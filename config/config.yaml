@@ -1,0 +1,89 @@
+# app configuration
+app:
+  # mode should be one of [debug release test]
+  mode: debug
+  # app name
+  name: wilson
+  # app version
+  version: v1.0.0
+  # http server configuration
+  http:
+    # http bind port
+    port: 8080
+    # tls enable
+    tls:
+      # enable
+      enable: false
+      # tls cert file
+      cert: xxx
+      # tls pem file
+      pem: xxx
+    # http request read timeout
+    readTimeout: 600
+    # http response write timeout
+    writeTimeout: 600
+    # header read timeout
+    readHeaderTimeout: 300
+    # keep-alive timeout
+    idleTimeout: 300
+    # multipart max size
+    multipartMemory: 52428800
+    # max header size
+    maxHeaderBytes: 3145728|
+
+  # rpc client configuration
+  rpc:
+
+# log configuration
+log:
+  # min level should be one of [fatal panic error warn info debug trace]
+  level: info
+  # a log entry whose level below or equal info will be output specified dir path
+  infoLog: /home/root/
+  # a log entry whose level above info will be output specified dir path
+  errorLog: /home/root/
+
+# i18n support
+locale:
+  # default language
+  lang: zh_CN
+  # specified dir where the language file stored in
+  # language file extension should be supported by viper
+  dir: lang
+
+# data source
+data:
+  # database configuration
+  database:
+    # driver type which should be supported by gorm
+    driver: mysql
+    # data source name eg: user:password@tcp(ip:port)/db?params
+    dsn: root:123456@tcp(127.0.0.1:3306)/wilson?charset=utf8mb4&parseTime=True&loc=Local
+    # max open connections
+    maxOpenCons: 40
+    # max idle connections
+    maxIdleCons: 20
+
+  # redis configuration
+  redis:
+    # redis server address host:port
+    addr: localhost:6379
+    # redis server auth password
+    auth: 123456
+    # times of max retry
+    retry: 5
+    # min idle connections
+    minIdleConns: 10
+    # limit read timeout by ms
+    readTimeout: 5000ms
+    # limit write timeout by ms
+    writeTimeout: 5000ms
+
+# jwt configuration
+jwt:
+  # jwt sign
+  sig: wilson
+  # jwt issuer
+  isu: wilson
+  # jwt expire time
+  exp: 10h

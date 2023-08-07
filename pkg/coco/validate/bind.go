@@ -1,0 +1,69 @@
+package validate
+
+import (
+	"github.com/dstgo/wilson/internal/pkg/errorw"
+	"github.com/gin-gonic/gin"
+)
+
+var (
+	JSON   = JsonBinding{}
+	XML    = XmlBinding{}
+	QUERY  = QueryBinding{}
+	YAML   = YamlBinding{}
+	TOML   = TomlBinding{}
+	HEADER = HeaderBinding{}
+	URI    = UriBinding{}
+)
+
+type Binding interface {
+	Bind(ctx *gin.Context, val Validator) error
+}
+
+type JsonBinding struct {
+}
+
+func (j JsonBinding) Bind(ctx *gin.Context, val Validator) error {
+	return errorw.Join(ctx.ShouldBindJSON(val), val.Validate()).Err()
+}
+
+type XmlBinding struct {
+}
+
+func (x XmlBinding) Bind(ctx *gin.Context, val Validator) error {
+	return errorw.Join(ctx.ShouldBindXML(val), val.Validate()).Err()
+}
+
+type QueryBinding struct {
+}
+
+func (q QueryBinding) Bind(ctx *gin.Context, val Validator) error {
+	return errorw.Join(ctx.ShouldBindQuery(val), val.Validate()).Err()
+}
+
+type YamlBinding struct {
+}
+
+func (y YamlBinding) Bind(ctx *gin.Context, val Validator) error {
+	return errorw.Join(ctx.ShouldBindYAML(val), val.Validate()).Err()
+}
+
+type TomlBinding struct {
+}
+
+func (y TomlBinding) Bind(ctx *gin.Context, val Validator) error {
+	return errorw.Join(ctx.ShouldBindTOML(val), val.Validate()).Err()
+}
+
+type HeaderBinding struct {
+}
+
+func (y HeaderBinding) Bind(ctx *gin.Context, val Validator) error {
+	return errorw.Join(ctx.ShouldBindHeader(val), val.Validate()).Err()
+}
+
+type UriBinding struct {
+}
+
+func (y UriBinding) Bind(ctx *gin.Context, val Validator) error {
+	return errorw.Join(ctx.ShouldBindUri(val), val.Validate()).Err()
+}
