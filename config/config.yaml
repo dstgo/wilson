@@ -2,6 +2,8 @@
 app:
   # mode should be one of [debug release test]
   mode: debug
+  # app author
+  author: stranger
   # app name
   name: wilson
   # app version
@@ -57,8 +59,16 @@ data:
   database:
     # driver type which should be supported by gorm
     driver: mysql
-    # data source name eg: user:password@tcp(ip:port)/db?params
-    dsn: root:123456@tcp(127.0.0.1:3306)/wilson?charset=utf8mb4&parseTime=True&loc=Local
+    # db network
+    network: tcp
+    # db address
+    addr: 127.0.0.1:3306
+    # db user
+    user: root
+    # db auth
+    pswd: 123456
+    # db connect params
+    params: wilson?charset=utf8mb4&parseTime=True&loc=Local
     # max open connections
     maxOpenCons: 40
     # max idle connections

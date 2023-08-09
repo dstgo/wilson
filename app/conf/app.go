@@ -1,0 +1,57 @@
+package conf
+
+import (
+	"github.com/dstgo/wilson/pkg/coco"
+	"time"
+)
+
+// ServerConf app config
+type ServerConf struct {
+	Mode    coco.GinMode `mapstructure:"mode"`
+	Author  string       `mapstructure:"author"`
+	Name    string       `mapstructure:"name"`
+	Version string       `mapstructure:"version"`
+	Http    HttpConf     `mapstructure:"http"`
+	Rpc     RpcConf      `mapstructure:"rpc"`
+}
+
+// HttpConf http server config
+type HttpConf struct {
+	Port int `mapstructure:"port"`
+
+	TlsConf *TlsConf `mapstructure:"tls"`
+
+	ReadTimeout     time.Duration `mapstructure:"readTimeout"`
+	WriteTimeout    time.Duration `mapstructure:"writeTimeout"`
+	ReadHeadTimeout time.Duration `mapstructure:"readHeaderTimeout"`
+	IdleTimeout     time.Duration `mapstructure:"idleTimeout"`
+	MultipartMax    int64         `mapstructure:"multipartMax"`
+	MaxHeader       int           `mapstructure:"maxHeader"`
+}
+
+// TlsConf tls config
+type TlsConf struct {
+	Enable bool   `mapstructure:"enable"`
+	Cert   string `mapstructure:"cert"`
+	Pem    string `mapstructure:"pem"`
+}
+
+// RpcConf Rpc client config
+type RpcConf struct {
+}
+
+// JwtConf jwt config
+type JwtConf struct {
+	Sig string        `mapstructure:"sig"`
+	Isu string        `mapstructure:"isu"`
+	Exp time.Duration `mapstructure:"exp"`
+}
+
+// LogConf app logger config
+type LogConf struct {
+	Level      string `mapstructure:"level"`
+	InfoLog    string `mapstructure:"infoLog"`
+	ErrorLog   string `mapstructure:"errorLog"`
+	TimeFormat string
+	Order      []string
+}

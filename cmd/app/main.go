@@ -4,8 +4,8 @@ import (
 	"context"
 	"flag"
 	"github.com/dstgo/filebox"
-	"github.com/dstgo/wilson/internal/conf"
-	"github.com/dstgo/wilson/internal/server"
+	"github.com/dstgo/wilson/app/conf"
+	"github.com/dstgo/wilson/app/server"
 	"github.com/dstgo/wilson/pkg/coco"
 	"path"
 )
@@ -27,16 +27,17 @@ func main() {
 	if err := confFile.ReadConfig(); err != nil {
 		panic(err)
 	}
-	// map configuration
+	// map configuration struct
 	appConf, err := conf.NewAppConf(confFile)
 	if err != nil {
 		panic(err)
 	}
+	coco.SetMode(appConf.AppConf.Mode)
 	// new app
 	app, err := server.NewApp(ctx, appConf)
 	if err != nil {
 		panic(err)
 	}
 	// run app
-	app.Run()
+	app.Core().L().Infoln(app.Run())
 }

@@ -64,7 +64,7 @@ type Router struct {
 func NewRouter(engine *gin.Engine) *Router {
 	return &Router{
 		root:   &engine.RouterGroup,
-		routes: &Routes{rs: make([]RouterInfo, 10)},
+		routes: &Routes{rs: make([]RouterInfo, 0, 10)},
 	}
 }
 
@@ -81,10 +81,12 @@ func (w *Router) addRoute(isGroup bool, method, path string, meta Meta, handlers
 	// join fullpath
 	fullpath := joinPaths(w.root.BasePath(), path)
 
+	fullHandlers := append(w.middleware, handlers...)
 	// meta handler
 	if meta != nil {
-		handlers = append([]gin.HandlerFunc{MetaHandler(meta)}, append(w.middleware, handlers...)...)
+		fullHandlers = append([]gin.HandlerFunc{MetaHandler(meta)}, fullHandlers...)
 	}
+	handlers = fullHandlers
 
 	info := RouterInfo{
 		Method:   method,
@@ -109,6 +111,10 @@ func (w *Router) addRoute(isGroup bool, method, path string, meta Meta, handlers
 
 func (w *Router) Use(handler ...gin.HandlerFunc) {
 	w.middleware = append(w.middleware, handler...)
+}
+
+func (w *Router) Attach(handler ...gin.HandlerFunc) {
+	w.root.Use(handler...)
 }
 
 func (w *Router) Group(path string, meta Meta, handler ...gin.HandlerFunc) RouterGroup {

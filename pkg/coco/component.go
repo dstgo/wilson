@@ -1,7 +1,6 @@
 package coco
 
 import (
-	"context"
 	"github.com/dstgo/wilson/pkg/coco/route"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -29,12 +28,6 @@ func WithRouter(router *route.Router) ComponentFn {
 	}
 }
 
-func WithCtx(ctx context.Context) ComponentFn {
-	return func(coco *Core) {
-		coco.ctx = ctx
-	}
-}
-
 func WithEngine(e *gin.Engine) ComponentFn {
 	return func(coco *Core) {
 		coco.engine = e
@@ -48,16 +41,3 @@ func WithServer(server *http.Server) ComponentFn {
 }
 
 type InterruptFn func(core *Core, signal os.Signal)
-
-func ShutdownWithInfo() InterruptFn {
-	return func(coco *Core, signal os.Signal) {
-		coco.logger.Infof("received os signal: %s, ready to graceful shutdown\n", signal.String())
-	}
-}
-
-func ShutdownWithCloseHttp() InterruptFn {
-	return func(coco *Core, signal os.Signal) {
-		err := coco.server.Shutdown(coco.ctx)
-		coco.logger.Infof("ready to close http server: %s", err)
-	}
-}

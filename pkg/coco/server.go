@@ -5,6 +5,7 @@ import (
 	"github.com/dstgo/task"
 	"github.com/dstgo/wilson/pkg/coco/route"
 	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"net"
 	"net/http"
@@ -79,6 +80,7 @@ type Coco struct {
 	postAsync []ComponentFn
 
 	OnPanic func(err any)
+	cancel  context.CancelCauseFunc
 }
 
 func (c *Coco) Core() *Core {
@@ -122,6 +124,7 @@ func (c *Coco) onInterrupt(s ...os.Signal) {
 	for _, fn := range c.interrupt {
 		fn(c.c, sig)
 	}
+	c.cancel(errors.New(sig.String()))
 }
 
 // execPreComponents
@@ -129,7 +132,7 @@ func (c *Coco) onInterrupt(s ...os.Signal) {
 // usually they are some initial tasks
 // async run after sync
 func (c *Coco) execPreComponents() {
-	// run async sync components
+	// run sync components
 	for _, fn := range c.preSync {
 		fn(c.c)
 	}
@@ -140,7 +143,7 @@ func (c *Coco) execPreComponents() {
 		}
 	})
 
-	// then async components
+	// async components
 	for _, fn := range c.preAsync {
 		fn := fn
 		preTask.AddJobs(func() {
@@ -174,18 +177,13 @@ func (c *Coco) execPostComponents(ch chan struct{}) {
 }
 
 func (c *Coco) prepare() {
+	// new goroutine listening os signal
+	go c.onInterrupt(c.signals...)
 
 	c.execPreComponents()
 
-	// log before exec interrupt
-	// shutdown http server finally
-	c.interrupt = append([]InterruptFn{ShutdownWithInfo()}, append(c.interrupt, ShutdownWithCloseHttp())...)
-
 	// async post tasks
 	go c.execPostComponents(c.listen)
-
-	// new goroutine listening os signal
-	go c.onInterrupt(c.signals...)
 }
 func (c *Coco) serve() {
 	c.once.Do(func() {
@@ -253,17 +251,20 @@ func newCore(opts ...ComponentFn) *Core {
 // New create new coco with options
 // param opts ...ComponentFn
 // return *Coco
-func New(opts ...ComponentFn) *Coco {
+func New(ctx context.Context, opts ...ComponentFn) *Coco {
 	core := newCore(opts...)
-	return NewWithCore(core)
+	return NewWithCore(ctx, core)
 }
 
 // NewWithCore
 // param Core *Core
 // return *Coco
 // with custom Core
-func NewWithCore(core *Core) *Coco {
+func NewWithCore(ctx context.Context, core *Core) *Coco {
+	cancelCtx, cancel := context.WithCancelCause(ctx)
+	core.ctx = cancelCtx
 	return &Coco{
+		cancel:  cancel,
 		c:       core,
 		signals: []os.Signal{syscall.SIGINT, syscall.SIGKILL, syscall.SIGABRT, syscall.SIGTERM},
 		listen:  make(chan struct{}),

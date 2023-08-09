@@ -1,7 +1,7 @@
 package validate
 
 import (
-	"github.com/dstgo/wilson/internal/pkg/errorw"
+	"github.com/dstgo/wilson/app/pkg/errorw"
 	"github.com/gin-gonic/gin"
 )
 
