@@ -120,11 +120,12 @@ func (c *Coco) onInterrupt(s ...os.Signal) {
 	ch := make(chan os.Signal)
 	signal.Notify(ch, s...)
 	sig := <-ch
+	c.cancel(errors.New(sig.String()))
 
 	for _, fn := range c.interrupt {
 		fn(c.c, sig)
 	}
-	c.cancel(errors.New(sig.String()))
+	os.Exit(1)
 }
 
 // execPreComponents

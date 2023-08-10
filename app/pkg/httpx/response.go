@@ -1,4 +1,4 @@
-package httputil
+package httpx
 
 import (
 	"errors"
@@ -23,9 +23,9 @@ func Resp(ctx *gin.Context, code int, msg string, data any, err error) {
 		Msg:  msg,
 		Data: data,
 	}
-	if err == nil {
-		httpCode = 200
-	} else {
+	httpCode = 200
+	if err != nil {
+		httpCode = 400
 		var e *Error
 		if errors.As(err, &e) {
 			httpCode = e.code

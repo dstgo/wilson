@@ -5,6 +5,7 @@ import (
 	"github.com/dstgo/wilson/app/api"
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/middleware"
+	"github.com/dstgo/wilson/app/pkg/locale"
 	"github.com/dstgo/wilson/app/pkg/logw"
 	"github.com/dstgo/wilson/app/types"
 	"github.com/gin-gonic/gin"
@@ -15,15 +16,15 @@ import (
 // newEngine config gin engine and create new instance
 // param conf *conf.ServerConf
 // return *gin.Engine
-func newEngine(conf *conf.ServerConf) *gin.Engine {
+func newEngine(conf *conf.ServerConf, locale *locale.Locale) *gin.Engine {
 
 	engine := gin.New()
 	gin.DisableConsoleColor()
 	gin.DisableBindValidation()
 
 	engine.MaxMultipartMemory = conf.Http.MultipartMax
-	engine.NoMethod(middleware.NoMethodHandler())
-	engine.NoRoute(middleware.NotFoundHandler())
+	engine.NoMethod(middleware.NoMethodHandler(locale))
+	engine.NoRoute(middleware.NotFoundHandler(locale))
 
 	return engine
 }
@@ -41,6 +42,14 @@ func newHttpServer(conf *conf.ServerConf) *http.Server {
 		MaxHeaderBytes:    conf.Http.MaxHeader,
 	}
 	return server
+}
+
+func newLocale(cfg *locale.Conf) (*locale.Locale, error) {
+	l, err := locale.NewLocaleWithConf(cfg)
+	if err != nil {
+		return nil, fmt.Errorf("load language directory failed: %s", err.Error())
+	}
+	return l, nil
 }
 
 // newLogger config logrus middleware

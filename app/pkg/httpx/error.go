@@ -1,4 +1,4 @@
-package httputil
+package httpx
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ func (e *Error) Error() string {
 	if e.error == "" {
 		return ""
 	}
-	return fmt.Sprintf("http Error %d: %s", e.code, e.error)
+	return fmt.Sprintf("http error %d: %s", e.code, e.error)
 }
 
 func NewErrorMsg(code int, msg string) *Error {

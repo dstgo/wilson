@@ -4,7 +4,6 @@ import (
 	"github.com/dstgo/size"
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/data"
-	"github.com/dstgo/wilson/app/pkg/locale"
 	"github.com/dstgo/wilson/app/pkg/logw"
 	"github.com/dstgo/wilson/app/pkg/sysinfo"
 	"github.com/dstgo/wilson/pkg/coco"
@@ -23,17 +22,6 @@ func LoadDataSource(dataConf *conf.DataConf, components *Components) coco.Compon
 		}
 		core.L().Infof("load data datasource ok √")
 		components.Datasource = datasource
-	}
-}
-
-func LoadLangDir(cfg *locale.Conf, components *Components) coco.ComponentFn {
-	return func(core *coco.Core) {
-		l, err := locale.NewLocaleWithConf(cfg)
-		if err != nil {
-			core.L().Panicf("load language directory failed: %s", err.Error())
-		}
-		core.L().Infof("load language directory ok √")
-		components.Lang = l
 	}
 }
 
@@ -119,15 +107,6 @@ func ShutdownWithInfo() coco.InterruptFn {
 
 func ShutdownWithCloseHttp() coco.InterruptFn {
 	return func(core *coco.Core, signal os.Signal) {
-
-		err := core.Server().Shutdown(core.Ctx())
-		// If the HTTP server is already running
-		// it will not run to the following code
-		var msg string
-		if err != nil {
-			msg = err.Error()
-		}
-		core.L().Infof("server closed %s", msg)
-		core.L().Exit(1)
+		core.Server().Shutdown(core.Ctx())
 	}
 }

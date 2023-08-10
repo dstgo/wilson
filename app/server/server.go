@@ -42,19 +42,29 @@ func NewApp(ctx context.Context, cfg *conf.AppConf) (*WilsonApp, error) {
 
 	components := new(Components)
 
+	// config
 	components.Conf = cfg
-	// gin engine
-	components.Engine = newEngine(cfg.AppConf)
-	// http server
-	components.Server = newHttpServer(cfg.AppConf)
-	// root router
-	components.Router = route.NewRouter(components.Engine)
+
 	// logger
 	newLogger, err := newLogger(cfg.LogConf)
 	if err != nil {
 		return nil, err
 	}
 	components.Logger = newLogger
+
+	// locale
+	l, err := newLocale(cfg.LocaleConf)
+	if err != nil {
+		return nil, err
+	}
+	components.Lang = l
+
+	// gin engine
+	components.Engine = newEngine(cfg.AppConf, l)
+	// http server
+	components.Server = newHttpServer(cfg.AppConf)
+	// root router
+	components.Router = route.NewRouter(components.Engine)
 
 	// new coco
 	c := coco.New(
@@ -75,9 +85,9 @@ func NewApp(ctx context.Context, cfg *conf.AppConf) (*WilsonApp, error) {
 	c.AddPreSyncCs(
 		LogBanner(cfg),
 	)
+
 	// async boot task
 	c.AddPreAsyncCs(
-		LoadLangDir(cfg.LocaleConf, components),
 		LoadDataSource(cfg.DataConf, components),
 	)
 

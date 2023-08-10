@@ -11,7 +11,7 @@ import (
 )
 
 type Conf struct {
-	Locale string `mapstructure:"locale"`
+	Locale string `mapstructure:"lang"`
 	Dir    string `mapstructure:"dir"`
 }
 

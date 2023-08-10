@@ -3,7 +3,7 @@ package systemApi
 import (
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/logic/systemLogic"
-	"github.com/dstgo/wilson/app/pkg/httputil"
+	"github.com/dstgo/wilson/app/pkg/httpx"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,5 +19,5 @@ type PingApi struct {
 }
 
 func (p *PingApi) Ping(ctx *gin.Context) {
-	httputil.Ok(ctx, 2000, "pong", p.p.Ping(ctx))
+	httpx.Ok(ctx, 2000, "pong", p.p.Ping(ctx))
 }

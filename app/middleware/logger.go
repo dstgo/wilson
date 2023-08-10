@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	"github.com/dstgo/size"
-	"github.com/dstgo/wilson/app/pkg/httputil"
+	"github.com/dstgo/wilson/app/pkg/httpx"
 	"github.com/dstgo/wilson/app/types"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -23,7 +23,7 @@ func UseLogger(logger *logrus.Logger) gin.HandlerFunc {
 		ctx.Next()
 
 		// set response header X-Request-ID
-		httputil.SetRequestId(ctx, requestId)
+		httpx.SetRequestId(ctx, requestId)
 
 		var (
 			fullpath     = ctx.FullPath()
@@ -64,7 +64,7 @@ func closeSize(s int64) string {
 	switch {
 	case data >= float64(size.MB):
 		return size.ParseTargetSize(meta.String(), size.MB).String()
-	case data >= float64(size.MB):
+	case data >= float64(size.KB):
 		return size.ParseTargetSize(meta.String(), size.KB).String()
 	default:
 		return size.ParseTargetSize(meta.String(), size.B).String()
