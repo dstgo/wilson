@@ -61,9 +61,9 @@ type Router struct {
 	routes     *Routes
 }
 
-func NewRouter(engine *gin.Engine) *Router {
+func NewRouter(group *gin.RouterGroup) *Router {
 	return &Router{
-		root:   &engine.RouterGroup,
+		root:   group,
 		routes: &Routes{rs: make([]RouterInfo, 0, 10)},
 	}
 }

@@ -1,7 +1,6 @@
 package sysinfo
 
 import (
-	"github.com/dstgo/size"
 	"github.com/shirou/gopsutil/host"
 )
 
@@ -13,8 +12,6 @@ type HostInfo struct {
 	Platform string
 	Os       string
 	Family   string
-	Cpu      int
-	Mem      size.SizeMeta
 }
 
 func GetHostInfo() HostInfo {

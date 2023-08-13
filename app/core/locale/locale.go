@@ -35,6 +35,7 @@ func (l *Locale) GetWithLocale(locale string, key string, args ...any) string {
 
 func (l *Locale) GetWithCtx(ctx *gin.Context, key string, args ...any) string {
 	lang := l.locale
+	// choose the first one from http language or default language
 	language := httpx.GetAcceptLanguage(ctx)
 	if len(language) != 0 {
 		lang = language[0]

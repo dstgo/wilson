@@ -3,22 +3,22 @@ package test
 import (
 	"fmt"
 	"github.com/dstgo/wilson/app/pkg/httpx"
-	"github.com/dstgo/wilson/pkg/coco/route"
+	route2 "github.com/dstgo/wilson/pkg/route"
 	"github.com/gin-gonic/gin"
 	"testing"
 )
 
 func TestHttpRoute(t *testing.T) {
-	router := route.NewRouter(gin.Default())
-	var NoAuth = route.E{
+	router := route2.NewRouter(&gin.Default().RouterGroup)
+	var NoAuth = route2.E{
 		K: "noauth",
 		V: struct{}{},
 	}
-	router.GET("ping", route.Metas(NoAuth), nil)
+	router.GET("ping", route2.Metas(NoAuth), nil)
 	group := router.Group("a", nil)
 	group.GET("abc", nil, nil)
 
-	router.Walk(func(info route.RouterInfo) error {
+	router.Walk(func(info route2.RouterInfo) error {
 		fmt.Println(fmt.Sprintf("%+v", info))
 		return nil
 	})
@@ -66,5 +66,33 @@ func TestHttpQualityValues(t *testing.T) {
 		langs := httpx.GetQualityValuePairs(accept_language)
 		// [text/html application/xhtml+xml application/xml */*]
 		t.Log(langs)
+	}
+}
+
+func TestBearerToken(t *testing.T) {
+	// test1
+	{
+		header := "Bearer 123456"
+		t.Log(httpx.GetBearerToken(header))
+	}
+	// test2
+	{
+		header := "Bearer asdasjljzda"
+		t.Log(httpx.GetBearerToken(header))
+	}
+	// test3
+	{
+		header := "Bearer "
+		t.Log(httpx.GetBearerToken(header))
+	}
+	// test4
+	{
+		header := "Bearerasd "
+		t.Log(httpx.GetBearerToken(header))
+	}
+	// test5
+	{
+		header := ""
+		t.Log(httpx.GetBearerToken(header))
 	}
 }

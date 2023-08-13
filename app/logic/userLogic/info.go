@@ -1,8 +1,8 @@
 package userLogic
 
 import (
+	"github.com/dstgo/wilson/app/core/locale"
 	"github.com/dstgo/wilson/app/dao/userDao"
-	"github.com/dstgo/wilson/app/pkg/locale"
 	"github.com/sirupsen/logrus"
 )
 

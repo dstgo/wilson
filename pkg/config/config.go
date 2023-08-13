@@ -1,4 +1,4 @@
-package coco
+package config
 
 import (
 	"bytes"

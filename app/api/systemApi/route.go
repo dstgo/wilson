@@ -1,7 +1,7 @@
 package systemApi
 
 import (
-	"github.com/dstgo/wilson/pkg/coco/route"
+	route2 "github.com/dstgo/wilson/pkg/route"
 	"github.com/google/wire"
 )
 
@@ -14,7 +14,8 @@ type Router struct {
 	PingApi *PingApi
 }
 
-func NewSystemRouter(root *route.Router, pingApi *PingApi) *Router {
-	root.GET("/ping", route.Metas(), pingApi.Ping)
+func NewSystemRouter(root *route2.Router, pingApi *PingApi) *Router {
+	root.GET("/ping", route2.Metas(), pingApi.Ping)
+
 	return &Router{PingApi: pingApi}
 }

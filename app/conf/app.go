@@ -1,18 +1,17 @@
 package conf
 
 import (
-	"github.com/dstgo/wilson/pkg/coco"
 	"time"
 )
 
 // ServerConf app config
 type ServerConf struct {
-	Mode    coco.GinMode `mapstructure:"mode"`
-	Author  string       `mapstructure:"author"`
-	Name    string       `mapstructure:"name"`
-	Version string       `mapstructure:"version"`
-	Http    HttpConf     `mapstructure:"http"`
-	Rpc     RpcConf      `mapstructure:"rpc"`
+	Mode    string   `mapstructure:"mode"`
+	Author  string   `mapstructure:"author"`
+	Name    string   `mapstructure:"name"`
+	Version string   `mapstructure:"version"`
+	Http    HttpConf `mapstructure:"http"`
+	Rpc     RpcConf  `mapstructure:"rpc"`
 }
 
 // HttpConf http server config

@@ -1,0 +1,3 @@
+[http]
+404 = "The requested resource does not exist"
+405 = "Unsupported HTTP method"

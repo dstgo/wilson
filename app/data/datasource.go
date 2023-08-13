@@ -5,8 +5,7 @@ import (
 	"errors"
 	"github.com/dstgo/task"
 	"github.com/dstgo/wilson/app/conf"
-	"github.com/dstgo/wilson/app/pkg/errorw"
-	"github.com/dstgo/wilson/pkg/coco"
+	"github.com/dstgo/wilson/app/pkg/errorx"
 	"github.com/go-redis/redis/v8"
 	mysqldriver "github.com/go-sql-driver/mysql"
 	"github.com/google/wire"
@@ -88,31 +87,31 @@ type DataSource struct {
 
 func (d *DataSource) Close() error {
 	db, err := d.OrmDB.DB()
-	return errorw.Join(
+	return errorx.Join(
 		err,
 		db.Close(),
 		d.Redis.Close(),
 	).Err()
 }
 
-func NewDataSource(ctx context.Context, databaseConf *conf.DataConf, core *coco.Core) (*DataSource, error) {
+func NewDataSource(ctx context.Context, databaseConf *conf.DataConf, logger *logrus.Logger) (*DataSource, error) {
 	datasource := new(DataSource)
 
 	var errs error
 	// async task to load each db
 	dataTask := task.NewTask(func(err any) {
-		core.L().Panicln(err)
+		logger.Panicln(err)
 	})
 
 	// connect to gorm db
 	dataTask.AddJobs(func() {
-		db, err := NewDBClient(ctx, databaseConf.DatabaseConf, core.L())
+		db, err := NewDBClient(ctx, databaseConf.DatabaseConf, logger)
 		if err != nil {
-			errs = errorw.Join(errs, err).Err()
-			core.L().Errorf("gorm db connected failed: %s", err)
+			errs = errorx.Join(errs, err).Err()
+			logger.Errorf("gorm db connected failed: %s", err)
 			return
 		}
-		core.L().Infof("gorm db connected:(%s) ok √", databaseConf.DatabaseConf.Address)
+		logger.Infof("gorm db connected:(%s) ok √", databaseConf.DatabaseConf.Address)
 		datasource.OrmDB = db
 	})
 
@@ -120,11 +119,11 @@ func NewDataSource(ctx context.Context, databaseConf *conf.DataConf, core *coco.
 	dataTask.AddJobs(func() {
 		redisClient, err := NewRedisClient(ctx, databaseConf.RedisConf)
 		if err != nil {
-			errs = errorw.Join(errs, err).Err()
-			core.L().Errorf("redis client connected failed: %s", err)
+			errs = errorx.Join(errs, err).Err()
+			logger.Errorf("redis client connected failed: %s", err)
 			return
 		}
-		core.L().Infof("redis server connected:(%s) ok √", redisClient.Options().Addr)
+		logger.Infof("redis server connected:(%s) ok √", redisClient.Options().Addr)
 		datasource.Redis = redisClient
 	})
 

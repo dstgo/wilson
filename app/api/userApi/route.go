@@ -1,7 +1,7 @@
 package userApi
 
 import (
-	"github.com/dstgo/wilson/pkg/coco/route"
+	"github.com/dstgo/wilson/pkg/route"
 	"github.com/google/wire"
 )
 

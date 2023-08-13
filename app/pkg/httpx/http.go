@@ -9,9 +9,11 @@ import (
 )
 
 const (
-	RequestIdKey    = "X-Request-ID"
-	AcceptLanguage  = "Accept-Language"
-	ContentLanguage = "Content-Language"
+	RequestIdKey      = "X-Request-ID"
+	AcceptLanguage    = "Accept-Language"
+	ContentLanguage   = "Content-Language"
+	AuthorizationKey  = "Authorization"
+	BearerTokenPrefix = "Bearer "
 )
 
 var (
@@ -95,4 +97,22 @@ func GetQualityValuePairs(header string) []string {
 	}
 
 	return httpLang
+}
+
+// GetBearerTokenFromCtx get bearer token from Authorization Header
+// param ctx *gin.Context
+// return string
+func GetBearerTokenFromCtx(ctx *gin.Context) string {
+	return GetBearerToken(ctx.GetHeader(AuthorizationKey))
+}
+
+func GetBearerToken(authHeader string) string {
+	var token string
+	if len(authHeader) == 0 {
+		return token
+	}
+	if !strings.HasPrefix(authHeader, BearerTokenPrefix) {
+		return token
+	}
+	return strings.TrimSpace(strings.TrimPrefix(authHeader, BearerTokenPrefix))
 }

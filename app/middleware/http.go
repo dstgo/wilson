@@ -1,10 +1,9 @@
 package middleware
 
 import (
+	"github.com/dstgo/wilson/app/core/locale"
 	"github.com/dstgo/wilson/app/pkg/httpx"
-	"github.com/dstgo/wilson/app/pkg/locale"
 	"github.com/gin-gonic/gin"
-	"github.com/pkg/errors"
 )
 
 func UseCors() gin.HandlerFunc {
@@ -13,6 +12,7 @@ func UseCors() gin.HandlerFunc {
 	}
 }
 
+// UseAcceptLanguage get accept language from http header
 func UseAcceptLanguage(defaultLanguage string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		acceptLang := defaultLanguage
@@ -27,15 +27,19 @@ func UseAcceptLanguage(defaultLanguage string) gin.HandlerFunc {
 }
 
 // NotFoundHandler
+// param l *locale.Locale
 // return gin.HandlerFunc
 func NotFoundHandler(l *locale.Locale) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		httpx.Failed(ctx, 4040, httpx.NotFoundError(errors.New(l.GetWithCtx(ctx, "http.404"))))
+		httpx.Failed(ctx, 4040, httpx.NotFoundError(l.NewErrorWithCtx(ctx, "http.404")))
 	}
 }
 
+// NoMethodHandler
+// param l *locale.Locale
+// return gin.HandlerFunc
 func NoMethodHandler(l *locale.Locale) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		httpx.Failed(ctx, 4050, httpx.NotFoundError(errors.New(l.GetWithCtx(ctx, "http.405"))))
+		httpx.Failed(ctx, 4050, httpx.NotFoundError(l.NewErrorWithCtx(ctx, "http.405")))
 	}
 }

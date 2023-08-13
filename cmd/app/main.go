@@ -3,11 +3,13 @@ package main
 import (
 	"context"
 	"flag"
+	"path"
+
 	"github.com/dstgo/filebox"
 	"github.com/dstgo/wilson/app/conf"
-	"github.com/dstgo/wilson/app/server"
-	"github.com/dstgo/wilson/pkg/coco"
-	"path"
+	"github.com/dstgo/wilson/app/core/wilson"
+	"github.com/dstgo/wilson/pkg/config"
+	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -22,22 +24,33 @@ func init() {
 func main() {
 	flag.Parse()
 	ctx := context.Background()
+
 	// read configuration
-	confFile := coco.NewConfigFile(configFile)
-	if err := confFile.ReadConfig(); err != nil {
+	appConfig := config.NewConfigFile(configFile)
+	if err := appConfig.ReadConfig(); err != nil {
 		panic(err)
 	}
+
 	// map configuration struct
-	appConf, err := conf.NewAppConf(confFile)
+	appConf, err := conf.NewAppConf(appConfig)
 	if err != nil {
 		panic(err)
 	}
-	coco.SetMode(appConf.AppConf.Mode)
-	// new app
-	app, err := server.NewApp(ctx, appConf)
+
+	// ini logger
+	logger, err := wilson.NewLogger(appConf.LogConf)
 	if err != nil {
 		panic(err)
 	}
-	// run app
-	app.Core().L().Infoln(app.Run())
+
+	// set app mode
+	gin.SetMode(appConf.ServerConf.Mode)
+
+	// initialize app server
+	app, err := wilson.NewApp(ctx, appConf, logger)
+	if err != nil {
+		panic(err)
+	}
+
+	app.Run(ctx)
 }

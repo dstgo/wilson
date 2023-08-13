@@ -7,13 +7,13 @@ import (
 
 type Response struct {
 	// custom Code
-	Code int `json:"code"`
+	Code int `json:"Code"`
 	// response mgs
 	Msg string `json:"msg,omitempty"`
 	// response Data
 	Data any `json:"data,omitempty"`
 	// response Error
-	Error string `json:"error,omitempty"`
+	Error string `json:"Err,omitempty"`
 }
 
 func Resp(ctx *gin.Context, code int, msg string, data any, err error) {
@@ -28,7 +28,7 @@ func Resp(ctx *gin.Context, code int, msg string, data any, err error) {
 		httpCode = 400
 		var e *Error
 		if errors.As(err, &e) {
-			httpCode = e.code
+			httpCode = e.Code
 		}
 		body.Error = err.Error()
 	}
