@@ -11,8 +11,8 @@ import (
 func TestHttpRoute(t *testing.T) {
 	router := route2.NewRouter(&gin.Default().RouterGroup)
 	var NoAuth = route2.E{
-		K: "noauth",
-		V: struct{}{},
+		Key: "noauth",
+		Val: struct{}{},
 	}
 	router.GET("ping", route2.Metas(NoAuth), nil)
 	group := router.Group("a", nil)

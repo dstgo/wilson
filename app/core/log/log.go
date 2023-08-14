@@ -1,4 +1,4 @@
-package logw
+package log
 
 import (
 	"errors"
@@ -7,6 +7,21 @@ import (
 	"github.com/sirupsen/logrus"
 	"os"
 )
+
+var (
+	logger *logrus.Logger
+)
+
+func L() *logrus.Logger {
+	if logger == nil {
+		panic("logger is not initialized")
+	}
+	return logger
+}
+
+func Set(l *logrus.Logger) {
+	logger = l
+}
 
 type LoggerW struct {
 	conf *conf.LogConf

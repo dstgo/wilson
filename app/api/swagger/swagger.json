@@ -1,0 +1,29 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Wilson api documentation",
+        "title": "Wilson API Documentation",
+        "contact": {},
+        "version": "v1.0.0"
+    },
+    "basePath": "/api/v1",
+    "paths": {
+        "/ping": {
+            "get": {
+                "tags": [
+                    "system"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        }
+    }
+}

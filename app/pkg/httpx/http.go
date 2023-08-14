@@ -9,11 +9,11 @@ import (
 )
 
 const (
-	RequestIdKey      = "X-Request-ID"
-	AcceptLanguage    = "Accept-Language"
-	ContentLanguage   = "Content-Language"
-	AuthorizationKey  = "Authorization"
-	BearerTokenPrefix = "Bearer "
+	RequestIdHeader         = "X-Request-ID"
+	AcceptLanguageHeader    = "Accept-Language"
+	ContentLanguageHeader   = "Content-Language"
+	AuthorizationHeader     = "Authorization"
+	BearerTokenHeaderPrefix = "Bearer "
 )
 
 var (
@@ -21,12 +21,12 @@ var (
 )
 
 func SetRequestId(ctx *gin.Context, id string) {
-	ctx.Set(RequestIdKey, id)
-	ctx.Writer.Header().Set(RequestIdKey, id)
+	ctx.Set(RequestIdHeader, id)
+	ctx.Writer.Header().Set(RequestIdHeader, id)
 }
 
 func GetRequestId(ctx *gin.Context) (requestId string) {
-	return ctx.GetString(RequestIdKey)
+	return ctx.GetString(RequestIdHeader)
 }
 
 // GetAcceptLanguage
@@ -37,7 +37,20 @@ func GetRequestId(ctx *gin.Context) (requestId string) {
 // Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
 // https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept-Language
 func GetAcceptLanguage(ctx *gin.Context) []string {
-	return GetQualityValuePairs(ctx.GetHeader(AcceptLanguage))
+	cached := ctx.GetStringSlice(AcceptLanguageHeader)
+	if cached != nil {
+		return cached
+	}
+	qualityValuePairs := GetQualityValuePairs(ctx.GetHeader(AcceptLanguageHeader))
+	ctx.Set(AcceptLanguageHeader, qualityValuePairs)
+	return qualityValuePairs
+}
+func GetFirstAcceptLanguage(ctx *gin.Context) string {
+	language := GetAcceptLanguage(ctx)
+	if len(language) > 0 {
+		return language[0]
+	}
+	return ""
 }
 
 type qualityV struct {
@@ -103,7 +116,7 @@ func GetQualityValuePairs(header string) []string {
 // param ctx *gin.Context
 // return string
 func GetBearerTokenFromCtx(ctx *gin.Context) string {
-	return GetBearerToken(ctx.GetHeader(AuthorizationKey))
+	return GetBearerToken(ctx.GetHeader(AuthorizationHeader))
 }
 
 func GetBearerToken(authHeader string) string {
@@ -111,8 +124,8 @@ func GetBearerToken(authHeader string) string {
 	if len(authHeader) == 0 {
 		return token
 	}
-	if !strings.HasPrefix(authHeader, BearerTokenPrefix) {
+	if !strings.HasPrefix(authHeader, BearerTokenHeaderPrefix) {
 		return token
 	}
-	return strings.TrimSpace(strings.TrimPrefix(authHeader, BearerTokenPrefix))
+	return strings.TrimSpace(strings.TrimPrefix(authHeader, BearerTokenHeaderPrefix))
 }

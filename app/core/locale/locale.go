@@ -10,8 +10,23 @@ import (
 
 var (
 	LocaleNotFoundErr     = errors.New("locale not found")
-	LocaleFileLeastOneErr = errors.New("expected least one toml language file")
+	LocaleFileLeastOneErr = errors.New("expected least one language file")
 )
+
+var (
+	locale *Locale
+)
+
+func L() *Locale {
+	if locale == nil {
+		panic("locale is not initialized")
+	}
+	return locale
+}
+
+func Set(l *Locale) {
+	locale = l
+}
 
 type Group = map[string]*viper.Viper
 
@@ -24,13 +39,15 @@ func (l *Locale) Default() string {
 	return l.locale
 }
 
-func (l *Locale) GetWithLocale(locale string, key string, args ...any) string {
-	v, e := l.mv[locale]
+func (l *Locale) Get(lang string, key string, args ...any) string {
+	if len(lang) == 0 {
+		lang = l.locale
+	}
+	v, e := l.mv[lang]
 	if !e {
 		return LocaleNotFoundErr.Error()
 	}
-	format := v.GetString(key)
-	return fmt.Sprintf(format, args...)
+	return fmt.Sprintf(v.GetString(key), args...)
 }
 
 func (l *Locale) GetWithCtx(ctx *gin.Context, key string, args ...any) string {
@@ -40,11 +57,11 @@ func (l *Locale) GetWithCtx(ctx *gin.Context, key string, args ...any) string {
 	if len(language) != 0 {
 		lang = language[0]
 	}
-	return l.GetWithLocale(lang, key, args...)
+	return l.Get(lang, key, args...)
 }
 
-func (l *Locale) Get(key string, args ...any) string {
-	return l.GetWithLocale(l.locale, key, args...)
+func (l *Locale) GetDefault(key string, args ...any) string {
+	return l.Get(l.locale, key, args...)
 }
 
 func NewLocale(locale string, mv Group) *Locale {

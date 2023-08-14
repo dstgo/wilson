@@ -22,7 +22,7 @@ func UseAcceptLanguage(defaultLanguage string) gin.HandlerFunc {
 			acceptLang = candidates[0]
 		}
 		ctx.Next()
-		ctx.Writer.Header().Set(httpx.ContentLanguage, acceptLang)
+		ctx.Writer.Header().Set(httpx.ContentLanguageHeader, acceptLang)
 	}
 }
 

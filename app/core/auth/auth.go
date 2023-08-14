@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"github.com/dstgo/wilson/app/pkg/jwtx"
-	"github.com/dstgo/wilson/app/types"
 	"github.com/gin-gonic/gin"
 	"time"
 )
@@ -17,7 +16,14 @@ type Authenticator interface {
 // Issuer
 // The Issuer should issue a new jwt token and return the token info
 type Issuer interface {
-	Issue(ctx context.Context, user types.UserPayload, exp time.Duration) (jwtx.Jwt, error)
+	Issue(ctx context.Context, user UserPayload, exp time.Duration) (jwtx.Jwt, error)
+}
+
+// UserPayload
+// basic user info
+type UserPayload struct {
+	Username string `json:"Username"`
+	UserId   string `json:"userId"`
 }
 
 var (

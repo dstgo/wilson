@@ -6,7 +6,7 @@ import (
 )
 
 func (l *Locale) NewError(key string, args ...any) error {
-	return errors.New(l.Get(key, args...))
+	return errors.New(l.GetDefault(key, args...))
 }
 
 func (l *Locale) NewErrorWithCtx(ctx *gin.Context, key string, args ...any) error {
@@ -14,5 +14,5 @@ func (l *Locale) NewErrorWithCtx(ctx *gin.Context, key string, args ...any) erro
 }
 
 func (l *Locale) NewErrorWithLocale(locale string, key string, args ...any) error {
-	return errors.New(l.GetWithLocale(locale, key, args...))
+	return errors.New(l.Get(locale, key, args...))
 }

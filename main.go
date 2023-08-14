@@ -15,10 +15,13 @@ import (
 var (
 	// specified config file path
 	configFile string
+	Author     string
+	Version    string
+	Repository string
 )
 
 func init() {
-	flag.StringVar(&configFile, "conf", path.Join(filebox.GetCurrentRunningPath(), "config.yaml"), "config file")
+	flag.StringVar(&configFile, "conf", path.Join(filebox.GetCurrentRunningPath(), "config.yaml"), "app configuration file")
 }
 
 func main() {

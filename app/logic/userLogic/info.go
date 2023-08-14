@@ -6,10 +6,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func NewUserLogic(logger *logrus.Logger, lang *locale.Locale, userdao *userDao.UserInfoDao) *UserInfoLogic {
+func NewUserLogic(userdao *userDao.UserInfoDao) *UserInfoLogic {
 	return &UserInfoLogic{
-		locale:  lang,
-		logger:  logger,
 		userDao: userdao,
 	}
 }

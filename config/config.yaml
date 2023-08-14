@@ -10,8 +10,8 @@ app:
   version: v1.0.0
   # http server configuration
   http:
-    # http bind port
-    port: 8080
+    # http bind address hots:port
+    address: 127.0.0.1:8080
     # tls enable
     tls:
       # enable

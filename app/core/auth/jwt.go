@@ -5,9 +5,7 @@ import (
 	"fmt"
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/core/locale"
-	"github.com/dstgo/wilson/app/data"
 	"github.com/dstgo/wilson/app/pkg/jwtx"
-	"github.com/dstgo/wilson/app/types"
 	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
@@ -16,14 +14,14 @@ import (
 )
 
 type UserClaims struct {
-	types.UserPayload
+	UserPayload
 	jwt.RegisteredClaims
 }
 
-func NewJwtAuthenticator(cfg *conf.JwtConf, lang *locale.Locale, data *data.DataSource) *JwtAuthenticator {
+func NewJwtAuthenticator(cfg *conf.JwtConf, lang *locale.Locale, client *redis.Client) *JwtAuthenticator {
 	return &JwtAuthenticator{
 		lang:   lang,
-		redis:  data.Redis,
+		redis:  client,
 		cfg:    cfg,
 		method: jwt.SigningMethodHS256,
 	}
@@ -36,7 +34,7 @@ type JwtAuthenticator struct {
 	method jwt.SigningMethod
 }
 
-func (j *JwtAuthenticator) Issue(ctx context.Context, user types.UserPayload, exp time.Duration) (jwtx.Jwt, error) {
+func (j *JwtAuthenticator) Issue(ctx context.Context, user UserPayload, exp time.Duration) (jwtx.Jwt, error) {
 	now := time.Now()
 	expiredAt := now.Add(exp)
 	if exp <= 0 {

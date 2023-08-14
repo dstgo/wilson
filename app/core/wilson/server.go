@@ -14,7 +14,7 @@ import (
 	"github.com/dstgo/wilson/app/api"
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/core/locale"
-	"github.com/dstgo/wilson/app/core/logw"
+	"github.com/dstgo/wilson/app/core/log"
 	"github.com/dstgo/wilson/app/data"
 	"github.com/dstgo/wilson/pkg/route"
 	"github.com/gin-gonic/gin"
@@ -32,6 +32,7 @@ type App struct {
 func (a *App) run() error {
 	appConf := a.cfg.ServerConf
 	a.logger.Infof("wilson app boot successfully, http server is listenning at %s, tls enable %t", a.server.Addr, appConf.Http.TlsConf.Enable)
+	a.logger.Infof("api doc address: http://127.0.0.1:8080/swagger/index.html")
 	tlsConf := a.cfg.ServerConf.Http.TlsConf
 	if tlsConf.Enable {
 		return a.server.ListenAndServeTLS(tlsConf.Cert, tlsConf.Pem)
@@ -41,7 +42,9 @@ func (a *App) run() error {
 
 func (a *App) Run(ctx context.Context) error {
 	c, stop := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGKILL, syscall.SIGABRT, syscall.SIGTERM)
+
 	bootTask := task.NewTask(ctx)
+
 	bootTask.AddJobs(func(ctx context.Context) error {
 		err := a.run()
 		stop()
@@ -51,6 +54,7 @@ func (a *App) Run(ctx context.Context) error {
 		}
 		return err
 	})
+
 	bootTask.AddJobs(func(ctx context.Context) error {
 		select {
 		case <-c.Done():
@@ -70,7 +74,7 @@ func (a *App) Shutdown() {
 	})
 }
 
-func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *logw.LoggerW) (*App, error) {
+func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App, error) {
 
 	var (
 		lang       *locale.Locale
@@ -83,7 +87,7 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *logw.LoggerW) (*App
 	)
 
 	// locale
-	lang, err = newLocale(cfg.LocaleConf)
+	lang, err = NewLocale(cfg.LocaleConf)
 	if err != nil {
 		return nil, err
 	}
@@ -92,27 +96,26 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *logw.LoggerW) (*App
 		return nil, err
 	}
 
-	// http server
-	engine, server = newHttpServer(cfg.ServerConf, lang, logger)
-
-	// rootRouter
-	rootRouter = route.NewRouter(engine.RouterGroup.Group("/v1/api/"))
-
 	// datasource
 	datasource, err = LoadDataSource(ctx, cfg.DataConf, logger)
 	if err != nil {
 		return nil, err
 	}
 
+	// http server
+	engine, server = NewHttpServer(cfg, lang, logger, datasource)
+
+	// rootRouter
+	rootRouter = NewRouter(cfg, lang, engine, datasource)
+
 	// attach api router
 	_ = api.NewApiRouter(
 		cfg,
 		rootRouter,
-		logger,
-		lang,
 		datasource,
 	)
 
+	// execute on server shutdown
 	shutdownFn := func() {
 		CloseDataSource(datasource, logger)
 		loggerw.Close()

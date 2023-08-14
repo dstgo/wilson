@@ -26,7 +26,8 @@ func UseLogger(logger *logrus.Logger) gin.HandlerFunc {
 		httpx.SetRequestId(ctx, requestId)
 
 		var (
-			fullpath     = ctx.FullPath()
+			url          = ctx.Request.URL.String()
+			path         = ctx.FullPath()
 			method       = request.Method
 			costTime     = time.Now().Sub(startTime).Milliseconds()
 			status       = ctx.Writer.Status()
@@ -37,15 +38,20 @@ func UseLogger(logger *logrus.Logger) gin.HandlerFunc {
 			err      = ctx.Err()
 		)
 
+		if len(path) == 0 {
+			path = "not found"
+		}
+
 		entry := logger.WithContext(ctx).
 			WithField(types.LogIpKey, clientIp).
 			WithField(types.LogHttpMethodKey, method).
-			WithField(types.LogRequestPathKey, fullpath).
+			WithField(types.LogRequestPathKey, path).
+			WithField(types.LogRequestUrlKey, url).
 			WithField(types.LogHttpStatusKey, status).
-			WithField(types.LogRequestIdKey, requestId).
-			WithField(types.LogRequestCostKey, fmt.Sprintf("%d ms", costTime)).
+			WithField(types.LogRequestCostKey, fmt.Sprintf("%dms", costTime)).
 			WithField(types.LogHttpContentLength, closeSize(requestSize)).
-			WithField(types.LogHttpResponseLength, closeSize(int64(responseSize)))
+			WithField(types.LogHttpResponseLength, closeSize(int64(responseSize))).
+			WithField(types.LogRequestIdKey, requestId)
 
 		// log by status
 		switch {

@@ -19,3 +19,11 @@ type ApiRouter struct {
 	SystemApi *systemApi.Router
 	UserApi   *userApi.Router
 }
+
+// swagger declarative api comment
+
+// @title Wilson API Documentation
+// @version v1.0.0
+// @description Wilson api documentation
+// @BasePath /api/v1
+//go:generate swag init -g api.go -d ./ --output ./swagger

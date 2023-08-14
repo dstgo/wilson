@@ -6,17 +6,19 @@ import (
 
 // ServerConf app config
 type ServerConf struct {
-	Mode    string   `mapstructure:"mode"`
-	Author  string   `mapstructure:"author"`
-	Name    string   `mapstructure:"name"`
-	Version string   `mapstructure:"version"`
-	Http    HttpConf `mapstructure:"http"`
-	Rpc     RpcConf  `mapstructure:"rpc"`
+	Mode       string `mapstructure:"mode"`
+	Author     string
+	Repository string
+	Swagger    bool     `mapstructure:"swagger"`
+	Version    string   `mapstructure:"version"`
+	Name       string   `mapstructure:"name"`
+	Http       HttpConf `mapstructure:"http"`
+	Rpc        RpcConf  `mapstructure:"rpc"`
 }
 
 // HttpConf http server config
 type HttpConf struct {
-	Port int `mapstructure:"port"`
+	Address string `mapstructure:"address"`
 
 	TlsConf *TlsConf `mapstructure:"tls"`
 

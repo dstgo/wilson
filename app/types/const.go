@@ -4,9 +4,10 @@ const (
 	LogIpKey              = "ip"
 	LogHttpMethodKey      = "method"
 	LogRequestPathKey     = "path"
+	LogRequestUrlKey      = "url"
 	LogHttpStatusKey      = "status"
 	LogRequestIdKey       = "requestId"
 	LogHttpContentLength  = "content-length"
-	LogHttpResponseLength = "response-size"
+	LogHttpResponseLength = "response-length"
 	LogRequestCostKey     = "cost"
 )

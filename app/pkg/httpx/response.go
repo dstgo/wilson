@@ -26,7 +26,7 @@ func Resp(ctx *gin.Context, code int, msg string, data any, err error) {
 	httpCode = 200
 	if err != nil {
 		httpCode = 400
-		var e *Error
+		var e Error
 		if errors.As(err, &e) {
 			httpCode = e.Code
 		}

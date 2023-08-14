@@ -8,6 +8,6 @@
  ███░ ░░░██░██ ███ ██████ ░░██████  ███  ░██   ██████ ░░██████░███     ░░██   ░░██████░███
 ░░░    ░░░ ░░ ░░░ ░░░░░░   ░░░░░░  ░░░   ░░   ░░░░░░   ░░░░░░ ░░░       ░░     ░░░░░░ ░░░
 
-Author={{ .author }} AppName={{ .appName}} Mode={{ .appMode }} Version={{ .appVersion }}
+Author={{ .author }} AppName={{ .appName}} Repository={{ .repository }} Mode={{ .appMode }} Version={{ .appVersion }}
 Os={{ .osInfo }} Arch= {{ .archInfo }}
 Cpu={{ .cpuInfo }} Mem= {{ .memInfo }}
