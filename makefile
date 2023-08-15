@@ -1,7 +1,6 @@
-.PHONY: help
-help:
-	@echo  init	initial app dependencies
-	@echo  generate	generate app template code
+OS := $(shell go env GOHOSTOS)
+GO_VERSION = $(shell go env GOVERSION)
+VERSION = $(shell git describe --tags --always)
 
 .PHONY: init
 init:
@@ -18,4 +17,11 @@ generate:
 
 .PHONY: build
 build:
-	go build -trimpath -o ./bin/wilson.exe
+	go build -trimpath -ldflags "-X main.Author=stranger -X main.Version=$(VERSION) -X main.GoVersion=$(GO_VERSION)" -o ./bin/ github.com/dstgo/wilson
+
+
+.PHONY: all
+all:
+	make init
+	make generate
+	make build

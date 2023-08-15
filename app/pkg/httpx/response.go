@@ -7,13 +7,13 @@ import (
 
 type Response struct {
 	// custom Code
-	Code int `json:"Code"`
+	Code int `json:"code"`
 	// response mgs
 	Msg string `json:"msg,omitempty"`
 	// response Data
 	Data any `json:"data,omitempty"`
 	// response Error
-	Error string `json:"Err,omitempty"`
+	Error string `json:"err,omitempty"`
 }
 
 func Resp(ctx *gin.Context, code int, msg string, data any, err error) {

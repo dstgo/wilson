@@ -1,3 +1,102 @@
+# Data validation part
+[validate]
+required = "is a required value"
+empty = "cannot be zero value"
+notnil = "cannot be empty"
+oneof = "must be one of [%v] several values"
+notoneof = "Cannot be one of [%v] several values"
+gt = "must be greater than %v"
+gte = "must be greater than or equal to %v"
+lt = "must be less than %v"
+lte = "must be less than or equal to %v"
+eq = "must be equal to %v"
+match = "must match the regular expression %v"
+multiple = "must be a multiple of %v"
+date = "must be a valid date format"
+
+
+[validate. length]
+range = "The length must be between %v and %v"
+max = "The length must be less than or equal to %v"
+min = "The length must be greater than or equal to %v"
+eq = "The length must be equal to %v"
+
+[validate. string]
+email = "must be a valid email format"
+url = "must be a valid URL"
+requrl = "must be a valid request URL"
+requri = "must be a valid request URI"
+alpha = "Can only contain English letters"
+digit = "can only contain numbers"
+alphanum = "can only contain English letters and numbers"
+unicode = "can only contain unicode alphabetic characters"
+unicodenum = "can only contain unicode decimal numbers"
+unicodeletternum = "can only contain unicode letters and numbers"
+unicodenumch = "can only contain unicode numeric characters"
+lower = "must be a lowercase string"
+upper = "must be an uppercase string"
+hex = "must be a hexadecimal number"
+hexcolor = "must be a hexadecimal color"
+rgb = "must be RGB format color code"
+int = "must be an integer number"
+float = "must be a floating point number"
+uuidv3 = "must be a valid UUID v3"
+uuidv4 = "must be a valid UUID v4"
+uuidv5 = "must be a valid UUID v5"
+uuid = "must be a valid UUID"
+creditcard = "must be a valid credit card number"
+isbn10 = "must conform to the ISBN-10 specification"
+isbn13 = "must conform to the ISBN-13 specification"
+isbn = "must conform to the ISBN specification"
+json = "must conform to JSON format"
+ascii = "can only contain ASCII characters"
+printable = "can only contain printable characters"
+multibyte = "Can only contain multibyte characters"
+fullwidth = "Can only contain full-width characters"
+halfwidth = "Can only contain half-width characters"
+fullhalfwidth = "Can only contain full-width and half-width characters"
+base64 = "must be Base64 encoded"
+base64uri = "must be a base64 encoded data URI"
+e164 = "must be a valid E164 number"
+2code = "must be a valid two-letter country code"
+3code = "must be a three-letter country code"
+iso4217code = "must be a valid ISO4217 currency code"
+dial = "must be a valid dial string"
+mac = "must be a valid MAC address"
+ip = "must be a valid IP address"
+ipv4 = "must be a valid IPv4 address"
+ipv6 = "must be a valid IPv6 address"
+subdomain = "must be a valid subdomain"
+domain = "must be a valid domain name"
+dns = "must be a valid DNS name"
+host = "must be a valid hostname"
+port = "must be a valid port"
+mongoid = "must be a valid hex-encoded MongoDB ObjectId"
+latitude = "must be a valid latitude"
+longitude = "must be a valid longitude"
+ssn = "must be a valid SSN code"
+version = "must be a valid semantic version"
+
+
+
+
+
+
+# Some commonly used field names
+[field]
+name = "name"
+email = "email"
+username = "username"
+password = "password"
+phone = "mobile phone number"
+age = "age"
+userid = "user id"
+
+# error message section
 [http]
-404 = "The requested resource does not exist"
-405 = "Unsupported HTTP method"
+404 = "the requested resource does not exist"
+405 = "unsupported HTTP method"
+
+[jwt]
+parsedFailed = "user authentication failed, please try to log in again"
+expired = "user credentials expired, please log in again"

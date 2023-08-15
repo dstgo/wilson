@@ -1,3 +1,103 @@
+# 数据校验部分
+[validate]
+required = "是必需值，不能为空"
+empty = "不能为零值"
+notnil = "不能为空"
+oneof = "必须是[%v]几个值其中之一"
+notoneof = "不能是[%v]几个值其中之一"
+gt = "必须大于%v"
+gte = "必须大于等于%v"
+lt = "必须小于%v"
+lte = "必须小于等于%v"
+eq = "必须等于%v"
+match = "必须匹配正则表达式%v"
+multiple = "必须是%v的倍数"
+date = "必须是有效的日期格式"
+
+
+[validate.length]
+range = "长度必须位于%v到%v之间"
+max = "长度必须小于等于%v"
+min = "长度必须大于等于%v"
+eq = "长度必须等于%v"
+
+[validate.string]
+email = "必须是有效的邮箱格式"
+url = "必须是有效的URL"
+requrl = "必须是有效的请求URL"
+requri = "必须是有效的请求URI"
+alpha = "只能包含英文字母"
+digit = "只能包含数字"
+alphanum = "只能包含英文字母和数字"
+unicode = "只能包含unicode字母字符"
+unicodenum = "只能包含unicode十进制数"
+unicodeletternum = "只能包含unicode字母和数字"
+unicodenumch = "只能包含unicode数字字符"
+lower = "必须是小写字符串"
+upper = "必须是大写字符串"
+hex = "必须是十六进制数"
+hexcolor = "必须是十六进制颜色"
+rgb = "必须是RGB格式颜色代码"
+int = "必须是整型数字"
+float = "必须是浮点型数字"
+uuidv3 = "必须是一个有效的UUID v3"
+uuidv4 = "必须是一个有效的UUID v4"
+uuidv5 = "必须是一个有效的UUID v5"
+uuid = "必须是一个有效的UUID"
+creditcard = "必须是一个有效的信用卡号"
+isbn10 = "必须符合ISBN-10的规范"
+isbn13 = "必须符合ISBN-13的规范"
+isbn = "必须符合ISBN的规范"
+json = "必须符合JSON格式"
+ascii = "只能包含ASCII字符"
+printable = "只能包含可打印的字符"
+multibyte = "只能包含多字节的字符"
+fullwidth = "只能包含全角字符"
+halfwidth = "只能包含半角字符"
+fullhalfwidth = "只能包含全角和半角字符"
+base64 = "必须是Base64编码"
+base64uri = "必须是base64编码的数据URI"
+e164 = "必须是有效的E164数字"
+2code = "必须是有效的两字母国家代码"
+3code = "必须是三字母国家代码"
+iso4217code = "必须是有效的ISO4217货币代码"
+dial = "必须是有效的Dial字符串"
+mac = "必须是有效的MAC地址"
+ip = "必须是有效的IP地址"
+ipv4 = "必须是有效的IPv4地址"
+ipv6 = "必须是有效的IPv6地址"
+subdomain = "必须是有效的子域名"
+domain = "必须是有效的域名"
+dns = "必须是有效的DNS名称"
+host = "必须是有效的主机名"
+port = "必须是有效的端口"
+mongoid = "必须是有效的十六进制编码的MongoDB ObjectId"
+latitude = "必须是有效纬度"
+longitude = "必须是有效经度"
+ssn = "必须是有效的SSN代码"
+version = "必须是有效语义版本"
+
+
+
+
+
+
+# 一些常用的字段名称
+[field]
+name = "名称"
+email = "邮箱"
+username = "用户名"
+password = "密码"
+phone = "手机号码"
+age = "年龄"
+userid = "用户标识符"
+
+# 错误信息部分
 [http]
 404 = "访问的资源不存在"
 405 = "不支持的HTTP方法"
+
+[jwt]
+parsedFailed = "用户认证失败，请尝试重新登录"
+expired = "用户凭证过期，请重新登录"
+

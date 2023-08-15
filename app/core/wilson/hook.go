@@ -31,8 +31,8 @@ func LogBanner(cfg *conf.AppConf, logger *logrus.Logger) error {
 
 	bannerData := map[string]any{
 		"author":     cfg.ServerConf.Author,
-		"repository": cfg.ServerConf.Repository,
 		"appName":    cfg.ServerConf.Name,
+		"goVersion":  cfg.ServerConf.GoVersion,
 		"appMode":    strings.ToUpper(cfg.ServerConf.Mode),
 		"appVersion": cfg.ServerConf.Version,
 		"osInfo":     fmt.Sprintf("%s %s %s", hostInfo.Os, hostInfo.Platform, hostInfo.Version),

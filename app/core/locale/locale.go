@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	LocaleNotFoundErr     = errors.New("locale not found")
+	LocaleUnSupportedErr  = errors.New("locale is unsupported")
 	LocaleFileLeastOneErr = errors.New("expected least one language file")
 )
 
@@ -45,7 +45,7 @@ func (l *Locale) Get(lang string, key string, args ...any) string {
 	}
 	v, e := l.mv[lang]
 	if !e {
-		return LocaleNotFoundErr.Error()
+		return errors.Wrap(LocaleUnSupportedErr, lang).Error()
 	}
 	return fmt.Sprintf(v.GetString(key), args...)
 }

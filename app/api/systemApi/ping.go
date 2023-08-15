@@ -26,7 +26,7 @@ type PingApi struct {
 // @router /ping [GET]
 func (p *PingApi) Ping(ctx *gin.Context) {
 	pingReq := new(request.PingRequest)
-	err := vax.ShouldBindAll(ctx,
+	err := vax.Binds(ctx,
 		vax.Query(pingReq),
 	)
 	if err != nil {

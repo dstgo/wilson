@@ -2,12 +2,10 @@
 app:
   # mode should be one of [debug release test]
   mode: release
-  # app author
-  author: stranger
   # app name
   name: wilson
-  # app version
-  version: v1.0.0
+  # if swagger api doc enable
+  swagger: true
   # http server configuration
   http:
     # http bind address hots:port

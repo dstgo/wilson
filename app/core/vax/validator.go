@@ -9,9 +9,9 @@ type BindPair struct {
 	V Validatable
 }
 
-func ShouldBindAll(ctx *gin.Context, pairs ...BindPair) error {
+func Binds(ctx *gin.Context, pairs ...BindPair) error {
 	for _, pair := range pairs {
-		err := ShouldBind(ctx, pair)
+		err := Bind(ctx, pair)
 		if err != nil {
 			return err
 		}
@@ -19,7 +19,7 @@ func ShouldBindAll(ctx *gin.Context, pairs ...BindPair) error {
 	return nil
 }
 
-func ShouldBind(ctx *gin.Context, pair BindPair) error {
+func Bind(ctx *gin.Context, pair BindPair) error {
 	err := pair.B.Bind(ctx, pair.V)
 	if err != nil {
 		return err
