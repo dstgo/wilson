@@ -14,13 +14,22 @@ type AppConf struct {
 	LocaleConf *locale.Conf `mapstructure:"locale"`
 }
 
-func NewAppConf(config *config.Config, author string, version string, goVersion string) (*AppConf, error) {
+func NewAppConf(config *config.Config, author string, version string) (*AppConf, error) {
 	cfg := new(AppConf)
 	if err := config.Viper().Unmarshal(cfg); err != nil {
 		return nil, err
 	}
+
+	if len(author) == 0 {
+		author = "none"
+	}
+
+	if len(version) == 0 {
+		version = "none"
+	}
+
 	cfg.ServerConf.Author = author
 	cfg.ServerConf.Version = version
-	cfg.ServerConf.GoVersion = goVersion
+
 	return cfg, nil
 }

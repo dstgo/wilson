@@ -17,7 +17,6 @@ var (
 	configFile string
 	Author     string
 	Version    string
-	GoVersion  string
 )
 
 func init() {
@@ -35,7 +34,7 @@ func main() {
 	}
 
 	// map configuration struct
-	appConf, err := conf.NewAppConf(appConfig, Author, Version, GoVersion)
+	appConf, err := conf.NewAppConf(appConfig, Author, Version)
 	if err != nil {
 		panic(err)
 	}

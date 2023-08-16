@@ -1,0 +1,11 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Wilson api documentation",
+        "title": "Wilson App Open API Documentation",
+        "contact": {},
+        "version": "v1.0.0"
+    },
+    "basePath": "/openapi/v1/",
+    "paths": {}
+}

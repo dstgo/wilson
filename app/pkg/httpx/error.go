@@ -5,6 +5,12 @@ import (
 	"net/http"
 )
 
+var (
+	InternalServerError   = errors.New("internal server error")
+	MethodNotAllowedError = errors.New("method not allowed")
+	ResourceNotFoundError = errors.New("resource not found")
+)
+
 type Error struct {
 	Code int
 	Err  string

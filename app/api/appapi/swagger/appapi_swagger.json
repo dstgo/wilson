@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "Wilson api documentation",
-        "title": "Wilson API Documentation",
+        "title": "Wilson App Internal API Documentation",
         "contact": {},
         "version": "v1.0.0"
     },

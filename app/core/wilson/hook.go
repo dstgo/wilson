@@ -11,8 +11,10 @@ import (
 	"github.com/dstgo/wilson/assets"
 	"github.com/dstgo/wilson/pkg/route"
 	"github.com/sirupsen/logrus"
+	"runtime"
 	"strings"
 	"text/template"
+	"time"
 )
 
 // on server boot hooks
@@ -31,12 +33,13 @@ func LogBanner(cfg *conf.AppConf, logger *logrus.Logger) error {
 
 	bannerData := map[string]any{
 		"author":     cfg.ServerConf.Author,
+		"timezone":   time.Now().Format("MST -07"),
 		"appName":    cfg.ServerConf.Name,
-		"goVersion":  cfg.ServerConf.GoVersion,
+		"goVersion":  runtime.Version(),
 		"appMode":    strings.ToUpper(cfg.ServerConf.Mode),
 		"appVersion": cfg.ServerConf.Version,
 		"osInfo":     fmt.Sprintf("%s %s %s", hostInfo.Os, hostInfo.Platform, hostInfo.Version),
-		"archInfo":   hostInfo.Arch,
+		"archInfo":   runtime.GOARCH,
 		"cpuInfo":    fmt.Sprintf("%s %d Cores", cpuInfo.Name, cpuInfo.Count),
 		"memInfo":    size.ParseTargetSize(memInfo.Virtual.Total.String(), size.GB),
 	}

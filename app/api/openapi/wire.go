@@ -1,7 +1,7 @@
 //go:build wireinject
 // +build wireinject
 
-package api
+package openapi
 
 import (
 	"github.com/dstgo/wilson/app/conf"
@@ -12,7 +12,7 @@ import (
 	"github.com/google/wire"
 )
 
-//go:generate wire gen -output_file_prefix api_
+//go:generate wire gen
 func NewApiRouter(appConf *conf.AppConf, rootRouter *route.Router, datasource *data.DataSource) ApiRouter {
-	panic(wire.Build(dao.DaoProviderSet, logic.LogicSet, ApiSet))
+	panic(wire.Build(dao.AppDaoSet, logic.OpenLogicSet, ApiSet))
 }

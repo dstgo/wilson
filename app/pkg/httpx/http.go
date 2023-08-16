@@ -1,6 +1,7 @@
 package httpx
 
 import (
+	"github.com/dstgo/wilson/app/pkg/httpx/httpheader"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
 	"regexp"
@@ -8,25 +9,17 @@ import (
 	"strings"
 )
 
-const (
-	RequestIdHeader         = "X-Request-ID"
-	AcceptLanguageHeader    = "Accept-Language"
-	ContentLanguageHeader   = "Content-Language"
-	AuthorizationHeader     = "Authorization"
-	BearerTokenHeaderPrefix = "Bearer "
-)
-
 var (
 	qualityValueRegexp = regexp.MustCompile("[/+*\\w-;q=.]+")
 )
 
 func SetRequestId(ctx *gin.Context, id string) {
-	ctx.Set(RequestIdHeader, id)
-	ctx.Writer.Header().Set(RequestIdHeader, id)
+	ctx.Set(httpheader.RequestIdHeader, id)
+	ctx.Writer.Header().Set(httpheader.RequestIdHeader, id)
 }
 
 func GetRequestId(ctx *gin.Context) (requestId string) {
-	return ctx.GetString(RequestIdHeader)
+	return ctx.GetString(httpheader.RequestIdHeader)
 }
 
 // GetAcceptLanguage
@@ -37,12 +30,12 @@ func GetRequestId(ctx *gin.Context) (requestId string) {
 // Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
 // https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept-Language
 func GetAcceptLanguage(ctx *gin.Context) []string {
-	cached := ctx.GetStringSlice(AcceptLanguageHeader)
+	cached := ctx.GetStringSlice(httpheader.AcceptLanguageHeader)
 	if cached != nil {
 		return cached
 	}
-	qualityValuePairs := GetQualityValuePairs(ctx.GetHeader(AcceptLanguageHeader))
-	ctx.Set(AcceptLanguageHeader, qualityValuePairs)
+	qualityValuePairs := GetQualityValuePairs(ctx.GetHeader(httpheader.AcceptLanguageHeader))
+	ctx.Set(httpheader.AcceptLanguageHeader, qualityValuePairs)
 	return qualityValuePairs
 }
 func GetFirstAcceptLanguage(ctx *gin.Context) string {
@@ -116,7 +109,7 @@ func GetQualityValuePairs(header string) []string {
 // param ctx *gin.Context
 // return string
 func GetBearerTokenFromCtx(ctx *gin.Context) string {
-	return GetBearerToken(ctx.GetHeader(AuthorizationHeader))
+	return GetBearerToken(ctx.GetHeader(httpheader.Authorization))
 }
 
 func GetBearerToken(authHeader string) string {
@@ -124,8 +117,8 @@ func GetBearerToken(authHeader string) string {
 	if len(authHeader) == 0 {
 		return token
 	}
-	if !strings.HasPrefix(authHeader, BearerTokenHeaderPrefix) {
+	if !strings.HasPrefix(authHeader, httpheader.BearerToken) {
 		return token
 	}
-	return strings.TrimSpace(strings.TrimPrefix(authHeader, BearerTokenHeaderPrefix))
+	return strings.TrimSpace(strings.TrimPrefix(authHeader, httpheader.BearerToken))
 }

@@ -5,6 +5,14 @@ import (
 	"github.com/google/wire"
 )
 
-var DaoProviderSet = wire.NewSet(
+// The role of different sets is only for convenience
+// and to avoid unused problems during wire injection
+// and they are logically consistent
+
+var AppDaoSet = wire.NewSet(
+	userDao.UserDaoSet,
+)
+
+var OpenDaoSet = wire.NewSet(
 	userDao.UserDaoSet,
 )

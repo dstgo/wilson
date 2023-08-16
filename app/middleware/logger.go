@@ -8,22 +8,30 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/exp/slices"
 	"time"
 )
 
-func UseLogger(logger *logrus.Logger) gin.HandlerFunc {
+func UseLogger(logger *logrus.Logger, skips ...string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+
+		// skip logger
+		if slices.Contains(skips, ctx.FullPath()) {
+			ctx.Next()
+			return
+		}
+
 		var (
 			request   = ctx.Request
 			requestId = uuid.NewString()
 			startTime = time.Now()
 		)
 
-		// next handlers
-		ctx.Next()
-
 		// set response header X-Request-ID
 		httpx.SetRequestId(ctx, requestId)
+
+		// next handlers
+		ctx.Next()
 
 		var (
 			url          = ctx.Request.URL.String()
@@ -33,6 +41,8 @@ func UseLogger(logger *logrus.Logger) gin.HandlerFunc {
 			status       = ctx.Writer.Status()
 			responseSize = ctx.Writer.Size()
 			requestSize  = request.ContentLength
+			contentType  = request.Header.Get("Content-Type")
+			responseType = ctx.Writer.Header().Get("Content-Type")
 
 			clientIp = ctx.ClientIP()
 			err      = ctx.Err()
@@ -49,8 +59,10 @@ func UseLogger(logger *logrus.Logger) gin.HandlerFunc {
 			WithField(types.LogRequestUrlKey, url).
 			WithField(types.LogHttpStatusKey, status).
 			WithField(types.LogRequestCostKey, fmt.Sprintf("%dms", costTime)).
-			WithField(types.LogHttpContentLength, closeSize(requestSize)).
-			WithField(types.LogHttpResponseLength, closeSize(int64(responseSize))).
+			WithField(types.LogRequestContentType, contentType).
+			WithField(types.LogHttpContentLength, closedSize(requestSize)).
+			WithField(types.LogResponseContentType, responseType).
+			WithField(types.LogHttpResponseLength, closedSize(int64(responseSize))).
 			WithField(types.LogRequestIdKey, requestId)
 
 		// log by status
@@ -64,7 +76,7 @@ func UseLogger(logger *logrus.Logger) gin.HandlerFunc {
 	}
 }
 
-func closeSize(s int64) string {
+func closedSize(s int64) string {
 	meta := size.NewSize(float64(s), size.B)
 	data := meta.Data
 	switch {

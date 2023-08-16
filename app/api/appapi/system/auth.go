@@ -1,4 +1,4 @@
-package systemApi
+package system
 
 import (
 	"github.com/dstgo/wilson/app/core/locale"

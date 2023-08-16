@@ -18,6 +18,31 @@ app:
       cert: xxx
       # tls pem file
       pem: xxx
+    # cross-origin configuration
+    cors:
+      enable: false
+      # allow origin
+      allowOrigin:
+        - http://localhost
+        - http://127.0.0.1
+      # allows methods
+      allowMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      # allow headers
+      allowHeaders:
+        - Accept-Language
+        - Authorization
+      # exposed headers
+      exposedHeaders:
+        - Content-Language
+      # http prefilight cached time by seconds
+      maxAge: 600
+      # cookies credentials enabled, but the project's authentication way is JWT,so no need to set this value
+      allowCredentials: false
     # http request read timeout
     readTimeout: 60s
     # http response write timeout
@@ -26,9 +51,9 @@ app:
     readHeaderTimeout: 10s
     # keep-alive timeout
     idleTimeout: 300s
-    # multipart max size
+    # multipart max size by bytes
     multipartMemory: 52428800
-    # max header size
+    # max header size by bytes
     maxHeaderBytes: 3145728
 
   # rpc client configuration

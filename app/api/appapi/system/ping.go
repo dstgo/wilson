@@ -1,4 +1,4 @@
-package systemApi
+package system
 
 import (
 	"github.com/dstgo/wilson/app/conf"
@@ -29,6 +29,7 @@ func (p *PingApi) Ping(ctx *gin.Context) {
 	err := vax.Binds(ctx,
 		vax.Query(pingReq),
 	)
+
 	if err != nil {
 		httpx.Failed(ctx, 4000, err)
 		return

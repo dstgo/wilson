@@ -2,7 +2,10 @@ package wilson
 
 import (
 	"fmt"
-	_ "github.com/dstgo/wilson/app/api/swagger"
+	"github.com/dstgo/wilson/app/api/appapi"
+	_ "github.com/dstgo/wilson/app/api/appapi/swagger"
+	"github.com/dstgo/wilson/app/api/openapi"
+	_ "github.com/dstgo/wilson/app/api/openapi/swagger"
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/core/auth"
 	"github.com/dstgo/wilson/app/core/locale"
@@ -18,9 +21,11 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"net/http"
+	"path"
 )
 
-func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger, datasource *data.DataSource) (*gin.Engine, *http.Server) {
+// NewHttpServer initializes http server configuration
+func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger) (*gin.Engine, *http.Server) {
 
 	serverConf := cfg.ServerConf
 
@@ -28,27 +33,24 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 	gin.DisableConsoleColor()
 	gin.DisableBindValidation()
 
-	engine.MaxMultipartMemory = serverConf.Http.MultipartMax
+	engine.MaxMultipartMemory = serverConf.HttpConf.MultipartMax
 
 	engine.Use(
-		middleware.UseLogger(logger),
+		middleware.UseLogger(logger, appapi.ApiDoc, openapi.ApiDoc),
+		middleware.UseRecovery(logger, lang),
 		middleware.UseAcceptLanguage(lang.Default()),
 	)
-
-	if cfg.ServerConf.Swagger {
-		engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	}
 
 	engine.NoMethod(middleware.NoMethodHandler(lang))
 	engine.NoRoute(middleware.NotFoundHandler(lang))
 
 	server := &http.Server{
-		Addr:              serverConf.Http.Address,
-		ReadTimeout:       serverConf.Http.ReadTimeout,
-		ReadHeaderTimeout: serverConf.Http.ReadHeadTimeout,
-		WriteTimeout:      serverConf.Http.WriteTimeout,
-		IdleTimeout:       serverConf.Http.IdleTimeout,
-		MaxHeaderBytes:    serverConf.Http.MaxHeader,
+		Addr:              serverConf.HttpConf.Address,
+		ReadTimeout:       serverConf.HttpConf.ReadTimeout,
+		ReadHeaderTimeout: serverConf.HttpConf.ReadHeadTimeout,
+		WriteTimeout:      serverConf.HttpConf.WriteTimeout,
+		IdleTimeout:       serverConf.HttpConf.IdleTimeout,
+		MaxHeaderBytes:    serverConf.HttpConf.MaxHeader,
 	}
 
 	// http request validate pkg
@@ -59,16 +61,42 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 	return engine, server
 }
 
-func NewRouter(cfg *conf.AppConf, lang *locale.Locale, engine *gin.Engine, datasource *data.DataSource) *route.Router {
-	router := route.NewRouter(engine.RouterGroup.Group("/api/v1/"))
+// NewAppApiRouter initializes app internal api router configuration
+func NewAppApiRouter(cfg *conf.AppConf, lang *locale.Locale, engine *gin.Engine, datasource *data.DataSource) appapi.ApiRouter {
+	if cfg.ServerConf.Swagger {
+		engine.GET(appapi.ApiDoc, ginSwagger.CustomWrapHandler(appapi.Config, swaggerFiles.NewHandler()))
+		log.L().Infof("visit AppAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(path.Dir(appapi.ApiDoc), "index.html"))
+	}
+
+	root := route.NewRouter(engine.RouterGroup.Group(appapi.BasePath))
+
+	// attach middleware to gin router
+	root.Attach(
+		middleware.UseCors(cfg.ServerConf.HttpConf.CorsConf),
+	)
+
 	// jwt authenticator
 	jwtAuthenticator := auth.NewJwtAuthenticator(cfg.JwtConf, lang, datasource.Redis)
 
-	router.Use(
+	root.Use(
 		middleware.UseJwtAuthenticate(jwtAuthenticator, lang),
 	)
 
-	return router
+	return appapi.NewApiRouter(cfg, root, datasource)
+}
+
+// NewOpenApiRouter initializes app open api router configuration
+func NewOpenApiRouter(cfg *conf.AppConf, lang *locale.Locale, engine *gin.Engine, datasource *data.DataSource) openapi.ApiRouter {
+	if !cfg.ServerConf.OpenAPI {
+		return openapi.ApiRouter{}
+	}
+	if cfg.ServerConf.Swagger {
+		engine.GET(openapi.ApiDoc, ginSwagger.CustomWrapHandler(openapi.Config, swaggerFiles.NewHandler()))
+		log.L().Infof("visit OpenAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(path.Dir(openapi.ApiDoc), "index.html"))
+	}
+	root := route.NewRouter(engine.RouterGroup.Group(openapi.BasePath))
+
+	return openapi.NewApiRouter(cfg, root, datasource)
 }
 
 func NewLocale(cfg *locale.Conf) (*locale.Locale, error) {
@@ -81,13 +109,16 @@ func NewLocale(cfg *locale.Conf) (*locale.Locale, error) {
 }
 
 // NewLogger config logrus middleware
-// param logConf *conf.LogConf
-// return *log.LoggerW
-// return error
 func NewLogger(logConf *conf.LogConf) (*log.LoggerW, error) {
 	logConf.TimeFormat = conf.DateTimeFormat
-	logConf.Order = []string{types.LogIpKey, types.LogHttpMethodKey, types.LogRequestPathKey, types.LogRequestUrlKey,
-		types.LogHttpStatusKey, types.LogRequestCostKey, types.LogHttpContentLength, types.LogHttpResponseLength, types.LogRequestIdKey}
+	logConf.Order = []string{
+		types.LogIpKey, types.LogHttpMethodKey,
+		types.LogHttpStatusKey, types.LogRequestPathKey,
+		types.LogRequestUrlKey, types.LogRequestCostKey,
+		types.LogRequestContentType, types.LogHttpContentLength,
+		types.LogResponseContentType, types.LogHttpResponseLength,
+		types.LogRecoverRequestKey, types.LogRecoverErrorKey,
+		types.LogRecoverStackKey, types.LogRequestIdKey}
 	logger, err := log.NewLogger(logConf)
 	if err != nil {
 		return nil, errors.Wrap(err, "load logger failed")

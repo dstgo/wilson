@@ -8,6 +8,6 @@
  ███░ ░░░██░██ ███ ██████ ░░██████  ███  ░██   ██████ ░░██████░███     ░░██   ░░██████░███
 ░░░    ░░░ ░░ ░░░ ░░░░░░   ░░░░░░  ░░░   ░░   ░░░░░░   ░░░░░░ ░░░       ░░     ░░░░░░ ░░░
 
-Author={{ .author }} AppName={{ .appName}} AppMode={{ .appMode }} AppVersion={{ .appVersion }} GoVersion={{ .goVersion }}
-Os={{ .osInfo }} Arch= {{ .archInfo }}
-Cpu={{ .cpuInfo }} Mem= {{ .memInfo }}
+Author={{ .author }} AppName={{ .appName}} AppMode={{ .appMode }} AppVersion={{ .appVersion }} GoVersion={{ .goVersion }} Timezone={{ .timezone }}
+Os={{ .osInfo }} Arch={{ .archInfo }}
+Cpu={{ .cpuInfo }} Mem={{ .memInfo }}

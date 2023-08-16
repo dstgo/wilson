@@ -1,4 +1,4 @@
-package userApi
+package user
 
 import (
 	"github.com/dstgo/wilson/app/logic/userLogic"

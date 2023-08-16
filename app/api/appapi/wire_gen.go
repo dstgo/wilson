@@ -4,11 +4,11 @@
 //go:build !wireinject
 // +build !wireinject
 
-package api
+package appapi
 
 import (
-	"github.com/dstgo/wilson/app/api/systemApi"
-	"github.com/dstgo/wilson/app/api/userApi"
+	systemApi2 "github.com/dstgo/wilson/app/api/appapi/system"
+	userApi2 "github.com/dstgo/wilson/app/api/appapi/user"
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/dao/userDao"
 	"github.com/dstgo/wilson/app/data"
@@ -22,12 +22,12 @@ import (
 //go:generate wire gen -output_file_prefix api_
 func NewApiRouter(appConf *conf.AppConf, rootRouter *route.Router, datasource *data.DataSource) ApiRouter {
 	pingLogic := systemLogic.NewPingLogic(appConf)
-	pingApi := systemApi.NewPingApi(appConf, pingLogic)
-	router := systemApi.NewSystemRouter(rootRouter, pingApi)
+	pingApi := systemApi2.NewPingApi(appConf, pingLogic)
+	router := systemApi2.NewSystemRouter(rootRouter, pingApi)
 	userInfoDao := userDao.NewUserInfoDao(datasource)
 	userInfoLogic := userLogic.NewUserLogic(userInfoDao)
-	userInfoApi := userApi.NewUserInfoApi(userInfoLogic)
-	userApiRouter := userApi.NewUserRouter(rootRouter, userInfoApi)
+	userInfoApi := userApi2.NewUserInfoApi(userInfoLogic)
+	userApiRouter := userApi2.NewUserRouter(rootRouter, userInfoApi)
 	apiRouter := ApiRouter{
 		SystemApi: router,
 		UserApi:   userApiRouter,

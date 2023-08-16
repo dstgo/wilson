@@ -11,12 +11,10 @@ import (
 
 	"github.com/dstgo/wilson/pkg/task"
 
-	"github.com/dstgo/wilson/app/api"
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/core/locale"
 	"github.com/dstgo/wilson/app/core/log"
 	"github.com/dstgo/wilson/app/data"
-	"github.com/dstgo/wilson/pkg/route"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -31,9 +29,8 @@ type App struct {
 
 func (a *App) run() error {
 	appConf := a.cfg.ServerConf
-	a.logger.Infof("wilson app boot successfully, http server is listenning at %s, tls enable %t", a.server.Addr, appConf.Http.TlsConf.Enable)
-	a.logger.Infof("api doc address: http://127.0.0.1:8080/swagger/index.html")
-	tlsConf := a.cfg.ServerConf.Http.TlsConf
+	a.logger.Infof("wilson app boot successfully, http server is listenning at %s, tls enable %t", a.server.Addr, appConf.HttpConf.TlsConf.Enable)
+	tlsConf := a.cfg.ServerConf.HttpConf.TlsConf
 	if tlsConf.Enable {
 		return a.server.ListenAndServeTLS(tlsConf.Cert, tlsConf.Pem)
 	}
@@ -68,7 +65,7 @@ func (a *App) Run(ctx context.Context) error {
 
 func (a *App) Shutdown() {
 	a.once.Do(func() {
-		a.logger.Infof("wilson app ready to graceful shutdown")
+		a.logger.Infof("wilson app ready to shutdown")
 		a.server.Shutdown(context.Background())
 		a.shutddownFn()
 	})
@@ -81,7 +78,6 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App,
 		engine     *gin.Engine
 		server     *http.Server
 		datasource *data.DataSource
-		rootRouter *route.Router
 		err        error
 		logger     = loggerw.L()
 	)
@@ -103,17 +99,13 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App,
 	}
 
 	// http server
-	engine, server = NewHttpServer(cfg, lang, logger, datasource)
+	engine, server = NewHttpServer(cfg, lang, logger)
 
-	// rootRouter
-	rootRouter = NewRouter(cfg, lang, engine, datasource)
+	// register app api router
+	_ = NewAppApiRouter(cfg, lang, engine, datasource)
 
-	// attach api router
-	_ = api.NewApiRouter(
-		cfg,
-		rootRouter,
-		datasource,
-	)
+	// register open api router
+	_ = NewOpenApiRouter(cfg, lang, engine, datasource)
 
 	// execute on server shutdown
 	shutdownFn := func() {

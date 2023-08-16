@@ -1,6 +1,7 @@
 package conf
 
 import (
+	"github.com/dstgo/wilson/app/pkg/httpx"
 	"time"
 )
 
@@ -10,9 +11,10 @@ type ServerConf struct {
 	Author    string
 	GoVersion string
 	Swagger   bool     `mapstructure:"swagger"`
+	OpenAPI   bool     `mapstructure:"openapi"`
 	Version   string   `mapstructure:"version"`
 	Name      string   `mapstructure:"name"`
-	Http      HttpConf `mapstructure:"http"`
+	HttpConf  HttpConf `mapstructure:"http"`
 	Rpc       RpcConf  `mapstructure:"rpc"`
 }
 
@@ -20,7 +22,8 @@ type ServerConf struct {
 type HttpConf struct {
 	Address string `mapstructure:"address"`
 
-	TlsConf *TlsConf `mapstructure:"tls"`
+	TlsConf  *TlsConf    `mapstructure:"tls"`
+	CorsConf *httpx.Cors `mapstructure:"cors"`
 
 	ReadTimeout     time.Duration `mapstructure:"readTimeout"`
 	WriteTimeout    time.Duration `mapstructure:"writeTimeout"`

@@ -1,0 +1,8 @@
+basePath: /openapi/v1/
+info:
+  contact: {}
+  description: Wilson api documentation
+  title: Wilson App Open API Documentation
+  version: v1.0.0
+paths: {}
+swagger: "2.0"

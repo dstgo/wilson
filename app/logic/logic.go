@@ -6,7 +6,15 @@ import (
 	"github.com/google/wire"
 )
 
-var LogicSet = wire.NewSet(
+// The role of different sets is only for convenience
+// and to avoid unused problems during wire injection
+// and they are logically consistent
+
+var AppLogicSet = wire.NewSet(
 	systemLogic.NewPingLogic,
+	userLogic.NewUserLogic,
+)
+
+var OpenLogicSet = wire.NewSet(
 	userLogic.NewUserLogic,
 )
