@@ -47,7 +47,7 @@ func (r MultipleOfRule) ErrorObject(err Error) MultipleOfRule {
 
 // Validate checks if the value is a multiple of the "base" value.
 func (r MultipleOfRule) Validate(lang string, value interface{}) error {
-	r.err.SetLang(lang)
+	r.err = r.err.SetLang(lang)
 	rv := reflect.ValueOf(r.base)
 	switch rv.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:

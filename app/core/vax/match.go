@@ -39,7 +39,7 @@ func (r MatchRule) Msg(msg string) Rule {
 
 // Validate checks if the given value is valid or not.
 func (r MatchRule) Validate(lang string, value interface{}) error {
-	r.err.SetLang(lang)
+	r.err = r.err.SetLang(lang)
 	value, isNil := Indirect(value)
 	if isNil {
 		return nil

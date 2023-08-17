@@ -89,7 +89,7 @@ func Eq(num any) CompareRule {
 
 // Validate checks if the given value is valid or not.
 func (r CompareRule) Validate(lang string, value interface{}) error {
-	r.err.SetLang(lang)
+	r.err = r.err.SetLang(lang)
 	value, isNil := Indirect(value)
 	if isNil || IsEmpty(value) {
 		return nil

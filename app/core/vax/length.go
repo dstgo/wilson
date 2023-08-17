@@ -45,7 +45,7 @@ func (r RangeLengthRule) Msg(msg string) Rule {
 
 // Validate checks if the given value is valid or not.
 func (r RangeLengthRule) Validate(lang string, value interface{}) error {
-	r.err.SetLang(lang)
+	r.err = r.err.SetLang(lang)
 	l, err := Len(value, r.rune)
 	if err != nil {
 		return err
@@ -84,7 +84,7 @@ type MaxLengthRule struct {
 }
 
 func (r MaxLengthRule) Validate(lang string, value interface{}) error {
-	r.err.SetLang(lang)
+	r.err = r.err.SetLang(lang)
 	l, err := Len(value, false)
 	if err != nil {
 		return err
@@ -112,7 +112,7 @@ type MinLengthRule struct {
 }
 
 func (r MinLengthRule) Validate(lang string, value interface{}) error {
-	r.err.SetLang(lang)
+	r.err = r.err.SetLang(lang)
 	l, err := Len(value, false)
 	if err != nil {
 		return err
@@ -140,7 +140,7 @@ type EqLengthRule struct {
 }
 
 func (r EqLengthRule) Validate(lang string, value interface{}) error {
-	r.err.SetLang(lang)
+	r.err = r.err.SetLang(lang)
 	l, err := Len(value, false)
 	if err != nil {
 		return err

@@ -35,7 +35,7 @@ func (r NotInRule) Msg(msg string) Rule {
 
 // Validate checks if the given value is valid or not.
 func (r NotInRule) Validate(lang string, value interface{}) error {
-	r.err.SetLang(lang)
+	r.err = r.err.SetLang(lang)
 	value, isNil := Indirect(value)
 	if isNil || IsEmpty(value) {
 		return nil

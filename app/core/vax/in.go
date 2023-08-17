@@ -39,7 +39,6 @@ func (r InRule) Msg(msg string) Rule {
 
 // Validate checks if the given value is valid or not.
 func (r InRule) Validate(lang string, value interface{}) error {
-	r.err.SetLang(lang)
 	value, isNil := Indirect(value)
 	if isNil || IsEmpty(value) {
 		return nil
@@ -50,5 +49,5 @@ func (r InRule) Validate(lang string, value interface{}) error {
 			return nil
 		}
 	}
-	return r.err
+	return r.err.SetLang(lang)
 }
