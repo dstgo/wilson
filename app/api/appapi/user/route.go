@@ -11,10 +11,10 @@ var UserApiSet = wire.NewSet(
 )
 
 type Router struct {
-	UserInfoApi *UserInfoApi
+	UserInfoApi UserInfoApi
 }
 
-func NewUserRouter(root *route.Router, userInfo *UserInfoApi) *Router {
+func NewUserRouter(root *route.Router, userInfo UserInfoApi) Router {
 
-	return &Router{UserInfoApi: userInfo}
+	return Router{UserInfoApi: userInfo}
 }

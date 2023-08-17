@@ -32,12 +32,14 @@ func (r RedisConf) Options() *redis.Options {
 
 // DatabaseConf relational database config
 type DatabaseConf struct {
-	Driver      string `mapstructure:"driver"`
-	Network     string `mapstructure:"network"`
-	Address     string `mapstructure:"addr"`
-	User        string `mapstructure:"user"`
-	Password    string `mapstructure:"pswd"`
-	Params      string `mapstructure:"params"`
-	MaxOpenCons int    `mapstructure:"maxOpenCons"`
-	MaxIdleCons int    `mapstructure:"maxIdleCons"`
+	Driver      string        `mapstructure:"driver"`
+	Network     string        `mapstructure:"network"`
+	Address     string        `mapstructure:"addr"`
+	User        string        `mapstructure:"user"`
+	Password    string        `mapstructure:"pswd"`
+	Params      string        `mapstructure:"params"`
+	MaxOpenCons int           `mapstructure:"maxOpenCons"`
+	MaxIdleCons int           `mapstructure:"maxIdleCons"`
+	MaxIdleTime time.Duration `mapstructure:"maxIdleTime"`
+	MaxLifetime time.Duration `mapstructure:"maxLifetime"`
 }

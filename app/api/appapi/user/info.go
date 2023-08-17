@@ -5,18 +5,26 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewUserInfoApi(userL *userLogic.UserInfoLogic) *UserInfoApi {
-	return &UserInfoApi{info: userL}
+func NewUserInfoApi(userL userLogic.UserInfoLogic) UserInfoApi {
+	return UserInfoApi{info: userL}
 }
 
 type UserInfoApi struct {
-	info *userLogic.UserInfoLogic
+	info userLogic.UserInfoLogic
 }
 
-func (ui *UserInfoApi) GetUserInfo(ctx *gin.Context) {
+func (ui UserInfoApi) GetUserInfo(ctx *gin.Context) {
 
 }
 
-func (ui *UserInfoApi) ListUserInfo(ctx *gin.Context) {
+func (ui UserInfoApi) GetUserInfoById(ctx *gin.Context) {
+
+}
+
+func (ui UserInfoApi) GetUserInfoList(ctx *gin.Context) {
+
+}
+
+func (ui UserInfoApi) UpdateUserInfo(ctx *gin.Context) {
 
 }

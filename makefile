@@ -1,4 +1,3 @@
-OS := $(shell go env GOHOSTOS)
 GO_VERSION = $(shell go env GOVERSION)
 VERSION = $(shell git describe --tags --always)
 
@@ -11,12 +10,14 @@ init:
 	go install github.com/google/wire/cmd/wire@latest
 	go get github.com/google/wire/cmd/wire@latest
 
-.PHONY: generate
-generate:
+.PHONY: gen
+gen:
 	go generate ./...
 
 .PHONY: build
 build:
+	go get github.com/google/wire/cmd/wire@v0.5.0
+	make gen
 	go build -trimpath -ldflags "-X main.Author=stranger -X main.Version=$(VERSION) -X main.GoVersion=$(GO_VERSION)" -o ./bin/ github.com/dstgo/wilson
 
 

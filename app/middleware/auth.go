@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/dstgo/wilson/app/core/auth"
 	"github.com/dstgo/wilson/app/core/locale"
+	"github.com/dstgo/wilson/app/core/resp"
 	"github.com/dstgo/wilson/app/pkg/httpx"
 	"github.com/dstgo/wilson/app/types/meta"
 	"github.com/dstgo/wilson/pkg/route"
@@ -32,14 +33,14 @@ func UseJwtAuthenticate(v auth.Authenticator, l *locale.Locale) gin.HandlerFunc 
 			auth.SetContextUserInfo(ctx, userClaims)
 		} else {
 			ctx.Abort()
-			var httpError httpx.Error
+			var httpError resp.Error
 			switch {
 			case errors.Is(err, jwt.ErrTokenExpired):
-				httpError = httpx.NewErrorMsg(401, l.GetWithCtx(ctx, "jwt.expired"))
+				httpError = resp.NewI18nErr(401, "jwt.expired")
 			default:
-				httpError = httpx.NewErrorMsg(403, l.GetWithCtx(ctx, "jwt.parsedFailed"))
+				httpError = resp.NewI18nErr(403, "jwt.parsedFailed")
 			}
-			httpx.Failed(ctx, httpError.Code*10, httpError)
+			resp.Fail(ctx, httpError.Code*10, httpError)
 		}
 	}
 }

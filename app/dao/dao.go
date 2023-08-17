@@ -10,9 +10,9 @@ import (
 // and they are logically consistent
 
 var AppDaoSet = wire.NewSet(
-	userDao.UserDaoSet,
+	userDao.DaoSet,
 )
 
 var OpenDaoSet = wire.NewSet(
-	userDao.UserDaoSet,
+	userDao.DaoSet,
 )

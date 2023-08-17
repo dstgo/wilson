@@ -4,20 +4,18 @@ import (
 	"fmt"
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 type PingLogic struct {
-	logger *logrus.Logger
-	conf   *conf.AppConf
+	conf *conf.AppConf
 }
 
-func NewPingLogic(conf *conf.AppConf) *PingLogic {
-	return &PingLogic{
+func NewPingLogic(conf *conf.AppConf) PingLogic {
+	return PingLogic{
 		conf: conf,
 	}
 }
 
-func (Ping *PingLogic) Ping(ctx *gin.Context, name string) string {
+func (Ping PingLogic) Ping(ctx *gin.Context, name string) string {
 	return fmt.Sprintf("hello wolrd! %s", name)
 }

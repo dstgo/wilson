@@ -3,14 +3,13 @@ package data
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/dstgo/task"
 	"github.com/dstgo/wilson/app/conf"
+	"github.com/dstgo/wilson/app/data/entity"
 	"github.com/dstgo/wilson/app/pkg/errorx"
 	"github.com/go-redis/redis/v8"
-	mysqldriver "github.com/go-sql-driver/mysql"
-	"github.com/google/wire"
 	"github.com/sirupsen/logrus"
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -31,16 +30,19 @@ func NewDBClient(ctx context.Context, conf *conf.DatabaseConf, logger *logrus.Lo
 	if conf == nil {
 		return nil, errors.New("db conf is empty")
 	}
-	var dial gorm.Dialector
+	var (
+		dial gorm.Dialector
+		err  error
+	)
 
-	// choose driver
-	switch conf.Driver {
-	case "mysql":
-		client, err := newMysqlClient(conf)
-		if err != nil {
-			return nil, err
-		}
-		dial = client
+	driverFn, exist := SupportDrivers[conf.Driver]
+	if !exist {
+		return nil, fmt.Errorf("driverFn is unsupport: %s", conf.Driver)
+	}
+
+	dial, err = driverFn(conf)
+	if err != nil {
+		return nil, err
 	}
 
 	ormDB, err := gorm.Open(dial, ormOption(ormLogger(logger)))
@@ -55,42 +57,41 @@ func NewDBClient(ctx context.Context, conf *conf.DatabaseConf, logger *logrus.Lo
 
 	db.SetMaxOpenConns(conf.MaxOpenCons)
 	db.SetMaxIdleConns(conf.MaxIdleCons)
+	db.SetConnMaxIdleTime(conf.MaxIdleTime)
+	db.SetConnMaxLifetime(conf.MaxLifetime)
 
 	// ping server
 	if err := db.PingContext(ctx); err != nil {
 		return nil, err
 	}
 
+	// migrate table
+	if err := entity.Migrate(ormDB); err != nil {
+		return ormDB, err
+	}
+
 	return ormDB, nil
 }
 
-func newMysqlClient(conf *conf.DatabaseConf) (gorm.Dialector, error) {
-	dsn := MysqlDsn(conf)
-	dsnConf, err := mysqldriver.ParseDSN(dsn)
-	if err != nil {
-		return nil, err
-	}
-	client := mysql.New(mysql.Config{
-		DriverName: conf.Driver,
-		DSN:        dsn,
-		DSNConfig:  dsnConf,
-	})
-	return client, nil
+type DataSource struct {
+	redis *redis.Client
+	orm   *gorm.DB
 }
 
-var DataSourceSet = wire.NewSet(NewDataSource)
+func (d *DataSource) Redis() *redis.Client {
+	return d.redis
+}
 
-type DataSource struct {
-	Redis *redis.Client
-	OrmDB *gorm.DB
+func (d *DataSource) ORM() *gorm.DB {
+	return d.orm
 }
 
 func (d *DataSource) Close() error {
-	db, err := d.OrmDB.DB()
+	db, err := d.orm.DB()
 	return errorx.Join(
 		err,
 		db.Close(),
-		d.Redis.Close(),
+		d.redis.Close(),
 	).Err()
 }
 
@@ -112,7 +113,7 @@ func NewDataSource(ctx context.Context, databaseConf *conf.DataConf, logger *log
 			return
 		}
 		logger.Infof("gorm db connected:(%s) ok √", databaseConf.DatabaseConf.Address)
-		datasource.OrmDB = db
+		datasource.orm = db
 	})
 
 	// connect to redis db
@@ -124,7 +125,7 @@ func NewDataSource(ctx context.Context, databaseConf *conf.DataConf, logger *log
 			return
 		}
 		logger.Infof("redis server connected:(%s) ok √", redisClient.Options().Addr)
-		datasource.Redis = redisClient
+		datasource.redis = redisClient
 	})
 
 	dataTask.Run()

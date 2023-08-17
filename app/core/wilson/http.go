@@ -37,12 +37,12 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 
 	engine.Use(
 		middleware.UseLogger(logger, appapi.ApiDoc, openapi.ApiDoc),
-		middleware.UseRecovery(logger, lang),
+		middleware.UseRecovery(logger),
 		middleware.UseAcceptLanguage(lang.Default()),
 	)
 
-	engine.NoMethod(middleware.NoMethodHandler(lang))
-	engine.NoRoute(middleware.NotFoundHandler(lang))
+	engine.NoMethod(middleware.NoMethodHandler())
+	engine.NoRoute(middleware.NotFoundHandler())
 
 	server := &http.Server{
 		Addr:              serverConf.HttpConf.Address,
@@ -68,6 +68,9 @@ func NewAppApiRouter(cfg *conf.AppConf, lang *locale.Locale, engine *gin.Engine,
 		log.L().Infof("visit AppAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(path.Dir(appapi.ApiDoc), "index.html"))
 	}
 
+	// jwt authenticator
+	jwtAuthenticator := auth.NewJwtAuthenticator(cfg.JwtConf, lang, datasource.Redis())
+
 	root := route.NewRouter(engine.RouterGroup.Group(appapi.BasePath))
 
 	// attach middleware to gin router
@@ -75,14 +78,11 @@ func NewAppApiRouter(cfg *conf.AppConf, lang *locale.Locale, engine *gin.Engine,
 		middleware.UseCors(cfg.ServerConf.HttpConf.CorsConf),
 	)
 
-	// jwt authenticator
-	jwtAuthenticator := auth.NewJwtAuthenticator(cfg.JwtConf, lang, datasource.Redis)
-
 	root.Use(
 		middleware.UseJwtAuthenticate(jwtAuthenticator, lang),
 	)
 
-	return appapi.NewApiRouter(cfg, root, datasource)
+	return appapi.NewApiRouter(cfg, root, datasource, jwtAuthenticator)
 }
 
 // NewOpenApiRouter initializes app open api router configuration

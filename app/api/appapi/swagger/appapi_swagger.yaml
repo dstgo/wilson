@@ -1,19 +1,84 @@
 basePath: /api/v1
+definitions:
+  request.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
 info:
   contact: {}
   description: Wilson api documentation
   title: Wilson App Internal API Documentation
   version: v1.0.0
 paths:
-  /ping:
-    get:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: if login success, return jwt token
       parameters:
-      - description: name
+      - description: comment
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginRequest'
+      produces:
+      - application/json
+      responses: {}
+      summary: user login api
+      tags:
+      - system/auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: user register api
+      parameters:
+      - description: comment
         in: query
         name: name
         required: true
         type: string
-      responses: {}
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: comment
+          schema:
+            type: string
+        "400":
+          description: comment
+          schema:
+            type: string
+      summary: user register api
+      tags:
+      - system/auth
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: path params
+      parameters:
+      - description: comment
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: comment
+          schema:
+            type: string
+        "400":
+          description: comment
+          schema:
+            type: string
+      summary: path params example
       tags:
       - system
 swagger: "2.0"

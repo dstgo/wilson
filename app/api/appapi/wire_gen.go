@@ -7,9 +7,10 @@
 package appapi
 
 import (
-	systemApi2 "github.com/dstgo/wilson/app/api/appapi/system"
-	userApi2 "github.com/dstgo/wilson/app/api/appapi/user"
+	"github.com/dstgo/wilson/app/api/appapi/system"
+	"github.com/dstgo/wilson/app/api/appapi/user"
 	"github.com/dstgo/wilson/app/conf"
+	"github.com/dstgo/wilson/app/core/auth"
 	"github.com/dstgo/wilson/app/dao/userDao"
 	"github.com/dstgo/wilson/app/data"
 	"github.com/dstgo/wilson/app/logic/systemLogic"
@@ -17,20 +18,22 @@ import (
 	"github.com/dstgo/wilson/pkg/route"
 )
 
-// Injectors from api_wire.go:
+// Injectors from wire.go:
 
-//go:generate wire gen -output_file_prefix api_
-func NewApiRouter(appConf *conf.AppConf, rootRouter *route.Router, datasource *data.DataSource) ApiRouter {
+//go:generate wire gen
+func NewApiRouter(appConf *conf.AppConf, rootRouter *route.Router, datasource *data.DataSource, issue auth.Issuer) ApiRouter {
 	pingLogic := systemLogic.NewPingLogic(appConf)
-	pingApi := systemApi2.NewPingApi(appConf, pingLogic)
-	router := systemApi2.NewSystemRouter(rootRouter, pingApi)
+	pingApi := system.NewPingApi(appConf, pingLogic)
 	userInfoDao := userDao.NewUserInfoDao(datasource)
+	authLogic := systemLogic.NewAuthLogic(issue, userInfoDao)
+	authApi := system.NewAuthApi(authLogic)
+	router := system.NewSystemRouter(rootRouter, pingApi, authApi)
 	userInfoLogic := userLogic.NewUserLogic(userInfoDao)
-	userInfoApi := userApi2.NewUserInfoApi(userInfoLogic)
-	userApiRouter := userApi2.NewUserRouter(rootRouter, userInfoApi)
+	userInfoApi := user.NewUserInfoApi(userInfoLogic)
+	userRouter := user.NewUserRouter(rootRouter, userInfoApi)
 	apiRouter := ApiRouter{
 		SystemApi: router,
-		UserApi:   userApiRouter,
+		UserApi:   userRouter,
 	}
 	return apiRouter
 }

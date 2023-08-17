@@ -1,5 +1,7 @@
 # 数据校验部分
 [validate]
+isnil = "必须是空值"
+isempty = "必须是默认值"
 required = "是必需值，不能为空"
 empty = "不能为零值"
 notnil = "不能为空"
@@ -13,7 +15,6 @@ eq = "必须等于%v"
 match = "必须匹配正则表达式%v"
 multiple = "必须是%v的倍数"
 date = "必须是有效的日期格式"
-
 
 [validate.length]
 range = "长度必须位于%v到%v之间"
@@ -77,11 +78,6 @@ longitude = "必须是有效经度"
 ssn = "必须是有效的SSN代码"
 version = "必须是有效语义版本"
 
-
-
-
-
-
 # 一些常用的字段名称
 [field]
 name = "名称"
@@ -96,6 +92,7 @@ userid = "用户标识符"
 [http]
 404 = "访问的资源不存在"
 405 = "不支持的HTTP方法"
+500 = "服务器内部错误"
 
 [jwt]
 parsedFailed = "用户认证失败，请尝试重新登录"

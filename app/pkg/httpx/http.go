@@ -81,8 +81,8 @@ func GetQualityValuePairs(header string) []string {
 
 		if len(qvSplit) > 1 {
 			quality := cast.ToFloat64(strings.TrimSpace(qvSplit[1]))
-			for _, tempqv := range tempqvs {
-				tempqv.quality = quality
+			for i := 0; i < len(tempqvs); i++ {
+				tempqvs[i].quality = quality
 			}
 			qvs = append(qvs, tempqvs...)
 			tempqvs = []qualityV{}
@@ -95,7 +95,7 @@ func GetQualityValuePairs(header string) []string {
 
 	// sort by quality
 	sort.Slice(qvs, func(i, j int) bool {
-		return qvs[i].quality < qvs[j].quality
+		return qvs[i].quality > qvs[j].quality
 	})
 
 	for _, qv := range qvs {

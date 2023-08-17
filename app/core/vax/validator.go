@@ -1,6 +1,7 @@
 package vax
 
 import (
+	"github.com/dstgo/wilson/app/core/resp"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,6 +18,14 @@ func Binds(ctx *gin.Context, pairs ...BindPair) error {
 		}
 	}
 	return nil
+}
+
+func BindsAndResp(ctx *gin.Context, pairs ...BindPair) error {
+	err := Binds(ctx, pairs...)
+	if err != nil {
+		resp.Fail(ctx, 400, err)
+	}
+	return err
 }
 
 func Bind(ctx *gin.Context, pair BindPair) error {

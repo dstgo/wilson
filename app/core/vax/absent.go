@@ -6,9 +6,9 @@ package vax
 
 var (
 	// ErrNil is the error that returns when a value is not nil.
-	ErrNil = NewError("validation_nil", "must be blank")
+	ErrNil = NewError("validate.isnil", "must be blank")
 	// ErrEmpty is the error that returns when a not nil value is not empty.
-	ErrEmpty = NewError("validation_empty", "must be blank")
+	ErrEmpty = NewError("validate.isempty", "must be blank")
 )
 
 // Nil is a validation rule that checks if a value is nil.
@@ -24,18 +24,28 @@ type absentRule struct {
 	skipNil   bool
 }
 
+func (r absentRule) Code(code string) Rule {
+	r.err.SetCode(code)
+	return r
+}
+
+func (r absentRule) Msg(msg string) Rule {
+	r.err.SetMessage(msg)
+	return r
+}
+
 // Validate checks if the given value is valid or not.
-func (r absentRule) Validate(value interface{}) error {
+func (r absentRule) Validate(lang string, value interface{}) error {
 	if r.condition {
 		value, isNil := Indirect(value)
 		if !r.skipNil && !isNil || r.skipNil && !isNil && !IsEmpty(value) {
 			if r.err != nil {
-				return r.err
+				return r.err.SetLang(lang)
 			}
 			if r.skipNil {
-				return ErrEmpty
+				return ErrEmpty.SetLang(lang)
 			}
-			return ErrNil
+			return ErrNil.SetLang(lang)
 		}
 	}
 	return nil

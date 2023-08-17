@@ -3,7 +3,7 @@ package middleware
 import (
 	"errors"
 	"fmt"
-	"github.com/dstgo/wilson/app/core/locale"
+	"github.com/dstgo/wilson/app/core/resp"
 	"github.com/dstgo/wilson/app/pkg/httpx"
 	"github.com/dstgo/wilson/app/pkg/httpx/httpheader"
 	"github.com/dstgo/wilson/app/types"
@@ -48,17 +48,16 @@ func UseCors(cors *httpx.Cors) gin.HandlerFunc {
 }
 
 // UseRecovery handler chain recover
-func UseRecovery(logger *logrus.Logger, lang *locale.Locale) gin.HandlerFunc {
+func UseRecovery(logger *logrus.Logger) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		defer func() {
-			var (
-				responseErr = httpx.InternalServerError
-				brokenPipe  bool
-			)
-
-			var err any
 
 			if panicErr := recover(); panicErr != nil {
+				var (
+					brokenPipe bool
+				)
+
+				var err any
 				// Check for a broken connection, as it is not really a
 				// condition that warrants a panic stack trace.
 				if ne, ok := panicErr.(*net.OpError); ok {
@@ -79,15 +78,11 @@ func UseRecovery(logger *logrus.Logger, lang *locale.Locale) gin.HandlerFunc {
 					WithField(types.LogRequestIdKey, httpx.GetRequestId(ctx))
 
 				if !brokenPipe {
-					entry = entry.WithField("stack", string(debug.Stack()))
+					entry = entry.WithField(types.LogRecoverStackKey, string(debug.Stack()))
 				}
 
 				if logger != nil {
 					entry.Errorln()
-				}
-
-				if lang != nil {
-					responseErr = lang.NewErrorWithCtx(ctx, "http.500")
 				}
 
 				ctx.Abort()
@@ -96,7 +91,7 @@ func UseRecovery(logger *logrus.Logger, lang *locale.Locale) gin.HandlerFunc {
 					return
 				}
 
-				httpx.Failed(ctx, 5000, httpx.NewError(http.StatusInternalServerError, responseErr))
+				resp.Fail(ctx, 5000, resp.NewI18nErr(http.StatusInternalServerError, "http.500"))
 			}
 		}()
 
@@ -119,23 +114,15 @@ func UseAcceptLanguage(defaultLanguage string) gin.HandlerFunc {
 }
 
 // NotFoundHandler 404 handler
-func NotFoundHandler(l *locale.Locale) gin.HandlerFunc {
+func NotFoundHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		err := httpx.ResourceNotFoundError
-		if l != nil {
-			err = l.NewErrorWithCtx(ctx, "http.404")
-		}
-		httpx.Failed(ctx, 4040, httpx.NotFoundError(err))
+		resp.NotFound(ctx, 4040, resp.NewI18nErr(http.StatusNotFound, "http.404"))
 	}
 }
 
 // NoMethodHandler no method handler
-func NoMethodHandler(l *locale.Locale) gin.HandlerFunc {
+func NoMethodHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		err := httpx.MethodNotAllowedError
-		if l != nil {
-			err = l.NewErrorWithCtx(ctx, "http.405")
-		}
-		httpx.Failed(ctx, 4050, httpx.NotFoundError(err))
+		resp.MethodNotAllowed(ctx, 4050, resp.NewI18nErr(http.StatusMethodNotAllowed, "http.405"))
 	}
 }

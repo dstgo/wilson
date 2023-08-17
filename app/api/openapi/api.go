@@ -17,7 +17,7 @@ var ApiSet = wire.NewSet(
 )
 
 type ApiRouter struct {
-	UserApi *user.UserRouter
+	UserApi user.UserRouter
 }
 
 var Config = &ginSwagger.Config{
@@ -33,8 +33,8 @@ var Config = &ginSwagger.Config{
 
 // swagger declarative api comment
 
-// @title Wilson App Open API Documentation
-// @version v1.0.0
-// @description Wilson api documentation
-// @BasePath /openapi/v1/
-//go:generate swag init --generatedTime --instanceName openapi -g api.go -d ./ --output ./swagger
+//	@title			Wilson App Open API Documentation
+//	@version		v1.0.0
+//	@description	Wilson api documentation
+//	@BasePath		/openapi/v1/
+//go:generate swag init --generatedTime --instanceName openapi -g api.go -d ./,../../types --output ./swagger && && swag fmt -g api.go -d ./

@@ -8,6 +8,6 @@ type PingRequest struct {
 
 func (p PingRequest) Validate(lang string) error {
 	return vax.Struct(&p, lang,
-		vax.Field(&p.Name, vax.Required, vax.RangeLength(1, 10, false), vax.In("wilson", "wendy", "uzi", "faker")),
+		vax.Field(&p.Name, vax.Required, vax.RangeLength(1, 10, false), vax.In("wilson", "wendy")),
 	)
 }

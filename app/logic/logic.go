@@ -11,8 +11,8 @@ import (
 // and they are logically consistent
 
 var AppLogicSet = wire.NewSet(
-	systemLogic.NewPingLogic,
-	userLogic.NewUserLogic,
+	systemLogic.ProviderSet,
+	userLogic.ProviderSet,
 )
 
 var OpenLogicSet = wire.NewSet(

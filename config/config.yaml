@@ -4,12 +4,26 @@ app:
   mode: release
   # app name
   name: wilson
-  # if swagger api doc enable
+  # if swagger api doc enable, the apidoc can visit on http://http.address/swagger/index.html
   swagger: true
+  # If openapi is enabled, the outside world can use the key to interact with the app through openapi
+  openapi: true
   # http server configuration
   http:
     # http bind address hots:port
     address: 127.0.0.1:8080
+    # http request read timeout
+    readTimeout: 60s
+    # http response write timeout
+    writeTimeout: 60s
+    # header read timeout
+    readHeaderTimeout: 10s
+    # keep-alive timeout
+    idleTimeout: 300s
+    # multipart max size by bytes
+    multipartMemory: 52428800
+    # max header size by bytes
+    maxHeaderBytes: 3145728
     # tls enable
     tls:
       # enable
@@ -20,9 +34,9 @@ app:
       pem: xxx
     # cross-origin configuration
     cors:
-      enable: false
+      enable: true
       # allow origin
-      allowOrigin:
+      allowOrigins:
         - http://localhost
         - http://127.0.0.1
       # allows methods
@@ -36,25 +50,17 @@ app:
       allowHeaders:
         - Accept-Language
         - Authorization
+        - Origin
       # exposed headers
       exposedHeaders:
+        - Date
         - Content-Language
+        - Content-Type
+        - Content-Length
       # http prefilight cached time by seconds
       maxAge: 600
       # cookies credentials enabled, but the project's authentication way is JWT,so no need to set this value
       allowCredentials: false
-    # http request read timeout
-    readTimeout: 60s
-    # http response write timeout
-    writeTimeout: 60s
-    # header read timeout
-    readHeaderTimeout: 10s
-    # keep-alive timeout
-    idleTimeout: 300s
-    # multipart max size by bytes
-    multipartMemory: 52428800
-    # max header size by bytes
-    maxHeaderBytes: 3145728
 
   # rpc client configuration
   rpc:
@@ -93,9 +99,14 @@ data:
     # db connect params
     params: wilson?charset=utf8mb4&parseTime=True&loc=Local
     # max open connections
-    maxOpenCons: 40
+    maxOpenCons: 200
     # max idle connections
     maxIdleCons: 20
+    # conns max idle time
+    maxIdleTime: 600s
+    # conns max lifetime
+    maxLifeTime: 3600s
+
 
   # redis configuration
   redis:

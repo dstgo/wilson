@@ -22,8 +22,8 @@ var ApiSet = wire.NewSet(
 // ApiRouter
 // combination of all router
 type ApiRouter struct {
-	SystemApi *system.Router
-	UserApi   *user.Router
+	SystemApi system.Router
+	UserApi   user.Router
 }
 
 var Config = &ginSwagger.Config{
@@ -39,8 +39,8 @@ var Config = &ginSwagger.Config{
 
 // swagger declarative api comment
 
-// @title Wilson App Internal API Documentation
-// @version v1.0.0
-// @description Wilson api documentation
-// @BasePath /api/v1
-//go:generate swag init --generatedTime --instanceName appapi -g api.go -d ./ --output ./swagger
+//	@title			Wilson App Internal API Documentation
+//	@version		v1.0.0
+//	@description	Wilson api documentation
+//	@BasePath		/api/v1
+//go:generate swag init --generatedTime --instanceName appapi -g api.go -d ./,../../types --output ./swagger && swag fmt -g api.go -d ./

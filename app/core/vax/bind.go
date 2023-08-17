@@ -1,9 +1,10 @@
 package vax
 
 import (
-	"github.com/dstgo/wilson/app/pkg/errorx"
+	"errors"
 	"github.com/dstgo/wilson/app/pkg/httpx"
 	"github.com/gin-gonic/gin"
+	"io"
 )
 
 var (
@@ -24,47 +25,68 @@ type JsonBinding struct {
 }
 
 func (j JsonBinding) Bind(ctx *gin.Context, val Validatable) error {
-	return errorx.Join(ctx.ShouldBindJSON(val), val.Validate(httpx.GetFirstAcceptLanguage(ctx))).Err()
+	if err := ctx.ShouldBindJSON(val); !errors.Is(err, io.EOF) && err != nil {
+		return err
+	}
+	return val.Validate(httpx.GetFirstAcceptLanguage(ctx))
 }
 
 type XmlBinding struct {
 }
 
 func (x XmlBinding) Bind(ctx *gin.Context, val Validatable) error {
-	return errorx.Join(ctx.ShouldBindXML(val), val.Validate(httpx.GetFirstAcceptLanguage(ctx))).Err()
+	if err := ctx.ShouldBindXML(val); !errors.Is(err, io.EOF) && err != nil {
+		return err
+	}
+	return val.Validate(httpx.GetFirstAcceptLanguage(ctx))
 }
 
 type QueryBinding struct {
 }
 
 func (q QueryBinding) Bind(ctx *gin.Context, val Validatable) error {
-	return errorx.Join(ctx.ShouldBindQuery(val), val.Validate(httpx.GetFirstAcceptLanguage(ctx))).Err()
+	if err := ctx.ShouldBindQuery(val); !errors.Is(err, io.EOF) && err != nil {
+		return err
+	}
+	return val.Validate(httpx.GetFirstAcceptLanguage(ctx))
 }
 
 type YamlBinding struct {
 }
 
 func (y YamlBinding) Bind(ctx *gin.Context, val Validatable) error {
-	return errorx.Join(ctx.ShouldBindYAML(val), val.Validate(httpx.GetFirstAcceptLanguage(ctx))).Err()
+	if err := ctx.ShouldBindYAML(val); !errors.Is(err, io.EOF) && err != nil {
+		return err
+	}
+	return val.Validate(httpx.GetFirstAcceptLanguage(ctx))
 }
 
 type TomlBinding struct {
 }
 
 func (y TomlBinding) Bind(ctx *gin.Context, val Validatable) error {
-	return errorx.Join(ctx.ShouldBindTOML(val), val.Validate(httpx.GetFirstAcceptLanguage(ctx))).Err()
+	if err := ctx.ShouldBindTOML(val); !errors.Is(err, io.EOF) && err != nil {
+		return err
+	}
+	return val.Validate(httpx.GetFirstAcceptLanguage(ctx))
 }
 
 type HeaderBinding struct {
 }
 
 func (y HeaderBinding) Bind(ctx *gin.Context, val Validatable) error {
-	return errorx.Join(ctx.ShouldBindHeader(val), val.Validate(httpx.GetFirstAcceptLanguage(ctx))).Err()
+	if err := ctx.ShouldBindHeader(val); !errors.Is(err, io.EOF) && err != nil {
+		return err
+	}
+	return val.Validate(httpx.GetFirstAcceptLanguage(ctx))
 }
 
 type UriBinding struct {
 }
 
 func (y UriBinding) Bind(ctx *gin.Context, val Validatable) error {
-	return errorx.Join(ctx.ShouldBindUri(val), val.Validate(httpx.GetFirstAcceptLanguage(ctx))).Err()
+	if err := ctx.ShouldBindUri(val); !errors.Is(err, io.EOF) && err != nil {
+		return err
+	}
+	return val.Validate(httpx.GetFirstAcceptLanguage(ctx))
 }
