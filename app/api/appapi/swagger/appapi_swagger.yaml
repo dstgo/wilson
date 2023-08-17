@@ -7,6 +7,20 @@ definitions:
       username:
         type: string
     type: object
+  resp.Response:
+    properties:
+      code:
+        description: custom Code
+        type: integer
+      data:
+        description: response Data
+      error:
+        description: response Error
+        type: string
+      msg:
+        description: response mgs
+        type: string
+    type: object
 info:
   contact: {}
   description: Wilson api documentation
@@ -60,9 +74,9 @@ paths:
     get:
       consumes:
       - application/json
-      description: path params
+      description: to test app api if is ok
       parameters:
-      - description: comment
+      - description: ping name
         in: query
         name: name
         required: true
@@ -71,14 +85,24 @@ paths:
       - application/json
       responses:
         "200":
-          description: comment
+          description: success
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/resp.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "400":
-          description: comment
+          description: bad parameter
           schema:
-            type: string
-      summary: path params example
+            allOf:
+            - $ref: '#/definitions/resp.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: app test ping api
       tags:
       - system
 swagger: "2.0"

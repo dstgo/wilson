@@ -75,7 +75,7 @@
         },
         "/ping": {
             "get": {
-                "description": "path params",
+                "description": "to test app api if is ok",
                 "consumes": [
                     "application/json"
                 ],
@@ -85,11 +85,11 @@
                 "tags": [
                     "system"
                 ],
-                "summary": "path params example",
+                "summary": "app test ping api",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "comment",
+                        "description": "ping name",
                         "name": "name",
                         "in": "query",
                         "required": true
@@ -97,15 +97,39 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "comment",
+                        "description": "success",
                         "schema": {
-                            "type": "string"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/resp.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
-                        "description": "comment",
+                        "description": "bad parameter",
                         "schema": {
-                            "type": "string"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/resp.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -120,6 +144,26 @@
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "resp.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "custom Code",
+                    "type": "integer"
+                },
+                "data": {
+                    "description": "response Data"
+                },
+                "error": {
+                    "description": "response Error",
+                    "type": "string"
+                },
+                "msg": {
+                    "description": "response mgs",
                     "type": "string"
                 }
             }

@@ -27,10 +27,10 @@ type PingApi struct {
 //	@Tags			system
 //	@Accept			json
 //	@Produce		json
-//	@Param			name	query		string	true	"comment"
-//	@Success		200		{object}	{"code":2000,"msg":"pong","data":"hello wolrd! wilson"}	"success"
-//	@Failure		400		{object}	{"code":4000,"error":"名称: 是必需值，不能为空"}	"name param empty"
-//	@Failure		400		{object}	{"code":4000,"error":"名称: 是必需值，不能为空"}	"name param empty"
+//	@Param			name	query		string						true	"ping name"
+//	@Success		200		{object}	resp.Response{data=string}	"success"
+//	@Failure		400		{object}	resp.Response{data=string}	"empty parameter"
+//	@Failure		400		{object}	resp.Response{data=string}	"bad parameter"
 //	@Router			/ping [get]
 func (p PingApi) Ping(ctx *gin.Context) {
 	pingReq := new(request.PingRequest)

@@ -43,4 +43,4 @@ var Config = &ginSwagger.Config{
 //	@version		v1.0.0
 //	@description	Wilson api documentation
 //	@BasePath		/api/v1
-//go:generate swag init --generatedTime --instanceName appapi -g api.go -d ./,../../types --output ./swagger && swag fmt -g api.go -d ./
+//go:generate swag init --generatedTime --instanceName appapi -g api.go -d ./,../../types,../../core/resp --output ./swagger && swag fmt -g api.go -d ./

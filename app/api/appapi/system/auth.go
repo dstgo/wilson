@@ -47,8 +47,8 @@ func (a AuthApi) Login(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			name	query		string	true	"comment"
-//	@Success		200		{string}	string	"comment"
-//	@Failure		400		{string}	string	"comment"
+//	@Success		200		{object}	string	"comment"
+//	@Failure		400		{object}	string	"comment"
 //	@Router			/auth/register [POST]
 func (a AuthApi) Register(ctx *gin.Context) {
 
