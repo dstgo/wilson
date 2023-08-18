@@ -1,5 +1,3 @@
-GO_VERSION = $(shell go env GOVERSION)
-VERSION = $(shell git describe --tags --always)
 
 .PHONY: init
 init:
@@ -18,11 +16,10 @@ gen:
 .PHONY: build
 build:
 	make gen
-	go build -trimpath -ldflags "-X main.Author=stranger -X main.Version=$(VERSION) -X main.GoVersion=$(GO_VERSION)" -o ./bin/ github.com/dstgo/wilson
+	go build -trimpath -ldflags "-X main.Author=stranger -X main.Version=$(shell git describe --tags --always)" -o ./bin/ github.com/dstgo/wilson
 
 
 .PHONY: all
 all:
 	make init
-	make generate
 	make build
