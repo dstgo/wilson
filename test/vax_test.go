@@ -3,6 +3,7 @@ package test
 import (
 	"github.com/dstgo/wilson/app/core/vax"
 	"github.com/dstgo/wilson/app/core/vax/is"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -27,7 +28,5 @@ func TestStruct(t *testing.T) {
 		Age:   101,
 	}
 	err := u.Validate("")
-	if err != nil {
-		t.Error(err)
-	}
+	assert.NotNil(t, err, "validate err not nil")
 }
