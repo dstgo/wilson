@@ -12,11 +12,11 @@ init:
 
 .PHONY: gen
 gen:
+	go get github.com/google/wire/cmd/wire@latest
 	go generate ./...
 
 .PHONY: build
 build:
-	go get github.com/google/wire/cmd/wire@v0.5.0
 	make gen
 	go build -trimpath -ldflags "-X main.Author=stranger -X main.Version=$(VERSION) -X main.GoVersion=$(GO_VERSION)" -o ./bin/ github.com/dstgo/wilson
 
