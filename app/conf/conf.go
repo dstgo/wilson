@@ -12,6 +12,7 @@ type AppConf struct {
 	LogConf    *LogConf     `mapstructure:"log"`
 	JwtConf    *JwtConf     `mapstructure:"jwt"`
 	LocaleConf *locale.Conf `mapstructure:"locale"`
+	EmailConf  *EmailConf   `mapstructure:"email"`
 }
 
 func NewAppConf(config *config.Config, author string, version string) (*AppConf, error) {

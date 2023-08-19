@@ -5,8 +5,10 @@ const (
 )
 
 const (
-	AcceptLanguageHeader = "Accept-Language"
-	ContentLanguage      = "Content-Language"
-	Authorization        = "Authorization"
-	BearerToken          = "Bearer "
+	ContentType     = "Content-Type"
+	XForwardFor     = "X-Forwarded-For"
+	AcceptLanguage  = "Accept-Language"
+	ContentLanguage = "Content-Language"
+	Authorization   = "Authorization"
+	BearerToken     = "Bearer "
 )

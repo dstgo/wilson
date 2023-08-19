@@ -42,7 +42,7 @@ func (r EachRule) Validate(lang string, value interface{}) error {
 
 // ValidateWithContext loops through the given iterable and calls the Ozzo ValidateWithContext() method for each value.
 func (r EachRule) ValidateWithContext(ctx context.Context, lang string, value interface{}) error {
-	errs := Errors{}
+	errs := make(Errors, 0)
 
 	v := reflect.ValueOf(value)
 	switch v.Kind() {

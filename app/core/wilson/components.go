@@ -6,10 +6,11 @@ import (
 	"fmt"
 	"github.com/dstgo/size"
 	"github.com/dstgo/wilson/app/conf"
-	"github.com/dstgo/wilson/app/data"
 	"github.com/dstgo/wilson/app/pkg/sysinfo"
+	"github.com/dstgo/wilson/app/repo/data"
 	"github.com/dstgo/wilson/assets"
 	"github.com/dstgo/wilson/pkg/route"
+	"github.com/jordan-wright/email"
 	"github.com/sirupsen/logrus"
 	"runtime"
 	"strings"
@@ -57,11 +58,21 @@ func LoadDataSource(ctx context.Context, dataConf *conf.DataConf, logger *logrus
 	logger.Infoln("attempt to load wilson datasource...")
 	datasource, err := data.NewDataSource(ctx, dataConf, logger)
 	if err != nil {
-		logger.Panicf("load data datasource failed: %s", err.Error())
+		logger.Errorf("load data datasource failed: %s", err.Error())
 		return datasource, err
 	}
 	logger.Infof("load data datasource ok √")
 	return datasource, nil
+}
+
+func LoadEmailPool(emailConf *conf.EmailConf, logger *logrus.Logger) (*email.Pool, error) {
+	pool, err := email.NewPool(emailConf.Address(), emailConf.MaxPoolSize, emailConf.SmtpAuth())
+	if err != nil {
+		logger.Errorf("load email pool failed: %s", emailConf.Address())
+		return nil, err
+	}
+	logger.Infof("load email pool ok: %s", emailConf.Address())
+	return pool, nil
 }
 
 func DebugPrintRouter(router *route.Router, logger *logrus.Logger) error {

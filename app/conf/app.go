@@ -1,7 +1,9 @@
 package conf
 
 import (
+	"fmt"
 	"github.com/dstgo/wilson/app/pkg/httpx"
+	"net/smtp"
 	"time"
 )
 
@@ -58,4 +60,26 @@ type LogConf struct {
 	ErrorLog   string `mapstructure:"errorLog"`
 	TimeFormat string
 	Order      []string
+}
+
+type EmailConf struct {
+	Host        string        `mapstructure:"host"`
+	Port        int           `mapstructure:"port"`
+	User        string        `mapstructure:"user"`
+	Password    string        `mapstructure:"password"`
+	SendTimeout time.Duration `mapstructure:"timeout"`
+	MaxPoolSize int           `mapstructure:"maxPoolSize"`
+	Exp         int           `mapstructure:"exp"`
+}
+
+func (e EmailConf) Expire() time.Duration {
+	return time.Duration(e.Exp) * time.Minute
+}
+
+func (e EmailConf) Address() string {
+	return fmt.Sprintf("%s:%d", e.Host, e.Port)
+}
+
+func (e EmailConf) SmtpAuth() smtp.Auth {
+	return smtp.PlainAuth("", e.User, e.Password, e.Host)
 }

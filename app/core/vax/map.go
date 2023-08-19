@@ -90,7 +90,7 @@ func (r MapRule) ValidateWithContext(ctx context.Context, lang string, m interfa
 		return nil
 	}
 
-	errs := Errors{}
+	errs := make(Errors, 0)
 	kt := value.Type().Key()
 
 	var extraKeys map[interface{}]bool

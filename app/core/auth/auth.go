@@ -30,11 +30,11 @@ var (
 	ContextUserInfo = "gin.context.user.info"
 )
 
-func SetContextUserInfo(ctx *gin.Context, claims UserClaims) {
+func SetContextTokenInfo(ctx *gin.Context, claims UserClaims) {
 	ctx.Set(ContextUserInfo, claims)
 }
 
-func GetContextUserInfo(ctx *gin.Context) UserClaims {
+func GetContextTokenInfo(ctx *gin.Context) UserClaims {
 	var userClaims UserClaims
 	value, exists := ctx.Get(ContextUserInfo)
 	if !exists {

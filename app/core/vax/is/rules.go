@@ -15,113 +15,113 @@ import (
 
 var (
 	// ErrEmail is the error that returns in case of an invalid email.
-	ErrEmail = vax.NewError("validate.email", "must be a valid email address")
+	ErrEmail = vax.NewError("validate.string.email", "must be a valid email address")
 	// ErrURL is the error that returns in case of an invalid URL.
-	ErrURL = vax.NewError("validate.url", "must be a valid URL")
+	ErrURL = vax.NewError("validate.string.url", "must be a valid URL")
 	// ErrRequestURL is the error that returns in case of an invalid request URL.
-	ErrRequestURL = vax.NewError("validate.requrl", "must be a valid request URL")
+	ErrRequestURL = vax.NewError("validate.string.requrl", "must be a valid request URL")
 	// ErrRequestURI is the error that returns in case of an invalid request URI.
-	ErrRequestURI = vax.NewError("validate.requri", "must be a valid request URI")
+	ErrRequestURI = vax.NewError("validate.string.requri", "must be a valid request URI")
 	// ErrAlpha is the error that returns in case of an invalid alpha value.
-	ErrAlpha = vax.NewError("validate.alpha", "must contain English letters only")
+	ErrAlpha = vax.NewError("validate.string.alpha", "must contain English letters only")
 	// ErrDigit is the error that returns in case of an invalid digit value.
-	ErrDigit = vax.NewError("validate.digit", "must contain digits only")
+	ErrDigit = vax.NewError("validate.string.digit", "must contain digits only")
 	// ErrAlphanumeric is the error that returns in case of an invalid alphanumeric value.
-	ErrAlphanumeric = vax.NewError("validate.alphanum", "must contain English letters and digits only")
+	ErrAlphanumeric = vax.NewError("validate.string.alphanum", "must contain English letters and digits only")
 	// ErrUTFLetter is the error that returns in case of an invalid utf letter value.
-	ErrUTFLetter = vax.NewError("validate.unicode", "must contain unicode letter characters only")
+	ErrUTFLetter = vax.NewError("validate.string.unicode", "must contain unicode letter characters only")
 	// ErrUTFDigit is the error that returns in case of an invalid utf digit value.
-	ErrUTFDigit = vax.NewError("validate.unicodenum", "must contain unicode decimal digits only")
+	ErrUTFDigit = vax.NewError("validate.string.unicodenum", "must contain unicode decimal digits only")
 	// ErrUTFLetterNumeric is the error that returns in case of an invalid utf numeric or letter value.
-	ErrUTFLetterNumeric = vax.NewError("validate.unicodeletternum", "must contain unicode letters and numbers only")
+	ErrUTFLetterNumeric = vax.NewError("validate.string.unicodeletternum", "must contain unicode letters and numbers only")
 	// ErrUTFNumeric is the error that returns in case of an invalid utf numeric value.
-	ErrUTFNumeric = vax.NewError("validate.unicodenumch", "must contain unicode number characters only")
+	ErrUTFNumeric = vax.NewError("validate.string.unicodenumch", "must contain unicode number characters only")
 	// ErrLowerCase is the error that returns in case of an invalid lower case value.
-	ErrLowerCase = vax.NewError("validate.lower", "must be in lower case")
+	ErrLowerCase = vax.NewError("validate.string.lower", "must be in lower case")
 	// ErrUpperCase is the error that returns in case of an invalid upper case value.
-	ErrUpperCase = vax.NewError("validate.upper", "must be in upper case")
+	ErrUpperCase = vax.NewError("validate.string.upper", "must be in upper case")
 	// ErrHexadecimal is the error that returns in case of an invalid hexadecimal number.
-	ErrHexadecimal = vax.NewError("validate.hex", "must be a valid hexadecimal number")
+	ErrHexadecimal = vax.NewError("validate.string.hex", "must be a valid hexadecimal number")
 	// ErrHexColor is the error that returns in case of an invalid hexadecimal color code.
-	ErrHexColor = vax.NewError("validate.hexcolor", "must be a valid hexadecimal color code")
+	ErrHexColor = vax.NewError("validate.string.hexcolor", "must be a valid hexadecimal color code")
 	// ErrRGBColor is the error that returns in case of an invalid RGB color code.
-	ErrRGBColor = vax.NewError("validate.rgb", "must be a valid RGB color code")
+	ErrRGBColor = vax.NewError("validate.string.rgb", "must be a valid RGB color code")
 	// ErrInt is the error that returns in case of an invalid integer value.
-	ErrInt = vax.NewError("validate.int", "must be an integer number")
+	ErrInt = vax.NewError("validate.string.int", "must be an integer number")
 	// ErrFloat is the error that returns in case of an invalid float value.
-	ErrFloat = vax.NewError("validate.float", "must be a floating point number")
+	ErrFloat = vax.NewError("validate.string.float", "must be a floating point number")
 	// ErrUUIDv3 is the error that returns in case of an invalid UUIDv3 value.
-	ErrUUIDv3 = vax.NewError("validate.uuidv3", "must be a valid UUID v3")
+	ErrUUIDv3 = vax.NewError("validate.string.uuidv3", "must be a valid UUID v3")
 	// ErrUUIDv4 is the error that returns in case of an invalid UUIDv4 value.
-	ErrUUIDv4 = vax.NewError("validate.uuidv4", "must be a valid UUID v4")
+	ErrUUIDv4 = vax.NewError("validate.string.uuidv4", "must be a valid UUID v4")
 	// ErrUUIDv5 is the error that returns in case of an invalid UUIDv5 value.
-	ErrUUIDv5 = vax.NewError("validate.uuidv5", "must be a valid UUID v5")
+	ErrUUIDv5 = vax.NewError("validate.string.uuidv5", "must be a valid UUID v5")
 	// ErrUUID is the error that returns in case of an invalid UUID value.
-	ErrUUID = vax.NewError("validate.uuid", "must be a valid UUID")
+	ErrUUID = vax.NewError("validate.string.uuid", "must be a valid UUID")
 	// ErrCreditCard is the error that returns in case of an invalid credit card number.
-	ErrCreditCard = vax.NewError("validate.creditcard", "must be a valid credit card number")
+	ErrCreditCard = vax.NewError("validate.string.creditcard", "must be a valid credit card number")
 	// ErrISBN10 is the error that returns in case of an invalid ISBN-10 value.
-	ErrISBN10 = vax.NewError("validate.isbn10", "must be a valid ISBN-10")
+	ErrISBN10 = vax.NewError("validate.string.isbn10", "must be a valid ISBN-10")
 	// ErrISBN13 is the error that returns in case of an invalid ISBN-13 value.
-	ErrISBN13 = vax.NewError("validate.isbn13", "must be a valid ISBN-13")
+	ErrISBN13 = vax.NewError("validate.string.isbn13", "must be a valid ISBN-13")
 	// ErrISBN is the error that returns in case of an invalid ISBN value.
-	ErrISBN = vax.NewError("validate.isbn", "must be a valid ISBN")
+	ErrISBN = vax.NewError("validate.string.isbn", "must be a valid ISBN")
 	// ErrJSON is the error that returns in case of an invalid JSON.
-	ErrJSON = vax.NewError("validate.json", "must be in valid JSON format")
+	ErrJSON = vax.NewError("validate.string.json", "must be in valid JSON format")
 	// ErrASCII is the error that returns in case of an invalid ASCII.
-	ErrASCII = vax.NewError("validate.ascii", "must contain ASCII characters only")
+	ErrASCII = vax.NewError("validate.string.ascii", "must contain ASCII characters only")
 	// ErrPrintableASCII is the error that returns in case of an invalid printable ASCII value.
-	ErrPrintableASCII = vax.NewError("validate.printable", "must contain printable ASCII characters only")
+	ErrPrintableASCII = vax.NewError("validate.string.printable", "must contain printable ASCII characters only")
 	// ErrMultibyte is the error that returns in case of an invalid multibyte value.
-	ErrMultibyte = vax.NewError("validate.multibyte", "must contain multibyte characters")
+	ErrMultibyte = vax.NewError("validate.string.multibyte", "must contain multibyte characters")
 	// ErrFullWidth is the error that returns in case of an invalid full-width value.
-	ErrFullWidth = vax.NewError("validate.fullwidth", "must contain full-width characters")
+	ErrFullWidth = vax.NewError("validate.string.fullwidth", "must contain full-width characters")
 	// ErrHalfWidth is the error that returns in case of an invalid half-width value.
-	ErrHalfWidth = vax.NewError("validate.halfwidth", "must contain half-width characters")
+	ErrHalfWidth = vax.NewError("validate.string.halfwidth", "must contain half-width characters")
 	// ErrVariableWidth is the error that returns in case of an invalid variable width value.
-	ErrVariableWidth = vax.NewError("validate.fullhalfwidth", "must contain both full-width and half-width characters")
+	ErrVariableWidth = vax.NewError("validate.string.fullhalfwidth", "must contain both full-width and half-width characters")
 	// ErrBase64 is the error that returns in case of an invalid base54 value.
-	ErrBase64 = vax.NewError("validate.base64", "must be encoded in Base64")
+	ErrBase64 = vax.NewError("validate.string.base64", "must be encoded in Base64")
 	// ErrDataURI is the error that returns in case of an invalid data URI.
-	ErrDataURI = vax.NewError("validate.base64uri", "must be a Base64-encoded data URI")
+	ErrDataURI = vax.NewError("validate.string.base64uri", "must be a Base64-encoded data URI")
 	// ErrE164 is the error that returns in case of an invalid e165.
-	ErrE164 = vax.NewError("validate.e164", "must be a valid E164 number")
+	ErrE164 = vax.NewError("validate.string.e164", "must be a valid E164 number")
 	// ErrCountryCode2 is the error that returns in case of an invalid two-letter country code.
-	ErrCountryCode2 = vax.NewError("validate.2code", "must be a valid two-letter country code")
+	ErrCountryCode2 = vax.NewError("validate.string.2code", "must be a valid two-letter country code")
 	// ErrCountryCode3 is the error that returns in case of an invalid three-letter country code.
-	ErrCountryCode3 = vax.NewError("validate.3code", "must be a valid three-letter country code")
+	ErrCountryCode3 = vax.NewError("validate.string.3code", "must be a valid three-letter country code")
 	// ErrCurrencyCode is the error that returns in case of an invalid currency code.
-	ErrCurrencyCode = vax.NewError("validate.iso4217code", "must be valid ISO 4217 currency code")
+	ErrCurrencyCode = vax.NewError("validate.string.iso4217code", "must be valid ISO 4217 currency code")
 	// ErrDialString is the error that returns in case of an invalid string.
-	ErrDialString = vax.NewError("validate.dail", "must be a valid dial string")
+	ErrDialString = vax.NewError("validate.string.dail", "must be a valid dial string")
 	// ErrMac is the error that returns in case of an invalid mac address.
-	ErrMac = vax.NewError("validate.mac", "must be a valid MAC address")
+	ErrMac = vax.NewError("validate.string.mac", "must be a valid MAC address")
 	// ErrIP is the error that returns in case of an invalid IP.
-	ErrIP = vax.NewError("validate.ip", "must be a valid IP address")
+	ErrIP = vax.NewError("validate.string.ip", "must be a valid IP address")
 	// ErrIPv4 is the error that returns in case of an invalid IPv4.
-	ErrIPv4 = vax.NewError("validate.ipv4", "must be a valid IPv4 address")
+	ErrIPv4 = vax.NewError("validate.string.ipv4", "must be a valid IPv4 address")
 	// ErrIPv6 is the error that returns in case of an invalid IPv6.
-	ErrIPv6 = vax.NewError("validate.ipv6", "must be a valid IPv6 address")
+	ErrIPv6 = vax.NewError("validate.string.ipv6", "must be a valid IPv6 address")
 	// ErrSubdomain is the error that returns in case of an invalid subdomain.
-	ErrSubdomain = vax.NewError("validate.subdomain", "must be a valid subdomain")
+	ErrSubdomain = vax.NewError("validate.string.subdomain", "must be a valid subdomain")
 	// ErrDomain is the error that returns in case of an invalid domain.
-	ErrDomain = vax.NewError("validate.domain", "must be a valid domain")
+	ErrDomain = vax.NewError("validate.string.domain", "must be a valid domain")
 	// ErrDNSName is the error that returns in case of an invalid DNS name.
-	ErrDNSName = vax.NewError("validate.dns", "must be a valid DNS name")
+	ErrDNSName = vax.NewError("validate.string.dns", "must be a valid DNS name")
 	// ErrHost is the error that returns in case of an invalid host.
-	ErrHost = vax.NewError("validate.host", "must be a valid IP address or DNS name")
+	ErrHost = vax.NewError("validate.string.host", "must be a valid IP address or DNS name")
 	// ErrPort is the error that returns in case of an invalid port.
-	ErrPort = vax.NewError("validate.port", "must be a valid port number")
+	ErrPort = vax.NewError("validate.string.port", "must be a valid port number")
 	// ErrMongoID is the error that returns in case of an invalid MongoID.
-	ErrMongoID = vax.NewError("validate.mongoid", "must be a valid hex-encoded MongoDB ObjectId")
+	ErrMongoID = vax.NewError("validate.string.mongoid", "must be a valid hex-encoded MongoDB ObjectId")
 	// ErrLatitude is the error that returns in case of an invalid latitude.
-	ErrLatitude = vax.NewError("validate.latitude", "must be a valid latitude")
+	ErrLatitude = vax.NewError("validate.string.latitude", "must be a valid latitude")
 	// ErrLongitude is the error that returns in case of an invalid longitude.
-	ErrLongitude = vax.NewError("validate.longitude", "must be a valid longitude")
+	ErrLongitude = vax.NewError("validate.string.longitude", "must be a valid longitude")
 	// ErrSSN is the error that returns in case of an invalid SSN.
-	ErrSSN = vax.NewError("validate.ssn", "must be a valid social security number")
+	ErrSSN = vax.NewError("validate.string.ssn", "must be a valid social security number")
 	// ErrSemver is the error that returns in case of an invalid semver.
-	ErrSemver = vax.NewError("validate.version", "must be a valid semantic version")
+	ErrSemver = vax.NewError("validate.string.version", "must be a valid semantic version")
 )
 
 var (

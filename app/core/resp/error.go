@@ -2,60 +2,91 @@ package resp
 
 import (
 	"github.com/dstgo/wilson/app/core/locale"
-	"github.com/gin-gonic/gin"
+	"github.com/dstgo/wilson/app/pkg/errorx"
+	"github.com/dstgo/wilson/app/types/code"
 	"net/http"
 )
 
-type Error struct {
-	// http status code will be response
-	Code int
-	// language code
-	LangCode string
-	// error message
-	Err string
+func NewErr() *ResponseError {
+	return new(ResponseError)
 }
 
-func (e Error) Error() string {
-	return e.Err
+// ResponseError
+// a response error wrap
+// err field
+type ResponseError struct {
+	CustomCode int
+	HttpStatus int
+	LangCode   string
+	err        error
 }
 
-func (e Error) ErrorCtx(ctx *gin.Context) string {
-	return locale.L().GetWithCtx(ctx, e.LangCode)
+func (e *ResponseError) Code(code int) *ResponseError {
+	e.CustomCode = code
+	return e
 }
 
-func NewI18nErr(code int, langcode string) Error {
-	return Error{
-		Code:     code,
-		LangCode: langcode,
+func (e *ResponseError) Status(status int) *ResponseError {
+	e.HttpStatus = status
+	return e
+}
+
+func (e *ResponseError) I18n(langCode string) *ResponseError {
+	e.LangCode = langCode
+	return e
+}
+
+func (e *ResponseError) Err(err error) *ResponseError {
+	e.err = err
+	return e
+}
+
+func (e *ResponseError) Error() string {
+	if e.LangCode == "" {
+		return e.err.Error()
+	}
+
+	if e.err != nil {
+		return errorx.WrapI18n(e.err, e.LangCode).Error()
+	}
+
+	return locale.L().GetDefault(e.LangCode)
+}
+
+// helper function
+
+func DataBaseErr(err error) *ResponseError {
+	return &ResponseError{
+		CustomCode: code.DatabaseError,
+		HttpStatus: http.StatusInternalServerError,
+		LangCode:   "internal.databaseErr",
+		err:        err,
 	}
 }
 
-func NewMsgErr(code int, msg string) Error {
-	return Error{
-		Code: code,
-		Err:  msg,
+func FileSystemErr(err error) *ResponseError {
+	return &ResponseError{
+		CustomCode: code.FilesystemError,
+		HttpStatus: http.StatusInternalServerError,
+		LangCode:   "internal.filesystemErr",
+		err:        err,
 	}
 }
 
-func NewErr(code int, err error) Error {
-	return Error{
-		Code: code,
-		Err:  err.Error(),
+func NetworkErr(err error) *ResponseError {
+	return &ResponseError{
+		CustomCode: code.NetworkError,
+		HttpStatus: http.StatusInternalServerError,
+		LangCode:   "internal.networkErr",
+		err:        err,
 	}
 }
 
-func NotFoundError(err error) Error {
-	return NewErr(http.StatusNotFound, err)
-}
-
-func ForbiddenError(err error) Error {
-	return NewErr(http.StatusForbidden, err)
-}
-
-func UnAuthorizedError(err error) Error {
-	return NewErr(http.StatusUnauthorized, err)
-}
-
-func InternalError(err error) Error {
-	return NewErr(http.StatusInternalServerError, err)
+func ProgramErr(err error) *ResponseError {
+	return &ResponseError{
+		CustomCode: code.UnknownError,
+		HttpStatus: http.StatusInternalServerError,
+		LangCode:   "internal.programErr",
+		err:        err,
+	}
 }

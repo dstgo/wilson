@@ -9,9 +9,9 @@ package openapi
 import (
 	"github.com/dstgo/wilson/app/api/openapi/user"
 	"github.com/dstgo/wilson/app/conf"
-	"github.com/dstgo/wilson/app/dao/userDao"
-	"github.com/dstgo/wilson/app/data"
 	"github.com/dstgo/wilson/app/logic/userLogic"
+	"github.com/dstgo/wilson/app/repo/dao/userDao"
+	"github.com/dstgo/wilson/app/repo/data"
 	"github.com/dstgo/wilson/pkg/route"
 )
 
