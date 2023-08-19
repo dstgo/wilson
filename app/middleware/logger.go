@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"fmt"
 	"github.com/dstgo/size"
 	"github.com/dstgo/wilson/app/pkg/httpx"
@@ -9,12 +10,12 @@ import (
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/exp/slices"
+	"strings"
 	"time"
 )
 
 func UseLogger(logger *logrus.Logger, skips ...string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-
 		// skip logger
 		if slices.Contains(skips, ctx.FullPath()) {
 			ctx.Next()
@@ -45,7 +46,7 @@ func UseLogger(logger *logrus.Logger, skips ...string) gin.HandlerFunc {
 			responseType = ctx.Writer.Header().Get("Content-Type")
 
 			clientIp = ctx.ClientIP()
-			err      = ctx.Err()
+			err      = ctx.Errors
 		)
 
 		if len(path) == 0 {
@@ -70,8 +71,9 @@ func UseLogger(logger *logrus.Logger, skips ...string) gin.HandlerFunc {
 		case err == nil && 100 < status && status < 400:
 			entry.Infoln()
 		case status >= 400:
-			entry.WithError(err)
-			entry.Errorln()
+			entry.
+				WithError(errors.New(strings.Join(err.Errors(), ";"))).
+				Errorln()
 		}
 	}
 }
