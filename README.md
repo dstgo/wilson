@@ -7,7 +7,7 @@
 
 </div>
 
-Englist|[简体中文](REAMD.zh.md)
+Englist|[简体中文](README.zh.md)
 
 Wilson is an open source, distributed, front-end and back-end separation, and a modern web management panel for server
 cluster management of Dont Starved Together, based on Docker.
