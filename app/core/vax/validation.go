@@ -180,7 +180,7 @@ func ValidateWithContext(ctx context.Context, lang string, value interface{}, ru
 
 // validateMap validates a map of validatable elements
 func validateMap(lang string, rv reflect.Value) error {
-	errs := Errors{}
+	errs := make(Errors, 0)
 	for _, key := range rv.MapKeys() {
 		if mv := rv.MapIndex(key).Interface(); mv != nil {
 			if err := mv.(Validatable).Validate(lang); err != nil {
@@ -196,7 +196,7 @@ func validateMap(lang string, rv reflect.Value) error {
 
 // validateMapWithContext validates a map of validatable elements with the given context.
 func validateMapWithContext(ctx context.Context, lang string, rv reflect.Value) error {
-	errs := Errors{}
+	errs := make(Errors, 0)
 	for _, key := range rv.MapKeys() {
 		if mv := rv.MapIndex(key).Interface(); mv != nil {
 			if err := mv.(ValidatableWithContext).ValidateWithContext(ctx, lang); err != nil {
@@ -212,7 +212,7 @@ func validateMapWithContext(ctx context.Context, lang string, rv reflect.Value) 
 
 // validateSlice validates a slice/array of validatable elements
 func validateSlice(lang string, rv reflect.Value) error {
-	errs := Errors{}
+	errs := make(Errors, 0)
 	l := rv.Len()
 	for i := 0; i < l; i++ {
 		if ev := rv.Index(i).Interface(); ev != nil {
@@ -229,7 +229,7 @@ func validateSlice(lang string, rv reflect.Value) error {
 
 // validateSliceWithContext validates a slice/array of validatable elements with the given context.
 func validateSliceWithContext(ctx context.Context, lang string, rv reflect.Value) error {
-	errs := Errors{}
+	errs := make(Errors, 0)
 	l := rv.Len()
 	for i := 0; i < l; i++ {
 		if ev := rv.Index(i).Interface(); ev != nil {

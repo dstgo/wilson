@@ -24,7 +24,7 @@
                 "parameters": [
                     {
                         "description": "comment",
-                        "name": "name",
+                        "name": "loginBody",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -32,6 +32,19 @@
                         }
                     }
                 ],
+                "responses": {}
+            }
+        },
+        "/auth/logout": {
+            "delete": {
+                "description": "user logout",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "system/auth"
+                ],
+                "summary": "user logout api",
                 "responses": {}
             }
         },
@@ -50,27 +63,41 @@
                 "summary": "user register api",
                 "parameters": [
                     {
-                        "type": "string",
                         "description": "comment",
-                        "name": "name",
+                        "name": "registerBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/email/code": {
+            "get": {
+                "description": "auth code email api",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "system/email"
+                ],
+                "summary": "auth code email api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
                         "in": "query",
                         "required": true
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "comment",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "comment",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/ping": {
@@ -95,44 +122,7 @@
                         "required": true
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "success",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/resp.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "bad parameter",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/resp.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
+                "responses": {}
             }
         }
     },
@@ -148,22 +138,19 @@
                 }
             }
         },
-        "resp.Response": {
+        "request.RegisterRequest": {
             "type": "object",
             "properties": {
                 "code": {
-                    "description": "custom Code",
-                    "type": "integer"
-                },
-                "data": {
-                    "description": "response Data"
-                },
-                "error": {
-                    "description": "response Error",
                     "type": "string"
                 },
-                "msg": {
-                    "description": "response mgs",
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

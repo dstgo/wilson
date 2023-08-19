@@ -78,7 +78,7 @@ func StructWithCtx(ctx context.Context, lang string, structPtr interface{}, fiel
 	}
 	value = value.Elem()
 
-	errs := Errors{}
+	errs := make(Errors, 0)
 
 	for i, fr := range fields {
 		fv := reflect.ValueOf(fr.fieldPtr)
@@ -104,8 +104,8 @@ func StructWithCtx(ctx context.Context, lang string, structPtr interface{}, fiel
 				// merge errors from anonymous struct field
 				var es Errors
 				if errors.As(err, &es) {
-					for name, value := range es {
-						errs[name] = value
+					for _, value := range es {
+						errs = append(errs, value)
 					}
 					continue
 				}

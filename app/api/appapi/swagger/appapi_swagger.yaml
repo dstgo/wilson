@@ -7,18 +7,15 @@ definitions:
       username:
         type: string
     type: object
-  resp.Response:
+  request.RegisterRequest:
     properties:
       code:
-        description: custom Code
-        type: integer
-      data:
-        description: response Data
-      error:
-        description: response Error
         type: string
-      msg:
-        description: response mgs
+      email:
+        type: string
+      password:
+        type: string
+      username:
         type: string
     type: object
 info:
@@ -35,7 +32,7 @@ paths:
       parameters:
       - description: comment
         in: body
-        name: name
+        name: loginBody
         required: true
         schema:
           $ref: '#/definitions/request.LoginRequest'
@@ -45,6 +42,15 @@ paths:
       summary: user login api
       tags:
       - system/auth
+  /auth/logout:
+    delete:
+      description: user logout
+      produces:
+      - application/json
+      responses: {}
+      summary: user logout api
+      tags:
+      - system/auth
   /auth/register:
     post:
       consumes:
@@ -52,24 +58,34 @@ paths:
       description: user register api
       parameters:
       - description: comment
+        in: body
+        name: registerBody
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterRequest'
+      produces:
+      - application/json
+      responses: {}
+      summary: user register api
+      tags:
+      - system/auth
+  /email/code:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: auth code email api
+      parameters:
+      - description: email
         in: query
-        name: name
+        name: email
         required: true
         type: string
       produces:
       - application/json
-      responses:
-        "200":
-          description: comment
-          schema:
-            type: string
-        "400":
-          description: comment
-          schema:
-            type: string
-      summary: user register api
+      responses: {}
+      summary: auth code email api
       tags:
-      - system/auth
+      - system/email
   /ping:
     get:
       consumes:
@@ -83,25 +99,7 @@ paths:
         type: string
       produces:
       - application/json
-      responses:
-        "200":
-          description: success
-          schema:
-            allOf:
-            - $ref: '#/definitions/resp.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-        "400":
-          description: bad parameter
-          schema:
-            allOf:
-            - $ref: '#/definitions/resp.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
+      responses: {}
       summary: app test ping api
       tags:
       - system
