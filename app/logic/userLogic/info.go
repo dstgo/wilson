@@ -1,7 +1,7 @@
 package userLogic
 
 import (
-	"github.com/dstgo/wilson/app/dao/userDao"
+	"github.com/dstgo/wilson/app/repo/dao/userDao"
 )
 
 func NewUserLogic(userDao userDao.UserInfoDao) UserInfoLogic {

@@ -5,9 +5,9 @@ package openapi
 
 import (
 	"github.com/dstgo/wilson/app/conf"
-	"github.com/dstgo/wilson/app/dao"
-	"github.com/dstgo/wilson/app/data"
 	"github.com/dstgo/wilson/app/logic"
+	"github.com/dstgo/wilson/app/repo/dao"
+	"github.com/dstgo/wilson/app/repo/data"
 	"github.com/dstgo/wilson/pkg/route"
 	"github.com/google/wire"
 )

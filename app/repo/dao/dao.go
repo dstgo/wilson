@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"github.com/dstgo/wilson/app/dao/userDao"
+	"github.com/dstgo/wilson/app/repo/dao/userDao"
 	"github.com/google/wire"
 )
 

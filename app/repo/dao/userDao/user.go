@@ -1,8 +1,8 @@
 package userDao
 
 import (
-	"github.com/dstgo/wilson/app/data"
-	"github.com/dstgo/wilson/app/data/entity"
+	"github.com/dstgo/wilson/app/repo/data"
+	"github.com/dstgo/wilson/app/repo/data/entity"
 	"github.com/google/wire"
 )
 

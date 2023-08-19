@@ -2,6 +2,7 @@ package wilson
 
 import (
 	"context"
+	"github.com/dstgo/wilson/app/repo/data"
 	"github.com/jordan-wright/email"
 	"net/http"
 	"os/signal"
@@ -15,7 +16,6 @@ import (
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/core/locale"
 	"github.com/dstgo/wilson/app/core/log"
-	"github.com/dstgo/wilson/app/data"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
