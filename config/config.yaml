@@ -137,7 +137,7 @@ email:
   host: smtp.qq.com
   port: 587
   user: dstgowilson@foxmail.com
-  password: fdjrlolpozpydiie
+  password: xxxxxx
   # send mail timeout
   timeout: 1m
   # max pool size
