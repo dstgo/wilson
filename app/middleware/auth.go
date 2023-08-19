@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"github.com/dstgo/wilson/app/core/auth"
-	"github.com/dstgo/wilson/app/core/locale"
 	"github.com/dstgo/wilson/app/core/resp"
 	"github.com/dstgo/wilson/app/pkg/httpx"
 	"github.com/dstgo/wilson/app/types/meta"
@@ -10,9 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/pkg/errors"
+	"net/http"
 )
 
-func UseJwtAuthenticate(v auth.Authenticator, l *locale.Locale) gin.HandlerFunc {
+func UseJwtAuthenticate(v auth.Authenticator) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		routeMeta := route.MetaFromCtx(ctx)
 
@@ -25,22 +25,22 @@ func UseJwtAuthenticate(v auth.Authenticator, l *locale.Locale) gin.HandlerFunc 
 		token := httpx.GetBearerTokenFromCtx(ctx)
 		jwtToken, err := v.Authenticate(ctx, token)
 		if err == nil {
-			ctx.Next()
 			var userClaims auth.UserClaims
-			if res, e := jwtToken.Claims.(auth.UserClaims); e {
-				userClaims = res
+			if res, e := jwtToken.Claims.(*auth.UserClaims); e {
+				userClaims = *res
 			}
-			auth.SetContextUserInfo(ctx, userClaims)
+			auth.SetContextTokenInfo(ctx, userClaims)
+			ctx.Next()
 		} else {
 			ctx.Abort()
-			var httpError resp.Error
+			var respErr *resp.ResponseError
 			switch {
 			case errors.Is(err, jwt.ErrTokenExpired):
-				httpError = resp.NewI18nErr(401, "jwt.expired")
+				respErr = resp.NewErr().Status(http.StatusUnauthorized).I18n("jwt.expired").Err(err)
 			default:
-				httpError = resp.NewI18nErr(403, "jwt.parsedFailed")
+				respErr = resp.NewErr().Status(http.StatusForbidden).I18n("jwt.parsedFailed").Err(err)
 			}
-			resp.Fail(ctx, httpError.Code*10, httpError)
+			resp.Fail(ctx).Code(respErr.HttpStatus * 10).MsgI18n("error.forbidden").Error(respErr).Send()
 		}
 	}
 }

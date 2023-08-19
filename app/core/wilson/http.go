@@ -16,6 +16,7 @@ import (
 	"github.com/dstgo/wilson/app/types"
 	"github.com/dstgo/wilson/pkg/route"
 	"github.com/gin-gonic/gin"
+	"github.com/jordan-wright/email"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
@@ -62,7 +63,7 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 }
 
 // NewAppApiRouter initializes app internal api router configuration
-func NewAppApiRouter(cfg *conf.AppConf, lang *locale.Locale, engine *gin.Engine, datasource *data.DataSource) appapi.ApiRouter {
+func NewAppApiRouter(cfg *conf.AppConf, lang *locale.Locale, engine *gin.Engine, datasource *data.DataSource, pool *email.Pool) appapi.ApiRouter {
 	if cfg.ServerConf.Swagger {
 		engine.GET(appapi.ApiDoc, ginSwagger.CustomWrapHandler(appapi.Config, swaggerFiles.NewHandler()))
 		log.L().Infof("visit AppAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(path.Dir(appapi.ApiDoc), "index.html"))
@@ -79,10 +80,10 @@ func NewAppApiRouter(cfg *conf.AppConf, lang *locale.Locale, engine *gin.Engine,
 	)
 
 	root.Use(
-		middleware.UseJwtAuthenticate(jwtAuthenticator, lang),
+		middleware.UseJwtAuthenticate(jwtAuthenticator),
 	)
 
-	return appapi.NewApiRouter(cfg, root, datasource, jwtAuthenticator)
+	return appapi.NewApiRouter(cfg, root, datasource, jwtAuthenticator, pool)
 }
 
 // NewOpenApiRouter initializes app open api router configuration

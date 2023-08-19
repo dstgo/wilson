@@ -2,6 +2,7 @@ package wilson
 
 import (
 	"context"
+	"github.com/jordan-wright/email"
 	"net/http"
 	"os/signal"
 	"sync"
@@ -78,6 +79,7 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App,
 		engine     *gin.Engine
 		server     *http.Server
 		datasource *data.DataSource
+		epool      *email.Pool
 		err        error
 		logger     = loggerw.L()
 	)
@@ -98,11 +100,17 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App,
 		return nil, err
 	}
 
+	// email pool
+	epool, err = LoadEmailPool(cfg.EmailConf, logger)
+	if err != nil {
+		return nil, err
+	}
+
 	// http server
 	engine, server = NewHttpServer(cfg, lang, logger)
 
 	// register app api router
-	_ = NewAppApiRouter(cfg, lang, engine, datasource)
+	_ = NewAppApiRouter(cfg, lang, engine, datasource, epool)
 
 	// register open api router
 	_ = NewOpenApiRouter(cfg, lang, engine, datasource)
@@ -110,6 +118,7 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App,
 	// execute on server shutdown
 	shutdownFn := func() {
 		CloseDataSource(datasource, logger)
+		epool.Close()
 		loggerw.Close()
 	}
 

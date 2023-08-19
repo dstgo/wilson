@@ -10,6 +10,10 @@ func Wrap(err error, msg string) error {
 	return errors.Wrap(err, msg)
 }
 
-func WrapI18n(ctx *gin.Context, err error, key string, args ...any) error {
+func WrapI18nCtx(ctx *gin.Context, err error, key string, args ...any) error {
 	return errors.Wrap(err, locale.L().GetWithCtx(ctx, key, args...))
+}
+
+func WrapI18n(err error, key string, args ...any) error {
+	return errors.Wrap(err, locale.L().GetDefault(key, args...))
 }

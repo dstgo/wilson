@@ -57,7 +57,7 @@ func (j *JwtAuthenticator) Issue(ctx context.Context, user UserPayload, exp time
 	}
 
 	// 将token的唯一ID存入redis
-	if err = j.redis.Set(ctx, fmt.Sprintf("token:%s", user.Username), userClaims.ID, 0).Err(); err != nil {
+	if err = j.redis.Set(ctx, fmt.Sprintf("token:%s", userClaims.ID), userClaims.Username, 0).Err(); err != nil {
 		return jwtx.Jwt{}, err
 	}
 
@@ -77,15 +77,15 @@ func (j *JwtAuthenticator) Authenticate(ctx context.Context, token string) (jwtx
 		return jwtV, err
 	}
 
-	if claims, e := parsedJwt.Claims.(UserClaims); e {
-		userClaims = claims
+	if claims, e := parsedJwt.Claims.(*UserClaims); e {
+		userClaims = *claims
 	}
 
 	// search from redis
-	if res, err := j.redis.Get(ctx, fmt.Sprintf("token:%s", userClaims.Username)).Result(); err != nil {
+	if res, err := j.redis.Get(ctx, fmt.Sprintf("token:%s", userClaims.ID)).Result(); err != nil {
 		return jwtV, err
 	} else if len(res) == 0 {
-		return jwtV, errors.New("token not found from redis")
+		return jwtV, errors.New("token not found")
 	}
 
 	return parsedJwt, nil

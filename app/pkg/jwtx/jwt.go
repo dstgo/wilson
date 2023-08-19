@@ -30,7 +30,7 @@ func ParseJwt(tokenStr, secret string, method jwt.SigningMethod, claims jwt.Clai
 	var jwtToken Jwt
 
 	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(tokenStr), nil
+		return []byte(secret), nil
 	}, jwt.WithValidMethods([]string{method.Alg()}))
 
 	if err != nil {

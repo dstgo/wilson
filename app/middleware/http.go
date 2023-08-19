@@ -7,6 +7,7 @@ import (
 	"github.com/dstgo/wilson/app/pkg/httpx"
 	"github.com/dstgo/wilson/app/pkg/httpx/httpheader"
 	"github.com/dstgo/wilson/app/types"
+	"github.com/dstgo/wilson/app/types/code"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/exp/slices"
@@ -55,6 +56,7 @@ func UseRecovery(logger *logrus.Logger) gin.HandlerFunc {
 			if panicErr := recover(); panicErr != nil {
 				var (
 					brokenPipe bool
+					readBody   bool
 				)
 
 				var err any
@@ -70,7 +72,12 @@ func UseRecovery(logger *logrus.Logger) gin.HandlerFunc {
 				}
 				err = panicErr
 
-				request, _ := httputil.DumpRequest(ctx.Request, false)
+				contentType := httpx.GetContentType(ctx)
+				if slices.Contains([]string{"application/json"}, contentType) {
+					readBody = true
+				}
+
+				request, _ := httputil.DumpRequest(ctx.Request, readBody)
 
 				entry := logger.
 					WithField(types.LogRecoverRequestKey, string(request)).
@@ -91,7 +98,7 @@ func UseRecovery(logger *logrus.Logger) gin.HandlerFunc {
 					return
 				}
 
-				resp.Fail(ctx, 5000, resp.NewI18nErr(http.StatusInternalServerError, "http.500"))
+				resp.Error(ctx).Code(code.InternalServerError).MsgI18n("err.internal").Send()
 			}
 		}()
 
@@ -116,13 +123,13 @@ func UseAcceptLanguage(defaultLanguage string) gin.HandlerFunc {
 // NotFoundHandler 404 handler
 func NotFoundHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		resp.NotFound(ctx, 4040, resp.NewI18nErr(http.StatusNotFound, "http.404"))
+		resp.Fail(ctx).Status(http.StatusNotFound).Code(4040).MsgI18n("err.notfound").Send()
 	}
 }
 
 // NoMethodHandler no method handler
 func NoMethodHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		resp.MethodNotAllowed(ctx, 4050, resp.NewI18nErr(http.StatusMethodNotAllowed, "http.405"))
+		resp.Fail(ctx).Status(http.StatusMethodNotAllowed).Code(4050).MsgI18n("err.methodnotallowed").Send()
 	}
 }

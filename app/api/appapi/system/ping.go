@@ -1,23 +1,23 @@
 package system
 
 import (
-	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/core/resp"
 	"github.com/dstgo/wilson/app/core/vax"
 	"github.com/dstgo/wilson/app/logic/systemLogic"
+	"github.com/dstgo/wilson/app/types/code"
 	"github.com/dstgo/wilson/app/types/request"
 	"github.com/gin-gonic/gin"
 )
 
-func NewPingApi(appConf *conf.AppConf, logic systemLogic.PingLogic) PingApi {
+func NewPingApi(logic systemLogic.PingLogic) PingApi {
 	api := PingApi{
-		pingLogic: logic,
+		PingLogic: logic,
 	}
 	return api
 }
 
 type PingApi struct {
-	pingLogic systemLogic.PingLogic
+	PingLogic systemLogic.PingLogic
 }
 
 // Ping
@@ -27,22 +27,21 @@ type PingApi struct {
 //	@Tags			system
 //	@Accept			json
 //	@Produce		json
-//	@Param			name	query		string						true	"ping name"
-//	@Success		200		{object}	resp.Response{data=string}	"success"
-//	@Failure		400		{object}	resp.Response{data=string}	"empty parameter"
-//	@Failure		400		{object}	resp.Response{data=string}	"bad parameter"
+//	@Param			name	query	string	true	"ping name"
 //	@Router			/ping [get]
 func (p PingApi) Ping(ctx *gin.Context) {
 	pingReq := new(request.PingRequest)
-	err := vax.Binds(ctx,
+	err := vax.BindAndResp(ctx,
 		vax.Query(pingReq),
 	)
 	if err != nil {
-		resp.Fail(ctx, 4000, err)
 		return
 	}
 
-	res := p.pingLogic.Ping(ctx, pingReq.Name)
+	res := p.PingLogic.Ping(ctx, pingReq.Name)
 
-	resp.Ok(ctx, 2000, "pong", res)
+	resp.Ok(ctx).Code(code.RequestOk).Msg("pong").
+		Data(gin.H{
+			"say": res,
+		}).Send()
 }

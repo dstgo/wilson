@@ -39,7 +39,7 @@ func (u UserInfoDao) DeleteByUUID(uuid string) error {
 }
 
 func (u UserInfoDao) CreateUser(user entity.User) error {
-	return u.ORM().Model(user.TableName()).Create(&user).Error
+	return u.ORM().Model(entity.User{}).Create(&user).Error
 }
 
 func (u UserInfoDao) ListAllUsers() ([]entity.User, error) {

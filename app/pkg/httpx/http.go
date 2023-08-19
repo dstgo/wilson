@@ -30,12 +30,12 @@ func GetRequestId(ctx *gin.Context) (requestId string) {
 // Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
 // https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept-Language
 func GetAcceptLanguage(ctx *gin.Context) []string {
-	cached := ctx.GetStringSlice(httpheader.AcceptLanguageHeader)
+	cached := ctx.GetStringSlice(httpheader.AcceptLanguage)
 	if cached != nil {
 		return cached
 	}
-	qualityValuePairs := GetQualityValuePairs(ctx.GetHeader(httpheader.AcceptLanguageHeader))
-	ctx.Set(httpheader.AcceptLanguageHeader, qualityValuePairs)
+	qualityValuePairs := GetQualityValuePairs(ctx.GetHeader(httpheader.AcceptLanguage))
+	ctx.Set(httpheader.AcceptLanguage, qualityValuePairs)
 	return qualityValuePairs
 }
 func GetFirstAcceptLanguage(ctx *gin.Context) string {
@@ -121,4 +121,8 @@ func GetBearerToken(authHeader string) string {
 		return token
 	}
 	return strings.TrimSpace(strings.TrimPrefix(authHeader, httpheader.BearerToken))
+}
+
+func GetContentType(ctx *gin.Context) string {
+	return ctx.GetHeader(httpheader.ContentType)
 }

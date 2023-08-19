@@ -2,6 +2,7 @@ package vax
 
 import (
 	"github.com/dstgo/wilson/app/core/resp"
+	"github.com/dstgo/wilson/app/types/code"
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,7 +11,7 @@ type BindPair struct {
 	V Validatable
 }
 
-func Binds(ctx *gin.Context, pairs ...BindPair) error {
+func BindAll(ctx *gin.Context, pairs ...BindPair) error {
 	for _, pair := range pairs {
 		err := Bind(ctx, pair)
 		if err != nil {
@@ -20,10 +21,10 @@ func Binds(ctx *gin.Context, pairs ...BindPair) error {
 	return nil
 }
 
-func BindsAndResp(ctx *gin.Context, pairs ...BindPair) error {
-	err := Binds(ctx, pairs...)
+func BindAndResp(ctx *gin.Context, pairs ...BindPair) error {
+	err := BindAll(ctx, pairs...)
 	if err != nil {
-		resp.Fail(ctx, 400, err)
+		resp.Fail(ctx).Code(code.BadRequest).MsgI18n("error.badparams").Error(err).Send()
 	}
 	return err
 }

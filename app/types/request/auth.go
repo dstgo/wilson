@@ -12,19 +12,19 @@ type LoginRequest struct {
 
 func (l LoginRequest) Validate(lang string) error {
 	return vax.Struct(&l, lang,
-		vax.Field(&l.Username, vax.Required, is.Alphanumeric, vax.RangeLength(8, 20, false)),
+		vax.Field(&l.Username, vax.Required, is.Alphanumeric, vax.RangeLength(6, 20, false)),
 		vax.Field(&l.Password, vax.Required, is.Alphanumeric, vax.RangeLength(10, 30, false)),
 	)
 }
 
 type RegisterRequest struct {
 	LoginRequest
-	Email string `json:"email" label:"field.email"`
+	Code string `json:"code" label:"field.code"`
 }
 
 func (r RegisterRequest) Validate(lang string) error {
 	return vax.Struct(&r, lang,
 		vax.Field(&r.LoginRequest),
-		vax.Field(&r.Email, vax.Required, is.Email),
+		vax.Field(&r.Code, vax.Required, is.Alphanumeric),
 	)
 }

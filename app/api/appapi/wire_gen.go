@@ -16,18 +16,21 @@ import (
 	"github.com/dstgo/wilson/app/logic/systemLogic"
 	"github.com/dstgo/wilson/app/logic/userLogic"
 	"github.com/dstgo/wilson/pkg/route"
+	"github.com/jordan-wright/email"
 )
 
 // Injectors from wire.go:
 
 //go:generate wire gen
-func NewApiRouter(appConf *conf.AppConf, rootRouter *route.Router, datasource *data.DataSource, issue auth.Issuer) ApiRouter {
+func NewApiRouter(appConf *conf.AppConf, rootRouter *route.Router, datasource *data.DataSource, issue auth.Issuer, pool *email.Pool) ApiRouter {
 	pingLogic := systemLogic.NewPingLogic(appConf)
-	pingApi := system.NewPingApi(appConf, pingLogic)
+	pingApi := system.NewPingApi(pingLogic)
 	userInfoDao := userDao.NewUserInfoDao(datasource)
-	authLogic := systemLogic.NewAuthLogic(issue, userInfoDao)
+	authLogic := systemLogic.NewAuthLogic(issue, userInfoDao, datasource)
 	authApi := system.NewAuthApi(authLogic)
-	router := system.NewSystemRouter(rootRouter, pingApi, authApi)
+	emailLogic := systemLogic.NewEmailLogic(appConf, pool)
+	emailApi := system.NewEmailApi(appConf, emailLogic, datasource)
+	router := system.NewSystemRouter(rootRouter, pingApi, authApi, emailApi)
 	userInfoLogic := userLogic.NewUserLogic(userInfoDao)
 	userInfoApi := user.NewUserInfoApi(userInfoLogic)
 	userRouter := user.NewUserRouter(rootRouter, userInfoApi)
