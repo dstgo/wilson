@@ -9,22 +9,34 @@ type E struct {
 }
 
 func (e *E) Bool() bool {
-	return e.Val.(bool)
+	if b, ok := e.Val.(bool); ok {
+		return b
+	}
+	return false
 }
 
 func (e *E) String() string {
-	return e.Val.(string)
+	if b, ok := e.Val.(string); ok {
+		return b
+	}
+	return ""
 }
 
 func (e *E) Int() int {
-	return e.Val.(int)
+	if b, ok := e.Val.(int); ok {
+		return b
+	}
+	return 0
 }
 
 func (e *E) Float() float64 {
-	return e.Val.(float64)
+	if b, ok := e.Val.(float64); ok {
+		return b
+	}
+	return 0
 }
 
-func Metas(e ...E) Meta {
+func MetaSum(e ...E) Meta {
 	if len(e) == 0 {
 		return nil
 	}
