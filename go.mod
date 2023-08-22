@@ -1,6 +1,6 @@
 module github.com/dstgo/wilson
 
-go 1.20
+go 1.21
 
 require (
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
