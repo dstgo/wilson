@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Static Badge](https://img.shields.io/badge/go-%3E%3D1.20-blue)
+![Static Badge](https://img.shields.io/badge/go-%3E%3D1.21-blue)
 ![GitHub](https://img.shields.io/github/license/dstgo/wilson?color=red)
 
 </div>
@@ -10,7 +10,7 @@
 Englist|[简体中文](README.zh.md)
 
 Wilson is an open source, distributed, front-end and back-end separation, and a modern web management panel for server
-cluster management of Dont Starved Together, based on Docker.
+cluster management of game server, based on Docker.
 
 ## Feature
 
@@ -19,12 +19,10 @@ cluster management of Dont Starved Together, based on Docker.
 - ELK log analysis
 - Prometheus system monitoring
 - Elastic control of instance resources
-- API permission management
-- Sub user management
-- Open interface support
+- Role API permission management
+- Multi-user, sub-user management
+- Open API support
 - Distributed server management
-- Mod management support
-- Multi-layer world support
 
 ## Build
 
