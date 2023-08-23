@@ -7,3 +7,10 @@ var NoAuth = route.E{
 	Key: "NoAuth",
 	Val: struct{}{},
 }
+
+func Roles(roles ...string) route.E {
+	return route.E{
+		Key: "role",
+		Val: roles,
+	}
+}

@@ -50,3 +50,9 @@ func UseCasbin() gin.HandlerFunc {
 
 	}
 }
+
+func UseApiKey() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+
+	}
+}
