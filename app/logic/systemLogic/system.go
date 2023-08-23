@@ -6,4 +6,5 @@ var ProviderSet = wire.NewSet(
 	NewPingLogic,
 	NewAuthLogic,
 	NewEmailLogic,
+	NewRoleLogic,
 )

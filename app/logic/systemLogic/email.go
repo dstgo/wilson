@@ -38,9 +38,17 @@ func (e EmailLogic) SendHtmlTemplateMail(mail *email.Email, tmpl string, data ma
 	mail.HTML = buf.Bytes()
 
 	// send email
-	if err = e.pool.Send(mail, e.conf.SendTimeout); err != nil {
+	return e.SendMail(mail)
+}
+
+func (e EmailLogic) SendTextMail(mail *email.Email, text string) error {
+	mail.Text = []byte(text)
+	return e.SendMail(mail)
+}
+
+func (e EmailLogic) SendMail(mail *email.Email) error {
+	if err := e.pool.Send(mail, e.conf.SendTimeout); err != nil {
 		return resp.NetworkErr(err)
 	}
-
 	return nil
 }

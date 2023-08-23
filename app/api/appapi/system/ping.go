@@ -4,6 +4,7 @@ import (
 	"github.com/dstgo/wilson/app/core/resp"
 	"github.com/dstgo/wilson/app/core/vax"
 	"github.com/dstgo/wilson/app/logic/systemLogic"
+	"github.com/dstgo/wilson/app/types"
 	"github.com/dstgo/wilson/app/types/code"
 	"github.com/dstgo/wilson/app/types/request"
 	"github.com/gin-gonic/gin"
@@ -28,7 +29,7 @@ type PingApi struct {
 //	@Accept			json
 //	@Produce		json
 //	@Param			name	query	string	true	"ping name"
-//	@Router			/ping [get]
+//	@Router			/ping [GET]
 func (p PingApi) Ping(ctx *gin.Context) {
 	pingReq := new(request.PingRequest)
 	err := vax.BindAndResp(ctx,
@@ -41,7 +42,7 @@ func (p PingApi) Ping(ctx *gin.Context) {
 	res := p.PingLogic.Ping(ctx, pingReq.Name)
 
 	resp.Ok(ctx).Code(code.RequestOk).Msg("pong").
-		Data(gin.H{
-			"say": res,
+		Data(types.H{
+			"reply": res,
 		}).Send()
 }

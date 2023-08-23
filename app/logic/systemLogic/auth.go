@@ -91,11 +91,11 @@ func (a AuthLogic) TryRegisterNewUser(username string, password string, code str
 
 	// create new user
 	newUser := entity.User{
-		UUID:     uuid.NewString(),
-		Username: username,
-		Password: password,
-		Email:    email,
-		CreateAt: time.Now(),
+		UUID:      uuid.NewString(),
+		Username:  username,
+		Password:  password,
+		Email:     email,
+		CreatedAt: time.Now(),
 	}
 
 	if err := a.UserDao.CreateUser(newUser); err != nil {

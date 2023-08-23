@@ -54,6 +54,6 @@ func (u UserInfoDao) Count() (int64, error) {
 	return count, err
 }
 
-func (u UserInfoDao) UpdateUser(user entity.User) error {
+func (u UserInfoDao) UpdateUserInfo(user entity.User) error {
 	return u.ORM().Model(user).Save(&user).Error
 }

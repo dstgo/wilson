@@ -6,12 +6,52 @@ import (
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/core/locale"
 	"github.com/dstgo/wilson/app/pkg/jwtx"
+	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"time"
 )
+
+// Authenticator
+// The authenticator should verify whether the request has been authenticated.
+type Authenticator interface {
+	Authenticate(ctx context.Context, token string) (jwtx.Jwt, error)
+}
+
+// Issuer
+// The Issuer should issue a new jwt token and return the token info
+type Issuer interface {
+	Issue(ctx context.Context, user UserPayload, exp time.Duration) (jwtx.Jwt, error)
+}
+
+// UserPayload
+// basic user info
+type UserPayload struct {
+	Username string `json:"Username"`
+	UserId   string `json:"userId"`
+}
+
+var (
+	ContextUserInfo = "gin.context.user.info"
+)
+
+func SetContextTokenInfo(ctx *gin.Context, claims UserClaims) {
+	ctx.Set(ContextUserInfo, claims)
+}
+
+func GetContextTokenInfo(ctx *gin.Context) UserClaims {
+	var userClaims UserClaims
+	value, exists := ctx.Get(ContextUserInfo)
+	if !exists {
+		return userClaims
+	}
+	if claims, ok := value.(UserClaims); ok {
+		userClaims = claims
+	}
+	return userClaims
+}
 
 type UserClaims struct {
 	UserPayload

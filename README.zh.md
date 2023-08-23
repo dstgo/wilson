@@ -1,6 +1,8 @@
 # Wilson
 <div align="center">
 
+<img src="https://public-1308755698.cos.ap-chongqing.myqcloud.com//img/202308231912543.png" alt="wilson" style="zoom: 50%;" />
+
 ![Static Badge](https://img.shields.io/badge/go-%3E%3D1.21-blue)
 ![GitHub](https://img.shields.io/github/license/dstgo/wilson?color=red)
 
