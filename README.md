@@ -1,7 +1,7 @@
 # Wilson
 
 <div align="center">
-<img src="https://public-1308755698.cos.ap-chongqing.myqcloud.com//img/202308231912543.png" alt="wilson" width="200px" height="300px" />
+<img src="https://public-1308755698.cos.ap-chongqing.myqcloud.com//img/202310122023621.png" alt="wilson" width="300px" height="300px" />
 
 ![Static Badge](https://img.shields.io/badge/go-%3E%3D1.21-blue)
 ![GitHub](https://img.shields.io/github/license/dstgo/wilson?color=red)
@@ -10,8 +10,7 @@
 
 Englist|[简体中文](README.zh.md)
 
-Wilson is an open source, distributed, front-end and back-end separation, and a modern web management panel for server
-cluster management of game server, based on Docker.
+wilson is an open source, distributed, front-end and back-end separation, modern Don't Starve game server web management panel server, implemented based on Go language.
 
 ## Feature
 

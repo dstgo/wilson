@@ -1,14 +1,13 @@
 # Wilson
 <div align="center">
-<img src="https://public-1308755698.cos.ap-chongqing.myqcloud.com//img/202308231912543.png" alt="wilson" width="200px" height="300px" />
+<img src="https://public-1308755698.cos.ap-chongqing.myqcloud.com//img/202310122023621.png" alt="wilson" width="300px" height="300px" />
+
 
 ![Static Badge](https://img.shields.io/badge/go-%3E%3D1.21-blue)
 ![GitHub](https://img.shields.io/github/license/dstgo/wilson?color=red)
 
 </div>
-wilson 是一款开源的，分布式，前后端分离，现代化的游戏服务器网页管理面板，基于Docker实现。
-
-
+wilson 是一款开源的，分布式，前后端分离，现代化的饥荒游戏服务器网页管理面板的服务端，基于Go语言实现。
 
 ## 特色
 
