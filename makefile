@@ -16,7 +16,7 @@ gen:
 .PHONY: build
 build:
 	make gen
-	go build -trimpath -ldflags "-X main.Author=stranger -X main.Version=$(shell git describe --tags --always)" -o ./bin/ github.com/dstgo/wilson
+	go build -trimpath -ldflags "-X main.Author=$(shell git config user.name) -X main.Version=$(shell git describe --tags --always)" -o ./bin/ github.com/dstgo/wilson
 
 
 .PHONY: all
