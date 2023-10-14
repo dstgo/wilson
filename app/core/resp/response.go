@@ -88,6 +88,9 @@ func (r *Response) Send() {
 					r.ErrorMsg = locale.GetWithCtx(r.ctx, e.LangCode)
 				} else {
 					r.ErrorMsg = e.Error()
+					if len(r.ErrorMsg) == 0 {
+						r.ErrorMsg = locale.GetWithCtx(r.ctx, e.LangCode)
+					}
 				}
 
 				if e.CustomCode > 0 {
