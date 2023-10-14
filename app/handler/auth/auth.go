@@ -128,8 +128,8 @@ func (a AuthLogic) ChangePassword(newPassword string, code string) error {
 
 	// get email
 	emailCache, err := a.codeCache.Check(ctx, code)
-	if emailCache == "" && err == nil {
-		return resp.NewErr().Status(http.StatusBadRequest).I18n("cacheEmail.codeExpired")
+	if errors.Is(err, redis.Nil) {
+		return resp.NewErr().Status(http.StatusBadRequest).I18n("email.codeExpired")
 	} else if err != nil {
 		return resp.DataBaseErr(err)
 	}
