@@ -26,10 +26,19 @@ func (c CodeCache) Get(ctx context.Context, code string) (string, error) {
 	return c.cache.Get(ctx, CodeCacheKey(code)).Result()
 }
 
-func (c CodeCache) Set(ctx context.Context, email string, code string, expire time.Duration) error {
+func (c CodeCache) Set(ctx context.Context, code string, email string, expire time.Duration) error {
 	return c.cache.Set(ctx, CodeCacheKey(code), email, expire).Err()
 }
 
 func (c CodeCache) Del(ctx context.Context, code string) error {
 	return c.cache.Del(ctx, CodeCacheKey(code)).Err()
+}
+
+// Check get and remove
+func (c CodeCache) Check(ctx context.Context, code string) (string, error) {
+	cache, err := c.Get(ctx, code)
+	if err != nil {
+		return "", err
+	}
+	return cache, c.Del(ctx, code)
 }

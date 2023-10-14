@@ -24,16 +24,18 @@ var EmailProviderSet = wire.NewSet(
 
 func NewEmailHandler(cfg *conf.AppConf, emailLogic EmailLogic, codeCache CodeCache) EmailHandler {
 	return EmailHandler{
-		EmailLogic: emailLogic,
-		cfg:        cfg.EmailConf,
-		codeCache:  codeCache,
+		EmailLogic:   emailLogic,
+		cfg:          cfg.EmailConf,
+		fallbackLang: cfg.LocaleConf.Locale,
+		codeCache:    codeCache,
 	}
 }
 
 type EmailHandler struct {
-	EmailLogic EmailLogic
-	cfg        *conf.EmailConf
-	codeCache  CodeCache
+	EmailLogic   EmailLogic
+	cfg          *conf.EmailConf
+	fallbackLang string
+	codeCache    CodeCache
 }
 
 // SendCodeEmail
@@ -56,7 +58,7 @@ func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 	authcode := strings.ToUpper(strings.Split(newUUUID, "-")[0])
 
 	// store in redis
-	if err := e.codeCache.Set(ctx, CodeCacheKey(authcode), emailReq.Email, e.cfg.Expire()); err != nil {
+	if err := e.codeCache.Set(ctx, authcode, emailReq.Email, e.cfg.Expire()); err != nil {
 		resp.InternalErr(ctx).
 			Code(code.DatabaseError).
 			MsgI18n("email.sendFail").
@@ -72,9 +74,10 @@ func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 
 	// judge language
 	language := httpx.GetFirstAcceptLanguage(ctx)
-	if language != "zh-CN" {
-		language = "en-US"
+	if language == "" {
+		language = e.fallbackLang
 	}
+
 	codeTmpl := path.Join("email", language, "code.html")
 
 	// send html email

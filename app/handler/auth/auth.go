@@ -67,9 +67,9 @@ func (a AuthLogic) TryLogin(userName string, password string) (jwtx.Jwt, error) 
 func (a AuthLogic) TryRegisterNewUser(username string, password string, code string) error {
 	ctx := context.Background()
 	// find the authcode from redis
-	cacheEmail, err := a.codeCache.Get(ctx, code)
+	cacheEmail, err := a.codeCache.Check(ctx, code)
 	if errors.Is(err, redis.Nil) {
-		return resp.NewErr().Status(http.StatusBadRequest).I18n("cacheEmail.codeExpired")
+		return resp.NewErr().Status(http.StatusBadRequest).I18n("email.codeExpired")
 	} else if err != nil {
 		return resp.DataBaseErr(err)
 	}
@@ -127,7 +127,7 @@ func (a AuthLogic) ChangePassword(newPassword string, code string) error {
 	ctx := context.Background()
 
 	// get email
-	emailCache, err := a.codeCache.Get(ctx, code)
+	emailCache, err := a.codeCache.Check(ctx, code)
 	if emailCache == "" && err == nil {
 		return resp.NewErr().Status(http.StatusBadRequest).I18n("cacheEmail.codeExpired")
 	} else if err != nil {
