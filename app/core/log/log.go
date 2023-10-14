@@ -18,7 +18,7 @@ func L() *logrus.Logger {
 	return logger
 }
 
-func Set(l *logrus.Logger) {
+func Setup(l *logrus.Logger) {
 	logger = l
 }
 

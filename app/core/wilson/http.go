@@ -110,8 +110,8 @@ func NewLocale(cfg *locale.Conf) (*locale.Locale, error) {
 }
 
 // NewLogger config logrus middleware
-func NewLogger(logConf *conf.LogConf) (*log.LoggerW, error) {
-	logConf.TimeFormat = conf.DateTimeFormat
+func NewLogger(logConf *conf.LogConf) (*log.Logger, error) {
+	logConf.TimeFormat = types.DateTimeFormat
 	logConf.Order = []string{
 		types.LogIpKey, types.LogHttpMethodKey,
 		types.LogHttpStatusKey, types.LogRequestPathKey,
@@ -124,6 +124,5 @@ func NewLogger(logConf *conf.LogConf) (*log.LoggerW, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "load logger failed")
 	}
-	log.Set(logger.L())
 	return logger, nil
 }

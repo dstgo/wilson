@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"github.com/dstgo/task"
 	"github.com/dstgo/wilson/app/conf"
+	"github.com/dstgo/wilson/app/core/log"
 	"github.com/dstgo/wilson/app/data/entity"
 	"github.com/dstgo/wilson/app/pkg/errorx"
 	"github.com/go-redis/redis/v8"
-	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -26,7 +26,7 @@ func NewRedisClient(ctx context.Context, conf *conf.RedisConf) (*redis.Client, e
 	return client, nil
 }
 
-func NewDBClient(ctx context.Context, conf *conf.DatabaseConf, logger *logrus.Logger) (*gorm.DB, error) {
+func NewDBClient(ctx context.Context, conf *conf.DatabaseConf) (*gorm.DB, error) {
 	if conf == nil {
 		return nil, errors.New("db conf is empty")
 	}
@@ -45,7 +45,7 @@ func NewDBClient(ctx context.Context, conf *conf.DatabaseConf, logger *logrus.Lo
 		return nil, err
 	}
 
-	ormDB, err := gorm.Open(dial, ormOption(ormLogger(logger)))
+	ormDB, err := gorm.Open(dial, ormOption(ormLogger(log.L())))
 	if err != nil {
 		return nil, err
 	}
@@ -95,24 +95,24 @@ func (d *DataSource) Close() error {
 	).Err()
 }
 
-func NewDataSource(ctx context.Context, databaseConf *conf.DataConf, logger *logrus.Logger) (*DataSource, error) {
+func NewDataSource(ctx context.Context, databaseConf *conf.DataConf) (*DataSource, error) {
 	datasource := new(DataSource)
 
 	var errs error
 	// async task to load each db
 	dataTask := task.NewTask(func(err any) {
-		logger.Panicln(err)
+		log.L().Panicln(err)
 	})
 
 	// connect to gorm db
 	dataTask.AddJobs(func() {
-		db, err := NewDBClient(ctx, databaseConf.DatabaseConf, logger)
+		db, err := NewDBClient(ctx, databaseConf.DatabaseConf)
 		if err != nil {
 			errs = errorx.Join(errs, err).Err()
-			logger.Errorf("gorm db connected failed: %s", err)
+			log.L().Errorf("gorm db connected failed: %s", err)
 			return
 		}
-		logger.Infof("gorm db connected:(%s) ok √", databaseConf.DatabaseConf.Address)
+		log.L().Infof("gorm db connected:(%s) ok √", databaseConf.DatabaseConf.Address)
 		datasource.orm = db
 	})
 
@@ -121,10 +121,10 @@ func NewDataSource(ctx context.Context, databaseConf *conf.DataConf, logger *log
 		redisClient, err := NewRedisClient(ctx, databaseConf.RedisConf)
 		if err != nil {
 			errs = errorx.Join(errs, err).Err()
-			logger.Errorf("redis client connected failed: %s", err)
+			log.L().Errorf("redis client connected failed: %s", err)
 			return
 		}
-		logger.Infof("redis server connected:(%s) ok √", redisClient.Options().Addr)
+		log.L().Infof("redis server connected:(%s) ok √", redisClient.Options().Addr)
 		datasource.redis = redisClient
 	})
 

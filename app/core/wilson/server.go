@@ -72,7 +72,7 @@ func (a *App) Shutdown() {
 	})
 }
 
-func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App, error) {
+func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.Logger) (*App, error) {
 
 	var (
 		lang       *locale.Locale
@@ -96,13 +96,13 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App,
 	}
 
 	// datasource
-	datasource, err = LoadDataSource(ctx, cfg.DataConf, logger)
+	datasource, err = LoadDataSource(ctx, cfg.DataConf)
 	if err != nil {
 		return nil, err
 	}
 
 	// email pool
-	epool, err = LoadEmailPool(cfg.EmailConf, logger)
+	epool, err = LoadEmailPool(cfg.EmailConf)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +118,7 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App,
 
 	// execute on server shutdown
 	shutdownFn := func() {
-		CloseDataSource(datasource, logger)
+		CloseDataSource(datasource)
 		epool.Close()
 		loggerw.Close()
 	}
