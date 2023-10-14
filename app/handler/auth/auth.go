@@ -123,6 +123,32 @@ func (a AuthLogic) TryLogout(tokenId string) error {
 	return nil
 }
 
-//func (a AuthLogic) ChangePassword(password string, code string) error {
-//
-//}
+func (a AuthLogic) ChangePassword(newPassword string, code string) error {
+	ctx := context.Background()
+
+	// get email
+	emailCache, err := a.codeCache.Get(ctx, code)
+	if emailCache == "" && err == nil {
+		return resp.NewErr().Status(http.StatusBadRequest).I18n("cacheEmail.codeExpired")
+	} else if err != nil {
+		return resp.DataBaseErr(err)
+	}
+
+	// find user by email
+	userInfo, err := a.userData.GetUserByEmail(emailCache)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return resp.NewErr().Status(http.StatusNotFound).I18n("user.notfound")
+	} else if err != nil {
+		return resp.DataBaseErr(err)
+	}
+
+	// change the password
+	userInfo.Password = cryptor.Sha512WithBase64(newPassword)
+
+	// save
+	if err := a.userData.UpdateUserInfo(userInfo); err != nil {
+		return resp.DataBaseErr(err)
+	}
+
+	return nil
+}
