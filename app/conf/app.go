@@ -55,6 +55,7 @@ type JwtConf struct {
 
 // LogConf app logger config
 type LogConf struct {
+	Format     string `mapstructure:"format"`
 	Level      string `mapstructure:"level"`
 	InfoLog    string `mapstructure:"infoLog"`
 	ErrorLog   string `mapstructure:"errorLog"`
