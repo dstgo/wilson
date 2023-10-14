@@ -33,7 +33,7 @@ type PingHandler struct {
 //	@Accept			json
 //	@Produce		json
 //	@Param			name	query	string	true	"ping name"
-//	@HandlerRouter			/ping [GET]
+//	@Router			/ping [GET]
 func (p PingHandler) Ping(ctx *gin.Context) {
 	pingReq := new(request.PingRequest)
 	err := vax.BindAndResp(ctx,

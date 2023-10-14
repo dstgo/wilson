@@ -42,11 +42,11 @@ type EmailHandler struct {
 //
 //	@Summary		auth code email api
 //	@Description	auth code email api
-//	@Tags			system/email
+//	@Tags			email
 //	@Accept			x-www-form-urlencoded
 //	@Produce		json
 //	@Param			email	query	string	true	"email"
-//	@Handler			/email/code [GET]
+//	@Router			/email/code [GET]
 func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 	emailReq := new(request.Email)
 	if err := vax.BindAndResp(ctx, vax.Query(emailReq)); err != nil {

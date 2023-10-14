@@ -65,8 +65,8 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 // SetupHandler initializes app internal api router configuration
 func SetupHandler(cfg *conf.AppConf, engine *gin.Engine, datasource *data.DataSource, pool *email.Pool) handler.Router {
 	if cfg.ServerConf.Swagger {
-		engine.GET(handler.DocPath, ginSwagger.CustomWrapHandler(handler.Config, swaggerFiles.NewHandler()))
-		log.L().Infof("visit AppAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(path.Dir(handler.DocPath), "index.html"))
+		engine.GET(path.Join(handler.DocPath, "*any"), ginSwagger.CustomWrapHandler(handler.Config, swaggerFiles.NewHandler()))
+		log.L().Infof("visit AppAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(handler.DocPath, "index.html"))
 	}
 
 	// jwt authenticator
@@ -92,8 +92,8 @@ func SetupOpenAPI(cfg *conf.AppConf, engine *gin.Engine, datasource *data.DataSo
 		return api.Router{}
 	}
 	if cfg.ServerConf.Swagger {
-		engine.GET(api.DocPath, ginSwagger.CustomWrapHandler(api.Config, swaggerFiles.NewHandler()))
-		log.L().Infof("visit OpenAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(path.Dir(api.DocPath), "index.html"))
+		engine.GET(path.Join(api.DocPath, "*any"), ginSwagger.CustomWrapHandler(api.Config, swaggerFiles.NewHandler()))
+		log.L().Infof("visit OpenAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(api.DocPath, "index.html"))
 	}
 	root := route.NewRouter(engine.RouterGroup.Group(api.BasePath))
 

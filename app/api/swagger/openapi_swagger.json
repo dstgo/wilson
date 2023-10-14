@@ -6,7 +6,7 @@
         "contact": {},
         "version": "v1.0.0"
     },
-    "basePath": "/openapi/",
+    "basePath": "/open/doc/",
     "paths": {
         "/open/user/info": {
             "get": {
@@ -31,6 +31,33 @@
                     }
                 ],
                 "responses": {}
+            }
+        }
+    },
+    "definitions": {
+        "request.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.RegisterRequest": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
             }
         }
     }

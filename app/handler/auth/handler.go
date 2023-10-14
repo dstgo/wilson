@@ -30,11 +30,11 @@ type AuthHandler struct {
 //
 //	@Summary		user login api
 //	@Description	if login success, return jwt token
-//	@Tags			system/auth
+//	@Tags			auth
 //	@param			loginBody	body	request.LoginRequest	true	"comment"
 //	@Accept			json
 //	@Produce		json
-//	@Handler			/auth/login [POST]
+//	@Router			/auth/login [POST]
 func (a AuthHandler) Login(ctx *gin.Context) {
 	loginRequest := new(request.LoginRequest)
 	if err := vax.BindAndResp(ctx, vax.Json(loginRequest)); err != nil {
@@ -53,11 +53,11 @@ func (a AuthHandler) Login(ctx *gin.Context) {
 //
 //	@Summary		user register api
 //	@Description	user register api
-//	@Tags			system/auth
+//	@Tags			auth
 //	@Accept			json
 //	@Produce		json
 //	@Param			registerBody	body	request.RegisterRequest	true	"comment"
-//	@Handler			/auth/register [POST]
+//	@Router			/auth/register [POST]
 func (a AuthHandler) Register(ctx *gin.Context) {
 	registerRequest := new(request.RegisterRequest)
 	if err := vax.BindAndResp(ctx, vax.Json(registerRequest)); err != nil {
@@ -75,9 +75,9 @@ func (a AuthHandler) Register(ctx *gin.Context) {
 //
 //	@Summary		user logout api
 //	@Description	user logout
-//	@Tags			system/auth
+//	@Tags			auth
 //	@Produce		json
-//	@Handler			/auth/logout [DELETE]
+//	@Router			/auth/logout [DELETE]
 func (a AuthHandler) Logout(ctx *gin.Context) {
 	// get user info from parsed request context
 	tokenInfo := auth.GetContextTokenInfo(ctx)

@@ -1,4 +1,4 @@
-basePath: /api/
+basePath: /api
 definitions:
   request.LoginRequest:
     properties:
@@ -21,5 +21,84 @@ info:
   description: Wilson api documentation
   title: Wilson App Internal API Documentation
   version: v1.0.0
-paths: {}
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: if login success, return jwt token
+      parameters:
+      - description: comment
+        in: body
+        name: loginBody
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginRequest'
+      produces:
+      - application/json
+      responses: {}
+      summary: user login api
+      tags:
+      - auth
+  /auth/logout:
+    delete:
+      description: user logout
+      produces:
+      - application/json
+      responses: {}
+      summary: user logout api
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: user register api
+      parameters:
+      - description: comment
+        in: body
+        name: registerBody
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterRequest'
+      produces:
+      - application/json
+      responses: {}
+      summary: user register api
+      tags:
+      - auth
+  /email/code:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: auth code email api
+      parameters:
+      - description: email
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: auth code email api
+      tags:
+      - email
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: to test app api if is ok
+      parameters:
+      - description: ping name
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: app test ping api
+      tags:
+      - system
 swagger: "2.0"

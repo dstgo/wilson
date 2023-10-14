@@ -1,4 +1,21 @@
-basePath: /openapi/
+basePath: /open/doc/
+definitions:
+  request.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  request.RegisterRequest:
+    properties:
+      code:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
 info:
   contact: {}
   description: Wilson api documentation
