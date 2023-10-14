@@ -2,7 +2,7 @@ package wilson
 
 import (
 	"context"
-	"github.com/dstgo/wilson/app/repo/data"
+	"github.com/dstgo/wilson/app/data"
 	"github.com/jordan-wright/email"
 	"net/http"
 	"os/signal"
@@ -72,7 +72,7 @@ func (a *App) Shutdown() {
 	})
 }
 
-func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App, error) {
+func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.Logger) (*App, error) {
 
 	var (
 		lang       *locale.Locale
@@ -89,19 +89,20 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App,
 	if err != nil {
 		return nil, err
 	}
+	locale.Setup(lang)
 
 	if err = LogBanner(cfg, logger); err != nil {
 		return nil, err
 	}
 
 	// datasource
-	datasource, err = LoadDataSource(ctx, cfg.DataConf, logger)
+	datasource, err = LoadDataSource(ctx, cfg.DataConf)
 	if err != nil {
 		return nil, err
 	}
 
 	// email pool
-	epool, err = LoadEmailPool(cfg.EmailConf, logger)
+	epool, err = LoadEmailPool(cfg.EmailConf)
 	if err != nil {
 		return nil, err
 	}
@@ -110,14 +111,14 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App,
 	engine, server = NewHttpServer(cfg, lang, logger)
 
 	// register app api router
-	_ = NewAppApiRouter(cfg, lang, engine, datasource, epool)
+	_ = SetupHandler(cfg, engine, datasource, epool)
 
 	// register open api router
-	_ = NewOpenApiRouter(cfg, lang, engine, datasource)
+	_ = SetupOpenAPI(cfg, engine, datasource)
 
 	// execute on server shutdown
 	shutdownFn := func() {
-		CloseDataSource(datasource, logger)
+		CloseDataSource(datasource)
 		epool.Close()
 		loggerw.Close()
 	}

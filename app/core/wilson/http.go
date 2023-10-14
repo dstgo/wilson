@@ -2,17 +2,17 @@ package wilson
 
 import (
 	"fmt"
-	"github.com/dstgo/wilson/app/api/appapi"
-	_ "github.com/dstgo/wilson/app/api/appapi/swagger"
-	"github.com/dstgo/wilson/app/api/openapi"
-	_ "github.com/dstgo/wilson/app/api/openapi/swagger"
+	"github.com/dstgo/wilson/app/api"
+	_ "github.com/dstgo/wilson/app/api/swagger"
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/core/auth"
 	"github.com/dstgo/wilson/app/core/locale"
 	"github.com/dstgo/wilson/app/core/log"
-	"github.com/dstgo/wilson/app/core/vax"
+	"github.com/dstgo/wilson/app/data"
+	"github.com/dstgo/wilson/app/handler"
+	_ "github.com/dstgo/wilson/app/handler/swagger"
 	"github.com/dstgo/wilson/app/middleware"
-	"github.com/dstgo/wilson/app/repo/data"
+	"github.com/dstgo/wilson/app/pkg/vax"
 	"github.com/dstgo/wilson/app/types"
 	"github.com/dstgo/wilson/pkg/route"
 	"github.com/gin-gonic/gin"
@@ -37,7 +37,7 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 	engine.MaxMultipartMemory = serverConf.HttpConf.MultipartMax
 
 	engine.Use(
-		middleware.UseLogger(logger, appapi.ApiDoc, openapi.ApiDoc),
+		middleware.UseLogger(logger, handler.DocPath, api.DocPath),
 		middleware.UseRecovery(logger),
 		middleware.UseAcceptLanguage(lang.Default()),
 	)
@@ -62,17 +62,17 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 	return engine, server
 }
 
-// NewAppApiRouter initializes app internal api router configuration
-func NewAppApiRouter(cfg *conf.AppConf, lang *locale.Locale, engine *gin.Engine, datasource *data.DataSource, pool *email.Pool) appapi.ApiRouter {
+// SetupHandler initializes app internal api router configuration
+func SetupHandler(cfg *conf.AppConf, engine *gin.Engine, datasource *data.DataSource, pool *email.Pool) handler.Router {
 	if cfg.ServerConf.Swagger {
-		engine.GET(appapi.ApiDoc, ginSwagger.CustomWrapHandler(appapi.Config, swaggerFiles.NewHandler()))
-		log.L().Infof("visit AppAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(path.Dir(appapi.ApiDoc), "index.html"))
+		engine.GET(path.Join(handler.DocPath, "*any"), ginSwagger.CustomWrapHandler(handler.Config, swaggerFiles.NewHandler()))
+		log.L().Infof("visit AppAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(handler.DocPath, "index.html"))
 	}
 
 	// jwt authenticator
-	jwtAuthenticator := auth.NewJwtAuthenticator(cfg.JwtConf, lang, datasource.Redis())
+	jwtAuthenticator := auth.NewJwtAuthenticator(cfg.JwtConf, datasource.Redis())
 
-	root := route.NewRouter(engine.RouterGroup.Group(appapi.BasePath))
+	root := route.NewRouter(engine.RouterGroup.Group(handler.BasePath))
 
 	// attach middleware to gin router
 	root.Attach(
@@ -83,21 +83,21 @@ func NewAppApiRouter(cfg *conf.AppConf, lang *locale.Locale, engine *gin.Engine,
 		middleware.UseJwtAuthenticate(jwtAuthenticator),
 	)
 
-	return appapi.NewApiRouter(cfg, root, datasource, jwtAuthenticator, pool)
+	return handler.SetupHandler(cfg, root, datasource, jwtAuthenticator, pool)
 }
 
-// NewOpenApiRouter initializes app open api router configuration
-func NewOpenApiRouter(cfg *conf.AppConf, lang *locale.Locale, engine *gin.Engine, datasource *data.DataSource) openapi.ApiRouter {
+// SetupOpenAPI initializes app open api router configuration
+func SetupOpenAPI(cfg *conf.AppConf, engine *gin.Engine, datasource *data.DataSource) api.Router {
 	if !cfg.ServerConf.OpenAPI {
-		return openapi.ApiRouter{}
+		return api.Router{}
 	}
 	if cfg.ServerConf.Swagger {
-		engine.GET(openapi.ApiDoc, ginSwagger.CustomWrapHandler(openapi.Config, swaggerFiles.NewHandler()))
-		log.L().Infof("visit OpenAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(path.Dir(openapi.ApiDoc), "index.html"))
+		engine.GET(path.Join(api.DocPath, "*any"), ginSwagger.CustomWrapHandler(api.Config, swaggerFiles.NewHandler()))
+		log.L().Infof("visit OpenAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(api.DocPath, "index.html"))
 	}
-	root := route.NewRouter(engine.RouterGroup.Group(openapi.BasePath))
+	root := route.NewRouter(engine.RouterGroup.Group(api.BasePath))
 
-	return openapi.NewApiRouter(cfg, root, datasource)
+	return api.SetupAPI(root, datasource)
 }
 
 func NewLocale(cfg *locale.Conf) (*locale.Locale, error) {
@@ -105,13 +105,13 @@ func NewLocale(cfg *locale.Conf) (*locale.Locale, error) {
 	if err != nil {
 		return nil, fmt.Errorf("load language directory failed: %s", err.Error())
 	}
-	locale.Set(l)
+	locale.Setup(l)
 	return l, nil
 }
 
 // NewLogger config logrus middleware
-func NewLogger(logConf *conf.LogConf) (*log.LoggerW, error) {
-	logConf.TimeFormat = conf.DateTimeFormat
+func NewLogger(logConf *conf.LogConf) (*log.Logger, error) {
+	logConf.TimeFormat = types.DateTimeFormat
 	logConf.Order = []string{
 		types.LogIpKey, types.LogHttpMethodKey,
 		types.LogHttpStatusKey, types.LogRequestPathKey,
@@ -124,6 +124,5 @@ func NewLogger(logConf *conf.LogConf) (*log.LoggerW, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "load logger failed")
 	}
-	log.Set(logger.L())
 	return logger, nil
 }

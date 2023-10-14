@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/dstgo/wilson/app/conf"
-	"github.com/dstgo/wilson/app/core/locale"
 	"github.com/dstgo/wilson/app/pkg/jwtx"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -58,9 +57,8 @@ type UserClaims struct {
 	jwt.RegisteredClaims
 }
 
-func NewJwtAuthenticator(cfg *conf.JwtConf, lang *locale.Locale, client *redis.Client) *JwtAuthenticator {
+func NewJwtAuthenticator(cfg *conf.JwtConf, client *redis.Client) *JwtAuthenticator {
 	return &JwtAuthenticator{
-		lang:   lang,
 		redis:  client,
 		cfg:    cfg,
 		method: jwt.SigningMethodHS256,
@@ -68,7 +66,6 @@ func NewJwtAuthenticator(cfg *conf.JwtConf, lang *locale.Locale, client *redis.C
 }
 
 type JwtAuthenticator struct {
-	lang   *locale.Locale
 	redis  *redis.Client
 	cfg    *conf.JwtConf
 	method jwt.SigningMethod
@@ -97,7 +94,7 @@ func (j *JwtAuthenticator) Issue(ctx context.Context, user UserPayload, exp time
 	}
 
 	// 将token的唯一ID存入redis
-	if err = j.redis.Set(ctx, fmt.Sprintf("token:%s", userClaims.ID), userClaims.Username, j.cfg.Exp).Err(); err != nil {
+	if err = j.redis.Set(ctx, fmt.Sprintf("token:%s", userClaims.ID), newJwt.SignedJwt, j.cfg.Exp).Err(); err != nil {
 		return jwtx.Jwt{}, err
 	}
 

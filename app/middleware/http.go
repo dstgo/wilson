@@ -98,7 +98,7 @@ func UseRecovery(logger *logrus.Logger) gin.HandlerFunc {
 					return
 				}
 
-				resp.Error(ctx).Code(code.InternalServerError).MsgI18n("err.internal").Send()
+				resp.InternalErr(ctx).Code(code.InternalServerError).MsgI18n("err.internal").Send()
 			}
 		}()
 

@@ -22,8 +22,8 @@ func Fail(ctx *gin.Context) *Response {
 	return NewResponse(ctx).Status(http.StatusBadRequest)
 }
 
-// Error means that the request is unsuccessful, the reason usually caused by server
-func Error(ctx *gin.Context) *Response {
+// InternalErr means that the request is unsuccessful, the reason usually caused by server
+func InternalErr(ctx *gin.Context) *Response {
 	return NewResponse(ctx).Status(http.StatusInternalServerError)
 }
 
@@ -53,7 +53,7 @@ func (r *Response) Code(code int) *Response {
 
 func (r *Response) MsgI18n(langCode string) *Response {
 	if r.ctx != nil {
-		return r.Msg(locale.L().GetWithCtx(r.ctx, langCode))
+		return r.Msg(locale.GetWithCtx(r.ctx, langCode))
 	}
 	return r
 }
@@ -85,9 +85,12 @@ func (r *Response) Send() {
 				// for non-internal errors, detailed error information can be displayed externally
 				// otherwise only simple description information should be returned to avoid leaking sensitive data
 				if e.HttpStatus >= 500 {
-					r.ErrorMsg = locale.L().GetWithCtx(r.ctx, e.LangCode)
+					r.ErrorMsg = locale.GetWithCtx(r.ctx, e.LangCode)
 				} else {
 					r.ErrorMsg = e.Error()
+					if len(r.ErrorMsg) == 0 {
+						r.ErrorMsg = locale.GetWithCtx(r.ctx, e.LangCode)
+					}
 				}
 
 				if e.CustomCode > 0 {
@@ -96,11 +99,16 @@ func (r *Response) Send() {
 			}
 
 			if len(r.ErrorMsg) == 0 {
-				r.ErrorMsg = locale.L().GetWithCtx(r.ctx, "err.unknown")
+				r.ErrorMsg = locale.GetWithCtx(r.ctx, "err.unknown")
 			}
 
 			r.ctx.Error(r.err)
 		}
+
+		if r.CustomCode == 0 {
+			r.CustomCode = r.status * 10
+		}
+
 		r.ctx.JSON(r.status, r)
 	}
 }

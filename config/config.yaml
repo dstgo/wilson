@@ -67,6 +67,8 @@ app:
 
 # log configuration
 log:
+  # logger entry format: text | json
+  format: text
   # min level should be one of [fatal panic error warn info debug trace]
   level: debug
   # a log entry whose level below or equal info will be output specified dir path

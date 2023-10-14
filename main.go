@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/dstgo/wilson/app/core/log"
 	"path"
 
 	"github.com/dstgo/filebox"
@@ -44,6 +45,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	log.Setup(logger.L())
 
 	// set app mode
 	gin.SetMode(appConf.ServerConf.Mode)

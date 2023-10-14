@@ -50,7 +50,7 @@ func (e *ResponseError) Error() string {
 		return errorx.WrapI18n(e.err, e.LangCode).Error()
 	}
 
-	return locale.L().GetDefault(e.LangCode)
+	return locale.Get(e.LangCode)
 }
 
 // helper function
@@ -59,7 +59,7 @@ func DataBaseErr(err error) *ResponseError {
 	return &ResponseError{
 		CustomCode: code.DatabaseError,
 		HttpStatus: http.StatusInternalServerError,
-		LangCode:   "internal.databaseErr",
+		LangCode:   "err.database",
 		err:        err,
 	}
 }
@@ -68,7 +68,7 @@ func FileSystemErr(err error) *ResponseError {
 	return &ResponseError{
 		CustomCode: code.FilesystemError,
 		HttpStatus: http.StatusInternalServerError,
-		LangCode:   "internal.filesystemErr",
+		LangCode:   "err.filesystem",
 		err:        err,
 	}
 }
@@ -77,7 +77,7 @@ func NetworkErr(err error) *ResponseError {
 	return &ResponseError{
 		CustomCode: code.NetworkError,
 		HttpStatus: http.StatusInternalServerError,
-		LangCode:   "internal.networkErr",
+		LangCode:   "err.network",
 		err:        err,
 	}
 }
@@ -86,7 +86,7 @@ func ProgramErr(err error) *ResponseError {
 	return &ResponseError{
 		CustomCode: code.UnknownError,
 		HttpStatus: http.StatusInternalServerError,
-		LangCode:   "internal.programErr",
+		LangCode:   "err.program",
 		err:        err,
 	}
 }

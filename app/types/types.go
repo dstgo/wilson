@@ -1,8 +1,12 @@
 package types
 
-type H = map[string]any
+var (
+	NopObj = NopType{}
+)
 
-type S = []any
-
-// Strings alias for string slice
-type Strings = []string
+type (
+	H       = map[string]any
+	S       = []any
+	NopType = struct{}
+	Strings = []string
+)

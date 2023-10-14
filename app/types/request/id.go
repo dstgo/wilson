@@ -1,14 +1,16 @@
 package request
 
-import "github.com/dstgo/wilson/app/core/vax"
+import (
+	vax2 "github.com/dstgo/wilson/app/pkg/vax"
+)
 
 type IdString struct {
 	Id string `json:"id" uri:"id" form:"id" label:"field.id"`
 }
 
 func (i IdString) Validate(lang string) error {
-	return vax.Struct(&i, lang,
-		vax.Field(i.Id, vax.Required),
+	return vax2.Struct(&i, lang,
+		vax2.Field(i.Id, vax2.Required),
 	)
 }
 
@@ -17,7 +19,7 @@ type IdInt struct {
 }
 
 func (i IdInt) Validate(lang string) error {
-	return vax.Struct(&i, lang,
-		vax.Field(i.Id, vax.Required),
+	return vax2.Struct(&i, lang,
+		vax2.Field(i.Id, vax2.Required),
 	)
 }

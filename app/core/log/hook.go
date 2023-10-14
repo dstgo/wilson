@@ -1,53 +1,53 @@
 package log
 
 import (
-	"bufio"
+	"github.com/dstgo/filebox"
 	"github.com/sirupsen/logrus"
 	"io"
 	"sync"
 )
 
-type LevelLoggerH struct {
-	closer    io.Closer
-	out       *bufio.Writer
-	mu        sync.Mutex
-	formatter logrus.Formatter
-	levels    []logrus.Level
+type HookCloser interface {
+	logrus.Hook
+	io.Closer
 }
 
-func NewLevelLoggerH(writer io.WriteCloser, formatter logrus.Formatter, buf int, levels ...logrus.Level) *LevelLoggerH {
-	return &LevelLoggerH{
-		out:       bufio.NewWriterSize(writer, buf),
-		formatter: formatter,
-		closer:    writer,
-		mu:        sync.Mutex{},
-		levels:    levels,
+type levelFileHook struct {
+	path   string
+	mu     sync.Mutex
+	levels []logrus.Level
+	writer io.WriteCloser
+}
+
+func newLevelFileHook(path string, levels ...logrus.Level) (*levelFileHook, error) {
+	var writer io.WriteCloser
+	file, err := filebox.OpenFile(path, filebox.AppendFlag, 0666)
+	if err != nil {
+		return nil, err
 	}
+	writer = file
+
+	return &levelFileHook{levels: levels, writer: writer}, nil
 }
 
-func (i *LevelLoggerH) Levels() []logrus.Level {
-	return i.levels
+func (l *levelFileHook) Close() error {
+	return l.writer.Close()
 }
 
-func (i *LevelLoggerH) Fire(entry *logrus.Entry) error {
-	i.mu.Lock()
-	defer i.mu.Unlock()
+func (l *levelFileHook) Levels() []logrus.Level {
+	return l.levels
+}
 
-	bytes, err := i.formatter.Format(entry)
+func (l *levelFileHook) Fire(entry *logrus.Entry) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	bytes, err := entry.Logger.Formatter.Format(entry)
 	if err != nil {
 		return err
 	}
-
-	if _, err := i.out.Write(bytes); err != nil {
+	_, err = l.writer.Write(bytes)
+	if err != nil {
 		return err
 	}
-	i.out.Flush()
 	return nil
-}
-
-func (i *LevelLoggerH) Close() error {
-	i.mu.Lock()
-	defer i.mu.Unlock()
-	i.out.Flush()
-	return i.closer.Close()
 }

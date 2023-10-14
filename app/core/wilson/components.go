@@ -6,8 +6,9 @@ import (
 	"fmt"
 	"github.com/dstgo/size"
 	"github.com/dstgo/wilson/app/conf"
+	"github.com/dstgo/wilson/app/core/log"
+	"github.com/dstgo/wilson/app/data"
 	"github.com/dstgo/wilson/app/pkg/sysinfo"
-	"github.com/dstgo/wilson/app/repo/data"
 	"github.com/dstgo/wilson/assets"
 	"github.com/dstgo/wilson/pkg/route"
 	"github.com/jordan-wright/email"
@@ -54,31 +55,31 @@ func LogBanner(cfg *conf.AppConf, logger *logrus.Logger) error {
 	return nil
 }
 
-func LoadDataSource(ctx context.Context, dataConf *conf.DataConf, logger *logrus.Logger) (*data.DataSource, error) {
-	logger.Infoln("attempt to load wilson datasource...")
-	datasource, err := data.NewDataSource(ctx, dataConf, logger)
+func LoadDataSource(ctx context.Context, dataConf *conf.DataConf) (*data.DataSource, error) {
+	log.L().Infoln("attempt to load wilson datasource...")
+	datasource, err := data.NewDataSource(ctx, dataConf)
 	if err != nil {
-		logger.Errorf("load data datasource failed: %s", err.Error())
+		log.L().Errorf("load data datasource failed: %s", err.Error())
 		return datasource, err
 	}
-	logger.Infof("load data datasource ok √")
+	log.L().Infof("load data datasource ok √")
 	return datasource, nil
 }
 
-func LoadEmailPool(emailConf *conf.EmailConf, logger *logrus.Logger) (*email.Pool, error) {
+func LoadEmailPool(emailConf *conf.EmailConf) (*email.Pool, error) {
 	pool, err := email.NewPool(emailConf.Address(), emailConf.MaxPoolSize, emailConf.SmtpAuth())
 	if err != nil {
-		logger.Errorf("load email pool failed: %s", emailConf.Address())
+		log.L().Errorf("load email pool failed: %s", emailConf.Address())
 		return nil, err
 	}
-	logger.Infof("load email pool ok: %s", emailConf.Address())
+	log.L().Infof("load email pool ok: %s", emailConf.Address())
 	return pool, nil
 }
 
-func DebugPrintRouter(router *route.Router, logger *logrus.Logger) error {
+func DebugPrintRouter(router *route.Router) error {
 	return router.Walk(func(info route.RouterInfo) error {
 		if !info.IsGroup {
-			logger.
+			log.L().
 				WithField("method", info.Method).
 				WithField("path", info.FullPath).
 				Debugln()
@@ -89,13 +90,13 @@ func DebugPrintRouter(router *route.Router, logger *logrus.Logger) error {
 
 // on server shutdown hooks
 
-func CloseDataSource(datasource *data.DataSource, logger *logrus.Logger) {
+func CloseDataSource(datasource *data.DataSource) {
 	if datasource != nil {
 		// close datasource
 		if err := datasource.Close(); err != nil {
-			logger.Errorf("data source closed failed: %s", err)
+			log.L().Errorf("data source closed failed: %s", err)
 			return
 		}
 	}
-	logger.Infoln("data source closed successfully")
+	log.L().Infoln("data source closed successfully")
 }
