@@ -104,6 +104,11 @@ func (r *Response) Send() {
 
 			r.ctx.Error(r.err)
 		}
+
+		if r.CustomCode == 0 {
+			r.CustomCode = r.status * 10
+		}
+
 		r.ctx.JSON(r.status, r)
 	}
 }
