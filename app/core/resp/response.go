@@ -22,8 +22,8 @@ func Fail(ctx *gin.Context) *Response {
 	return NewResponse(ctx).Status(http.StatusBadRequest)
 }
 
-// Error means that the request is unsuccessful, the reason usually caused by server
-func Error(ctx *gin.Context) *Response {
+// InternalErr means that the request is unsuccessful, the reason usually caused by server
+func InternalErr(ctx *gin.Context) *Response {
 	return NewResponse(ctx).Status(http.StatusInternalServerError)
 }
 

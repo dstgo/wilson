@@ -94,7 +94,7 @@ func (j *JwtAuthenticator) Issue(ctx context.Context, user UserPayload, exp time
 	}
 
 	// 将token的唯一ID存入redis
-	if err = j.redis.Set(ctx, fmt.Sprintf("token:%s", userClaims.ID), userClaims.Username, j.cfg.Exp).Err(); err != nil {
+	if err = j.redis.Set(ctx, fmt.Sprintf("token:%s", userClaims.ID), newJwt.SignedJwt, j.cfg.Exp).Err(); err != nil {
 		return jwtx.Jwt{}, err
 	}
 

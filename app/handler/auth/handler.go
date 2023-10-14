@@ -12,6 +12,7 @@ import (
 )
 
 var AuthProviderSet = wire.NewSet(
+	TokenCacheProviderSet,
 	NewAuthLogic,
 	NewAuthHandler,
 	NewRoleLogic,

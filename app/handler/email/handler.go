@@ -1,17 +1,14 @@
 package email
 
 import (
-	"fmt"
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/core/locale"
 	"github.com/dstgo/wilson/app/core/resp"
 	"github.com/dstgo/wilson/app/core/vax"
-	"github.com/dstgo/wilson/app/data"
 	"github.com/dstgo/wilson/app/pkg/httpx"
 	"github.com/dstgo/wilson/app/types/code"
 	"github.com/dstgo/wilson/app/types/request"
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
 	"github.com/google/wire"
 	"github.com/jordan-wright/email"
@@ -21,21 +18,22 @@ import (
 
 var EmailProviderSet = wire.NewSet(
 	NewEmailLogic,
+	NewEmailCodeCache,
 	NewEmailHandler,
 )
 
-func NewEmailHandler(cfg *conf.AppConf, emailLogic EmailLogic, datasource *data.DataSource) EmailHandler {
+func NewEmailHandler(cfg *conf.AppConf, emailLogic EmailLogic, codeCache CodeCache) EmailHandler {
 	return EmailHandler{
 		EmailLogic: emailLogic,
 		cfg:        cfg.EmailConf,
-		redis:      datasource.Redis(),
+		codeCache:  codeCache,
 	}
 }
 
 type EmailHandler struct {
 	EmailLogic EmailLogic
 	cfg        *conf.EmailConf
-	redis      *redis.Client
+	codeCache  CodeCache
 }
 
 // SendCodeEmail
@@ -58,8 +56,11 @@ func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 	authcode := strings.ToUpper(strings.Split(newUUUID, "-")[0])
 
 	// store in redis
-	if err := e.redis.Set(ctx, fmt.Sprintf("email:code:%s", authcode), emailReq.Email, e.cfg.Expire()).Err(); err != nil {
-		resp.Error(ctx).Code(code.DatabaseError).MsgI18n("email.sendFail").Error(resp.DataBaseErr(err)).Send()
+	if err := e.codeCache.Set(ctx, CodeCacheKey(authcode), emailReq.Email, e.cfg.Expire()); err != nil {
+		resp.InternalErr(ctx).
+			Code(code.DatabaseError).
+			MsgI18n("email.sendFail").
+			Error(resp.DataBaseErr(err)).Send()
 		return
 	}
 

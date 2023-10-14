@@ -23,7 +23,9 @@ import (
 //go:generate wire gen
 func SetupHandler(appConf *conf.AppConf, api *route.Router, datasource *data.DataSource, issue auth.Issuer, pool *email.Pool) Router {
 	infoData := user.NewInfoData(datasource)
-	authLogic := auth2.NewAuthLogic(issue, infoData, datasource)
+	codeCache := email2.NewEmailCodeCache(datasource)
+	tokenRedisCache := auth2.NewTokenRedisCache(datasource)
+	authLogic := auth2.NewAuthLogic(issue, infoData, codeCache, tokenRedisCache)
 	authHandler := auth2.NewAuthHandler(authLogic)
 	roleLogic := auth2.NewRoleLogic()
 	roleHandler := auth2.NewRoleHandler(roleLogic)
@@ -33,7 +35,7 @@ func SetupHandler(appConf *conf.AppConf, api *route.Router, datasource *data.Dat
 	}
 	handlerRouter := auth2.SetupRouter(api, handler)
 	emailLogic := email2.NewEmailLogic(appConf, pool)
-	emailHandler := email2.NewEmailHandler(appConf, emailLogic, datasource)
+	emailHandler := email2.NewEmailHandler(appConf, emailLogic, codeCache)
 	handler2 := email2.Handler{
 		Email: emailHandler,
 	}
