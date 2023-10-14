@@ -7,7 +7,7 @@
 package api
 
 import (
-	user2 "github.com/dstgo/wilson/app/open/user"
+	user2 "github.com/dstgo/wilson/app/api/user"
 	"github.com/dstgo/wilson/app/data"
 	"github.com/dstgo/wilson/app/handler/user"
 	"github.com/dstgo/wilson/pkg/route"

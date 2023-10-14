@@ -1,4 +1,4 @@
-basePath: /api/v1
+basePath: /api/
 definitions:
   request.LoginRequest:
     properties:
@@ -21,22 +21,5 @@ info:
   description: Wilson api documentation
   title: Wilson App Internal API Documentation
   version: v1.0.0
-paths:
-  /ping:
-    get:
-      consumes:
-      - application/json
-      description: to test app api if is ok
-      parameters:
-      - description: ping name
-        in: query
-        name: name
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: app test ping api
-      tags:
-      - system
+paths: {}
 swagger: "2.0"

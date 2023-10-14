@@ -21,40 +21,40 @@ import (
 // Injectors from wire.go:
 
 //go:generate wire gen
-func SetupHandler(appConf *conf.AppConf, rootRouter *route.Router, datasource *data.DataSource, issue auth.Issuer, pool *email.Pool) Router {
+func SetupHandler(appConf *conf.AppConf, api *route.Router, datasource *data.DataSource, issue auth.Issuer, pool *email.Pool) Router {
 	infoData := user.NewInfoData(datasource)
 	authLogic := auth2.NewAuthLogic(issue, infoData, datasource)
 	authHandler := auth2.NewAuthHandler(authLogic)
 	roleLogic := auth2.NewRoleLogic()
 	roleHandler := auth2.NewRoleHandler(roleLogic)
-	handlerRouter := auth2.Handler{
+	handler := auth2.Handler{
 		Auth: authHandler,
 		Role: roleHandler,
 	}
-	router := auth2.SetupRouter(rootRouter, handlerRouter)
+	handlerRouter := auth2.SetupRouter(api, handler)
 	emailLogic := email2.NewEmailLogic(appConf, pool)
 	emailHandler := email2.NewEmailHandler(appConf, emailLogic, datasource)
-	emailHandlerRouter := email2.Handler{
+	handler2 := email2.Handler{
 		Email: emailHandler,
 	}
-	emailRouter := email2.SetupRouter(rootRouter, emailHandlerRouter)
+	emailHandlerRouter := email2.SetupRouter(api, handler2)
 	pingLogic := system.NewPingLogic(appConf)
 	pingHandler := system.NewPingHandler(pingLogic)
-	systemHandlerRouter := system.Handler{
+	systemHandler := system.Handler{
 		Ping: pingHandler,
 	}
-	systemRouter := system.SetupRouter(rootRouter, systemHandlerRouter)
+	systemHandlerRouter := system.SetupRouter(api, systemHandler)
 	infoLogic := user.NewInfoLogic(infoData)
 	infoHandler := user.NewInfoHandler(infoLogic)
-	userHandlerRouter := user.Handler{
+	userHandler := user.Handler{
 		Info: infoHandler,
 	}
-	userRouter := user.SetupRouter(rootRouter, userHandlerRouter)
-	router2 := Router{
-		Auth:   router,
-		Email:  emailRouter,
-		System: systemRouter,
-		User:   userRouter,
+	userHandlerRouter := user.SetupRouter(api, userHandler)
+	router := Router{
+		Auth:   handlerRouter,
+		Email:  emailHandlerRouter,
+		System: systemHandlerRouter,
+		User:   userHandlerRouter,
 	}
-	return router2
+	return router
 }

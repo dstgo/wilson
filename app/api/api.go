@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/dstgo/wilson/app/open/user"
+	"github.com/dstgo/wilson/app/api/user"
 	"github.com/google/wire"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -37,4 +37,4 @@ var Config = &ginSwagger.Config{
 //	@version		v1.0.0
 //	@description	Wilson api documentation
 //	@BasePath		/openapi/
-//go:generate swag init --generatedTime --instanceName appapi -g api.go -d ./,../types,../core/resp --output ./swagger && swag fmt -g api.go -d ./
+//go:generate swag init --generatedTime --instanceName openapi -g api.go -d ./,../types,../core/resp --output ./swagger && swag fmt -g api.go -d ./
