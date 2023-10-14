@@ -87,14 +87,43 @@ password = "密码"
 phone = "手机号码"
 age = "年龄"
 userid = "用户标识符"
+code = "验证码"
 
 # 错误信息部分
-[http]
-404 = "访问的资源不存在"
-405 = "不支持的HTTP方法"
-500 = "服务器内部错误"
+[err]
+unknown = "未知错误"
+badparams = "参数校验未通过"
+forbidden = "认证未通过"
+database = "数据库错误"
+filesystem = "文件IO错误"
+network = "网络错误"
+program = "程序错误"
+notfound = "访问的资源不存在"
+methodnotallowed = "不支持的HTTP方法"
+internal = "服务器内部错误"
+
+[email]
+codeSubject = "来自wilson的验证码邮件，请及时查看"
+sendFail = "邮件发送失败"
+sendOk = "邮件已发送"
+codeExpired = "验证码已过期"
 
 [jwt]
 parsedFailed = "用户认证失败，请尝试重新登录"
 expired = "用户凭证过期，请重新登录"
+
+[auth]
+loginFail = "登录失败"
+loginOk = "登录成功"
+registerFail = "注册失败"
+registerOk = "注册成功"
+logoutFail = "退出登录失败"
+logoutOk = "退出登录成功"
+changePasswdFail = "密码修改失败"
+changePasswdOk = "密码修改成功"
+
+[user]
+notfound = "用户不存在"
+alreadyExist = "用户已存在"
+wrongPassword = "密码错误"
 
