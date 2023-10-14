@@ -1,8 +1,8 @@
 package request
 
 import (
-	"github.com/dstgo/wilson/app/core/vax"
-	"github.com/dstgo/wilson/app/core/vax/is"
+	vax2 "github.com/dstgo/wilson/app/pkg/vax"
+	"github.com/dstgo/wilson/app/pkg/vax/is"
 )
 
 type Email struct {
@@ -10,7 +10,7 @@ type Email struct {
 }
 
 func (e Email) Validate(lang string) error {
-	return vax.Struct(&e, lang,
-		vax.Field(&e.Email, vax.Required, is.Email),
+	return vax2.Struct(&e, lang,
+		vax2.Field(&e.Email, vax2.Required, is.Email),
 	)
 }

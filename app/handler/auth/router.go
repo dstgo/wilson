@@ -28,6 +28,7 @@ func SetupRouter(api *route.Router, handler Handler) HandlerRouter {
 		// POST
 		authGroup.POST("/login", route.MetaSum(meta.NoAuth), handler.Auth.Login)
 		authGroup.POST("/register", route.MetaSum(meta.NoAuth), handler.Auth.Register)
+		authGroup.POST("/forgotpwd", route.MetaSum(meta.NoAuth), handler.Auth.ForgotPassword)
 		// DELETE
 		authGroup.DELETE("/logout", nil, handler.Auth.Logout)
 	}

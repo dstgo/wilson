@@ -1,14 +1,15 @@
-package vax
+package validate
 
 import (
 	"github.com/dstgo/wilson/app/core/resp"
+	"github.com/dstgo/wilson/app/pkg/vax"
 	"github.com/dstgo/wilson/app/types/code"
 	"github.com/gin-gonic/gin"
 )
 
 type BindPair struct {
 	B Binding
-	V Validatable
+	V vax.Validatable
 }
 
 func BindAll(ctx *gin.Context, pairs ...BindPair) error {
@@ -37,34 +38,34 @@ func Bind(ctx *gin.Context, pair BindPair) error {
 	return nil
 }
 
-func Pair(b Binding, val Validatable) BindPair {
+func Pair(b Binding, val vax.Validatable) BindPair {
 	return BindPair{B: b, V: val}
 }
 
-func Json(val Validatable) BindPair {
+func Json(val vax.Validatable) BindPair {
 	return Pair(BindingJson, val)
 }
 
-func Query(val Validatable) BindPair {
+func Query(val vax.Validatable) BindPair {
 	return Pair(BingQuery, val)
 }
 
-func Xml(val Validatable) BindPair {
+func Xml(val vax.Validatable) BindPair {
 	return Pair(BindingXml, val)
 }
 
-func Yaml(val Validatable) BindPair {
+func Yaml(val vax.Validatable) BindPair {
 	return Pair(BindingYaml, val)
 }
 
-func Toml(val Validatable) BindPair {
+func Toml(val vax.Validatable) BindPair {
 	return Pair(BindingToml, val)
 }
 
-func Header(val Validatable) BindPair {
+func Header(val vax.Validatable) BindPair {
 	return Pair(BindingHeader, val)
 }
 
-func Uri(val Validatable) BindPair {
+func Uri(val vax.Validatable) BindPair {
 	return Pair(BindingUri, val)
 }

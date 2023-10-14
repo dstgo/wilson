@@ -1,8 +1,9 @@
-package vax
+package validate
 
 import (
 	"errors"
 	"github.com/dstgo/wilson/app/pkg/httpx"
+	"github.com/dstgo/wilson/app/pkg/vax"
 	"github.com/gin-gonic/gin"
 	"io"
 )
@@ -18,13 +19,13 @@ var (
 )
 
 type Binding interface {
-	Bind(ctx *gin.Context, val Validatable) error
+	Bind(ctx *gin.Context, val vax.Validatable) error
 }
 
 type JsonBinding struct {
 }
 
-func (j JsonBinding) Bind(ctx *gin.Context, val Validatable) error {
+func (j JsonBinding) Bind(ctx *gin.Context, val vax.Validatable) error {
 	if err := ctx.ShouldBindJSON(val); !errors.Is(err, io.EOF) && err != nil {
 		return err
 	}
@@ -34,7 +35,7 @@ func (j JsonBinding) Bind(ctx *gin.Context, val Validatable) error {
 type XmlBinding struct {
 }
 
-func (x XmlBinding) Bind(ctx *gin.Context, val Validatable) error {
+func (x XmlBinding) Bind(ctx *gin.Context, val vax.Validatable) error {
 	if err := ctx.ShouldBindXML(val); !errors.Is(err, io.EOF) && err != nil {
 		return err
 	}
@@ -44,7 +45,7 @@ func (x XmlBinding) Bind(ctx *gin.Context, val Validatable) error {
 type QueryBinding struct {
 }
 
-func (q QueryBinding) Bind(ctx *gin.Context, val Validatable) error {
+func (q QueryBinding) Bind(ctx *gin.Context, val vax.Validatable) error {
 	if err := ctx.ShouldBindQuery(val); !errors.Is(err, io.EOF) && err != nil {
 		return err
 	}
@@ -54,7 +55,7 @@ func (q QueryBinding) Bind(ctx *gin.Context, val Validatable) error {
 type YamlBinding struct {
 }
 
-func (y YamlBinding) Bind(ctx *gin.Context, val Validatable) error {
+func (y YamlBinding) Bind(ctx *gin.Context, val vax.Validatable) error {
 	if err := ctx.ShouldBindYAML(val); !errors.Is(err, io.EOF) && err != nil {
 		return err
 	}
@@ -64,7 +65,7 @@ func (y YamlBinding) Bind(ctx *gin.Context, val Validatable) error {
 type TomlBinding struct {
 }
 
-func (y TomlBinding) Bind(ctx *gin.Context, val Validatable) error {
+func (y TomlBinding) Bind(ctx *gin.Context, val vax.Validatable) error {
 	if err := ctx.ShouldBindTOML(val); !errors.Is(err, io.EOF) && err != nil {
 		return err
 	}
@@ -74,7 +75,7 @@ func (y TomlBinding) Bind(ctx *gin.Context, val Validatable) error {
 type HeaderBinding struct {
 }
 
-func (y HeaderBinding) Bind(ctx *gin.Context, val Validatable) error {
+func (y HeaderBinding) Bind(ctx *gin.Context, val vax.Validatable) error {
 	if err := ctx.ShouldBindHeader(val); !errors.Is(err, io.EOF) && err != nil {
 		return err
 	}
@@ -84,7 +85,7 @@ func (y HeaderBinding) Bind(ctx *gin.Context, val Validatable) error {
 type UriBinding struct {
 }
 
-func (y UriBinding) Bind(ctx *gin.Context, val Validatable) error {
+func (y UriBinding) Bind(ctx *gin.Context, val vax.Validatable) error {
 	if err := ctx.ShouldBindUri(val); !errors.Is(err, io.EOF) && err != nil {
 		return err
 	}

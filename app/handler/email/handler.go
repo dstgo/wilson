@@ -4,7 +4,7 @@ import (
 	"github.com/dstgo/wilson/app/conf"
 	"github.com/dstgo/wilson/app/core/locale"
 	"github.com/dstgo/wilson/app/core/resp"
-	"github.com/dstgo/wilson/app/core/vax"
+	"github.com/dstgo/wilson/app/core/validate"
 	"github.com/dstgo/wilson/app/pkg/httpx"
 	"github.com/dstgo/wilson/app/types/code"
 	"github.com/dstgo/wilson/app/types/request"
@@ -47,7 +47,7 @@ type EmailHandler struct {
 //	@Router			/email/code [GET]
 func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 	emailReq := new(request.Email)
-	if err := vax.BindAndResp(ctx, vax.Query(emailReq)); err != nil {
+	if err := validate.BindAndResp(ctx, validate.Query(emailReq)); err != nil {
 		return
 	}
 

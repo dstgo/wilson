@@ -8,7 +8,6 @@ package vax
 import (
 	"context"
 	"fmt"
-	"github.com/dstgo/wilson/app/core/locale"
 	"reflect"
 	"strconv"
 )
@@ -69,8 +68,8 @@ var (
 	validatableWithContextType = reflect.TypeOf((*ValidatableWithContext)(nil)).Elem()
 )
 
-func SetTranslator(l *locale.Locale) {
-	translator = l
+func SetTranslator(t Translator) {
+	translator = t
 }
 
 // Validate validates the given value and returns the validation error, if any.

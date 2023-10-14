@@ -3,7 +3,7 @@ package auth
 import (
 	"github.com/dstgo/wilson/app/core/auth"
 	"github.com/dstgo/wilson/app/core/resp"
-	"github.com/dstgo/wilson/app/core/vax"
+	"github.com/dstgo/wilson/app/core/validate"
 	"github.com/dstgo/wilson/app/types/code"
 	"github.com/dstgo/wilson/app/types/request"
 	"github.com/dstgo/wilson/app/types/response"
@@ -38,7 +38,7 @@ type AuthHandler struct {
 //	@Router			/auth/login [POST]
 func (a AuthHandler) Login(ctx *gin.Context) {
 	loginRequest := new(request.LoginRequest)
-	if err := vax.BindAndResp(ctx, vax.Json(loginRequest)); err != nil {
+	if err := validate.BindAndResp(ctx, validate.Json(loginRequest)); err != nil {
 		return
 	}
 	signedJwt, err := a.Authlogic.TryLogin(loginRequest.Username, loginRequest.Password)
@@ -61,7 +61,7 @@ func (a AuthHandler) Login(ctx *gin.Context) {
 //	@Router			/auth/register [POST]
 func (a AuthHandler) Register(ctx *gin.Context) {
 	registerRequest := new(request.RegisterRequest)
-	if err := vax.BindAndResp(ctx, vax.Json(registerRequest)); err != nil {
+	if err := validate.BindAndResp(ctx, validate.Json(registerRequest)); err != nil {
 		return
 	}
 	err := a.Authlogic.TryRegisterNewUser(registerRequest.Username, registerRequest.Password, registerRequest.Code)
@@ -88,6 +88,32 @@ func (a AuthHandler) Logout(ctx *gin.Context) {
 		return
 	}
 	resp.Ok(ctx).Code(code.LogoutOK).MsgI18n("auth.logoutOk").Send()
+}
+
+// ForgotPassword
+//
+//	@Summary		user forgot password api
+//	@Description	forgot password
+//	@Tags			auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			changePasswdBoy	body	request.ForgotPasswordRequest	true	"comment"
+//	@Router			/auth/forgotpwd [POST]
+func (a AuthHandler) ForgotPassword(ctx *gin.Context) {
+	changePasswordReq := new(request.ForgotPasswordRequest)
+	err := validate.BindAndResp(ctx,
+		validate.Json(changePasswordReq),
+	)
+	if err != nil {
+		return
+	}
+
+	err = a.Authlogic.ChangePassword(changePasswordReq.Password, changePasswordReq.Code)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n("auth.changePasswdFail").Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n("auth.changePasswdOk").Send()
 }
 
 func NewRoleHandler(roleLogic RoleLogic) RoleHandler {

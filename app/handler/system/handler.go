@@ -2,7 +2,7 @@ package system
 
 import (
 	"github.com/dstgo/wilson/app/core/resp"
-	"github.com/dstgo/wilson/app/core/vax"
+	"github.com/dstgo/wilson/app/core/validate"
 	"github.com/dstgo/wilson/app/types"
 	"github.com/dstgo/wilson/app/types/code"
 	"github.com/dstgo/wilson/app/types/request"
@@ -36,8 +36,8 @@ type PingHandler struct {
 //	@Router			/ping [GET]
 func (p PingHandler) Ping(ctx *gin.Context) {
 	pingReq := new(request.PingRequest)
-	err := vax.BindAndResp(ctx,
-		vax.Query(pingReq),
+	err := validate.BindAndResp(ctx,
+		validate.Query(pingReq),
 	)
 	if err != nil {
 		return
