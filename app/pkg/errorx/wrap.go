@@ -11,9 +11,9 @@ func Wrap(err error, msg string) error {
 }
 
 func WrapI18nCtx(ctx *gin.Context, err error, key string, args ...any) error {
-	return errors.Wrap(err, locale.L().GetWithCtx(ctx, key, args...))
+	return errors.Wrap(err, locale.GetWithCtx(ctx, key, args...))
 }
 
 func WrapI18n(err error, key string, args ...any) error {
-	return errors.Wrap(err, locale.L().GetDefault(key, args...))
+	return errors.Wrap(err, locale.Get(key, args...))
 }

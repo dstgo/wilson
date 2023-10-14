@@ -24,8 +24,29 @@ func L() *Locale {
 	return locale
 }
 
-func Set(l *Locale) {
+func Setup(l *Locale) {
 	locale = l
+}
+
+func Get(key string, args ...any) string {
+	if locale != nil {
+		return locale.GetDefault(key, args...)
+	}
+	return ""
+}
+
+func GetWithLang(lang string, key string, args ...any) string {
+	if locale != nil {
+		return locale.Get(lang, key, args...)
+	}
+	return ""
+}
+
+func GetWithCtx(ctx *gin.Context, key string, args ...any) string {
+	if locale != nil {
+		return locale.GetWithCtx(ctx, key, args...)
+	}
+	return ""
 }
 
 type Group = map[string]*viper.Viper

@@ -2,7 +2,7 @@ package wilson
 
 import (
 	"context"
-	"github.com/dstgo/wilson/app/repo/data"
+	"github.com/dstgo/wilson/app/data"
 	"github.com/jordan-wright/email"
 	"net/http"
 	"os/signal"
@@ -89,6 +89,7 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App,
 	if err != nil {
 		return nil, err
 	}
+	locale.Setup(lang)
 
 	if err = LogBanner(cfg, logger); err != nil {
 		return nil, err
@@ -110,10 +111,10 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.LoggerW) (*App,
 	engine, server = NewHttpServer(cfg, lang, logger)
 
 	// register app api router
-	_ = NewAppApiRouter(cfg, lang, engine, datasource, epool)
+	_ = SetupHandler(cfg, engine, datasource, epool)
 
 	// register open api router
-	_ = NewOpenApiRouter(cfg, lang, engine, datasource)
+	_ = SetupOpenAPI(cfg, engine, datasource)
 
 	// execute on server shutdown
 	shutdownFn := func() {

@@ -50,7 +50,7 @@ func (e *ResponseError) Error() string {
 		return errorx.WrapI18n(e.err, e.LangCode).Error()
 	}
 
-	return locale.L().GetDefault(e.LangCode)
+	return locale.Get(e.LangCode)
 }
 
 // helper function

@@ -1,0 +1,25 @@
+basePath: /openapi/
+info:
+  contact: {}
+  description: Wilson api documentation
+  title: Wilson App Internal API Documentation
+  version: v1.0.0
+paths:
+  /open/user/info:
+    get:
+      consumes:
+      - application/json
+      description: get user simple info
+      parameters:
+      - description: comment
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: path params example
+      tags:
+      - ""
+swagger: "2.0"
