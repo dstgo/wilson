@@ -23,7 +23,7 @@ gen_build:
 	go build -trimpath -ldflags "-X main.Author=$(shell git config user.name) -X main.Version=$(shell git describe --tags --always)" -o ./bin/ github.com/dstgo/wilson
 
 
-.PHONY: all
-all:
+.PHONY: install
+install:
 	make init
 	make gen_build
