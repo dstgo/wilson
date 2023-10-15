@@ -110,6 +110,7 @@ func (w *Router) addRoute(isGroup bool, method, path string, meta Meta, handlers
 }
 
 // Use store middleware to gin router, these middleware will be use when addRoute
+// if you want to use global middleware, use the Attach method
 func (w *Router) Use(handler ...gin.HandlerFunc) {
 	w.middleware = append(w.middleware, handler...)
 }

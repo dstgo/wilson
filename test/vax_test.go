@@ -1,8 +1,8 @@
 package test
 
 import (
-	vax2 "github.com/dstgo/wilson/app/pkg/vax"
-	"github.com/dstgo/wilson/app/pkg/vax/is"
+	"github.com/dstgo/wilson/pkg/vax"
+	"github.com/dstgo/wilson/pkg/vax/is"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -14,10 +14,10 @@ type User struct {
 }
 
 func (u User) Validate(lang string) error {
-	return vax2.Struct(&u, lang,
-		vax2.Field(&u.Name, vax2.Required, vax2.RangeLength(1, 10, false)),
-		vax2.Field(&u.Email, vax2.Required, is.Email),
-		vax2.Field(&u.Age, vax2.Required, vax2.Gte(18), vax2.Lte(100)),
+	return vax.Struct(&u, lang,
+		vax.Field(&u.Name, vax.Required, vax.RangeLength(1, 10, false)),
+		vax.Field(&u.Email, vax.Required, is.Email),
+		vax.Field(&u.Age, vax.Required, vax.Gte(18), vax.Lte(100)),
 	)
 }
 

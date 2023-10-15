@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/dstgo/wilson/app/pkg/httpx"
+	"github.com/dstgo/wilson/internal/pkg/httpx"
 	route2 "github.com/dstgo/wilson/pkg/route"
 	"github.com/gin-gonic/gin"
 	"testing"

@@ -3,12 +3,12 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/dstgo/wilson/app/core/log"
+	"github.com/dstgo/wilson/internal/pkg/log"
+	"github.com/dstgo/wilson/internal/wilson"
 	"path"
 
 	"github.com/dstgo/filebox"
-	"github.com/dstgo/wilson/app/conf"
-	"github.com/dstgo/wilson/app/core/wilson"
+	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/pkg/config"
 	"github.com/gin-gonic/gin"
 )
