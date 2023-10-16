@@ -1,7 +1,7 @@
-package errorx
+package errs
 
 import (
-	"github.com/dstgo/wilson/internal/pkg/locale"
+	"github.com/dstgo/wilson/internal/sys/locale"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 )

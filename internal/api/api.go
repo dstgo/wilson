@@ -4,7 +4,7 @@ import (
 	"github.com/dstgo/wilson/internal/api/user"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/data"
-	"github.com/dstgo/wilson/internal/pkg/log"
+	"github.com/dstgo/wilson/internal/sys/log"
 	"github.com/dstgo/wilson/pkg/route"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"

@@ -1,6 +1,6 @@
 basePath: /api
 definitions:
-  request.ForgotPasswordRequest:
+  auth.ForgotPasswordOption:
     properties:
       code:
         description: auth code get from user binding email
@@ -11,7 +11,7 @@ definitions:
         example: "123456789"
         type: string
     type: object
-  request.LoginRequest:
+  auth.LoginOption:
     properties:
       password:
         description: length of the password must be in range [10,30]
@@ -23,7 +23,7 @@ definitions:
         example: 123456@example.com/username
         type: string
     type: object
-  request.RegisterRequest:
+  auth.RegisterOption:
     properties:
       code:
         description: 8-digit auth code get from user binding email, and it must be
@@ -38,6 +38,66 @@ definitions:
         description: length of the username must be in range [6,20], and username
           must be Alphanumeric
         example: 123456@example.com/username
+        type: string
+    type: object
+  user.Info:
+    properties:
+      createdAt:
+        example: "2022-01-01 00:00:00"
+        type: string
+      email:
+        example: jacklove@lol.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      username:
+        example: jack
+        type: string
+      uuid:
+        example: 55BBA4ED-18D3-790F-EABF-A5330E527586
+        type: string
+    type: object
+  user.PageOption:
+    properties:
+      desc:
+        description: if is reverse order
+        example: true
+        type: boolean
+      order:
+        description: specified field
+        example: email
+        type: string
+      page:
+        description: page
+        example: 1
+        type: integer
+      search:
+        description: search text, should be of one username or email
+        example: jacklove
+        type: string
+      size:
+        description: size of page
+        example: 10
+        type: integer
+    type: object
+  user.UpdateInfoOption:
+    properties:
+      email:
+        description: new email
+        example: jack@google.com
+        type: string
+      id:
+        description: specified user id
+        example: 1
+        type: integer
+      password:
+        description: new password
+        example: "123456"
+        type: string
+      username:
+        description: new username
+        example: jack
         type: string
     type: object
 info:
@@ -60,7 +120,7 @@ paths:
         name: changePasswdBoy
         required: true
         schema:
-          $ref: '#/definitions/request.ForgotPasswordRequest'
+          $ref: '#/definitions/auth.ForgotPasswordOption'
       produces:
       - application/json
       responses: {}
@@ -78,7 +138,7 @@ paths:
         name: loginBody
         required: true
         schema:
-          $ref: '#/definitions/request.LoginRequest'
+          $ref: '#/definitions/auth.LoginOption'
       produces:
       - application/json
       responses: {}
@@ -105,7 +165,7 @@ paths:
         name: registerBody
         required: true
         schema:
-          $ref: '#/definitions/request.RegisterRequest'
+          $ref: '#/definitions/auth.RegisterOption'
       produces:
       - application/json
       responses: {}
@@ -228,9 +288,19 @@ paths:
       consumes:
       - application/json
       description: get specific user simple info
+      parameters:
+      - description: userId
+        in: query
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.Info'
       summary: GetUserInfo
       tags:
       - user
@@ -239,9 +309,22 @@ paths:
       consumes:
       - application/json
       description: get specific user list
+      parameters:
+      - description: comment
+        in: body
+        name: userPageOptIon
+        required: true
+        schema:
+          $ref: '#/definitions/user.PageOption'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/user.Info'
+            type: array
       summary: GetUserInfoList
       tags:
       - user
@@ -250,6 +333,12 @@ paths:
       consumes:
       - application/json
       description: Remove the specific user
+      parameters:
+      - description: userId
+        in: query
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses: {}
@@ -261,6 +350,13 @@ paths:
       consumes:
       - application/json
       description: update the specific user info
+      parameters:
+      - description: comment
+        in: body
+        name: updateInfoOption
+        required: true
+        schema:
+          $ref: '#/definitions/user.UpdateInfoOption'
       produces:
       - application/json
       responses: {}

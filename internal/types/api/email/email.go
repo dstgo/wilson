@@ -1,8 +1,8 @@
 package email
 
 import (
+	"github.com/dstgo/wilson/internal/types/api/helper/rules"
 	"github.com/dstgo/wilson/pkg/vax"
-	"github.com/dstgo/wilson/pkg/vax/is"
 )
 
 type Email struct {
@@ -12,6 +12,6 @@ type Email struct {
 
 func (e Email) Validate(lang string) error {
 	return vax.Struct(&e, lang,
-		vax.Field(&e.Email, vax.Required, is.Email),
+		vax.Field(&e.Email, rules.Required(rules.Email)...),
 	)
 }

@@ -16,6 +16,8 @@ const (
 	LogoutFailed   = 4003
 
 	EmailSendFailed = 4006
+
+	ResourceNotFound = 4040
 )
 
 const (

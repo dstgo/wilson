@@ -7,7 +7,7 @@ import (
 	"github.com/dstgo/wilson/assets"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/data"
-	"github.com/dstgo/wilson/internal/pkg/log"
+	"github.com/dstgo/wilson/internal/sys/log"
 	"github.com/dstgo/wilson/pkg/route"
 	"github.com/dstgo/wilson/pkg/sysinfo"
 	"github.com/sirupsen/logrus"

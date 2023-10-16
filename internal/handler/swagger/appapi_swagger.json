@@ -32,7 +32,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.ForgotPasswordRequest"
+                            "$ref": "#/definitions/auth.ForgotPasswordOption"
                         }
                     }
                 ],
@@ -59,7 +59,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.LoginRequest"
+                            "$ref": "#/definitions/auth.LoginOption"
                         }
                     }
                 ],
@@ -99,7 +99,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.RegisterRequest"
+                            "$ref": "#/definitions/auth.RegisterOption"
                         }
                     }
                 ],
@@ -281,7 +281,23 @@
                     "user"
                 ],
                 "summary": "GetUserInfo",
-                "responses": {}
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "userId",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.Info"
+                        }
+                    }
+                }
             }
         },
         "/user/list": {
@@ -297,7 +313,28 @@
                     "user"
                 ],
                 "summary": "GetUserInfoList",
-                "responses": {}
+                "parameters": [
+                    {
+                        "description": "comment",
+                        "name": "userPageOptIon",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.PageOption"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/user.Info"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/user/remove": {
@@ -313,6 +350,15 @@
                     "user"
                 ],
                 "summary": "RemoveUser",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "userId",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {}
             }
         },
@@ -329,12 +375,23 @@
                     "user"
                 ],
                 "summary": "UpdateUserInfo",
+                "parameters": [
+                    {
+                        "description": "comment",
+                        "name": "updateInfoOption",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UpdateInfoOption"
+                        }
+                    }
+                ],
                 "responses": {}
             }
         }
     },
     "definitions": {
-        "request.ForgotPasswordRequest": {
+        "auth.ForgotPasswordOption": {
             "type": "object",
             "properties": {
                 "code": {
@@ -349,7 +406,7 @@
                 }
             }
         },
-        "request.LoginRequest": {
+        "auth.LoginOption": {
             "type": "object",
             "properties": {
                 "password": {
@@ -364,7 +421,7 @@
                 }
             }
         },
-        "request.RegisterRequest": {
+        "auth.RegisterOption": {
             "type": "object",
             "properties": {
                 "code": {
@@ -381,6 +438,86 @@
                     "description": "length of the username must be in range [6,20], and username must be Alphanumeric",
                     "type": "string",
                     "example": "123456@example.com/username"
+                }
+            }
+        },
+        "user.Info": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2022-01-01 00:00:00"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "jacklove@lol.com"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "username": {
+                    "type": "string",
+                    "example": "jack"
+                },
+                "uuid": {
+                    "type": "string",
+                    "example": "55BBA4ED-18D3-790F-EABF-A5330E527586"
+                }
+            }
+        },
+        "user.PageOption": {
+            "type": "object",
+            "properties": {
+                "desc": {
+                    "description": "if is reverse order",
+                    "type": "boolean",
+                    "example": true
+                },
+                "order": {
+                    "description": "specified field",
+                    "type": "string",
+                    "example": "email"
+                },
+                "page": {
+                    "description": "page",
+                    "type": "integer",
+                    "example": 1
+                },
+                "search": {
+                    "description": "search text, should be of one username or email",
+                    "type": "string",
+                    "example": "jacklove"
+                },
+                "size": {
+                    "description": "size of page",
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "user.UpdateInfoOption": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "new email",
+                    "type": "string",
+                    "example": "jack@google.com"
+                },
+                "id": {
+                    "description": "specified user id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "password": {
+                    "description": "new password",
+                    "type": "string",
+                    "example": "123456"
+                },
+                "username": {
+                    "description": "new username",
+                    "type": "string",
+                    "example": "jack"
                 }
             }
         }

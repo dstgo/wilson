@@ -3,11 +3,12 @@ package email
 import (
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/pkg/httpx"
-	"github.com/dstgo/wilson/internal/pkg/locale"
-	resp2 "github.com/dstgo/wilson/internal/pkg/resp"
-	"github.com/dstgo/wilson/internal/pkg/valid"
-	email2 "github.com/dstgo/wilson/internal/types/api/email"
+	"github.com/dstgo/wilson/internal/sys/locale"
+	"github.com/dstgo/wilson/internal/sys/resp"
+	"github.com/dstgo/wilson/internal/sys/valid"
+	emailType "github.com/dstgo/wilson/internal/types/api/email"
 	"github.com/dstgo/wilson/internal/types/code"
+	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/google/wire"
@@ -48,7 +49,7 @@ type EmailHandler struct {
 //	@Param			email	query	string	true	"email"
 //	@Router			/email/code [GET]
 func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
-	emailReq := new(email2.Email)
+	emailReq := new(emailType.Email)
 	if err := valid.BindAndResp(ctx, valid.Query(emailReq)); err != nil {
 		return
 	}
@@ -59,10 +60,8 @@ func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 
 	// store in redis
 	if err := e.codeCache.Set(ctx, authcode, emailReq.Email, e.cfg.Expire()); err != nil {
-		resp2.InternalErr(ctx).
-			Code(code.DatabaseError).
-			MsgI18n("email.sendFail").
-			Error(resp2.DataBaseErr(err)).Send()
+		resp.InternalFailed(ctx).Error(errs.DataBaseErr(err)).
+			MsgI18n("email.sendFail").Send()
 		return
 	}
 
@@ -88,8 +87,8 @@ func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 	})
 
 	if err != nil {
-		resp2.Fail(ctx).Code(code.EmailSendFailed).MsgI18n("email.sendFail").Error(err).Send()
+		resp.Fail(ctx).Code(code.EmailSendFailed).MsgI18n("email.sendFail").Error(err).Send()
 	} else {
-		resp2.Ok(ctx).Code(code.EmailSendOk).MsgI18n("email.sendOk").Send()
+		resp.Ok(ctx).Code(code.EmailSendOk).MsgI18n("email.sendOk").Send()
 	}
 }

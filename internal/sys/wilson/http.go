@@ -8,8 +8,8 @@ import (
 	"github.com/dstgo/wilson/internal/handler"
 	"github.com/dstgo/wilson/internal/handler/middleware"
 	_ "github.com/dstgo/wilson/internal/handler/swagger"
-	"github.com/dstgo/wilson/internal/pkg/locale"
-	"github.com/dstgo/wilson/internal/pkg/log"
+	locale2 "github.com/dstgo/wilson/internal/sys/locale"
+	"github.com/dstgo/wilson/internal/sys/log"
 	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/pkg/vax"
 	"github.com/gin-gonic/gin"
@@ -21,7 +21,7 @@ import (
 )
 
 // NewHttpServer initializes http server configuration
-func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger) (*gin.Engine, *http.Server) {
+func NewHttpServer(cfg *conf.AppConf, lang *locale2.Locale, logger *logrus.Logger) (*gin.Engine, *http.Server) {
 
 	serverConf := cfg.ServerConf
 
@@ -55,19 +55,19 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 	}
 
 	// http request validate pkg
-	vax.SetTranslator(locale.L())
+	vax.SetTranslator(locale2.L())
 
 	server.Handler = engine
 
 	return engine, server
 }
 
-func NewLocale(cfg *locale.Conf) (*locale.Locale, error) {
-	l, err := locale.NewLocaleWithConf(cfg)
+func NewLocale(cfg *locale2.Conf) (*locale2.Locale, error) {
+	l, err := locale2.NewLocaleWithConf(cfg)
 	if err != nil {
 		return nil, fmt.Errorf("load language directory failed: %s", err.Error())
 	}
-	locale.Setup(l)
+	locale2.Setup(l)
 	return l, nil
 }
 

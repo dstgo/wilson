@@ -1,11 +1,49 @@
 package user
 
-import "time"
+import (
+	"github.com/dstgo/wilson/internal/types/api/helper"
+	"github.com/dstgo/wilson/internal/types/api/helper/rules"
+	"github.com/dstgo/wilson/pkg/vax"
+)
 
 type Info struct {
-	ID        uint      `json:"id"`
-	UUID      string    `json:"uuid"`
-	Username  string    `json:"username"`
-	Email     string    `json:"email"`
-	CreatedAt time.Time `json:"created"`
+	ID       uint   `json:"id" example:"1"`
+	UUID     string `json:"uuid" example:"55BBA4ED-18D3-790F-EABF-A5330E527586"`
+	Username string `json:"username" example:"jack"`
+	Email    string `json:"email" example:"jacklove@lol.com"`
+	helper.CreatedAt
+}
+
+type PageOption struct {
+	helper.PageOption
+	// specified field
+	Order string `json:"order" example:"email"`
+	// search text, should be of one username or email
+	Search string `json:"search" example:"jacklove"`
+}
+
+func (p PageOption) Validate(lang string) error {
+	return vax.Struct(&p, lang,
+		vax.Field(p.PageOption),
+	)
+}
+
+type UpdateInfoOption struct {
+	// specified user id
+	Id uint `json:"id" example:"1"`
+	// new username
+	Username string `json:"username" example:"jack"`
+	// new email
+	Email string `json:"email" example:"jack@google.com"`
+	// new password
+	Password string `json:"password" example:"123456"`
+}
+
+func (u UpdateInfoOption) Validate(lang string) error {
+	return vax.Struct(&u, lang,
+		vax.Field(u.Id, vax.Required),
+		vax.Field(&u.Username, rules.Required(rules.Username)...),
+		vax.Field(&u.Email, rules.Required(rules.Email)...),
+		vax.Field(&u.Password, rules.Required(rules.Password)...),
+	)
 }

@@ -1,8 +1,7 @@
-package resp
+package errs
 
 import (
-	"github.com/dstgo/wilson/internal/pkg/errorx"
-	"github.com/dstgo/wilson/internal/pkg/locale"
+	"github.com/dstgo/wilson/internal/sys/locale"
 	"github.com/dstgo/wilson/internal/types/code"
 	"net/http"
 )
@@ -13,12 +12,12 @@ func NewErr() *ResponseError {
 
 // ResponseError
 // a response error wrap
-// err field
+// Er field
 type ResponseError struct {
 	CustomCode int
 	HttpStatus int
 	LangCode   string
-	err        error
+	Er         error
 }
 
 func (e *ResponseError) Code(code int) *ResponseError {
@@ -37,30 +36,59 @@ func (e *ResponseError) I18n(langCode string) *ResponseError {
 }
 
 func (e *ResponseError) Err(err error) *ResponseError {
-	e.err = err
+	e.Er = err
 	return e
 }
 
 func (e *ResponseError) Error() string {
 	if e.LangCode == "" {
-		return e.err.Error()
+		return e.Er.Error()
 	}
 
-	if e.err != nil {
-		return errorx.WrapI18n(e.err, e.LangCode).Error()
+	if e.Er != nil {
+		return WrapI18n(e.Er, e.LangCode).Error()
 	}
 
 	return locale.Get(e.LangCode)
 }
 
-// helper function
+// response error helper function
+
+func BadRequest(err error) *ResponseError {
+	return &ResponseError{
+		HttpStatus: http.StatusBadRequest,
+		Er:         err,
+	}
+}
+
+func UnAuthorized(err error) *ResponseError {
+	return &ResponseError{
+		HttpStatus: http.StatusUnauthorized,
+		Er:         err,
+	}
+}
+
+func Forbidden(err error) *ResponseError {
+	return &ResponseError{
+		HttpStatus: http.StatusForbidden,
+		Er:         err,
+	}
+}
+
+func ResourceNotFound(err error) *ResponseError {
+	return &ResponseError{
+		CustomCode: code.ResourceNotFound,
+		HttpStatus: http.StatusNotFound,
+		Er:         err,
+	}
+}
 
 func DataBaseErr(err error) *ResponseError {
 	return &ResponseError{
 		CustomCode: code.DatabaseError,
 		HttpStatus: http.StatusInternalServerError,
 		LangCode:   "err.database",
-		err:        err,
+		Er:         err,
 	}
 }
 
@@ -69,7 +97,7 @@ func FileSystemErr(err error) *ResponseError {
 		CustomCode: code.FilesystemError,
 		HttpStatus: http.StatusInternalServerError,
 		LangCode:   "err.filesystem",
-		err:        err,
+		Er:         err,
 	}
 }
 
@@ -78,7 +106,7 @@ func NetworkErr(err error) *ResponseError {
 		CustomCode: code.NetworkError,
 		HttpStatus: http.StatusInternalServerError,
 		LangCode:   "err.network",
-		err:        err,
+		Er:         err,
 	}
 }
 
@@ -87,6 +115,6 @@ func ProgramErr(err error) *ResponseError {
 		CustomCode: code.UnknownError,
 		HttpStatus: http.StatusInternalServerError,
 		LangCode:   "err.program",
-		err:        err,
+		Er:         err,
 	}
 }

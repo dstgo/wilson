@@ -9,10 +9,10 @@ package handler
 import (
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/data"
-	"github.com/dstgo/wilson/internal/handler/auth"
 	"github.com/dstgo/wilson/internal/handler/email"
 	"github.com/dstgo/wilson/internal/handler/system"
 	"github.com/dstgo/wilson/internal/handler/user"
+	"github.com/dstgo/wilson/internal/sys/authenticate"
 	"github.com/dstgo/wilson/pkg/route"
 )
 
@@ -20,39 +20,35 @@ import (
 
 //go:generate wire gen
 func setupHandlerRouter(appConf *conf.AppConf, api *route.Router, datasource *data.DataSource) (Router, func(), error) {
-	infoData := user.NewInfoData(datasource)
-	codeCache := email.NewEmailCodeCache(datasource)
-	redisTokenCache := auth.NewTokenRedisCache(datasource)
-	authenticator := auth.NewAuthenticator(appConf, infoData, codeCache, redisTokenCache)
-	authHandler := auth.NewAuthHandler(authenticator)
-	handler := auth.Handler{
-		Auth: authHandler,
-	}
-	handlerRouter := auth.SetupRouter(api, handler)
 	sender, cleanup, err := email.NewSender(appConf)
 	if err != nil {
 		return Router{}, nil, err
 	}
+	codeCache := email.NewEmailCodeCache(datasource)
 	emailHandler := email.NewEmailHandler(appConf, sender, codeCache)
-	handler2 := email.Handler{
+	handler := email.Handler{
 		Email: emailHandler,
 	}
-	emailHandlerRouter := email.SetupRouter(api, handler2)
+	handlerRouter := email.SetupRouter(api, handler)
 	pingLogic := system.NewPingLogic(appConf)
 	pingHandler := system.NewPingHandler(pingLogic)
+	infoData := user.NewInfoData(datasource)
+	redisTokenCache := authenticate.NewTokenRedisCache(datasource)
+	authenticator := system.NewAuthenticator(appConf, infoData, codeCache, redisTokenCache)
+	authHandler := system.NewAuthHandler(authenticator)
 	systemHandler := system.Handler{
 		Ping: pingHandler,
+		Auth: authHandler,
 	}
 	systemHandlerRouter := system.SetupRouter(api, systemHandler)
-	infoLogic := user.NewUserInfo(infoData)
-	infoHandler := user.NewInfoHandler(infoLogic)
+	userInfo := user.NewUserInfo(infoData)
+	infoHandler := user.NewInfoHandler(userInfo)
 	userHandler := user.Handler{
 		Info: infoHandler,
 	}
 	userHandlerRouter := user.SetupRouter(api, userHandler)
 	router := Router{
-		Auth:   handlerRouter,
-		Email:  emailHandlerRouter,
+		Email:  handlerRouter,
 		System: systemHandlerRouter,
 		User:   userHandlerRouter,
 	}

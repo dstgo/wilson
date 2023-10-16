@@ -2,7 +2,8 @@ package resp
 
 import (
 	"errors"
-	"github.com/dstgo/wilson/internal/pkg/locale"
+	"github.com/dstgo/wilson/internal/sys/locale"
+	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -22,8 +23,8 @@ func Fail(ctx *gin.Context) *Response {
 	return NewResponse(ctx).Status(http.StatusBadRequest)
 }
 
-// InternalErr means that the request is unsuccessful, the reason usually caused by server
-func InternalErr(ctx *gin.Context) *Response {
+// InternalFailed means that the request is unsuccessful, the reason usually caused by server
+func InternalFailed(ctx *gin.Context) *Response {
 	return NewResponse(ctx).Status(http.StatusInternalServerError)
 }
 
@@ -78,7 +79,7 @@ func (r *Response) Send() {
 		if r.err != nil {
 			r.ErrorMsg = r.err.Error()
 
-			var e *ResponseError
+			var e *errs.ResponseError
 			if errors.As(r.err, &e) {
 
 				// if httpcode >= 500, which means internal server error happened

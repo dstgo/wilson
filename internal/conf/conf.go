@@ -1,7 +1,7 @@
 package conf
 
 import (
-	"github.com/dstgo/wilson/internal/pkg/locale"
+	"github.com/dstgo/wilson/internal/sys/locale"
 	"github.com/dstgo/wilson/pkg/config"
 )
 

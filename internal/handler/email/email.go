@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"github.com/dstgo/wilson/assets"
 	"github.com/dstgo/wilson/internal/conf"
-	"github.com/dstgo/wilson/internal/pkg/resp"
+	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/jordan-wright/email"
 	"text/template"
 )
@@ -38,13 +38,13 @@ func (e Sender) SendHtmlTemplateMail(mail *email.Email, tmpl string, data map[st
 	// parse template
 	tmp, err := template.ParseFS(assets.Fs, tmpl)
 	if err != nil {
-		return resp.FileSystemErr(err)
+		return errs.FileSystemErr(err)
 	}
 	buf := bytes.NewBuffer([]byte{})
 
 	// execute template
 	if err = tmp.Execute(buf, data); err != nil {
-		return resp.ProgramErr(err)
+		return errs.ProgramErr(err)
 	}
 
 	// set content
@@ -61,7 +61,7 @@ func (e Sender) SendTextMail(mail *email.Email, text string) error {
 
 func (e Sender) SendMail(mail *email.Email) error {
 	if err := e.pool.Send(mail, e.conf.SendTimeout); err != nil {
-		return resp.NetworkErr(err)
+		return errs.NetworkErr(err)
 	}
 	return nil
 }

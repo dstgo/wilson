@@ -1,4 +1,4 @@
-package auth
+package system
 
 import (
 	"context"
@@ -8,8 +8,9 @@ import (
 	"github.com/dstgo/wilson/internal/handler/email"
 	"github.com/dstgo/wilson/internal/handler/user"
 	"github.com/dstgo/wilson/internal/pkg/jwtx"
-	"github.com/dstgo/wilson/internal/pkg/locale"
-	"github.com/dstgo/wilson/internal/pkg/resp"
+	"github.com/dstgo/wilson/internal/sys/authenticate"
+	"github.com/dstgo/wilson/internal/sys/locale"
+	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/dstgo/wilson/pkg/vax/is"
 	"github.com/duke-git/lancet/v2/cryptor"
 	"github.com/go-redis/redis/v8"
@@ -18,9 +19,9 @@ import (
 	"net/http"
 )
 
-func NewAuthenticator(cfg *conf.AppConf, userData user.InfoData, codeCache email.CodeCache, tokenCache TokenCache) Authenticator {
+func NewAuthenticator(cfg *conf.AppConf, userData user.InfoData, codeCache email.CodeCache, tokenCache authenticate.TokenCache) Authenticator {
 	return Authenticator{
-		issue:      NewCacheAuthor(cfg.JwtConf, tokenCache),
+		issue:      authenticate.NewCacheAuthor(cfg.JwtConf, tokenCache),
 		userData:   userData,
 		codeCache:  codeCache,
 		tokenCache: tokenCache,
@@ -28,10 +29,10 @@ func NewAuthenticator(cfg *conf.AppConf, userData user.InfoData, codeCache email
 }
 
 type Authenticator struct {
-	issue      Issuer
+	issue      authenticate.Issuer
 	userData   user.InfoData
 	codeCache  email.CodeCache
-	tokenCache TokenCache
+	tokenCache authenticate.TokenCache
 }
 
 func (a Authenticator) TryLogin(userName string, password string) (jwtx.Jwt, error) {
@@ -51,25 +52,25 @@ func (a Authenticator) TryLogin(userName string, password string) (jwtx.Jwt, err
 
 	// if user not found, return error
 	if errors.Is(userErr, gorm.ErrRecordNotFound) {
-		return token, resp.NewErr().Status(http.StatusNotFound).I18n("user.notfound")
+		return token, errs.NewErr().Status(http.StatusNotFound).I18n("user.notfound")
 	} else if userErr != nil {
-		return token, resp.DataBaseErr(userErr)
+		return token, errs.DataBaseErr(userErr)
 	}
 
 	// compare the password
 	sum := cryptor.Sha512WithBase64(password)
 	if sum != user.Password {
-		return token, resp.NewErr().Status(http.StatusBadRequest).I18n("user.wrongPassword")
+		return token, errs.NewErr().Status(http.StatusBadRequest).I18n("user.wrongPassword")
 	}
 
 	// issue token
-	issueToken, err := a.issue.Issue(context.Background(), UserPayload{
+	issueToken, err := a.issue.Issue(context.Background(), authenticate.UserPayload{
 		Username: user.Username,
 		UserID:   user.UUID,
 	}, -1)
 
 	if err != nil {
-		return token, resp.ProgramErr(err)
+		return token, errs.ProgramErr(err)
 	}
 
 	token = issueToken
@@ -81,20 +82,20 @@ func (a Authenticator) TryRegisterNewUser(username string, password string, code
 	// find the authcode from redis
 	cacheEmail, err := a.codeCache.Check(ctx, code)
 	if errors.Is(err, redis.Nil) {
-		return resp.NewErr().Status(http.StatusBadRequest).I18n("email.codeExpired")
+		return errs.BadRequest(err).I18n("email.codeExpired")
 	} else if err != nil {
-		return resp.DataBaseErr(err)
+		return errs.DataBaseErr(err)
 	}
 
 	// try to find the userInfo
 	userInfo, err := a.userData.GetUserByName(username)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return resp.DataBaseErr(err)
+		return errs.DataBaseErr(err)
 	}
 
 	// if userInfo found, return error
 	if len(userInfo.Username) > 0 {
-		return resp.NewErr().Status(http.StatusBadRequest).I18n("userInfo.alreadyExist")
+		return errs.BadRequest(err).I18n("userInfo.alreadyExist")
 	}
 
 	// encrypt
@@ -109,7 +110,7 @@ func (a Authenticator) TryRegisterNewUser(username string, password string, code
 	}
 
 	if err := a.userData.CreateUser(newUser); err != nil {
-		return resp.DataBaseErr(err)
+		return errs.DataBaseErr(err)
 	}
 
 	return nil
@@ -121,14 +122,14 @@ func (a Authenticator) TryLogout(tokenId string) error {
 	_, ok, err := a.tokenCache.Get(ctx, tokenId)
 	// check if token is expired
 	if !ok && err == nil {
-		return resp.NewErr().Status(http.StatusUnauthorized).I18n("jwt.expired")
+		return errs.UnAuthorized(err).I18n("jwt.expired")
 	} else if err != nil {
-		return resp.DataBaseErr(err)
+		return errs.DataBaseErr(err)
 	}
 
 	err = a.tokenCache.Del(ctx, tokenId)
 	if err != nil {
-		return resp.DataBaseErr(err)
+		return errs.DataBaseErr(err)
 	}
 
 	return nil
@@ -140,17 +141,17 @@ func (a Authenticator) ChangePassword(newPassword string, code string) error {
 	// get email
 	emailCache, err := a.codeCache.Check(ctx, code)
 	if errors.Is(err, redis.Nil) {
-		return resp.NewErr().Status(http.StatusBadRequest).I18n("email.codeExpired")
+		return errs.BadRequest(err).I18n("email.codeExpired")
 	} else if err != nil {
-		return resp.DataBaseErr(err)
+		return errs.DataBaseErr(err)
 	}
 
 	// find user by email
 	userInfo, err := a.userData.GetUserByEmail(emailCache)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return resp.NewErr().Status(http.StatusNotFound).I18n("user.notfound")
+		return errs.ResourceNotFound(err).I18n("user.notfound")
 	} else if err != nil {
-		return resp.DataBaseErr(err)
+		return errs.DataBaseErr(err)
 	}
 
 	// change the password
@@ -158,7 +159,7 @@ func (a Authenticator) ChangePassword(newPassword string, code string) error {
 
 	// save
 	if err := a.userData.UpdateUserInfo(userInfo); err != nil {
-		return resp.DataBaseErr(err)
+		return errs.DataBaseErr(err)
 	}
 
 	return nil

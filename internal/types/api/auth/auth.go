@@ -1,8 +1,8 @@
 package auth
 
 import (
+	rules2 "github.com/dstgo/wilson/internal/types/api/helper/rules"
 	"github.com/dstgo/wilson/pkg/vax"
-	"github.com/dstgo/wilson/pkg/vax/is"
 )
 
 type LoginOption struct {
@@ -14,8 +14,8 @@ type LoginOption struct {
 
 func (l LoginOption) Validate(lang string) error {
 	return vax.Struct(&l, lang,
-		vax.Field(&l.Username, vax.Required, is.Alphanumeric, vax.RangeLength(6, 20, false)),
-		vax.Field(&l.Password, vax.Required, vax.RangeLength(10, 30, false)),
+		vax.Field(&l.Username, rules2.Required(rules2.Username)...),
+		vax.Field(&l.Password, rules2.Required(rules2.Password)...),
 	)
 }
 
@@ -28,7 +28,7 @@ type RegisterOption struct {
 func (r RegisterOption) Validate(lang string) error {
 	return vax.Struct(&r, lang,
 		vax.Field(&r.LoginOption),
-		vax.Field(&r.Code, vax.Required, is.Alphanumeric),
+		vax.Field(&r.Code, rules2.Required(rules2.EmailCode)...),
 	)
 }
 
@@ -41,7 +41,7 @@ type ForgotPasswordOption struct {
 
 func (f ForgotPasswordOption) Validate(lang string) error {
 	return vax.Struct(&f, lang,
-		vax.Field(&f.Password, vax.Required, is.Alphanumeric, vax.RangeLength(10, 30, false)),
-		vax.Field(&f.Code, vax.Required, is.Alphanumeric),
+		vax.Field(&f.Password, rules2.Required(rules2.Username)...),
+		vax.Field(&f.Code, rules2.Required(rules2.EmailCode)...),
 	)
 }

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/dstgo/wilson/internal/pkg/httpx"
 	"github.com/dstgo/wilson/internal/pkg/httpx/httpheader"
-	"github.com/dstgo/wilson/internal/pkg/resp"
+	"github.com/dstgo/wilson/internal/sys/resp"
 	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/code"
 	"github.com/gin-gonic/gin"
@@ -98,7 +98,7 @@ func UseRecovery(logger *logrus.Logger) gin.HandlerFunc {
 					return
 				}
 
-				resp.InternalErr(ctx).Code(code.InternalServerError).MsgI18n("err.internal").Send()
+				resp.InternalFailed(ctx).Code(code.InternalServerError).MsgI18n("err.internal").Send()
 			}
 		}()
 

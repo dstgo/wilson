@@ -3,13 +3,13 @@ package handler
 import (
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/data"
-	"github.com/dstgo/wilson/internal/handler/auth"
 	"github.com/dstgo/wilson/internal/handler/email"
 	"github.com/dstgo/wilson/internal/handler/middleware"
 	"github.com/dstgo/wilson/internal/handler/system"
 	"github.com/dstgo/wilson/internal/handler/user"
-	"github.com/dstgo/wilson/internal/pkg/log"
 	"github.com/dstgo/wilson/internal/pkg/utils"
+	"github.com/dstgo/wilson/internal/sys/authenticate"
+	"github.com/dstgo/wilson/internal/sys/log"
 	"github.com/dstgo/wilson/pkg/route"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -24,7 +24,6 @@ const (
 )
 
 var HandlerProviderSet = wire.NewSet(
-	auth.AuthRouterSet,
 	email.EmailRouterSet,
 	system.SystemRouterSet,
 	user.UserRouterSet,
@@ -33,7 +32,6 @@ var HandlerProviderSet = wire.NewSet(
 
 // Router has no influence, just for wire injection
 type Router struct {
-	Auth   auth.HandlerRouter
 	Email  email.HandlerRouter
 	System system.HandlerRouter
 	User   user.HandlerRouter
@@ -46,7 +44,7 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 		swaggerEnabled = serverConf.Swagger
 	)
 
-	authenticator := auth.NewCacheAuthor(cfg.JwtConf, auth.NewTokenRedisCache(datasource))
+	authenticator := authenticate.NewCacheAuthor(cfg.JwtConf, authenticate.NewTokenRedisCache(datasource))
 
 	// wrap http router
 	handlerRouter := route.NewRouter(httpserver.RouterGroup.Group(BasePath))
@@ -94,4 +92,4 @@ var Config = &ginSwagger.Config{
 //	@BasePath		/api
 //  @license.name  MIT
 //  @license.url   https://mit-license.org/
-//go:generate swag init --generatedTime --instanceName appapi -g handler.go -d ./,../types,../pkg/resp --output ./swagger && swag fmt -g handler.go -d ./
+//go:generate swag init --generatedTime --instanceName appapi -g handler.go -d ./,../types,../sys/resp --output ./swagger && swag fmt -g handler.go -d ./

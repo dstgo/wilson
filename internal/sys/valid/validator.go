@@ -1,7 +1,7 @@
 package valid
 
 import (
-	"github.com/dstgo/wilson/internal/pkg/resp"
+	"github.com/dstgo/wilson/internal/sys/resp"
 	"github.com/dstgo/wilson/internal/types/code"
 	"github.com/dstgo/wilson/pkg/vax"
 	"github.com/gin-gonic/gin"

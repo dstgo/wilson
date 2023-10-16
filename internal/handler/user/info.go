@@ -1,8 +1,12 @@
 package user
 
 import (
-	"github.com/dstgo/wilson/internal/data"
+	"errors"
 	"github.com/dstgo/wilson/internal/data/entity"
+	"github.com/dstgo/wilson/internal/pkg/utils/cp"
+	"github.com/dstgo/wilson/internal/types/api/user"
+	"github.com/dstgo/wilson/internal/types/errs"
+	"gorm.io/gorm"
 )
 
 func NewUserInfo(userData InfoData) UserInfo {
@@ -15,56 +19,62 @@ type UserInfo struct {
 	userData InfoData
 }
 
-func (u UserInfo) GetUserInfo() {
-
+func (u UserInfo) GetUserInfo(userId uint) (user.Info, error) {
+	userEntity, err := u.userData.GetUserById(userId)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return user.Info{}, errs.ResourceNotFound(err).I18n("user.notfound")
+	}
+	var userInfo user.Info
+	if err := cp.Copy(&userEntity, &userInfo); err != nil {
+		return user.Info{}, errs.ProgramErr(err)
+	}
+	return userInfo, nil
 }
 
-func NewInfoData(source *data.DataSource) InfoData {
-	return InfoData{DataSource: source}
+func (u UserInfo) GetUserInfoList(opt user.PageOption) ([]user.Info, error) {
+	pageUser, err := u.userData.ListByPage(opt)
+	if err != nil {
+		return []user.Info{}, errs.DataBaseErr(err)
+	}
+
+	userInfoList := make([]user.Info, 0, len(pageUser))
+
+	if err := cp.Copy(&pageUser, &userInfoList); err != nil {
+		return []user.Info{}, errs.ProgramErr(err)
+	}
+
+	return userInfoList, err
 }
 
-type InfoData struct {
-	*data.DataSource
+func (u UserInfo) UpdateUserInfo(info user.UpdateInfoOption) error {
+	var userTable entity.User
+
+	// try to find the user
+	if _, err := u.GetUserInfo(info.Id); err != nil {
+		return err
+	}
+
+	if err := cp.Copy(&info, &userTable); err != nil {
+		return errs.ProgramErr(err)
+	}
+
+	if err := u.userData.UpdateUserInfo(userTable); err != nil {
+		return errs.DataBaseErr(err)
+	}
+
+	return nil
 }
 
-func (u InfoData) GetUserByName(username string) (entity.User, error) {
-	user := entity.User{}
-	err := u.ORM().Model(user).Where("username = ?", username).First(&user).Error
-	return user, err
-}
+func (u UserInfo) RemoveUser(userId uint) error {
 
-func (u InfoData) GetUserByUUID(uuid string) (entity.User, error) {
-	user := entity.User{}
-	err := u.ORM().Model(user).Where("uuid =?", uuid).First(&user).Error
-	return user, err
-}
+	// try to find the user
+	if _, err := u.GetUserInfo(userId); err != nil {
+		return err
+	}
 
-func (u InfoData) GetUserByEmail(email string) (entity.User, error) {
-	user := entity.User{}
-	err := u.ORM().Model(user).Where("email =?", email).First(&user).Error
-	return user, err
-}
+	if err := u.userData.RemoveUser(userId); err != nil {
+		return errs.DataBaseErr(err)
+	}
 
-func (u InfoData) DeleteByUUID(uuid string) error {
-	return u.ORM().Delete(&entity.User{}, "uuid =?", uuid).Error
-}
-
-func (u InfoData) CreateUser(user entity.User) error {
-	return u.ORM().Model(entity.User{}).Create(&user).Error
-}
-
-func (u InfoData) ListAllUsers() ([]entity.User, error) {
-	var users []entity.User
-	err := u.ORM().Model(entity.User{}).Find(&users).Error
-	return users, err
-}
-
-func (u InfoData) Count() (int64, error) {
-	var count int64
-	err := u.ORM().Model(entity.User{}).Count(&count).Error
-	return count, err
-}
-
-func (u InfoData) UpdateUserInfo(user entity.User) error {
-	return u.ORM().Model(user).Save(&user).Error
+	return nil
 }
