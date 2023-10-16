@@ -59,7 +59,15 @@ func (u InfoData) ListByPage(pageOpt user.PageOption) ([]entity.User, error) {
 		}
 	}
 
-	var users []entity.User
+	var (
+		users []entity.User
+	)
+
+	if len(pageOpt.Search) > 0 {
+		query := "%" + pageOpt.Search + "%"
+		pageDB = pageDB.Where("username LIKE ? OR email LIKE ?", query, query)
+	}
+
 	err := pageDB.Find(&users).Error
 	return users, err
 }
