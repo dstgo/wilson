@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/dstgo/size"
 	"github.com/dstgo/wilson/assets"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/data"
@@ -30,19 +29,18 @@ func LogBanner(cfg *conf.AppConf, logger *logrus.Logger) error {
 
 	hostInfo := sysinfo.GetHostInfo()
 	cpuInfo := sysinfo.GetCpuInfo()
-	memInfo := sysinfo.GetMemInfo()
 
 	bannerData := map[string]any{
-		"author":     cfg.ServerConf.Author,
-		"timezone":   time.Now().Format("MST -07"),
-		"appName":    cfg.ServerConf.Name,
-		"goVersion":  runtime.Version(),
-		"appMode":    strings.ToUpper(cfg.ServerConf.Mode),
-		"appVersion": cfg.ServerConf.Version,
-		"osInfo":     fmt.Sprintf("%s %s %s", hostInfo.Os, hostInfo.Platform, hostInfo.Version),
-		"archInfo":   runtime.GOARCH,
-		"cpuInfo":    fmt.Sprintf("%s %d Cores", cpuInfo.Name, cpuInfo.Count),
-		"memInfo":    size.ParseTargetSize(memInfo.Virtual.Total.String(), size.GB),
+		"author":    cfg.ServerConf.Author,
+		"appName":   cfg.ServerConf.Name,
+		"appMode":   strings.ToUpper(cfg.ServerConf.Mode),
+		"logMode":   strings.ToUpper(cfg.LogConf.Level),
+		"goVersion": runtime.Version(),
+		"version":   cfg.ServerConf.Version,
+		"osInfo":    fmt.Sprintf("%s %s", hostInfo.Os, hostInfo.Version),
+		"timezone":  time.Now().Format("MST -07"),
+		"archInfo":  runtime.GOARCH,
+		"cpuInfo":   cpuInfo.Name,
 	}
 
 	if err := banner.Execute(bannerTemplate, bannerData); err != nil {
