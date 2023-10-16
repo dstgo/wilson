@@ -67,7 +67,7 @@ func NewLogger(logConf *conf.LogConf) (*Logger, error) {
 		return nil, err
 	}
 
-	if parseLevel >= logrus.DebugLevel {
+	if parseLevel >= logrus.TraceLevel {
 		logger.SetReportCaller(true)
 	}
 

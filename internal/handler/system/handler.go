@@ -2,10 +2,9 @@ package system
 
 import (
 	"github.com/dstgo/wilson/internal/pkg/resp"
-	"github.com/dstgo/wilson/internal/pkg/validate"
+	"github.com/dstgo/wilson/internal/pkg/valid"
 	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/code"
-	"github.com/dstgo/wilson/internal/types/request"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 )
@@ -27,7 +26,7 @@ type PingHandler struct {
 
 // Ping
 //
-//	@Summary		app test ping api
+//	@Summary		Ping
 //	@Description	to test app api if is ok
 //	@Tags			system
 //	@Accept			json
@@ -35,9 +34,9 @@ type PingHandler struct {
 //	@Param			name	query	string	true	"ping name"
 //	@Router			/ping [GET]
 func (p PingHandler) Ping(ctx *gin.Context) {
-	pingReq := new(request.PingRequest)
-	err := validate.BindAndResp(ctx,
-		validate.Query(pingReq),
+	pingReq := new(PingRequest)
+	err := valid.BindAndResp(ctx,
+		valid.Query(pingReq),
 	)
 	if err != nil {
 		return

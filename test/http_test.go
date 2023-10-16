@@ -14,7 +14,7 @@ func TestHttpRoute(t *testing.T) {
 		Key: "noauth",
 		Val: struct{}{},
 	}
-	router.GET("ping", route2.MetaSum(NoAuth), nil)
+	router.GET("ping", route2.Metas(NoAuth), nil)
 	group := router.Group("a", nil)
 	group.GET("abc", nil, nil)
 

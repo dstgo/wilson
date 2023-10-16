@@ -1,4 +1,4 @@
-package request
+package email
 
 import (
 	"github.com/dstgo/wilson/pkg/vax"
@@ -6,7 +6,8 @@ import (
 )
 
 type Email struct {
-	Email string `json:"email" uri:"email" form:"email" label:"field.email"`
+	// valid email format
+	Email string `json:"email" uri:"email" form:"email" label:"field.email" example:"abc@example.com"`
 }
 
 func (e Email) Validate(lang string) error {

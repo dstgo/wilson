@@ -1,4 +1,4 @@
-package validate
+package valid
 
 import (
 	"github.com/dstgo/wilson/internal/pkg/resp"

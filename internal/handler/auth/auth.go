@@ -8,13 +8,14 @@ import (
 	"github.com/dstgo/wilson/internal/handler/email"
 	"github.com/dstgo/wilson/internal/handler/user"
 	"github.com/dstgo/wilson/internal/pkg/jwtx"
+	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/internal/pkg/resp"
+	"github.com/dstgo/wilson/pkg/vax/is"
 	"github.com/duke-git/lancet/v2/cryptor"
 	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"net/http"
-	"time"
 )
 
 func NewAuthenticator(cfg *conf.AppConf, userData user.InfoData, codeCache email.CodeCache, tokenCache TokenCache) Authenticator {
@@ -35,13 +36,24 @@ type Authenticator struct {
 
 func (a Authenticator) TryLogin(userName string, password string) (jwtx.Jwt, error) {
 	var token jwtx.Jwt
+
+	var (
+		user    entity.User
+		userErr error
+	)
+
 	// try to find the user
-	user, err := a.userData.GetUserByName(userName)
+	if err := is.Email.Validate(locale.L().Default(), userName); err != nil {
+		user, userErr = a.userData.GetUserByEmail(userName)
+	} else {
+		user, userErr = a.userData.GetUserByName(userName)
+	}
+
 	// if user not found, return error
-	if errors.Is(err, gorm.ErrRecordNotFound) {
+	if errors.Is(userErr, gorm.ErrRecordNotFound) {
 		return token, resp.NewErr().Status(http.StatusNotFound).I18n("user.notfound")
-	} else if err != nil {
-		return token, resp.DataBaseErr(err)
+	} else if userErr != nil {
+		return token, resp.DataBaseErr(userErr)
 	}
 
 	// compare the password
@@ -90,11 +102,10 @@ func (a Authenticator) TryRegisterNewUser(username string, password string, code
 
 	// create new userInfo
 	newUser := entity.User{
-		UUID:      uuid.NewString(),
-		Username:  username,
-		Password:  password,
-		Email:     cacheEmail,
-		CreatedAt: time.Now(),
+		UUID:     uuid.NewString(),
+		Username: username,
+		Password: password,
+		Email:    cacheEmail,
 	}
 
 	if err := a.userData.CreateUser(newUser); err != nil {

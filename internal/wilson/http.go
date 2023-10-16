@@ -15,6 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"io"
 	"net/http"
 	"path"
 )
@@ -24,9 +25,12 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 
 	serverConf := cfg.ServerConf
 
-	engine := gin.New()
 	gin.DisableConsoleColor()
 	gin.DisableBindValidation()
+	gin.DefaultWriter = io.Discard
+	gin.DefaultErrorWriter = io.Discard
+
+	engine := gin.New()
 
 	engine.MaxMultipartMemory = serverConf.HttpConf.MultipartMax
 
@@ -38,6 +42,8 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 
 	engine.NoMethod(middleware.NoMethodHandler())
 	engine.NoRoute(middleware.NotFoundHandler())
+
+	gin.ErrorLogger()
 
 	server := &http.Server{
 		Addr:              serverConf.HttpConf.Address,

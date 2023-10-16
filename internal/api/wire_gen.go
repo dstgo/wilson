@@ -19,7 +19,7 @@ import (
 func setupOpenAPIRouter(open *route.Router, datasource *data.DataSource) Router {
 	infoData := user.NewInfoData(datasource)
 	infoLogic := user2.NewInfoLogic(infoData)
-	userInfoLogic := user.NewInfoLogic(infoData)
+	userInfoLogic := user.NewUserInfo(infoData)
 	infoApi := user2.NewInfoApi(infoLogic, userInfoLogic)
 	api := user2.API{
 		Info: infoApi,

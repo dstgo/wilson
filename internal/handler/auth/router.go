@@ -18,7 +18,6 @@ var AuthRouterSet = wire.NewSet(
 
 type Handler struct {
 	Auth AuthHandler
-	Role RoleHandler
 }
 
 func SetupRouter(api *route.Router, handler Handler) HandlerRouter {
@@ -26,11 +25,11 @@ func SetupRouter(api *route.Router, handler Handler) HandlerRouter {
 	{
 		authGroup := api.Group("auth", nil)
 		// POST
-		authGroup.POST("/login", route.MetaSum(meta.NoAuth), handler.Auth.Login)
-		authGroup.POST("/register", route.MetaSum(meta.NoAuth), handler.Auth.Register)
-		authGroup.POST("/forgotpwd", route.MetaSum(meta.NoAuth), handler.Auth.ForgotPassword)
+		authGroup.POST("/login", route.Metas(meta.NoAuth, meta.Name("route.auth.login")), handler.Auth.Login)
+		authGroup.POST("/register", route.Metas(meta.NoAuth, meta.Name("route.auth.register")), handler.Auth.Register)
+		authGroup.POST("/forgotpwd", route.Metas(meta.NoAuth, meta.Name("route.auth.forgotpasswd")), handler.Auth.ForgotPassword)
 		// DELETE
-		authGroup.DELETE("/logout", nil, handler.Auth.Logout)
+		authGroup.DELETE("/logout", route.Metas(meta.Name("route.auth.logout")), handler.Auth.Logout)
 	}
 	return types.NopObj
 }

@@ -25,11 +25,8 @@ func setupHandlerRouter(appConf *conf.AppConf, api *route.Router, datasource *da
 	redisTokenCache := auth.NewTokenRedisCache(datasource)
 	authenticator := auth.NewAuthenticator(appConf, infoData, codeCache, redisTokenCache)
 	authHandler := auth.NewAuthHandler(authenticator)
-	roleLogic := auth.NewRoleLogic()
-	roleHandler := auth.NewRoleHandler(roleLogic)
 	handler := auth.Handler{
 		Auth: authHandler,
-		Role: roleHandler,
 	}
 	handlerRouter := auth.SetupRouter(api, handler)
 	sender, cleanup, err := email.NewSender(appConf)
@@ -47,7 +44,7 @@ func setupHandlerRouter(appConf *conf.AppConf, api *route.Router, datasource *da
 		Ping: pingHandler,
 	}
 	systemHandlerRouter := system.SetupRouter(api, systemHandler)
-	infoLogic := user.NewInfoLogic(infoData)
+	infoLogic := user.NewUserInfo(infoData)
 	infoHandler := user.NewInfoHandler(infoLogic)
 	userHandler := user.Handler{
 		Info: infoHandler,

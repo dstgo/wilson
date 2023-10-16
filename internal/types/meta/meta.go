@@ -8,6 +8,20 @@ var NoAuth = route.E{
 	Val: struct{}{},
 }
 
+func Name(routeName string) route.E {
+	return route.E{
+		Key: "RouteName",
+		Val: routeName,
+	}
+}
+
+func Comment(routeComment string) route.E {
+	return route.E{
+		Key: "RouteComment",
+		Val: routeComment,
+	}
+}
+
 func Roles(roles ...string) route.E {
 	return route.E{
 		Key: "role",

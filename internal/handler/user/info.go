@@ -5,14 +5,18 @@ import (
 	"github.com/dstgo/wilson/internal/data/entity"
 )
 
-func NewInfoLogic(userDao InfoData) InfoLogic {
-	return InfoLogic{
-		userDao: userDao,
+func NewUserInfo(userData InfoData) UserInfo {
+	return UserInfo{
+		userData: userData,
 	}
 }
 
-type InfoLogic struct {
-	userDao InfoData
+type UserInfo struct {
+	userData InfoData
+}
+
+func (u UserInfo) GetUserInfo() {
+
 }
 
 func NewInfoData(source *data.DataSource) InfoData {

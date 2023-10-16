@@ -3,29 +3,49 @@ definitions:
   request.ForgotPasswordRequest:
     properties:
       code:
+        description: auth code get from user binding email
+        example: F294484D
         type: string
       password:
+        description: length of the password must be in range [10,30]
+        example: "123456789"
         type: string
     type: object
   request.LoginRequest:
     properties:
       password:
+        description: length of the password must be in range [10,30]
+        example: "123456789"
         type: string
       username:
+        description: length of the username must be in range [6,20], and username
+          must be Alphanumeric
+        example: 123456@example.com/username
         type: string
     type: object
   request.RegisterRequest:
     properties:
       code:
+        description: 8-digit auth code get from user binding email, and it must be
+          Alphanumeric
+        example: F294484D
         type: string
       password:
+        description: length of the password must be in range [10,30]
+        example: "123456789"
         type: string
       username:
+        description: length of the username must be in range [6,20], and username
+          must be Alphanumeric
+        example: 123456@example.com/username
         type: string
     type: object
 info:
   contact: {}
   description: Wilson api documentation
+  license:
+    name: MIT
+    url: https://mit-license.org/
   title: Wilson App Internal API Documentation
   version: v1.0.0
 paths:
@@ -44,7 +64,7 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: user forgot password api
+      summary: ForgotPasswd
       tags:
       - auth
   /auth/login:
@@ -62,7 +82,7 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: user login api
+      summary: Login
       tags:
       - auth
   /auth/logout:
@@ -71,7 +91,7 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: user logout api
+      summary: Logout
       tags:
       - auth
   /auth/register:
@@ -89,13 +109,13 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: user register api
+      summary: Register
       tags:
       - auth
   /email/code:
     get:
       consumes:
-      - application/x-www-form-urlencoded
+      - application/json
       description: auth code email api
       parameters:
       - description: email
@@ -106,7 +126,7 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: auth code email api
+      summary: SendCodeEmail
       tags:
       - email
   /ping:
@@ -123,7 +143,128 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: app test ping api
+      summary: Ping
       tags:
       - system
+  /role/create:
+    post:
+      consumes:
+      - application/json
+      description: create a new role
+      produces:
+      - application/json
+      responses: {}
+      summary: NewRole
+      tags:
+      - role
+  /role/grant:
+    post:
+      consumes:
+      - application/json
+      description: grant permissions for the specified role
+      produces:
+      - application/json
+      responses: {}
+      summary: GrantPermForRole
+      tags:
+      - role
+  /role/perm/create:
+    post:
+      consumes:
+      - application/json
+      description: create a new permission
+      produces:
+      - application/json
+      responses: {}
+      summary: NewPermission
+      tags:
+      - role
+  /role/perm/remove:
+    delete:
+      consumes:
+      - application/json
+      description: remove the specified permission
+      produces:
+      - application/json
+      responses: {}
+      summary: RemovePermission
+      tags:
+      - role
+  /role/perm/update:
+    post:
+      consumes:
+      - application/json
+      description: update the specified permission info
+      produces:
+      - application/json
+      responses: {}
+      summary: UpdatePermission
+      tags:
+      - role
+  /role/remove:
+    delete:
+      consumes:
+      - application/json
+      description: remove a role
+      produces:
+      - application/json
+      responses: {}
+      summary: RemoveRole
+      tags:
+      - role
+  /role/update:
+    post:
+      consumes:
+      - application/json
+      description: update the specified role info
+      produces:
+      - application/json
+      responses: {}
+      summary: UpdateRole
+      tags:
+      - role
+  /user/info:
+    get:
+      consumes:
+      - application/json
+      description: get specific user simple info
+      produces:
+      - application/json
+      responses: {}
+      summary: GetUserInfo
+      tags:
+      - user
+  /user/list:
+    get:
+      consumes:
+      - application/json
+      description: get specific user list
+      produces:
+      - application/json
+      responses: {}
+      summary: GetUserInfoList
+      tags:
+      - user
+  /user/remove:
+    get:
+      consumes:
+      - application/json
+      description: Remove the specific user
+      produces:
+      - application/json
+      responses: {}
+      summary: RemoveUser
+      tags:
+      - user
+  /user/update:
+    get:
+      consumes:
+      - application/json
+      description: update the specific user info
+      produces:
+      - application/json
+      responses: {}
+      summary: UpdateUserInfo
+      tags:
+      - user
 swagger: "2.0"

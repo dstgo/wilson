@@ -23,7 +23,7 @@ type Handler struct {
 func SetupRouter(api *route.Router, Handler Handler) HandlerRouter {
 	emailGroup := api.Group("email", nil)
 	{
-		emailGroup.GET("code", route.MetaSum(meta.NoAuth), Handler.Email.SendCodeEmail)
+		emailGroup.GET("code", route.Metas(meta.NoAuth, meta.Name("auth.login")), Handler.Email.SendCodeEmail)
 	}
 	return types.NopObj
 }

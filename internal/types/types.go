@@ -10,5 +10,3 @@ type (
 	NopType = struct{}
 	Strings = []string
 )
-
-type CloseFn func() error

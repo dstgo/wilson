@@ -36,7 +36,7 @@ func (e *E) Float() float64 {
 	return 0
 }
 
-func MetaSum(e ...E) Meta {
+func Metas(e ...E) Meta {
 	if len(e) == 0 {
 		return nil
 	}

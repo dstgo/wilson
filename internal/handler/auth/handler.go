@@ -2,10 +2,9 @@ package auth
 
 import (
 	"github.com/dstgo/wilson/internal/pkg/resp"
-	"github.com/dstgo/wilson/internal/pkg/validate"
+	"github.com/dstgo/wilson/internal/pkg/valid"
+	"github.com/dstgo/wilson/internal/types/api/auth"
 	"github.com/dstgo/wilson/internal/types/code"
-	"github.com/dstgo/wilson/internal/types/request"
-	"github.com/dstgo/wilson/internal/types/response"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 )
@@ -14,8 +13,6 @@ var AuthProviderSet = wire.NewSet(
 	TokenCacheProviderSet,
 	NewAuthenticator,
 	NewAuthHandler,
-	NewRoleLogic,
-	NewRoleHandler,
 )
 
 func NewAuthHandler(authen Authenticator) AuthHandler {
@@ -28,16 +25,16 @@ type AuthHandler struct {
 
 // Login
 //
-//	@Summary		user login api
+//	@Summary		Login
 //	@Description	if login success, return jwt token
 //	@Tags			auth
-//	@param			loginBody	body	request.LoginRequest	true	"comment"
 //	@Accept			json
 //	@Produce		json
+//	@param			loginBody	body	auth.LoginOption	true	"comment"
 //	@Router			/auth/login [POST]
 func (a AuthHandler) Login(ctx *gin.Context) {
-	loginRequest := new(request.LoginRequest)
-	if err := validate.BindAndResp(ctx, validate.Json(loginRequest)); err != nil {
+	loginRequest := new(auth.LoginOption)
+	if err := valid.BindAndResp(ctx, valid.Json(loginRequest)); err != nil {
 		return
 	}
 	signedJwt, err := a.Authlogic.TryLogin(loginRequest.Username, loginRequest.Password)
@@ -46,21 +43,21 @@ func (a AuthHandler) Login(ctx *gin.Context) {
 		return
 	}
 	resp.Ok(ctx).Code(code.LoginOk).MsgI18n("auth.loginOk").
-		Data(response.Token{Token: signedJwt.SignedJwt}).Send()
+		Data(auth.Token{Token: signedJwt.SignedJwt}).Send()
 }
 
 // Register
 //
-//	@Summary		user register api
+//	@Summary		Register
 //	@Description	user register api
 //	@Tags			auth
 //	@Accept			json
 //	@Produce		json
-//	@Param			registerBody	body	request.RegisterRequest	true	"comment"
+//	@Param			registerBody	body	auth.RegisterOption	true	"comment"
 //	@Router			/auth/register [POST]
 func (a AuthHandler) Register(ctx *gin.Context) {
-	registerRequest := new(request.RegisterRequest)
-	if err := validate.BindAndResp(ctx, validate.Json(registerRequest)); err != nil {
+	registerRequest := new(auth.RegisterOption)
+	if err := valid.BindAndResp(ctx, valid.Json(registerRequest)); err != nil {
 		return
 	}
 	err := a.Authlogic.TryRegisterNewUser(registerRequest.Username, registerRequest.Password, registerRequest.Code)
@@ -73,7 +70,7 @@ func (a AuthHandler) Register(ctx *gin.Context) {
 
 // Logout
 //
-//	@Summary		user logout api
+//	@Summary		Logout
 //	@Description	user logout
 //	@Tags			auth
 //	@Produce		json
@@ -91,17 +88,17 @@ func (a AuthHandler) Logout(ctx *gin.Context) {
 
 // ForgotPassword
 //
-//	@Summary		user forgot password api
+//	@Summary		ForgotPasswd
 //	@Description	forgot password
 //	@Tags			auth
 //	@Accept			json
 //	@Produce		json
-//	@Param			changePasswdBoy	body	request.ForgotPasswordRequest	true	"comment"
+//	@Param			changePasswdBoy	body	auth.ForgotPasswordOption	true	"comment"
 //	@Router			/auth/forgotpwd [POST]
 func (a AuthHandler) ForgotPassword(ctx *gin.Context) {
-	changePasswordReq := new(request.ForgotPasswordRequest)
-	err := validate.BindAndResp(ctx,
-		validate.Json(changePasswordReq),
+	changePasswordReq := new(auth.ForgotPasswordOption)
+	err := valid.BindAndResp(ctx,
+		valid.Json(changePasswordReq),
 	)
 	if err != nil {
 		return
@@ -113,12 +110,4 @@ func (a AuthHandler) ForgotPassword(ctx *gin.Context) {
 		return
 	}
 	resp.Ok(ctx).MsgI18n("auth.changePasswdOk").Send()
-}
-
-func NewRoleHandler(roleLogic RoleLogic) RoleHandler {
-	return RoleHandler{roleLogic}
-}
-
-type RoleHandler struct {
-	RoleLogic RoleLogic
 }

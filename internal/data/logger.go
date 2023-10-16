@@ -62,5 +62,5 @@ func (g *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql 
 		WithField("sql", sql).
 		WithField("rowAffected", affected).
 		WithError(err).
-		Debugln("gorm trace")
+		Traceln("gorm trace")
 }

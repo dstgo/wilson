@@ -5,9 +5,9 @@ import (
 	"github.com/dstgo/wilson/internal/pkg/httpx"
 	"github.com/dstgo/wilson/internal/pkg/locale"
 	resp2 "github.com/dstgo/wilson/internal/pkg/resp"
-	"github.com/dstgo/wilson/internal/pkg/validate"
+	"github.com/dstgo/wilson/internal/pkg/valid"
+	email2 "github.com/dstgo/wilson/internal/types/api/email"
 	"github.com/dstgo/wilson/internal/types/code"
-	"github.com/dstgo/wilson/internal/types/request"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/google/wire"
@@ -40,16 +40,16 @@ type EmailHandler struct {
 
 // SendCodeEmail
 //
-//	@Summary		auth code email api
+//	@Summary		SendCodeEmail
 //	@Description	auth code email api
 //	@Tags			email
-//	@Accept			x-www-form-urlencoded
+//	@Accept			json
 //	@Produce		json
 //	@Param			email	query	string	true	"email"
 //	@Router			/email/code [GET]
 func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
-	emailReq := new(request.Email)
-	if err := validate.BindAndResp(ctx, validate.Query(emailReq)); err != nil {
+	emailReq := new(email2.Email)
+	if err := valid.BindAndResp(ctx, valid.Query(emailReq)); err != nil {
 		return
 	}
 

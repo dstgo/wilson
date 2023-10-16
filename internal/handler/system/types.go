@@ -1,11 +1,12 @@
-package request
+package system
 
 import (
 	"github.com/dstgo/wilson/pkg/vax"
 )
 
 type PingRequest struct {
-	Name string `json:"name" uri:"name" form:"name" label:"field.name"`
+	// name must be one of [wilson, wendy]
+	Name string `json:"name" uri:"name" form:"name" label:"field.name" example:"wilson"`
 }
 
 func (p PingRequest) Validate(lang string) error {

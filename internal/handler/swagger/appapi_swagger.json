@@ -4,6 +4,10 @@
         "description": "Wilson api documentation",
         "title": "Wilson App Internal API Documentation",
         "contact": {},
+        "license": {
+            "name": "MIT",
+            "url": "https://mit-license.org/"
+        },
         "version": "v1.0.0"
     },
     "basePath": "/api",
@@ -20,7 +24,7 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "user forgot password api",
+                "summary": "ForgotPasswd",
                 "parameters": [
                     {
                         "description": "comment",
@@ -47,7 +51,7 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "user login api",
+                "summary": "Login",
                 "parameters": [
                     {
                         "description": "comment",
@@ -71,7 +75,7 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "user logout api",
+                "summary": "Logout",
                 "responses": {}
             }
         },
@@ -87,7 +91,7 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "user register api",
+                "summary": "Register",
                 "parameters": [
                     {
                         "description": "comment",
@@ -106,7 +110,7 @@
             "get": {
                 "description": "auth code email api",
                 "consumes": [
-                    "application/x-www-form-urlencoded"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -114,7 +118,7 @@
                 "tags": [
                     "email"
                 ],
-                "summary": "auth code email api",
+                "summary": "SendCodeEmail",
                 "parameters": [
                     {
                         "type": "string",
@@ -139,7 +143,7 @@
                 "tags": [
                     "system"
                 ],
-                "summary": "app test ping api",
+                "summary": "Ping",
                 "parameters": [
                     {
                         "type": "string",
@@ -151,6 +155,182 @@
                 ],
                 "responses": {}
             }
+        },
+        "/role/create": {
+            "post": {
+                "description": "create a new role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "role"
+                ],
+                "summary": "NewRole",
+                "responses": {}
+            }
+        },
+        "/role/grant": {
+            "post": {
+                "description": "grant permissions for the specified role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "role"
+                ],
+                "summary": "GrantPermForRole",
+                "responses": {}
+            }
+        },
+        "/role/perm/create": {
+            "post": {
+                "description": "create a new permission",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "role"
+                ],
+                "summary": "NewPermission",
+                "responses": {}
+            }
+        },
+        "/role/perm/remove": {
+            "delete": {
+                "description": "remove the specified permission",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "role"
+                ],
+                "summary": "RemovePermission",
+                "responses": {}
+            }
+        },
+        "/role/perm/update": {
+            "post": {
+                "description": "update the specified permission info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "role"
+                ],
+                "summary": "UpdatePermission",
+                "responses": {}
+            }
+        },
+        "/role/remove": {
+            "delete": {
+                "description": "remove a role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "role"
+                ],
+                "summary": "RemoveRole",
+                "responses": {}
+            }
+        },
+        "/role/update": {
+            "post": {
+                "description": "update the specified role info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "role"
+                ],
+                "summary": "UpdateRole",
+                "responses": {}
+            }
+        },
+        "/user/info": {
+            "get": {
+                "description": "get specific user simple info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "GetUserInfo",
+                "responses": {}
+            }
+        },
+        "/user/list": {
+            "get": {
+                "description": "get specific user list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "GetUserInfoList",
+                "responses": {}
+            }
+        },
+        "/user/remove": {
+            "get": {
+                "description": "Remove the specific user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "RemoveUser",
+                "responses": {}
+            }
+        },
+        "/user/update": {
+            "get": {
+                "description": "update the specific user info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "UpdateUserInfo",
+                "responses": {}
+            }
         }
     },
     "definitions": {
@@ -158,10 +338,14 @@
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "string"
+                    "description": "auth code get from user binding email",
+                    "type": "string",
+                    "example": "F294484D"
                 },
                 "password": {
-                    "type": "string"
+                    "description": "length of the password must be in range [10,30]",
+                    "type": "string",
+                    "example": "123456789"
                 }
             }
         },
@@ -169,10 +353,14 @@
             "type": "object",
             "properties": {
                 "password": {
-                    "type": "string"
+                    "description": "length of the password must be in range [10,30]",
+                    "type": "string",
+                    "example": "123456789"
                 },
                 "username": {
-                    "type": "string"
+                    "description": "length of the username must be in range [6,20], and username must be Alphanumeric",
+                    "type": "string",
+                    "example": "123456@example.com/username"
                 }
             }
         },
@@ -180,13 +368,19 @@
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "string"
+                    "description": "8-digit auth code get from user binding email, and it must be Alphanumeric",
+                    "type": "string",
+                    "example": "F294484D"
                 },
                 "password": {
-                    "type": "string"
+                    "description": "length of the password must be in range [10,30]",
+                    "type": "string",
+                    "example": "123456789"
                 },
                 "username": {
-                    "type": "string"
+                    "description": "length of the username must be in range [6,20], and username must be Alphanumeric",
+                    "type": "string",
+                    "example": "123456@example.com/username"
                 }
             }
         }

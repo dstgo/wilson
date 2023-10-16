@@ -115,7 +115,9 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.Logger) (*App, 
 
 	// execute on server shutdown
 	shutdownFn := func() {
-		cleanupHandler()
+		if cleanupHandler != nil {
+			cleanupHandler()
+		}
 		CloseDataSource(datasource)
 		loggerw.Close()
 	}

@@ -23,7 +23,7 @@ type Handler struct {
 func SetupRouter(api *route.Router, handler Handler) HandlerRouter {
 	// system
 	{
-		api.GET("/ping", route.MetaSum(meta.NoAuth), handler.Ping.Ping)
+		api.GET("/ping", route.Metas(meta.NoAuth, meta.Name("route.sys.ping")), handler.Ping.Ping)
 	}
 	return types.NopObj
 }

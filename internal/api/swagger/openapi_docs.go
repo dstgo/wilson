@@ -42,7 +42,7 @@ const docTemplateopenapi = `{
         }
     },
     "definitions": {
-        "request.LoginRequest": {
+        "request.LoginOption": {
             "type": "object",
             "properties": {
                 "password": {

@@ -3,7 +3,9 @@ package system
 import (
 	"fmt"
 	"github.com/dstgo/wilson/internal/conf"
+	"github.com/dstgo/wilson/internal/types"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 type PingLogic struct {
@@ -17,5 +19,5 @@ func NewPingLogic(conf *conf.AppConf) PingLogic {
 }
 
 func (Ping PingLogic) Ping(ctx *gin.Context, name string) string {
-	return fmt.Sprintf("hello wolrd! %s", name)
+	return fmt.Sprintf("hello %s! Now is %s.", name, time.Now().Format(types.DateTimeFormat))
 }

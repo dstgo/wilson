@@ -9,13 +9,25 @@ const (
 	tableOptions = "gorm:table_options"
 )
 
+// Table
+// represents an entity for table
 type Table interface {
 	TableName() string
 	TableComment() string
 }
 
 var tables = []Table{
+	// user
 	User{},
+	UserRole{},
+	// node
+	Node{},
+	// instance
+	Instance{},
+	// role
+	Role{},
+	Permission{},
+	RolePermission{},
 }
 
 func Migrate(db *gorm.DB) error {
