@@ -20,8 +20,7 @@ build:
 .PHONY: gen_build
 gen_build:
 	make gen
-	go build -trimpath -ldflags "-X main.Author=$(shell git config user.name) -X main.Version=$(shell git describe --tags --always)" -o ./bin/ github.com/dstgo/wilson
-
+	make build
 
 .PHONY: install
 install:
