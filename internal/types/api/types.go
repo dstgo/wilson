@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/dstgo/wilson/pkg/vax"
+	"github.com/dstgo/wilson/pkg/vax/is"
 	"github.com/spf13/cast"
 )
 
@@ -26,6 +27,16 @@ func (i Id) String() string {
 func (i Id) Validate(lang string) error {
 	return vax.Struct(&i, lang,
 		vax.Field(i.Id, vax.Required),
+	)
+}
+
+type UUID struct {
+	UUID string `json:"uuid" uri:"uuid" form:"uuid" label:"field.uuid"`
+}
+
+func (u UUID) Validate(lang string) error {
+	return vax.Struct(&u, lang,
+		vax.Field(u.UUID, vax.Required, is.UUID),
 	)
 }
 

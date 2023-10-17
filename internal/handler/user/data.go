@@ -8,47 +8,47 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewInfoData(source *data.DataSource) InfoData {
-	return InfoData{DataSource: source}
+func NewUserData(source *data.DataSource) UserData {
+	return UserData{DataSource: source}
 }
 
-type InfoData struct {
+type UserData struct {
 	*data.DataSource
 }
 
-func (u InfoData) GetUserById(id uint) (entity.User, error) {
+func (u UserData) GetUserById(id uint) (entity.User, error) {
 	findUser := entity.User{}
 	err := u.ORM().Where("id = ?", id).Find(&u).Error
 	return findUser, err
 }
 
-func (u InfoData) GetUserByName(username string) (entity.User, error) {
+func (u UserData) GetUserByName(username string) (entity.User, error) {
 	findUser := entity.User{}
 	err := u.ORM().Where("username = ?", username).First(&findUser).Error
 	return findUser, err
 }
 
-func (u InfoData) GetUserByUUID(uuid string) (entity.User, error) {
+func (u UserData) GetUserByUUID(uuid string) (entity.User, error) {
 	findUser := entity.User{}
 	err := u.ORM().Where("uuid =?", uuid).First(&findUser).Error
 	return findUser, err
 }
 
-func (u InfoData) GetUserByEmail(email string) (entity.User, error) {
+func (u UserData) GetUserByEmail(email string) (entity.User, error) {
 	findUser := entity.User{}
 	err := u.ORM().Model(findUser).Where("email =?", email).First(&findUser).Error
 	return findUser, err
 }
 
-func (u InfoData) DeleteByUUID(uuid string) error {
+func (u UserData) DeleteByUUID(uuid string) error {
 	return u.ORM().Delete(&entity.User{}, "uuid =?", uuid).Error
 }
 
-func (u InfoData) CreateUser(user entity.User) error {
+func (u UserData) CreateUser(user entity.User) error {
 	return u.ORM().Create(&user).Error
 }
 
-func (u InfoData) ListByPage(pageOpt user.PageOption) ([]entity.User, error) {
+func (u UserData) ListByPage(pageOpt user.PageOption) ([]entity.User, error) {
 
 	pageDB := data.Page(u.ORM(), pageOpt.Page, pageOpt.Size)
 	if len(pageOpt.Order) > 0 {
@@ -74,30 +74,34 @@ func (u InfoData) ListByPage(pageOpt user.PageOption) ([]entity.User, error) {
 
 // ListAllUsers
 // in most time, you should use ListByPage
-func (u InfoData) ListAllUsers() ([]entity.User, error) {
+func (u UserData) ListAllUsers() ([]entity.User, error) {
 	var users []entity.User
 	err := u.ORM().Find(&users).Error
 	return users, err
 }
 
-func (u InfoData) Count() (int64, error) {
+func (u UserData) Count() (int64, error) {
 	var count int64
 	err := u.ORM().Model(entity.User{}).Count(&count).Error
 	return count, err
 }
 
-func (u InfoData) UpdateUserInfo(user entity.User) error {
+func (u UserData) UpdateUserInfo(user entity.User) error {
 	return u.ORM().Save(&user).Error
 }
 
-func (u InfoData) DisableUser(id uint) error {
+func (u UserData) DisableUser(id uint) error {
 	return u.ORM().Model(entity.User{}).Delete(entity.User{
 		Model: gorm.Model{ID: id},
 	}).Error
 }
 
-func (u InfoData) RemoveUser(id uint) error {
+func (u UserData) RemoveUser(id uint) error {
 	return u.ORM().Unscoped().Model(entity.User{}).Delete(entity.User{
 		Model: gorm.Model{ID: id},
 	}).Error
+}
+
+func (u UserData) RemoveByUUID(uuid string) error {
+	return u.ORM().Unscoped().Model(entity.User{}).Delete("uuid = ?", uuid).Error
 }

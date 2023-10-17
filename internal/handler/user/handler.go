@@ -10,13 +10,15 @@ import (
 )
 
 var UserProviderSet = wire.NewSet(
-	NewInfoData,
+	NewUserData,
 	NewUserInfo,
+	NewUserModify,
 	NewInfoHandler,
+	NewModifyHandler,
 )
 
-func NewInfoHandler(userL UserInfo) InfoHandler {
-	return InfoHandler{info: userL}
+func NewInfoHandler(info UserInfo) InfoHandler {
+	return InfoHandler{info: info}
 }
 
 type InfoHandler struct {
@@ -26,19 +28,20 @@ type InfoHandler struct {
 // GetUserInfo
 // @Summary      GetUserInfo
 // @Description  get specific user simple info
-// @Tags         user
+// @Tags         user/info
 // @Accept       json
 // @Produce      json
 // @Param        id      query   int     true    "userId"
 // @Success      200  {object}  api.Response{data=user.Info}
 // @Router       /user/info [GET]
+// @security BearerAuth
 func (ui InfoHandler) GetUserInfo(ctx *gin.Context) {
 	var id api.Id
 	if err := valid.BindAndResp(ctx, valid.Query(&id)); err != nil {
 		return
 	}
 
-	info, err := ui.info.GetUserInfo(id.Uint())
+	info, err := ui.info.GetUserInfoById(id.Uint())
 	if err != nil {
 		resp.Fail(ctx).Error(err).MsgI18n("user.findfail").Send()
 		return
@@ -49,12 +52,13 @@ func (ui InfoHandler) GetUserInfo(ctx *gin.Context) {
 // GetUserInfoList
 // @Summary      GetUserInfoList
 // @Description  get specific user list
-// @Tags         user
+// @Tags         user/info
 // @Accept       json
 // @Produce      json
 // @Param        userPageOptIon	body	user.PageOption	true	"comment"
 // @Success      200  {object}  api.Response{data=[]user.Info}
 // @Router       /user/list [GET]
+// @security BearerAuth
 func (ui InfoHandler) GetUserInfoList(ctx *gin.Context) {
 	var page user.PageOption
 	if err := valid.Bind(ctx, valid.Query(&page)); err != nil {
@@ -69,22 +73,40 @@ func (ui InfoHandler) GetUserInfoList(ctx *gin.Context) {
 	resp.Ok(ctx).Data(list).MsgI18n("user.findOK").Send()
 }
 
+func NewModifyHandler(modify UserModify) ModifyHandler {
+	return ModifyHandler{modify: modify}
+}
+
+type ModifyHandler struct {
+	modify UserModify
+}
+
 // UpdateUserInfo
 // @Summary      UpdateUserInfo
 // @Description  update the specific user info
-// @Tags         user
+// @Tags         user/modify
 // @Accept       json
 // @Produce      json
+// @Param        uuid   query      string  true  "uuid"
 // @Param        updateInfoOption	body	user.UpdateInfoOption	true	"comment"
 // @Success      200  {object}  api.Response
 // @Router       /user/update [POST]
-func (ui InfoHandler) UpdateUserInfo(ctx *gin.Context) {
-	var updateUserOpt user.UpdateInfoOption
-	if err := valid.BindAndResp(ctx, valid.Json(&updateUserOpt)); err != nil {
+// @security BearerAuth
+func (ui ModifyHandler) UpdateUserInfo(ctx *gin.Context) {
+	var (
+		updateUserOpt user.UpdateInfoOption
+		uuid          api.UUID
+	)
+
+	if err := valid.BindAndResp(ctx,
+		valid.Query(&uuid),
+		valid.Json(&updateUserOpt)); err != nil {
 		return
 	}
 
-	if err := ui.info.UpdateUserInfo(updateUserOpt); err != nil {
+	updateUserOpt.UUID = uuid.UUID
+
+	if err := ui.modify.Update(updateUserOpt); err != nil {
 		resp.Fail(ctx).Error(err).MsgI18n("user.updateFail").Send()
 		return
 	}
@@ -94,18 +116,19 @@ func (ui InfoHandler) UpdateUserInfo(ctx *gin.Context) {
 // RemoveUser
 // @Summary      RemoveUser
 // @Description  Remove the specific user
-// @Tags         user
+// @Tags         user/modify
 // @Accept       json
 // @Produce      json
-// @Param        id  query   int true    "userId"
+// @Param        uuid  query   string true    "uuid"
 // @Success      200  {object}  api.Response
 // @Router       /user/remove [DELETE]
-func (ui InfoHandler) RemoveUser(ctx *gin.Context) {
-	var id api.Id
-	if err := valid.BindAndResp(ctx, valid.Query(&id)); err != nil {
+// @security BearerAuth
+func (ui ModifyHandler) RemoveUser(ctx *gin.Context) {
+	var uuid api.UUID
+	if err := valid.BindAndResp(ctx, valid.Query(&uuid)); err != nil {
 		return
 	}
-	if err := ui.info.RemoveUser(id.Uint()); err != nil {
+	if err := ui.modify.Remove(uuid.UUID); err != nil {
 		resp.Fail(ctx).Error(err).MsgI18n("user.removeFail").Send()
 		return
 	}

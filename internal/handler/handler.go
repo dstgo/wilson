@@ -88,9 +88,12 @@ var Config = &ginSwagger.Config{
 
 // @title		Wilson App Internal API Documentation
 // @version		v1.0.0
-// @description	Wilson api documentation
+// @description Wilson app http api documentation, use the Bearer Token to authenticate
+// @description It should be noted that when using swagger doc for API debugging, the Token needs to be manually prefixed with Bearer.
+// @contact.name dstgo
+// @contact.url https://github.com/dstgo
 // @BasePath	/api
-// @license.name  MIT
+// @license.name  MIT LICENSE
 // @license.url   https://mit-license.org/
 // @securityDefinitions.apikey BearerAuth
 // @in header

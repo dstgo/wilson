@@ -19,7 +19,7 @@ import (
 	"net/http"
 )
 
-func NewAuthenticator(cfg *conf.AppConf, userData user.InfoData, codeCache email.CodeCache, tokenCache authen.TokenCache) Authenticator {
+func NewAuthenticator(cfg *conf.AppConf, userData user.UserData, codeCache email.CodeCache, tokenCache authen.TokenCache) Authenticator {
 	return Authenticator{
 		issue:      authen.NewCacheAuthor(cfg.JwtConf, tokenCache),
 		userData:   userData,
@@ -30,7 +30,7 @@ func NewAuthenticator(cfg *conf.AppConf, userData user.InfoData, codeCache email
 
 type Authenticator struct {
 	issue      authen.Issuer
-	userData   user.InfoData
+	userData   user.UserData
 	codeCache  email.CodeCache
 	tokenCache authen.TokenCache
 }
@@ -39,15 +39,15 @@ func (a Authenticator) TryLogin(userName string, password string) (jwtx.Jwt, err
 	var token jwtx.Jwt
 
 	var (
-		user    entity.User
-		userErr error
+		userEntity entity.User
+		userErr    error
 	)
 
 	// try to find the user
 	if err := is.Email.Validate(locale.L().Default(), userName); err != nil {
-		user, userErr = a.userData.GetUserByEmail(userName)
+		userEntity, userErr = a.userData.GetUserByEmail(userName)
 	} else {
-		user, userErr = a.userData.GetUserByName(userName)
+		userEntity, userErr = a.userData.GetUserByName(userName)
 	}
 
 	// if user not found, return error
@@ -59,14 +59,14 @@ func (a Authenticator) TryLogin(userName string, password string) (jwtx.Jwt, err
 
 	// compare the password
 	sum := cryptor.Sha512WithBase64(password)
-	if sum != user.Password {
+	if sum != userEntity.Password {
 		return token, errs.NewErr().Status(http.StatusBadRequest).I18n("user.wrongPassword")
 	}
 
 	// issue token
 	issueToken, err := a.issue.Issue(context.Background(), authen.UserPayload{
-		Username: user.Username,
-		UserID:   user.UUID,
+		Username: userEntity.Username,
+		UUID:     userEntity.UUID,
 	}, -1)
 
 	if err != nil {

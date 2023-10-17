@@ -32,7 +32,7 @@ func setupHandlerRouter(appConf *conf.AppConf, api *route.Router, datasource *da
 	handlerRouter := email.SetupRouter(api, handler)
 	pingLogic := system.NewPingLogic(appConf)
 	pingHandler := system.NewPingHandler(pingLogic)
-	infoData := user.NewInfoData(datasource)
+	infoData := user.NewUserData(datasource)
 	redisTokenCache := authen.NewTokenRedisCache(datasource)
 	authenticator := system.NewAuthenticator(appConf, infoData, codeCache, redisTokenCache)
 	authHandler := system.NewAuthHandler(authenticator)

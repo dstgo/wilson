@@ -9,7 +9,7 @@ import (
 var UserApiProviderSet = wire.NewSet(
 	NewInfoLogic,
 	NewInfoApi,
-	user.NewInfoData,
+	user.NewUserData,
 	user.NewUserInfo,
 )
 
@@ -27,7 +27,7 @@ type InfoApi struct {
 
 // UserInfo
 //
-//	@Summary		GetUserInfo
+//	@Summary		GetUserInfoById
 //	@Description	get user simple info
 //	@Tags           user
 //	@Accept			query

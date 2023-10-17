@@ -31,7 +31,7 @@ var (
 // basic user info
 type UserPayload struct {
 	Username string   `json:"username"`
-	UserID   string   `json:"userId"`
+	UUID     string   `json:"uuid"`
 	Roles    []string `json:"roles"`
 }
 

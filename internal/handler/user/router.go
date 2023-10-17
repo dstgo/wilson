@@ -16,10 +16,31 @@ var UserRouterSet = wire.NewSet(
 )
 
 type Handler struct {
-	Info InfoHandler
+	Info   InfoHandler
+	Modify ModifyHandler
 }
 
 func SetupRouter(api *route.Router, handler Handler) HandlerRouter {
+	// user router
+	userRouter := api.Group("user", nil)
+	{
+		// user info
+		infoRouter := userRouter.Group("", nil)
+		infoHandler := handler.Info
+		{
+			infoRouter.GET("/user/info", route.Metas(), infoHandler.GetUserInfo)
+			infoRouter.GET("/user/list", route.Metas(), infoHandler.GetUserInfoList)
+		}
+
+		// user modify
+		modifyRouter := userRouter.Group("", nil)
+		modifyHandler := handler.Modify
+		{
+			modifyRouter.POST("/user/update", route.Metas(), modifyHandler.UpdateUserInfo)
+			modifyRouter.DELETE("/user/remove", route.Metas(), modifyHandler.RemoveUser)
+		}
+
+	}
 
 	return types.NopObj
 }

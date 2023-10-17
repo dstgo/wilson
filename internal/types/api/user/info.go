@@ -7,7 +7,6 @@ import (
 )
 
 type Info struct {
-	ID       uint   `json:"id" example:"1"`
 	UUID     string `json:"uuid" example:"55BBA4ED-18D3-790F-EABF-A5330E527586"`
 	Username string `json:"username" example:"jack"`
 	Email    string `json:"email" example:"jacklove@lol.com"`
@@ -29,8 +28,7 @@ func (p PageOption) Validate(lang string) error {
 }
 
 type UpdateInfoOption struct {
-	// specified user id
-	Id uint `json:"id" example:"1"`
+	UUID string `json:"-" swaggerignore:"true"`
 	// new username
 	Username string `json:"username" example:"jack"`
 	// new email
@@ -41,7 +39,6 @@ type UpdateInfoOption struct {
 
 func (u UpdateInfoOption) Validate(lang string) error {
 	return vax.Struct(&u, lang,
-		vax.Field(u.Id, vax.Required),
 		vax.Field(&u.Username, rules.Required(rules.Username)...),
 		vax.Field(&u.Email, rules.Required(rules.Email)...),
 		vax.Field(&u.Password, rules.Required(rules.Password)...),
