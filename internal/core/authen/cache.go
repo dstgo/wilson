@@ -41,8 +41,13 @@ func (t RedisTokenCache) Get(ctx context.Context, tokenId string) (string, bool,
 	)
 	op := t.cache.Get(ctx, TokenCacheKey(tokenId))
 
-	if !errors.Is(op.Err(), redis.Nil) {
+	if errors.Is(op.Err(), redis.Nil) {
+		exist = false
+	} else if op.Err() != nil {
 		err = op.Err()
+	} else {
+		res = op.String()
+		exist = true
 	}
 
 	return res, exist, err

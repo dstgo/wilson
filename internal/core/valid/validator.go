@@ -24,7 +24,13 @@ func BindAll(ctx *gin.Context, pairs ...BindPair) error {
 func BindAndResp(ctx *gin.Context, pairs ...BindPair) error {
 	err := BindAll(ctx, pairs...)
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("error.badparams").Error(err).Send()
+		switch err.(type) {
+		// validate internal occur error
+		case vax.InternalError:
+			resp.InternalFailed(ctx).MsgI18n("err.program").Error(err).Send()
+		default:
+			resp.Fail(ctx).MsgI18n("err.badparams").Error(err).Send()
+		}
 	}
 	return err
 }

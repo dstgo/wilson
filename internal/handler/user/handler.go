@@ -31,17 +31,17 @@ type InfoHandler struct {
 // @Tags         user/info
 // @Accept       json
 // @Produce      json
-// @Param        id      query   int     true    "userId"
+// @Param        uuid      query   api.UUID     true    "user unique id"
 // @Success      200  {object}  api.Response{data=user.Info}
 // @Router       /user/info [GET]
 // @security BearerAuth
 func (ui InfoHandler) GetUserInfo(ctx *gin.Context) {
-	var id api.Id
-	if err := valid.BindAndResp(ctx, valid.Query(&id)); err != nil {
+	var uuid api.UUID
+	if err := valid.BindAndResp(ctx, valid.Query(&uuid)); err != nil {
 		return
 	}
 
-	info, err := ui.info.GetUserInfoById(id.Uint())
+	info, err := ui.info.GetUserInfoByUUID(uuid.UUID)
 	if err != nil {
 		resp.Fail(ctx).Error(err).MsgI18n("user.findfail").Send()
 		return
@@ -55,13 +55,13 @@ func (ui InfoHandler) GetUserInfo(ctx *gin.Context) {
 // @Tags         user/info
 // @Accept       json
 // @Produce      json
-// @Param        userPageOptIon	body	user.PageOption	true	"comment"
+// @Param        userPageOptIon	query	user.PageOption	true	"comment"
 // @Success      200  {object}  api.Response{data=[]user.Info}
 // @Router       /user/list [GET]
 // @security BearerAuth
 func (ui InfoHandler) GetUserInfoList(ctx *gin.Context) {
 	var page user.PageOption
-	if err := valid.Bind(ctx, valid.Query(&page)); err != nil {
+	if err := valid.BindAndResp(ctx, valid.Query(&page)); err != nil {
 		return
 	}
 
@@ -87,7 +87,7 @@ type ModifyHandler struct {
 // @Tags         user/modify
 // @Accept       json
 // @Produce      json
-// @Param        uuid   query      string  true  "uuid"
+// @Param        uuid   query      api.UUID  true  "uuid"
 // @Param        updateInfoOption	body	user.UpdateInfoOption	true	"comment"
 // @Success      200  {object}  api.Response
 // @Router       /user/update [POST]
@@ -119,7 +119,7 @@ func (ui ModifyHandler) UpdateUserInfo(ctx *gin.Context) {
 // @Tags         user/modify
 // @Accept       json
 // @Produce      json
-// @Param        uuid  query   string true    "uuid"
+// @Param        uuid  query   api.UUID true    "uuid"
 // @Success      200  {object}  api.Response
 // @Router       /user/remove [DELETE]
 // @security BearerAuth

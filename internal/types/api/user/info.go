@@ -10,20 +10,21 @@ type Info struct {
 	UUID     string `json:"uuid" example:"55BBA4ED-18D3-790F-EABF-A5330E527586"`
 	Username string `json:"username" example:"jack"`
 	Email    string `json:"email" example:"jacklove@lol.com"`
-	helper.CreatedAt
+	// used for copy from gorm.model
+	helper.CreatedAt `copier:"Model"`
 }
 
 type PageOption struct {
 	helper.PageOption
 	// specified field
-	Order string `json:"order" example:"email"`
+	Order string `json:"order" uri:"order" form:"order" example:"email"`
 	// search text, should be of one username or email
-	Search string `json:"search" example:"jacklove"`
+	Search string `json:"search" uri:"search" form:"search" example:"jacklove"`
 }
 
 func (p PageOption) Validate(lang string) error {
 	return vax.Struct(&p, lang,
-		vax.Field(p.PageOption),
+		vax.Field(&p.PageOption),
 	)
 }
 

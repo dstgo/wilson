@@ -28,16 +28,16 @@ func SetupRouter(api *route.Router, handler Handler) HandlerRouter {
 		infoRouter := userRouter.Group("", nil)
 		infoHandler := handler.Info
 		{
-			infoRouter.GET("/user/info", route.Metas(), infoHandler.GetUserInfo)
-			infoRouter.GET("/user/list", route.Metas(), infoHandler.GetUserInfoList)
+			infoRouter.GET("info", route.Metas(), infoHandler.GetUserInfo)
+			infoRouter.GET("list", route.Metas(), infoHandler.GetUserInfoList)
 		}
 
 		// user modify
 		modifyRouter := userRouter.Group("", nil)
 		modifyHandler := handler.Modify
 		{
-			modifyRouter.POST("/user/update", route.Metas(), modifyHandler.UpdateUserInfo)
-			modifyRouter.DELETE("/user/remove", route.Metas(), modifyHandler.RemoveUser)
+			modifyRouter.POST("update", route.Metas(), modifyHandler.UpdateUserInfo)
+			modifyRouter.DELETE("remove", route.Metas(), modifyHandler.RemoveUser)
 		}
 
 	}

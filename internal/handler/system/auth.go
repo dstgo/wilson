@@ -44,10 +44,10 @@ func (a Authenticator) TryLogin(userName string, password string) (jwtx.Jwt, err
 	)
 
 	// try to find the user
-	if err := is.Email.Validate(locale.L().Default(), userName); err != nil {
-		userEntity, userErr = a.userData.GetUserByEmail(userName)
-	} else {
+	if err := is.EmailFormat.Validate(locale.L().Default(), userName); err != nil {
 		userEntity, userErr = a.userData.GetUserByName(userName)
+	} else {
+		userEntity, userErr = a.userData.GetUserByEmail(userName)
 	}
 
 	// if user not found, return error

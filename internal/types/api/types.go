@@ -36,7 +36,7 @@ type UUID struct {
 
 func (u UUID) Validate(lang string) error {
 	return vax.Struct(&u, lang,
-		vax.Field(u.UUID, vax.Required, is.UUID),
+		vax.Field(&u.UUID, vax.Required, is.UUID),
 	)
 }
 
