@@ -113,6 +113,7 @@ func (a AuthHandler) Register(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  api.Response
 // @Router       /auth/logout [DELETE]
+// @security BearerAuth
 func (a AuthHandler) Logout(ctx *gin.Context) {
 	// get user info from parsed request context
 	tokenInfo := authen.GetContextTokenInfo(ctx)

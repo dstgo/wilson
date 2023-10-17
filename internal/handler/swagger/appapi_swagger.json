@@ -94,6 +94,11 @@
         },
         "/auth/logout": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "user logout",
                 "consumes": [
                     "application/json"
@@ -662,6 +667,13 @@
                     "example": "jack"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

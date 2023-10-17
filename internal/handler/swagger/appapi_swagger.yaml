@@ -194,6 +194,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.Response'
+      security:
+      - BearerAuth: []
       summary: Logout
       tags:
       - auth
@@ -441,4 +443,9 @@ paths:
       summary: UpdateUserInfo
       tags:
       - user
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

@@ -92,4 +92,7 @@ var Config = &ginSwagger.Config{
 // @BasePath	/api
 // @license.name  MIT
 // @license.url   https://mit-license.org/
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 //go:generate swag init --generatedTime --instanceName appapi -g handler.go -d ./,../types,../core/resp --output ./swagger && swag fmt -g handler.go -d ./
