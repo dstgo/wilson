@@ -5,6 +5,10 @@ import (
 	"github.com/dstgo/wilson/pkg/vax"
 )
 
+type PingReply struct {
+	Reply string `json:"reply" example:"hello wendy! Now is 2023-10-17 11:07:21.696 +08:00."`
+}
+
 type LoginOption struct {
 	// length of the username must be in range [6,20], and username must be Alphanumeric
 	Username string `json:"username" label:"field.username" example:"123456@example.com/username"`

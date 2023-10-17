@@ -4,12 +4,12 @@ import (
 	"context"
 	"errors"
 	"github.com/dstgo/wilson/internal/conf"
+	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/handler/email"
 	"github.com/dstgo/wilson/internal/handler/user"
 	"github.com/dstgo/wilson/internal/pkg/jwtx"
-	"github.com/dstgo/wilson/internal/sys/authenticate"
-	"github.com/dstgo/wilson/internal/sys/locale"
+	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/dstgo/wilson/pkg/vax/is"
 	"github.com/duke-git/lancet/v2/cryptor"
@@ -19,9 +19,9 @@ import (
 	"net/http"
 )
 
-func NewAuthenticator(cfg *conf.AppConf, userData user.InfoData, codeCache email.CodeCache, tokenCache authenticate.TokenCache) Authenticator {
+func NewAuthenticator(cfg *conf.AppConf, userData user.InfoData, codeCache email.CodeCache, tokenCache authen.TokenCache) Authenticator {
 	return Authenticator{
-		issue:      authenticate.NewCacheAuthor(cfg.JwtConf, tokenCache),
+		issue:      authen.NewCacheAuthor(cfg.JwtConf, tokenCache),
 		userData:   userData,
 		codeCache:  codeCache,
 		tokenCache: tokenCache,
@@ -29,10 +29,10 @@ func NewAuthenticator(cfg *conf.AppConf, userData user.InfoData, codeCache email
 }
 
 type Authenticator struct {
-	issue      authenticate.Issuer
+	issue      authen.Issuer
 	userData   user.InfoData
 	codeCache  email.CodeCache
-	tokenCache authenticate.TokenCache
+	tokenCache authen.TokenCache
 }
 
 func (a Authenticator) TryLogin(userName string, password string) (jwtx.Jwt, error) {
@@ -64,7 +64,7 @@ func (a Authenticator) TryLogin(userName string, password string) (jwtx.Jwt, err
 	}
 
 	// issue token
-	issueToken, err := a.issue.Issue(context.Background(), authenticate.UserPayload{
+	issueToken, err := a.issue.Issue(context.Background(), authen.UserPayload{
 		Username: user.Username,
 		UserID:   user.UUID,
 	}, -1)

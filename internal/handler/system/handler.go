@@ -1,10 +1,9 @@
 package system
 
 import (
-	"github.com/dstgo/wilson/internal/sys/authenticate"
-	"github.com/dstgo/wilson/internal/sys/resp"
-	"github.com/dstgo/wilson/internal/sys/valid"
-	"github.com/dstgo/wilson/internal/types"
+	"github.com/dstgo/wilson/internal/core/authen"
+	"github.com/dstgo/wilson/internal/core/resp"
+	"github.com/dstgo/wilson/internal/core/valid"
 	"github.com/dstgo/wilson/internal/types/api/auth"
 	"github.com/dstgo/wilson/internal/types/code"
 	"github.com/gin-gonic/gin"
@@ -12,7 +11,7 @@ import (
 )
 
 var SystemProviderSet = wire.NewSet(
-	authenticate.TokenCacheProviderSet,
+	authen.TokenCacheProviderSet,
 	NewPingHandler,
 	NewPingLogic,
 	NewAuthenticator,
@@ -30,14 +29,14 @@ type PingHandler struct {
 }
 
 // Ping
-//
-//	@Summary		Ping
-//	@Description	to test app api if is ok
-//	@Tags			system
-//	@Accept			json
-//	@Produce		json
-//	@Param			name	query	string	true	"ping name"
-//	@Router			/ping [GET]
+// @Summary      Ping
+// @Description  test app api if is ok
+// @Tags         system
+// @Accept       json
+// @Produce      json
+// @Param        name	query	string	true	"ping name"
+// @Success      200  {object}  api.Response{data=auth.PingReply}
+// @Router       /ping [GET]
 func (p PingHandler) Ping(ctx *gin.Context) {
 	pingReq := new(PingRequest)
 	err := valid.BindAndResp(ctx,
@@ -50,9 +49,7 @@ func (p PingHandler) Ping(ctx *gin.Context) {
 	res := p.PingLogic.Ping(ctx, pingReq.Name)
 
 	resp.Ok(ctx).Code(code.RequestOk).Msg("pong").
-		Data(types.H{
-			"reply": res,
-		}).Send()
+		Data(auth.PingReply{Reply: res}).Send()
 }
 
 func NewAuthHandler(authen Authenticator) AuthHandler {
@@ -64,14 +61,14 @@ type AuthHandler struct {
 }
 
 // Login
-//
-//	@Summary		Login
-//	@Description	if login success, return jwt token
-//	@Tags			auth
-//	@Accept			json
-//	@Produce		json
-//	@param			loginBody	body	auth.LoginOption	true	"comment"
-//	@Router			/auth/login [POST]
+// @Summary      Login
+// @Description  if login success, return jwt token
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        loginBody	body	auth.LoginOption	true	"comment"
+// @Success      200  {object}  api.Response{data=auth.Token}
+// @Router       /auth/login [POST]
 func (a AuthHandler) Login(ctx *gin.Context) {
 	loginRequest := new(auth.LoginOption)
 	if err := valid.BindAndResp(ctx, valid.Json(loginRequest)); err != nil {
@@ -87,14 +84,14 @@ func (a AuthHandler) Login(ctx *gin.Context) {
 }
 
 // Register
-//
-//	@Summary		Register
-//	@Description	user register api
-//	@Tags			auth
-//	@Accept			json
-//	@Produce		json
-//	@Param			registerBody	body	auth.RegisterOption	true	"comment"
-//	@Router			/auth/register [POST]
+// @Summary      Register
+// @Description  user register api
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        registerBody	body	auth.RegisterOption	true	"comment"
+// @Success      200  {object}  api.Response
+// @Router       /auth/register [POST]
 func (a AuthHandler) Register(ctx *gin.Context) {
 	registerRequest := new(auth.RegisterOption)
 	if err := valid.BindAndResp(ctx, valid.Json(registerRequest)); err != nil {
@@ -109,15 +106,16 @@ func (a AuthHandler) Register(ctx *gin.Context) {
 }
 
 // Logout
-//
-//	@Summary		Logout
-//	@Description	user logout
-//	@Tags			auth
-//	@Produce		json
-//	@Router			/auth/logout [DELETE]
+// @Summary      Logout
+// @Description  user logout
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  api.Response
+// @Router       /auth/logout [DELETE]
 func (a AuthHandler) Logout(ctx *gin.Context) {
 	// get user info from parsed request context
-	tokenInfo := authenticate.GetContextTokenInfo(ctx)
+	tokenInfo := authen.GetContextTokenInfo(ctx)
 	err := a.Authlogic.TryLogout(tokenInfo.ID)
 	if err != nil {
 		resp.Fail(ctx).Code(code.LogoutFailed).MsgI18n("auth.logoutFail").Error(err).Send()
@@ -127,14 +125,14 @@ func (a AuthHandler) Logout(ctx *gin.Context) {
 }
 
 // ForgotPassword
-//
-//	@Summary		ForgotPasswd
-//	@Description	forgot password
-//	@Tags			auth
-//	@Accept			json
-//	@Produce		json
-//	@Param			changePasswdBoy	body	auth.ForgotPasswordOption	true	"comment"
-//	@Router			/auth/forgotpwd [POST]
+// @Summary      ForgotPassword
+// @Description  forgot password
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        form   body      auth.ForgotPasswordOption  true  "Account ID"
+// @Success      200  {object}  api.Response
+// @Router       /auth/forgotpwd [POST]
 func (a AuthHandler) ForgotPassword(ctx *gin.Context) {
 	changePasswordReq := new(auth.ForgotPasswordOption)
 	err := valid.BindAndResp(ctx,

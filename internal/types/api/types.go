@@ -28,3 +28,12 @@ func (i Id) Validate(lang string) error {
 		vax.Field(i.Id, vax.Required),
 	)
 }
+
+// Response
+// just used to generate swagger api doc, you should use resp.Response instead
+type Response struct {
+	Code int    `json:"code" example:"2000"`
+	Msg  string `json:"msg" example:"operation success"`
+	Err  string `json:"err"`
+	Data any    `json:"data"`
+}

@@ -12,7 +12,7 @@ import (
 	"github.com/dstgo/wilson/internal/handler/email"
 	"github.com/dstgo/wilson/internal/handler/system"
 	"github.com/dstgo/wilson/internal/handler/user"
-	"github.com/dstgo/wilson/internal/sys/authenticate"
+	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/pkg/route"
 )
 
@@ -33,7 +33,7 @@ func setupHandlerRouter(appConf *conf.AppConf, api *route.Router, datasource *da
 	pingLogic := system.NewPingLogic(appConf)
 	pingHandler := system.NewPingHandler(pingLogic)
 	infoData := user.NewInfoData(datasource)
-	redisTokenCache := authenticate.NewTokenRedisCache(datasource)
+	redisTokenCache := authen.NewTokenRedisCache(datasource)
 	authenticator := system.NewAuthenticator(appConf, infoData, codeCache, redisTokenCache)
 	authHandler := system.NewAuthHandler(authenticator)
 	systemHandler := system.Handler{

@@ -3,10 +3,10 @@ package wilson
 import (
 	"context"
 	"github.com/dstgo/wilson/internal/api"
+	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/handler"
-	"github.com/dstgo/wilson/internal/sys/locale"
-	"github.com/dstgo/wilson/internal/sys/log"
+	"github.com/dstgo/wilson/internal/pkg/locale"
 	"net/http"
 	"os/signal"
 	"sync"

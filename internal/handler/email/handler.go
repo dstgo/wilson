@@ -2,10 +2,10 @@ package email
 
 import (
 	"github.com/dstgo/wilson/internal/conf"
+	"github.com/dstgo/wilson/internal/core/resp"
+	"github.com/dstgo/wilson/internal/core/valid"
 	"github.com/dstgo/wilson/internal/pkg/httpx"
-	"github.com/dstgo/wilson/internal/sys/locale"
-	"github.com/dstgo/wilson/internal/sys/resp"
-	"github.com/dstgo/wilson/internal/sys/valid"
+	"github.com/dstgo/wilson/internal/pkg/locale"
 	emailType "github.com/dstgo/wilson/internal/types/api/email"
 	"github.com/dstgo/wilson/internal/types/code"
 	"github.com/dstgo/wilson/internal/types/errs"
@@ -40,14 +40,14 @@ type EmailHandler struct {
 }
 
 // SendCodeEmail
-//
-//	@Summary		SendCodeEmail
-//	@Description	auth code email api
-//	@Tags			email
-//	@Accept			json
-//	@Produce		json
-//	@Param			email	query	string	true	"email"
-//	@Router			/email/code [GET]
+// @Summary      SendCodeEmail
+// @Description  auth code email api
+// @Tags         email
+// @Accept       json
+// @Produce      json
+// @Param        email	query	string	true	"email"
+// @Success      200  {object}  api.Response
+// @Router       /email/code [GET]
 func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 	emailReq := new(emailType.Email)
 	if err := valid.BindAndResp(ctx, valid.Query(emailReq)); err != nil {
@@ -69,7 +69,7 @@ func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 	ee := email.NewEmail()
 	ee.From = e.cfg.User
 	ee.To = append(ee.To, emailReq.Email)
-	ee.Subject = locale.GetWithCtx(ctx, "email.codeSubject")
+	ee.Subject = locale.GetWithLang(httpx.GetFirstAcceptLanguage(ctx), "email.codeSubject")
 
 	// judge language
 	language := httpx.GetFirstAcceptLanguage(ctx)

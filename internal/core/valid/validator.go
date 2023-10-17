@@ -1,8 +1,7 @@
 package valid
 
 import (
-	"github.com/dstgo/wilson/internal/sys/resp"
-	"github.com/dstgo/wilson/internal/types/code"
+	"github.com/dstgo/wilson/internal/core/resp"
 	"github.com/dstgo/wilson/pkg/vax"
 	"github.com/gin-gonic/gin"
 )
@@ -25,7 +24,7 @@ func BindAll(ctx *gin.Context, pairs ...BindPair) error {
 func BindAndResp(ctx *gin.Context, pairs ...BindPair) error {
 	err := BindAll(ctx, pairs...)
 	if err != nil {
-		resp.Fail(ctx).Code(code.BadRequest).MsgI18n("error.badparams").Error(err).Send()
+		resp.Fail(ctx).MsgI18n("error.badparams").Error(err).Send()
 	}
 	return err
 }

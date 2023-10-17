@@ -3,9 +3,9 @@ package middleware
 import (
 	"errors"
 	"fmt"
+	"github.com/dstgo/wilson/internal/core/resp"
 	"github.com/dstgo/wilson/internal/pkg/httpx"
 	"github.com/dstgo/wilson/internal/pkg/httpx/httpheader"
-	"github.com/dstgo/wilson/internal/sys/resp"
 	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/code"
 	"github.com/gin-gonic/gin"

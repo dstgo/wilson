@@ -1,9 +1,9 @@
 package middleware
 
 import (
+	"github.com/dstgo/wilson/internal/core/authen"
+	"github.com/dstgo/wilson/internal/core/resp"
 	"github.com/dstgo/wilson/internal/pkg/httpx"
-	"github.com/dstgo/wilson/internal/sys/authenticate"
-	"github.com/dstgo/wilson/internal/sys/resp"
 	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/dstgo/wilson/internal/types/meta"
 	"github.com/dstgo/wilson/pkg/route"
@@ -12,7 +12,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func UseAuthenticate(v authenticate.Parser) gin.HandlerFunc {
+func UseAuthenticate(v authen.Parser) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		routeMeta := route.MetaFromCtx(ctx)
 
@@ -25,11 +25,11 @@ func UseAuthenticate(v authenticate.Parser) gin.HandlerFunc {
 		token := httpx.GetBearerTokenFromCtx(ctx)
 		jwtToken, err := v.Parse(ctx, token)
 		if err == nil {
-			var userClaims authenticate.UserClaims
-			if res, e := jwtToken.Claims.(*authenticate.UserClaims); e {
+			var userClaims authen.UserClaims
+			if res, e := jwtToken.Claims.(*authen.UserClaims); e {
 				userClaims = *res
 			}
-			authenticate.SetContextTokenInfo(ctx, userClaims)
+			authen.SetContextTokenInfo(ctx, userClaims)
 			ctx.Next()
 		} else {
 			ctx.Abort()

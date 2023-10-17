@@ -2,14 +2,14 @@ package handler
 
 import (
 	"github.com/dstgo/wilson/internal/conf"
+	"github.com/dstgo/wilson/internal/core/authen"
+	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/handler/email"
 	"github.com/dstgo/wilson/internal/handler/middleware"
 	"github.com/dstgo/wilson/internal/handler/system"
 	"github.com/dstgo/wilson/internal/handler/user"
 	"github.com/dstgo/wilson/internal/pkg/utils"
-	"github.com/dstgo/wilson/internal/sys/authenticate"
-	"github.com/dstgo/wilson/internal/sys/log"
 	"github.com/dstgo/wilson/pkg/route"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -44,7 +44,7 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 		swaggerEnabled = serverConf.Swagger
 	)
 
-	authenticator := authenticate.NewCacheAuthor(cfg.JwtConf, authenticate.NewTokenRedisCache(datasource))
+	authenticator := authen.NewCacheAuthor(cfg.JwtConf, authen.NewTokenRedisCache(datasource))
 
 	// wrap http router
 	handlerRouter := route.NewRouter(httpserver.RouterGroup.Group(BasePath))
@@ -86,10 +86,10 @@ var Config = &ginSwagger.Config{
 
 // swagger declarative api comment
 
-//	@title			Wilson App Internal API Documentation
-//	@version		v1.0.0
-//	@description	Wilson api documentation
-//	@BasePath		/api
-//  @license.name  MIT
-//  @license.url   https://mit-license.org/
-//go:generate swag init --generatedTime --instanceName appapi -g handler.go -d ./,../types,../sys/resp --output ./swagger && swag fmt -g handler.go -d ./
+// @title		Wilson App Internal API Documentation
+// @version		v1.0.0
+// @description	Wilson api documentation
+// @BasePath	/api
+// @license.name  MIT
+// @license.url   https://mit-license.org/
+//go:generate swag init --generatedTime --instanceName appapi -g handler.go -d ./,../types,../core/resp --output ./swagger && swag fmt -g handler.go -d ./

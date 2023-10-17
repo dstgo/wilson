@@ -1,7 +1,7 @@
 package errs
 
 import (
-	"github.com/dstgo/wilson/internal/sys/locale"
+	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/internal/types/code"
 	"net/http"
 )
@@ -14,14 +14,14 @@ func NewErr() *ResponseError {
 // a response error wrap
 // Er field
 type ResponseError struct {
-	CustomCode int
+	ErrorCode  int
 	HttpStatus int
 	LangCode   string
 	Er         error
 }
 
 func (e *ResponseError) Code(code int) *ResponseError {
-	e.CustomCode = code
+	e.ErrorCode = code
 	return e
 }
 
@@ -77,7 +77,7 @@ func Forbidden(err error) *ResponseError {
 
 func ResourceNotFound(err error) *ResponseError {
 	return &ResponseError{
-		CustomCode: code.ResourceNotFound,
+		ErrorCode:  code.ResourceNotFound,
 		HttpStatus: http.StatusNotFound,
 		Er:         err,
 	}
@@ -85,7 +85,7 @@ func ResourceNotFound(err error) *ResponseError {
 
 func DataBaseErr(err error) *ResponseError {
 	return &ResponseError{
-		CustomCode: code.DatabaseError,
+		ErrorCode:  code.DatabaseError,
 		HttpStatus: http.StatusInternalServerError,
 		LangCode:   "err.database",
 		Er:         err,
@@ -94,7 +94,7 @@ func DataBaseErr(err error) *ResponseError {
 
 func FileSystemErr(err error) *ResponseError {
 	return &ResponseError{
-		CustomCode: code.FilesystemError,
+		ErrorCode:  code.FilesystemError,
 		HttpStatus: http.StatusInternalServerError,
 		LangCode:   "err.filesystem",
 		Er:         err,
@@ -103,7 +103,7 @@ func FileSystemErr(err error) *ResponseError {
 
 func NetworkErr(err error) *ResponseError {
 	return &ResponseError{
-		CustomCode: code.NetworkError,
+		ErrorCode:  code.NetworkError,
 		HttpStatus: http.StatusInternalServerError,
 		LangCode:   "err.network",
 		Er:         err,
@@ -112,7 +112,7 @@ func NetworkErr(err error) *ResponseError {
 
 func ProgramErr(err error) *ResponseError {
 	return &ResponseError{
-		CustomCode: code.UnknownError,
+		ErrorCode:  code.UnknownError,
 		HttpStatus: http.StatusInternalServerError,
 		LangCode:   "err.program",
 		Er:         err,

@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/dstgo/wilson/internal/sys/log"
-	wilson2 "github.com/dstgo/wilson/internal/sys/wilson"
+	"github.com/dstgo/wilson/internal/core/log"
+	wilson2 "github.com/dstgo/wilson/internal/core/wilson"
 	"path"
 
 	"github.com/dstgo/filebox"

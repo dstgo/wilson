@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/dstgo/wilson/internal/sys/log"
+	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/pkg/route"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"

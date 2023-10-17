@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/dstgo/wilson/internal/sys/resp"
-	"github.com/dstgo/wilson/internal/sys/valid"
+	"github.com/dstgo/wilson/internal/core/resp"
+	"github.com/dstgo/wilson/internal/core/valid"
 	"github.com/dstgo/wilson/internal/types/api"
 	"github.com/dstgo/wilson/internal/types/api/user"
 	"github.com/gin-gonic/gin"
@@ -24,15 +24,14 @@ type InfoHandler struct {
 }
 
 // GetUserInfo
-//
-//		@Summary		GetUserInfo
-//		@Description	get specific user simple info
-//		@Tags			user
-//		@Accept			json
-//		@Produce		json
-//	 @param  id  query   integer true "userId"
-//	 @success 200 {object} user.Info
-//		@Router			/user/info [GET]
+// @Summary      GetUserInfo
+// @Description  get specific user simple info
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param        id      query   int     true    "userId"
+// @Success      200  {object}  api.Response{data=user.Info}
+// @Router       /user/info [GET]
 func (ui InfoHandler) GetUserInfo(ctx *gin.Context) {
 	var id api.Id
 	if err := valid.BindAndResp(ctx, valid.Query(&id)); err != nil {
@@ -48,15 +47,14 @@ func (ui InfoHandler) GetUserInfo(ctx *gin.Context) {
 }
 
 // GetUserInfoList
-//
-//		@Summary		GetUserInfoList
-//		@Description	get specific user list
-//		@Tags			user
-//		@Accept			json
-//		@Produce		json
-//		@param			userPageOptIon	body	user.PageOption	true	"comment"
-//	 @success 200 {object} []user.Info
-//		@Router			/user/list [GET]
+// @Summary      GetUserInfoList
+// @Description  get specific user list
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param        userPageOptIon	body	user.PageOption	true	"comment"
+// @Success      200  {object}  api.Response{data=[]user.Info}
+// @Router       /user/list [GET]
 func (ui InfoHandler) GetUserInfoList(ctx *gin.Context) {
 	var page user.PageOption
 	if err := valid.Bind(ctx, valid.Query(&page)); err != nil {
@@ -72,14 +70,14 @@ func (ui InfoHandler) GetUserInfoList(ctx *gin.Context) {
 }
 
 // UpdateUserInfo
-//
-//	@Summary		UpdateUserInfo
-//	@Description	update the specific user info
-//	@Tags			user
-//	@Accept			json
-//	@Produce		json
-//	@param			updateInfoOption	body	user.UpdateInfoOption	true	"comment"
-//	@Router			/user/update [GET]
+// @Summary      UpdateUserInfo
+// @Description  update the specific user info
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param        updateInfoOption	body	user.UpdateInfoOption	true	"comment"
+// @Success      200  {object}  api.Response
+// @Router       /user/update [POST]
 func (ui InfoHandler) UpdateUserInfo(ctx *gin.Context) {
 	var updateUserOpt user.UpdateInfoOption
 	if err := valid.BindAndResp(ctx, valid.Json(&updateUserOpt)); err != nil {
@@ -94,14 +92,14 @@ func (ui InfoHandler) UpdateUserInfo(ctx *gin.Context) {
 }
 
 // RemoveUser
-//
-//	@Summary		RemoveUser
-//	@Description	Remove the specific user
-//	@Tags			user
-//	@Accept			json
-//	@Produce		json
-//	 @param  id  query   integer true "userId"
-//	@Router			/user/remove [get]
+// @Summary      RemoveUser
+// @Description  Remove the specific user
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param        id  query   int true    "userId"
+// @Success      200  {object}  api.Response
+// @Router       /user/remove [DELETE]
 func (ui InfoHandler) RemoveUser(ctx *gin.Context) {
 	var id api.Id
 	if err := valid.BindAndResp(ctx, valid.Query(&id)); err != nil {

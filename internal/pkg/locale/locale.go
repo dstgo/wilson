@@ -2,8 +2,6 @@ package locale
 
 import (
 	"fmt"
-	"github.com/dstgo/wilson/internal/pkg/httpx"
-	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 )
@@ -42,13 +40,6 @@ func GetWithLang(lang string, key string, args ...any) string {
 	return ""
 }
 
-func GetWithCtx(ctx *gin.Context, key string, args ...any) string {
-	if locale != nil {
-		return locale.GetWithCtx(ctx, key, args...)
-	}
-	return ""
-}
-
 type Group = map[string]*viper.Viper
 
 type Locale struct {
@@ -69,16 +60,6 @@ func (l *Locale) Get(lang string, key string, args ...any) string {
 		return errors.Wrap(LocaleUnSupportedErr, lang).Error()
 	}
 	return fmt.Sprintf(v.GetString(key), args...)
-}
-
-func (l *Locale) GetWithCtx(ctx *gin.Context, key string, args ...any) string {
-	lang := l.locale
-	// choose the first one from http language or default language
-	language := httpx.GetAcceptLanguage(ctx)
-	if len(language) != 0 {
-		lang = language[0]
-	}
-	return l.Get(lang, key, args...)
 }
 
 func (l *Locale) GetDefault(key string, args ...any) string {

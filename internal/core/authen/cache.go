@@ -1,4 +1,4 @@
-package authenticate
+package authen
 
 import (
 	"context"

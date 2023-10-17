@@ -24,11 +24,11 @@
                 "tags": [
                     "auth"
                 ],
-                "summary": "ForgotPasswd",
+                "summary": "ForgotPassword",
                 "parameters": [
                     {
-                        "description": "comment",
-                        "name": "changePasswdBoy",
+                        "description": "Account ID",
+                        "name": "form",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -36,7 +36,14 @@
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
             }
         },
         "/auth/login": {
@@ -63,12 +70,34 @@
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/api.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/auth.Token"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
             }
         },
         "/auth/logout": {
             "delete": {
                 "description": "user logout",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -76,7 +105,14 @@
                     "auth"
                 ],
                 "summary": "Logout",
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
             }
         },
         "/auth/register": {
@@ -103,7 +139,14 @@
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
             }
         },
         "/email/code": {
@@ -128,12 +171,19 @@
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
             }
         },
         "/ping": {
             "get": {
-                "description": "to test app api if is ok",
+                "description": "test app api if is ok",
                 "consumes": [
                     "application/json"
                 ],
@@ -153,7 +203,26 @@
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/api.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/auth.PingReply"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
             }
         },
         "/role/create": {
@@ -294,7 +363,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.Info"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/api.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/user.Info"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -328,17 +409,29 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/user.Info"
-                            }
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/api.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/user.Info"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
             }
         },
         "/user/remove": {
-            "get": {
+            "delete": {
                 "description": "Remove the specific user",
                 "consumes": [
                     "application/json"
@@ -359,11 +452,18 @@
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
             }
         },
         "/user/update": {
-            "get": {
+            "post": {
                 "description": "update the specific user info",
                 "consumes": [
                     "application/json"
@@ -386,11 +486,35 @@
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
             }
         }
     },
     "definitions": {
+        "api.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 2000
+                },
+                "data": {},
+                "err": {
+                    "type": "string"
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "operation success"
+                }
+            }
+        },
         "auth.ForgotPasswordOption": {
             "type": "object",
             "properties": {
@@ -421,6 +545,15 @@
                 }
             }
         },
+        "auth.PingReply": {
+            "type": "object",
+            "properties": {
+                "reply": {
+                    "type": "string",
+                    "example": "hello wendy! Now is 2023-10-17 11:07:21.696 +08:00."
+                }
+            }
+        },
         "auth.RegisterOption": {
             "type": "object",
             "properties": {
@@ -438,6 +571,15 @@
                     "description": "length of the username must be in range [6,20], and username must be Alphanumeric",
                     "type": "string",
                     "example": "123456@example.com/username"
+                }
+            }
+        },
+        "auth.Token": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InN0cmFuZ2VyIiwidXNlcklkIjoiMDA1YjQzOTctOTRjMi00YWZjLWIzNTEtNWIzY2VkNzI4MDkzIiwiaXNzIjoid2lsc29uIiwiZXhwIjoxNjk3MzI0ODY4LCJpYXQiOjE2OTcyODg4NjgsImp0aSI6IjdkZDI4NDZlLTFkZjEtNDBkMS04YmZlLTA3ZGI3ZmE4NmFhYiJ9.HnAaz-WOmugqfdz_oXphsJY_zQl3FCzrtYCm90WJgGU"
                 }
             }
         },

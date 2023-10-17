@@ -2,14 +2,18 @@ package resp
 
 import (
 	"errors"
-	"github.com/dstgo/wilson/internal/sys/locale"
+	"github.com/dstgo/wilson/internal/pkg/httpx"
+	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func NewResponse(ctx *gin.Context) *Response {
-	return &Response{ctx: ctx}
+	resp := &Response{ctx: ctx}
+	// get accept languages
+	resp.locale = httpx.GetFirstAcceptLanguage(ctx)
+	return resp
 }
 
 // Ok means that the request is successful.
@@ -29,9 +33,18 @@ func InternalFailed(ctx *gin.Context) *Response {
 }
 
 type Response struct {
-	err    error
+	// current response error
+	err error
+	// http status
 	status int
+	// current context language
+	locale string
 	ctx    *gin.Context
+
+	// i18n message code
+	i18n string
+	// fallback message
+	fallback string
 
 	// custom CustomCode
 	CustomCode int `json:"code"`
@@ -53,14 +66,12 @@ func (r *Response) Code(code int) *Response {
 }
 
 func (r *Response) MsgI18n(langCode string) *Response {
-	if r.ctx != nil {
-		return r.Msg(locale.GetWithCtx(r.ctx, langCode))
-	}
+	r.i18n = langCode
 	return r
 }
 
 func (r *Response) Msg(msg string) *Response {
-	r.Message = msg
+	r.fallback = msg
 	return r
 }
 
@@ -84,23 +95,20 @@ func (r *Response) Send() {
 
 				// if httpcode >= 500, which means internal server error happened
 				// for non-internal errors, detailed error information can be displayed externally
-				// otherwise only simple description information should be returned to avoid leaking sensitive data
-				if e.HttpStatus >= 500 {
-					r.ErrorMsg = locale.GetWithCtx(r.ctx, e.LangCode)
+				// otherwise only simple description information can be returned to avoid leaking sensitive data
+				if e.HttpStatus >= 500 || e.Er == nil {
+					r.ErrorMsg = locale.GetWithLang(r.locale, e.LangCode)
 				} else {
 					r.ErrorMsg = e.Error()
-					if len(r.ErrorMsg) == 0 {
-						r.ErrorMsg = locale.GetWithCtx(r.ctx, e.LangCode)
-					}
 				}
 
-				if e.CustomCode > 0 {
-					r.CustomCode = e.CustomCode
+				if e.ErrorCode > 0 {
+					r.CustomCode = e.ErrorCode
 				}
 			}
 
 			if len(r.ErrorMsg) == 0 {
-				r.ErrorMsg = locale.GetWithCtx(r.ctx, "err.unknown")
+				r.ErrorMsg = locale.GetWithLang(r.locale, "err.unknown")
 			}
 
 			r.ctx.Error(r.err)
@@ -108,6 +116,16 @@ func (r *Response) Send() {
 
 		if r.CustomCode == 0 {
 			r.CustomCode = r.status * 10
+		}
+
+		// try to get localized message
+		if len(r.i18n) > 0 {
+			r.Message = locale.GetWithLang(r.locale, r.i18n)
+		}
+
+		// fallback default message
+		if len(r.Message) == 0 {
+			r.Message = r.fallback
 		}
 
 		r.ctx.JSON(r.status, r)
