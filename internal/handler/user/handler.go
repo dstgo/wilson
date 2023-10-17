@@ -31,12 +31,12 @@ type InfoHandler struct {
 // @Tags         user/info
 // @Accept       json
 // @Produce      json
-// @Param        uuid      query   api.UUID     true    "user unique id"
+// @Param        uuid      query    api.Uid     true    "user unique id"
 // @Success      200  {object}  api.Response{data=user.Info}
 // @Router       /user/info [GET]
 // @security BearerAuth
 func (ui InfoHandler) GetUserInfo(ctx *gin.Context) {
-	var uuid api.UUID
+	var uuid api.Uid
 	if err := valid.BindAndResp(ctx, valid.Query(&uuid)); err != nil {
 		return
 	}
@@ -87,7 +87,7 @@ type ModifyHandler struct {
 // @Tags         user/modify
 // @Accept       json
 // @Produce      json
-// @Param        uuid   query      api.UUID  true  "uuid"
+// @Param        uuid   query      api.Uid  true  "uuid"
 // @Param        updateInfoOption	body	user.UpdateInfoOption	true	"comment"
 // @Success      200  {object}  api.Response
 // @Router       /user/update [POST]
@@ -95,7 +95,7 @@ type ModifyHandler struct {
 func (ui ModifyHandler) UpdateUserInfo(ctx *gin.Context) {
 	var (
 		updateUserOpt user.UpdateInfoOption
-		uuid          api.UUID
+		uuid          api.Uid
 	)
 
 	if err := valid.BindAndResp(ctx,
@@ -119,12 +119,12 @@ func (ui ModifyHandler) UpdateUserInfo(ctx *gin.Context) {
 // @Tags         user/modify
 // @Accept       json
 // @Produce      json
-// @Param        uuid  query   api.UUID true    "uuid"
+// @Param        uuid  query   api.Uid  true    "uuid"
 // @Success      200  {object}  api.Response
 // @Router       /user/remove [DELETE]
 // @security BearerAuth
 func (ui ModifyHandler) RemoveUser(ctx *gin.Context) {
-	var uuid api.UUID
+	var uuid api.Uid
 	if err := valid.BindAndResp(ctx, valid.Query(&uuid)); err != nil {
 		return
 	}

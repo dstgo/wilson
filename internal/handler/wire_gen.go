@@ -8,11 +8,11 @@ package handler
 
 import (
 	"github.com/dstgo/wilson/internal/conf"
+	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/handler/email"
 	"github.com/dstgo/wilson/internal/handler/system"
 	"github.com/dstgo/wilson/internal/handler/user"
-	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/pkg/route"
 )
 
@@ -32,19 +32,22 @@ func setupHandlerRouter(appConf *conf.AppConf, api *route.Router, datasource *da
 	handlerRouter := email.SetupRouter(api, handler)
 	pingLogic := system.NewPingLogic(appConf)
 	pingHandler := system.NewPingHandler(pingLogic)
-	infoData := user.NewUserData(datasource)
+	userData := user.NewUserData(datasource)
 	redisTokenCache := authen.NewTokenRedisCache(datasource)
-	authenticator := system.NewAuthenticator(appConf, infoData, codeCache, redisTokenCache)
+	authenticator := system.NewAuthenticator(appConf, userData, codeCache, redisTokenCache)
 	authHandler := system.NewAuthHandler(authenticator)
 	systemHandler := system.Handler{
 		Ping: pingHandler,
 		Auth: authHandler,
 	}
 	systemHandlerRouter := system.SetupRouter(api, systemHandler)
-	userInfo := user.NewUserInfo(infoData)
+	userInfo := user.NewUserInfo(userData)
 	infoHandler := user.NewInfoHandler(userInfo)
+	userModify := user.NewUserModify(userData, userInfo)
+	modifyHandler := user.NewModifyHandler(userModify)
 	userHandler := user.Handler{
-		Info: infoHandler,
+		Info:   infoHandler,
+		Modify: modifyHandler,
 	}
 	userHandlerRouter := user.SetupRouter(api, userHandler)
 	router := Router{

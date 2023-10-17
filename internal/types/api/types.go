@@ -30,11 +30,11 @@ func (i Id) Validate(lang string) error {
 	)
 }
 
-type UUID struct {
+type Uid struct {
 	UUID string `json:"uuid" uri:"uuid" form:"uuid" label:"field.uuid"`
 }
 
-func (u UUID) Validate(lang string) error {
+func (u Uid) Validate(lang string) error {
 	return vax.Struct(&u, lang,
 		vax.Field(&u.UUID, vax.Required, is.UUID),
 	)

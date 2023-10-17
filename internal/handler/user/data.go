@@ -87,7 +87,7 @@ func (u UserData) Count() (int64, error) {
 }
 
 func (u UserData) UpdateUserInfo(user entity.User) error {
-	return u.ORM().Save(&user).Error
+	return u.ORM().Where("uuid = ?", user.UUID).Updates(&user).Error
 }
 
 func (u UserData) DisableUser(id uint) error {

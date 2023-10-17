@@ -98,6 +98,9 @@ func (r *Response) Send() {
 				// otherwise only simple description information can be returned to avoid leaking sensitive data
 				if e.HttpStatus >= 500 || e.Er == nil {
 					r.ErrorMsg = locale.GetWithLang(r.locale, e.LangCode)
+					if e.HttpStatus >= 500 {
+						r.status = e.HttpStatus
+					}
 				} else {
 					r.ErrorMsg = e.Error()
 				}

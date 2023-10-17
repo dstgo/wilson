@@ -5,6 +5,7 @@ import (
 	"github.com/dstgo/wilson/internal/pkg/utils/cp"
 	"github.com/dstgo/wilson/internal/types/api/user"
 	"github.com/dstgo/wilson/internal/types/errs"
+	"github.com/duke-git/lancet/v2/cryptor"
 )
 
 func NewUserModify(userdata UserData, userInfo UserInfo) UserModify {
@@ -30,6 +31,8 @@ func (u UserModify) Update(updateOpt user.UpdateInfoOption) error {
 	if err := cp.Copy(&updateOpt, &userTable); err != nil {
 		return errs.ProgramErr(err)
 	}
+
+	userTable.Password = cryptor.Sha512WithBase64(userTable.Password)
 
 	if err := u.userData.UpdateUserInfo(userTable); err != nil {
 		return errs.DataBaseErr(err)
