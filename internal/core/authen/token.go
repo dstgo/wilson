@@ -3,6 +3,7 @@ package authen
 import (
 	"context"
 	"github.com/dstgo/wilson/internal/conf"
+	"github.com/dstgo/wilson/internal/data/cache"
 	"github.com/dstgo/wilson/internal/pkg/jwtx"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -56,7 +57,7 @@ func GetContextTokenInfo(ctx *gin.Context) UserClaims {
 	return userClaims
 }
 
-func NewCacheAuthor(cfg *conf.JwtConf, cache TokenCache) *CacheAuthor {
+func NewCacheAuthor(cfg *conf.JwtConf, cache cache.TokenCache) *CacheAuthor {
 	return &CacheAuthor{
 		cache:  cache,
 		cfg:    cfg,
@@ -65,7 +66,7 @@ func NewCacheAuthor(cfg *conf.JwtConf, cache TokenCache) *CacheAuthor {
 }
 
 type CacheAuthor struct {
-	cache  TokenCache
+	cache  cache.TokenCache
 	cfg    *conf.JwtConf
 	method jwt.SigningMethod
 }
