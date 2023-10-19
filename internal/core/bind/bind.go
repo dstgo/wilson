@@ -1,4 +1,4 @@
-package valid
+package bind
 
 import (
 	"errors"

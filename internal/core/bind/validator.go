@@ -1,4 +1,4 @@
-package valid
+package bind
 
 import (
 	"github.com/dstgo/wilson/internal/core/resp"
