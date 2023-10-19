@@ -86,51 +86,65 @@ func (r *Response) Error(err error) *Response {
 }
 
 func (r *Response) Send() {
-	if r.ctx != nil {
-		if r.err != nil {
-			r.ErrorMsg = r.err.Error()
-
-			var e *errs.ResponseError
-			if errors.As(r.err, &e) {
-
-				// if httpcode >= 500, which means internal server error happened
-				// for non-internal errors, detailed error information can be displayed externally
-				// otherwise only simple description information can be returned to avoid leaking sensitive data
-				if e.HttpStatus >= 500 || e.Er == nil {
-					r.ErrorMsg = locale.GetWithLang(r.locale, e.LangCode)
-					if e.HttpStatus >= 500 {
-						r.status = e.HttpStatus
-					}
-				} else {
-					r.ErrorMsg = e.Error()
-				}
-
-				if e.ErrorCode > 0 {
-					r.CustomCode = e.ErrorCode
-				}
-			}
-
-			if len(r.ErrorMsg) == 0 {
-				r.ErrorMsg = locale.GetWithLang(r.locale, "err.unknown")
-			}
-
-			r.ctx.Error(r.err)
-		}
-
-		if r.CustomCode == 0 {
-			r.CustomCode = r.status * 10
-		}
-
-		// try to get localized message
-		if len(r.i18n) > 0 {
-			r.Message = locale.GetWithLang(r.locale, r.i18n)
-		}
-
-		// fallback default message
-		if len(r.Message) == 0 {
-			r.Message = r.fallback
-		}
-
-		r.ctx.JSON(r.status, r)
+	if r.ctx == nil {
+		panic("response gin context is nil")
 	}
+
+	if r.err != nil {
+		r.ErrorMsg = r.err.Error()
+
+		var e *errs.LocaleError
+		if errors.As(r.err, &e) {
+			errMsg := locale.GetWithLang(r.locale, e.LangCode)
+			// if httpcode >= 500, which means internal server error happened.
+			// for non-internal errors, detailed error information can be displayed externally
+			// otherwise only simple description information can be returned to avoid leaking sensitive data
+			if e.HttpStatus < 500 && e.Er != nil {
+				errMsg = errs.Wrap(e.Er, errMsg).Error()
+			}
+
+			// overwrite http status
+			if e.HttpStatus >= 500 {
+				r.status = e.HttpStatus
+			}
+
+			// overwrite custom code
+			if e.ErrorCode > 0 {
+				r.CustomCode = e.ErrorCode
+			}
+
+			// error msg fallback
+			if len(errMsg) == 0 {
+				errMsg = e.LangCode
+			}
+
+			r.ErrorMsg = errMsg
+		}
+
+		if len(r.ErrorMsg) == 0 {
+			r.ErrorMsg = locale.GetWithLang(r.locale, "err.unknown")
+		}
+
+		r.ctx.Error(r.err)
+	}
+
+	if r.CustomCode == 0 {
+		r.CustomCode = r.status * 10
+	}
+
+	// try to get localized message
+	if len(r.i18n) > 0 {
+		r.Message = locale.GetWithLang(r.locale, r.i18n)
+		// i18n fallback
+		if len(r.Message) == 0 {
+			r.Message = r.i18n
+		}
+	}
+
+	// fallback default message
+	if len(r.Message) == 0 {
+		r.Message = r.fallback
+	}
+
+	r.ctx.JSON(r.status, r)
 }
