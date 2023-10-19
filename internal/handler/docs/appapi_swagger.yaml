@@ -1,0 +1,985 @@
+basePath: /api
+definitions:
+  api.Response:
+    properties:
+      code:
+        example: 2000
+        type: integer
+      data: {}
+      err:
+        type: string
+      msg:
+        example: operation success
+        type: string
+    type: object
+  auth.ForgotPasswordOption:
+    properties:
+      code:
+        description: auth code get from user binding email
+        example: F294484D
+        type: string
+      password:
+        description: length of the password must be in range [10,30]
+        example: "123456789"
+        type: string
+    type: object
+  auth.LoginOption:
+    properties:
+      password:
+        description: length of the password must be in range [10,30]
+        example: "123456789"
+        type: string
+      username:
+        description: length of the username must be in range [6,20], and username
+          must be Alphanumeric
+        example: 123456@example.com/username
+        type: string
+    type: object
+  auth.PingReply:
+    properties:
+      reply:
+        example: hello wendy! Now is 2023-10-17 11:07:21.696 +08:00.
+        type: string
+    type: object
+  auth.RegisterOption:
+    properties:
+      code:
+        description: 8-digit auth code get from user binding email, and it must be
+          Alphanumeric
+        example: F294484D
+        type: string
+      password:
+        description: length of the password must be in range [10,30]
+        example: "123456789"
+        type: string
+      username:
+        description: length of the username must be in range [6,20], and username
+          must be Alphanumeric
+        example: 123456@example.com/username
+        type: string
+    type: object
+  auth.Token:
+    properties:
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InN0cmFuZ2VyIiwidXNlcklkIjoiMDA1YjQzOTctOTRjMi00YWZjLWIzNTEtNWIzY2VkNzI4MDkzIiwiaXNzIjoid2lsc29uIiwiZXhwIjoxNjk3MzI0ODY4LCJpYXQiOjE2OTcyODg4NjgsImp0aSI6IjdkZDI4NDZlLTFkZjEtNDBkMS04YmZlLTA3ZGI3ZmE4NmFhYiJ9.HnAaz-WOmugqfdz_oXphsJY_zQl3FCzrtYCm90WJgGU
+        type: string
+    type: object
+  role.CreatePermOption:
+    properties:
+      action:
+        description: how to access the object
+        example: POST
+        type: string
+      group:
+        description: permission group
+        example: UserGroup
+        type: string
+      name:
+        example: updateUser
+        type: string
+      object:
+        description: define the object will be accessed
+        example: /user/update
+        type: string
+      tag:
+        description: tag of permission
+        example: AppAPI
+        type: string
+    type: object
+  role.CreateRoleOption:
+    properties:
+      code:
+        description: role code, must be alpha numeric
+        example: ADMIN
+        type: string
+      name:
+        description: role name
+        example: admin
+        type: string
+    type: object
+  role.GrantOption:
+    properties:
+      permId:
+        items:
+          type: integer
+        type: array
+      roleId:
+        example: 1
+        type: integer
+      tag:
+        example: AppApi
+        type: string
+    type: object
+  role.PermGroup:
+    properties:
+      group:
+        description: group name
+        example: user group
+        type: string
+      perms:
+        items:
+          $ref: '#/definitions/role.PermInfo'
+        type: array
+    type: object
+  role.PermInfo:
+    properties:
+      action:
+        description: how to access the object
+        example: POST
+        type: string
+      name:
+        example: updateUser
+        type: string
+      object:
+        description: define the object will be accessed
+        example: /user/update
+        type: string
+      tag:
+        description: tag of permissions
+        example: AppAPI
+        type: string
+    type: object
+  role.RoleInfo:
+    properties:
+      code:
+        description: role code, must be alpha numeric
+        example: ADMIN
+        type: string
+      name:
+        description: role name
+        example: admin
+        type: string
+    type: object
+  role.UpdatePermOption:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        example: updateUser
+        type: string
+    type: object
+  role.UpdateRoleOption:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        description: role name
+        example: admin
+        type: string
+    type: object
+  user.Info:
+    properties:
+      createdAt:
+        example: "2022-01-01 00:00:00"
+        type: string
+      email:
+        example: jacklove@lol.com
+        type: string
+      username:
+        example: jack
+        type: string
+      uuid:
+        example: 55BBA4ED-18D3-790F-EABF-A5330E527586
+        type: string
+    type: object
+  user.UpdateInfoOption:
+    properties:
+      email:
+        description: new email
+        example: jack@google.com
+        type: string
+      password:
+        description: new password
+        example: "123456"
+        type: string
+      username:
+        description: new username
+        example: jack
+        type: string
+    type: object
+info:
+  contact:
+    name: dstgo
+    url: https://github.com/dstgo
+  description: |-
+    Wilson app http api documentation, use the Bearer Token to authenticate
+    It should be noted that when using swagger doc for API debugging, the Token needs to be manually prefixed with Bearer.
+  license:
+    name: MIT LICENSE
+    url: https://mit-license.org/
+  title: Wilson App Internal API Documentation
+  version: v1.0.0
+paths:
+  /auth/forgotpwd:
+    post:
+      consumes:
+      - application/json
+      description: forgot password
+      parameters:
+      - description: Account ID
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/auth.ForgotPasswordOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: ForgotPassword
+      tags:
+      - auth
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: if login success, return jwt token
+      parameters:
+      - description: comment
+        in: body
+        name: loginBody
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/api.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth.Token'
+              type: object
+      summary: Login
+      tags:
+      - auth
+  /auth/logout:
+    delete:
+      consumes:
+      - application/json
+      description: user logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - BearerAuth: []
+      summary: Logout
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: user register api
+      parameters:
+      - description: comment
+        in: body
+        name: registerBody
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RegisterOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Register
+      tags:
+      - auth
+  /container/create:
+    post:
+      consumes:
+      - application/json
+      description: create a new container instance
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - BearerAuth: []
+      summary: Create
+      tags:
+      - container
+  /container/delete:
+    delete:
+      consumes:
+      - application/json
+      description: delete a specified container instance
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Delete
+      tags:
+      - container
+  /container/restart:
+    post:
+      consumes:
+      - application/json
+      description: restart the container instance
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Restart
+      tags:
+      - container
+  /container/start:
+    post:
+      consumes:
+      - application/json
+      description: start a container instance
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Start
+      tags:
+      - container
+  /container/stop:
+    post:
+      consumes:
+      - application/json
+      description: stop a container instance
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Stop
+      tags:
+      - container
+  /container/update:
+    post:
+      consumes:
+      - application/json
+      description: update the container instance, like name, resource
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Update
+      tags:
+      - container
+  /email/code:
+    get:
+      consumes:
+      - application/json
+      description: auth code email api
+      parameters:
+      - description: email
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: SendCodeEmail
+      tags:
+      - email
+  /image/create:
+    post:
+      consumes:
+      - application/json
+      description: create a new image on specified node
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Create
+      tags:
+      - image
+  /image/delete:
+    delete:
+      consumes:
+      - application/json
+      description: delete a specified image on specified node
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Delete
+      tags:
+      - image
+  /image/pull:
+    get:
+      consumes:
+      - application/json
+      description: pull a specified image on specified node
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Pull
+      tags:
+      - image
+  /image/tag:
+    post:
+      consumes:
+      - application/json
+      description: tag a specified image on specified nde
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Tag
+      tags:
+      - image
+  /node/create:
+    post:
+      consumes:
+      - application/json
+      description: create a new node
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Create
+      tags:
+      - node
+  /node/info:
+    get:
+      consumes:
+      - application/json
+      description: get the specified node info
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: GetNodeInfo
+      tags:
+      - node
+  /node/list:
+    get:
+      consumes:
+      - application/json
+      description: get node list by page
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: GetNodeList
+      tags:
+      - node
+  /node/remove:
+    delete:
+      consumes:
+      - application/json
+      description: remove the specified node
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Remove
+      tags:
+      - node
+  /node/update:
+    post:
+      consumes:
+      - application/json
+      description: update the specified node
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Update
+      tags:
+      - node
+  /perm/create:
+    post:
+      consumes:
+      - application/json
+      description: create a new permission
+      parameters:
+      - description: create perm
+        in: body
+        name: createPerm
+        required: true
+        schema:
+          $ref: '#/definitions/role.CreatePermOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: CreatePermission
+      tags:
+      - perm
+  /perm/list:
+    get:
+      consumes:
+      - application/json
+      description: Get Permission list by page
+      parameters:
+      - description: if is reverse order
+        example: true
+        in: query
+        name: desc
+        type: boolean
+      - description: page
+        example: 1
+        in: query
+        name: page
+        type: integer
+      - example: admin
+        in: query
+        name: search
+        type: string
+      - description: size of page
+        example: 10
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/api.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/role.PermInfo'
+                  type: array
+              type: object
+      summary: GetPermList
+      tags:
+      - perm
+  /perm/remove:
+    delete:
+      consumes:
+      - application/json
+      description: remove the specified permission
+      parameters:
+      - in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: RemovePermission
+      tags:
+      - perm
+  /perm/update:
+    post:
+      consumes:
+      - application/json
+      description: update the specified permission info
+      parameters:
+      - description: update perm
+        in: body
+        name: updatePermOpt
+        required: true
+        schema:
+          $ref: '#/definitions/role.UpdatePermOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: UpdatePermission
+      tags:
+      - perm
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: test app api if is accessible
+      parameters:
+      - description: name must be one of [wilson, wendy]
+        example: wilson
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/api.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth.PingReply'
+              type: object
+      summary: Ping
+      tags:
+      - system
+  /pong:
+    get:
+      consumes:
+      - application/json
+      description: test app api authentication if is work
+      parameters:
+      - description: name must be one of [wilson, wendy]
+        example: wilson
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Pong
+      tags:
+      - system
+  /role/create:
+    post:
+      consumes:
+      - application/json
+      description: create a new role
+      parameters:
+      - description: create role
+        in: body
+        name: createRole
+        required: true
+        schema:
+          $ref: '#/definitions/role.CreateRoleOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: CreateRole
+      tags:
+      - role
+  /role/grant:
+    post:
+      consumes:
+      - application/json
+      description: grant permissions for the specified role
+      parameters:
+      - description: grant role
+        in: body
+        name: GrantOption
+        required: true
+        schema:
+          $ref: '#/definitions/role.GrantOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: GrantRolePerms
+      tags:
+      - role
+  /role/list:
+    get:
+      consumes:
+      - application/json
+      description: get role list by page
+      parameters:
+      - description: if is reverse order
+        example: true
+        in: query
+        name: desc
+        type: boolean
+      - description: page
+        example: 1
+        in: query
+        name: page
+        type: integer
+      - example: admin
+        in: query
+        name: search
+        type: string
+      - description: size of page
+        example: 10
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/api.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/role.RoleInfo'
+                  type: array
+              type: object
+      summary: GetRoleList
+      tags:
+      - role
+  /role/perms:
+    get:
+      consumes:
+      - application/json
+      description: get permissions list belong to role
+      parameters:
+      - in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/api.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/role.PermGroup'
+                  type: array
+              type: object
+      summary: GetRolePerms
+      tags:
+      - role
+  /role/remove:
+    delete:
+      consumes:
+      - application/json
+      description: remove a role
+      parameters:
+      - in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: RemoveRole
+      tags:
+      - role
+  /role/update:
+    post:
+      consumes:
+      - application/json
+      description: update the specified role info
+      parameters:
+      - description: update role
+        in: body
+        name: updateRole
+        required: true
+        schema:
+          $ref: '#/definitions/role.UpdateRoleOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: UpdateRole
+      tags:
+      - role
+  /user/info:
+    get:
+      consumes:
+      - application/json
+      description: get specific user simple info
+      parameters:
+      - in: query
+        name: uuid
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/api.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/user.Info'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: GetUserInfo
+      tags:
+      - user
+  /user/list:
+    get:
+      consumes:
+      - application/json
+      description: get specific user list
+      parameters:
+      - description: if is reverse order
+        example: true
+        in: query
+        name: desc
+        type: boolean
+      - description: specified field
+        example: email
+        in: query
+        name: order
+        type: string
+      - description: page
+        example: 1
+        in: query
+        name: page
+        type: integer
+      - description: search text, should be of one username or email
+        example: jacklove
+        in: query
+        name: search
+        type: string
+      - description: size of page
+        example: 10
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/api.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/user.Info'
+                  type: array
+              type: object
+      security:
+      - BearerAuth: []
+      summary: GetUserInfoList
+      tags:
+      - user
+  /user/remove:
+    delete:
+      consumes:
+      - application/json
+      description: Remove the specific user
+      parameters:
+      - in: query
+        name: uuid
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - BearerAuth: []
+      summary: RemoveUser
+      tags:
+      - user
+  /user/update:
+    post:
+      consumes:
+      - application/json
+      description: update the specific user info
+      parameters:
+      - in: query
+        name: uuid
+        type: string
+      - description: comment
+        in: body
+        name: updateInfoOption
+        required: true
+        schema:
+          $ref: '#/definitions/user.UpdateInfoOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      security:
+      - BearerAuth: []
+      summary: UpdateUserInfo
+      tags:
+      - user
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
