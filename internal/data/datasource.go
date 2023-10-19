@@ -8,6 +8,7 @@ import (
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/data/entity"
+	"github.com/dstgo/wilson/internal/pkg/utils"
 	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
@@ -83,6 +84,9 @@ func (d *DataSource) Redis() *redis.Client {
 }
 
 func (d *DataSource) ORM() *gorm.DB {
+	if utils.IsDebugMode() {
+		return d.orm.Debug()
+	}
 	return d.orm
 }
 
