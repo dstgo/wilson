@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/types"
-	"github.com/gin-gonic/gin"
+	"github.com/dstgo/wilson/internal/types/api/auth"
 	"time"
 )
 
@@ -18,6 +18,10 @@ func NewPingLogic(conf *conf.AppConf) PingLogic {
 	}
 }
 
-func (Ping PingLogic) Ping(ctx *gin.Context, name string) string {
-	return fmt.Sprintf("hello %s! Now is %s.", name, time.Now().Format(types.DateTimeFormat))
+func (p PingLogic) Ping(name string) auth.PingReply {
+	return auth.PingReply{Reply: fmt.Sprintf("hello %s! Now is %s.", name, time.Now().Format(types.DateTimeFormat))}
+}
+
+func (p PingLogic) Pong(name string) auth.PingReply {
+	return auth.PingReply{Reply: fmt.Sprintf("goodbye %s! Now is %s.", name, time.Now().Format(types.DateTimeFormat))}
 }

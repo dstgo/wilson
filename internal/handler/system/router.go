@@ -25,6 +25,7 @@ func SetupRouter(api *route.Router, handler Handler) HandlerRouter {
 	// system
 	{
 		api.GET("/ping", route.Metas(meta.NoAuth, meta.Name("route.sys.ping")), handler.Ping.Ping)
+		api.GET("/pong", route.Metas(meta.NoAuth, meta.Name("route.sys.ping")), handler.Ping.Pong)
 	}
 	// auth api
 	{
