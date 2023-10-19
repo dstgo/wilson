@@ -2,8 +2,9 @@ package email
 
 import (
 	"github.com/dstgo/wilson/internal/conf"
+	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/resp"
-	"github.com/dstgo/wilson/internal/core/valid"
+	"github.com/dstgo/wilson/internal/data/cache"
 	"github.com/dstgo/wilson/internal/pkg/httpx"
 	"github.com/dstgo/wilson/internal/pkg/locale"
 	emailType "github.com/dstgo/wilson/internal/types/api/email"
@@ -19,11 +20,11 @@ import (
 
 var EmailProviderSet = wire.NewSet(
 	NewSender,
-	NewEmailCodeCache,
+	cache.EmailCodeCacheProvider,
 	NewEmailHandler,
 )
 
-func NewEmailHandler(cfg *conf.AppConf, emailLogic Sender, codeCache CodeCache) EmailHandler {
+func NewEmailHandler(cfg *conf.AppConf, emailLogic Sender, codeCache cache.RedisEmailCodeCache) EmailHandler {
 	return EmailHandler{
 		EmailLogic:   emailLogic,
 		cfg:          cfg.EmailConf,
@@ -36,7 +37,7 @@ type EmailHandler struct {
 	EmailLogic   Sender
 	cfg          *conf.EmailConf
 	fallbackLang string
-	codeCache    CodeCache
+	codeCache    cache.RedisEmailCodeCache
 }
 
 // SendCodeEmail
@@ -49,8 +50,8 @@ type EmailHandler struct {
 // @Success      200  {object}  api.Response
 // @Router       /email/code [GET]
 func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
-	emailReq := new(emailType.Email)
-	if err := valid.BindAndResp(ctx, valid.Query(emailReq)); err != nil {
+	emailReq := new(emailType.SendCodeEmailOption)
+	if err := bind.BindAndResp(ctx, bind.Query(emailReq)); err != nil {
 		return
 	}
 

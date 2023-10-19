@@ -8,12 +8,17 @@ package handler
 
 import (
 	"github.com/dstgo/wilson/internal/conf"
-	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/data"
+	"github.com/dstgo/wilson/internal/data/cache"
 	"github.com/dstgo/wilson/internal/handler/email"
+	"github.com/dstgo/wilson/internal/handler/role"
 	"github.com/dstgo/wilson/internal/handler/system"
 	"github.com/dstgo/wilson/internal/handler/user"
 	"github.com/dstgo/wilson/pkg/route"
+)
+
+import (
+	_ "github.com/dstgo/wilson/internal/handler/docs"
 )
 
 // Injectors from wire.go:
@@ -24,36 +29,48 @@ func setupHandlerRouter(appConf *conf.AppConf, api *route.Router, datasource *da
 	if err != nil {
 		return Router{}, nil, err
 	}
-	codeCache := email.NewEmailCodeCache(datasource)
-	emailHandler := email.NewEmailHandler(appConf, sender, codeCache)
+	redisEmailCodeCache := cache.NewRedisEmailCodeCache(datasource)
+	emailHandler := email.NewEmailHandler(appConf, sender, redisEmailCodeCache)
 	handler := email.Handler{
 		Email: emailHandler,
 	}
 	handlerRouter := email.SetupRouter(api, handler)
 	pingLogic := system.NewPingLogic(appConf)
 	pingHandler := system.NewPingHandler(pingLogic)
-	userData := user.NewUserData(datasource)
-	redisTokenCache := authen.NewTokenRedisCache(datasource)
-	authenticator := system.NewAuthenticator(appConf, userData, codeCache, redisTokenCache)
+	userData := user.NewUserData()
+	redisTokenCache := cache.NewRedisTokenCache(datasource)
+	authenticator := system.NewAuthenticator(appConf, datasource, userData, redisEmailCodeCache, redisTokenCache)
 	authHandler := system.NewAuthHandler(authenticator)
 	systemHandler := system.Handler{
 		Ping: pingHandler,
 		Auth: authHandler,
 	}
 	systemHandlerRouter := system.SetupRouter(api, systemHandler)
-	userInfo := user.NewUserInfo(userData)
+	userInfo := user.NewUserInfo(datasource, userData)
 	infoHandler := user.NewInfoHandler(userInfo)
-	userModify := user.NewUserModify(userData, userInfo)
+	userModify := user.NewUserModify(datasource, userData, userInfo)
 	modifyHandler := user.NewModifyHandler(userModify)
 	userHandler := user.Handler{
 		Info:   infoHandler,
 		Modify: modifyHandler,
 	}
 	userHandlerRouter := user.SetupRouter(api, userHandler)
+	permData := role.NewPermData()
+	roleData := role.NewRoleData()
+	roleService := role.NewRoleService(datasource, permData, roleData)
+	roleHandler := role.NewRoleHandler(roleService)
+	permService := role.NewPermService(permData, roleData, datasource)
+	permHandler := role.NewPermHandler(permService)
+	handler2 := role.Handler{
+		Role: roleHandler,
+		Perm: permHandler,
+	}
+	roleHandlerRouter := role.SetupRouter(api, handler2)
 	router := Router{
 		Email:  handlerRouter,
 		System: systemHandlerRouter,
 		User:   userHandlerRouter,
+		Role:   roleHandlerRouter,
 	}
 	return router, func() {
 		cleanup()

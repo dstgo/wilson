@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/pkg/utils/cp"
 	"github.com/dstgo/wilson/internal/types/api/user"
@@ -8,16 +9,18 @@ import (
 	"github.com/duke-git/lancet/v2/cryptor"
 )
 
-func NewUserModify(userdata UserData, userInfo UserInfo) UserModify {
+func NewUserModify(ds *data.DataSource, userdata UserData, userInfo UserInfo) UserModify {
 	return UserModify{
 		userData: userdata,
 		userInfo: userInfo,
+		ds:       ds,
 	}
 }
 
 type UserModify struct {
 	userData UserData
 	userInfo UserInfo
+	ds       *data.DataSource
 }
 
 func (u UserModify) Update(updateOpt user.UpdateInfoOption) error {
@@ -34,7 +37,7 @@ func (u UserModify) Update(updateOpt user.UpdateInfoOption) error {
 
 	userTable.Password = cryptor.Sha512WithBase64(userTable.Password)
 
-	if err := u.userData.UpdateUserInfo(userTable); err != nil {
+	if err := u.userData.UpdateUserInfo(u.ds.ORM(), userTable); err != nil {
 		return errs.DataBaseErr(err)
 	}
 
@@ -47,7 +50,7 @@ func (u UserModify) Remove(uuid string) error {
 		return err
 	}
 
-	if err := u.userData.RemoveByUUID(uuid); err != nil {
+	if err := u.userData.RemoveByUUID(u.ds.ORM(), uuid); err != nil {
 		return errs.DataBaseErr(err)
 	}
 

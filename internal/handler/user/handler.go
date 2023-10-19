@@ -1,8 +1,8 @@
 package user
 
 import (
+	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/resp"
-	"github.com/dstgo/wilson/internal/core/valid"
 	"github.com/dstgo/wilson/internal/types/api"
 	"github.com/dstgo/wilson/internal/types/api/user"
 	"github.com/gin-gonic/gin"
@@ -28,7 +28,7 @@ type InfoHandler struct {
 // GetUserInfo
 // @Summary      GetUserInfo
 // @Description  get specific user simple info
-// @Tags         user/info
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        uuid      query    api.Uid     true    "user unique id"
@@ -37,22 +37,22 @@ type InfoHandler struct {
 // @security BearerAuth
 func (ui InfoHandler) GetUserInfo(ctx *gin.Context) {
 	var uuid api.Uid
-	if err := valid.BindAndResp(ctx, valid.Query(&uuid)); err != nil {
+	if err := bind.BindAndResp(ctx, bind.Query(&uuid)); err != nil {
 		return
 	}
 
 	info, err := ui.info.GetUserInfoByUUID(uuid.UUID)
 	if err != nil {
-		resp.Fail(ctx).Error(err).MsgI18n("user.findfail").Send()
+		resp.Fail(ctx).Error(err).MsgI18n("op.query.fail").Send()
 		return
 	}
-	resp.Ok(ctx).Data(info).MsgI18n("user.findok").Send()
+	resp.Ok(ctx).Data(info).MsgI18n("op.query.ok").Send()
 }
 
 // GetUserInfoList
 // @Summary      GetUserInfoList
 // @Description  get specific user list
-// @Tags         user/info
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        userPageOptIon	query	user.PageOption	true	"comment"
@@ -61,16 +61,16 @@ func (ui InfoHandler) GetUserInfo(ctx *gin.Context) {
 // @security BearerAuth
 func (ui InfoHandler) GetUserInfoList(ctx *gin.Context) {
 	var page user.PageOption
-	if err := valid.BindAndResp(ctx, valid.Query(&page)); err != nil {
+	if err := bind.BindAndResp(ctx, bind.Query(&page)); err != nil {
 		return
 	}
 
 	list, err := ui.info.GetUserInfoList(page)
 	if err != nil {
-		resp.Fail(ctx).Error(err).MsgI18n("user.findFail").Send()
+		resp.Fail(ctx).Error(err).MsgI18n("op.query.fail").Send()
 		return
 	}
-	resp.Ok(ctx).Data(list).MsgI18n("user.findOK").Send()
+	resp.Ok(ctx).Data(list).MsgI18n("op.query.ok").Send()
 }
 
 func NewModifyHandler(modify UserModify) ModifyHandler {
@@ -84,7 +84,7 @@ type ModifyHandler struct {
 // UpdateUserInfo
 // @Summary      UpdateUserInfo
 // @Description  update the specific user info
-// @Tags         user/modify
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        uuid   query      api.Uid  true  "uuid"
@@ -98,25 +98,25 @@ func (ui ModifyHandler) UpdateUserInfo(ctx *gin.Context) {
 		uuid          api.Uid
 	)
 
-	if err := valid.BindAndResp(ctx,
-		valid.Query(&uuid),
-		valid.Json(&updateUserOpt)); err != nil {
+	if err := bind.BindAndResp(ctx,
+		bind.Query(&uuid),
+		bind.Json(&updateUserOpt)); err != nil {
 		return
 	}
 
 	updateUserOpt.UUID = uuid.UUID
 
 	if err := ui.modify.Update(updateUserOpt); err != nil {
-		resp.Fail(ctx).Error(err).MsgI18n("user.updateFail").Send()
+		resp.Fail(ctx).Error(err).MsgI18n("op.update.fail").Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("user.updateOk").Send()
+	resp.Ok(ctx).MsgI18n("op.update.fail").Send()
 }
 
 // RemoveUser
 // @Summary      RemoveUser
 // @Description  Remove the specific user
-// @Tags         user/modify
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        uuid  query   api.Uid  true    "uuid"
@@ -125,12 +125,12 @@ func (ui ModifyHandler) UpdateUserInfo(ctx *gin.Context) {
 // @security BearerAuth
 func (ui ModifyHandler) RemoveUser(ctx *gin.Context) {
 	var uuid api.Uid
-	if err := valid.BindAndResp(ctx, valid.Query(&uuid)); err != nil {
+	if err := bind.BindAndResp(ctx, bind.Query(&uuid)); err != nil {
 		return
 	}
 	if err := ui.modify.Remove(uuid.UUID); err != nil {
-		resp.Fail(ctx).Error(err).MsgI18n("user.removeFail").Send()
+		resp.Fail(ctx).Error(err).MsgI18n("op.delete.fail").Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("user.removeOk").Send()
+	resp.Ok(ctx).MsgI18n("op.delete.ok").Send()
 }

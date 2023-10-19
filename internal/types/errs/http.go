@@ -6,41 +6,45 @@ import (
 	"net/http"
 )
 
-func NewErr() *ResponseError {
-	return new(ResponseError)
+func NewError() *LocaleError {
+	return new(LocaleError)
 }
 
-// ResponseError
+func NewI18nError(i18n string) *LocaleError {
+	return NewError().I18n(i18n)
+}
+
+// LocaleError
 // a response error wrap
 // Er field
-type ResponseError struct {
+type LocaleError struct {
 	ErrorCode  int
 	HttpStatus int
 	LangCode   string
 	Er         error
 }
 
-func (e *ResponseError) Code(code int) *ResponseError {
+func (e *LocaleError) Code(code int) *LocaleError {
 	e.ErrorCode = code
 	return e
 }
 
-func (e *ResponseError) Status(status int) *ResponseError {
+func (e *LocaleError) Status(status int) *LocaleError {
 	e.HttpStatus = status
 	return e
 }
 
-func (e *ResponseError) I18n(langCode string) *ResponseError {
+func (e *LocaleError) I18n(langCode string) *LocaleError {
 	e.LangCode = langCode
 	return e
 }
 
-func (e *ResponseError) Err(err error) *ResponseError {
+func (e *LocaleError) Err(err error) *LocaleError {
 	e.Er = err
 	return e
 }
 
-func (e *ResponseError) Error() string {
+func (e *LocaleError) Error() string {
 	if e.LangCode == "" {
 		return e.Er.Error()
 	}
@@ -54,37 +58,37 @@ func (e *ResponseError) Error() string {
 
 // response error helper function
 
-func BadRequest(err error) *ResponseError {
-	return &ResponseError{
+func BadRequest(err error) *LocaleError {
+	return &LocaleError{
 		HttpStatus: http.StatusBadRequest,
 		Er:         err,
 	}
 }
 
-func UnAuthorized(err error) *ResponseError {
-	return &ResponseError{
+func UnAuthorized(err error) *LocaleError {
+	return &LocaleError{
 		HttpStatus: http.StatusUnauthorized,
 		Er:         err,
 	}
 }
 
-func Forbidden(err error) *ResponseError {
-	return &ResponseError{
+func Forbidden(err error) *LocaleError {
+	return &LocaleError{
 		HttpStatus: http.StatusForbidden,
 		Er:         err,
 	}
 }
 
-func ResourceNotFound(err error) *ResponseError {
-	return &ResponseError{
+func ResourceNotFound(err error) *LocaleError {
+	return &LocaleError{
 		ErrorCode:  code.ResourceNotFound,
 		HttpStatus: http.StatusNotFound,
 		Er:         err,
 	}
 }
 
-func DataBaseErr(err error) *ResponseError {
-	return &ResponseError{
+func DataBaseErr(err error) *LocaleError {
+	return &LocaleError{
 		ErrorCode:  code.DatabaseError,
 		HttpStatus: http.StatusInternalServerError,
 		LangCode:   "err.database",
@@ -92,8 +96,8 @@ func DataBaseErr(err error) *ResponseError {
 	}
 }
 
-func FileSystemErr(err error) *ResponseError {
-	return &ResponseError{
+func FileSystemErr(err error) *LocaleError {
+	return &LocaleError{
 		ErrorCode:  code.FilesystemError,
 		HttpStatus: http.StatusInternalServerError,
 		LangCode:   "err.filesystem",
@@ -101,8 +105,8 @@ func FileSystemErr(err error) *ResponseError {
 	}
 }
 
-func NetworkErr(err error) *ResponseError {
-	return &ResponseError{
+func NetworkErr(err error) *LocaleError {
+	return &LocaleError{
 		ErrorCode:  code.NetworkError,
 		HttpStatus: http.StatusInternalServerError,
 		LangCode:   "err.network",
@@ -110,8 +114,8 @@ func NetworkErr(err error) *ResponseError {
 	}
 }
 
-func ProgramErr(err error) *ResponseError {
-	return &ResponseError{
+func ProgramErr(err error) *LocaleError {
+	return &LocaleError{
 		ErrorCode:  code.UnknownError,
 		HttpStatus: http.StatusInternalServerError,
 		LangCode:   "err.program",

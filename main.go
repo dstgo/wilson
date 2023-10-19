@@ -4,7 +4,7 @@ import (
 	"context"
 	"flag"
 	"github.com/dstgo/wilson/internal/core/log"
-	wilson2 "github.com/dstgo/wilson/internal/core/wilson"
+	"github.com/dstgo/wilson/internal/core/wilson"
 	"path"
 
 	"github.com/dstgo/filebox"
@@ -41,7 +41,7 @@ func main() {
 	}
 
 	// ini logger
-	logger, err := wilson2.NewLogger(appConf.LogConf)
+	logger, err := wilson.NewLogger(appConf.LogConf)
 	if err != nil {
 		panic(err)
 	}
@@ -51,7 +51,7 @@ func main() {
 	gin.SetMode(appConf.ServerConf.Mode)
 
 	// initialize app server
-	app, err := wilson2.NewApp(ctx, appConf, logger)
+	app, err := wilson.NewApp(ctx, appConf, logger)
 	if err != nil {
 		panic(err)
 	}

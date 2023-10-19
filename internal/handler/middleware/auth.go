@@ -33,7 +33,7 @@ func UseAuthenticate(v authen.Parser) gin.HandlerFunc {
 			ctx.Next()
 		} else {
 			ctx.Abort()
-			var respErr *errs.ResponseError
+			var respErr *errs.LocaleError
 			switch {
 			case errors.Is(err, jwt.ErrTokenExpired):
 				respErr = errs.UnAuthorized(err).I18n("jwt.expired")

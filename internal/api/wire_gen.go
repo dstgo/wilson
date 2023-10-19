@@ -17,10 +17,10 @@ import (
 
 //go:generate wire gen
 func setupOpenAPIRouter(open *route.Router, datasource *data.DataSource) Router {
-	infoData := user.NewUserData(datasource)
-	infoLogic := user2.NewInfoLogic(infoData)
-	userInfoLogic := user.NewUserInfo(infoData)
-	infoApi := user2.NewInfoApi(infoLogic, userInfoLogic)
+	userData := user.NewUserData()
+	infoLogic := user2.NewInfoLogic(userData)
+	userInfo := user.NewUserInfo(datasource, userData)
+	infoApi := user2.NewInfoApi(infoLogic, userInfo)
 	api := user2.API{
 		Info: infoApi,
 	}

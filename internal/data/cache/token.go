@@ -1,4 +1,4 @@
-package authen
+package cache
 
 import (
 	"context"
@@ -20,12 +20,12 @@ func TokenCacheKey(tokenId string) string {
 	return fmt.Sprintf("token:%s", tokenId)
 }
 
-var TokenCacheProviderSet = wire.NewSet(
-	NewTokenRedisCache,
+var TokenCacheProvider = wire.NewSet(
+	NewRedisTokenCache,
 	wire.Bind(new(TokenCache), new(RedisTokenCache)),
 )
 
-func NewTokenRedisCache(d *data.DataSource) RedisTokenCache {
+func NewRedisTokenCache(d *data.DataSource) RedisTokenCache {
 	return RedisTokenCache{cache: d.Redis()}
 }
 

@@ -3,12 +3,10 @@ package wilson
 import (
 	"fmt"
 	"github.com/dstgo/wilson/internal/api"
-	_ "github.com/dstgo/wilson/internal/api/swagger"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/handler"
 	"github.com/dstgo/wilson/internal/handler/middleware"
-	_ "github.com/dstgo/wilson/internal/handler/swagger"
 	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/pkg/vax"

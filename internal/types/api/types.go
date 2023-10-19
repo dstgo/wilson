@@ -26,7 +26,7 @@ func (i Id) String() string {
 
 func (i Id) Validate(lang string) error {
 	return vax.Struct(&i, lang,
-		vax.Field(i.Id, vax.Required),
+		vax.Field(&i.Id, vax.Required),
 	)
 }
 

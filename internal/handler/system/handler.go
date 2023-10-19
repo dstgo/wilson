@@ -2,16 +2,18 @@ package system
 
 import (
 	"github.com/dstgo/wilson/internal/core/authen"
+	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/resp"
-	"github.com/dstgo/wilson/internal/core/valid"
+	"github.com/dstgo/wilson/internal/data/cache"
 	"github.com/dstgo/wilson/internal/types/api/auth"
+	"github.com/dstgo/wilson/internal/types/api/system"
 	"github.com/dstgo/wilson/internal/types/code"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 )
 
 var SystemProviderSet = wire.NewSet(
-	authen.TokenCacheProviderSet,
+	cache.TokenCacheProvider,
 	NewPingHandler,
 	NewPingLogic,
 	NewAuthenticator,
@@ -30,26 +32,48 @@ type PingHandler struct {
 
 // Ping
 // @Summary      Ping
-// @Description  test app api if is ok
+// @Description  test app api if is accessible
 // @Tags         system
 // @Accept       json
 // @Produce      json
-// @Param        name	query	string	true	"ping name"
+// @Param        name	query	system.PingRequest	true	"ping name"
 // @Success      200  {object}  api.Response{data=auth.PingReply}
 // @Router       /ping [GET]
 func (p PingHandler) Ping(ctx *gin.Context) {
-	pingReq := new(PingRequest)
-	err := valid.BindAndResp(ctx,
-		valid.Query(pingReq),
+	pingReq := new(system.PingRequest)
+	err := bind.BindAndResp(ctx,
+		bind.Query(pingReq),
 	)
 	if err != nil {
 		return
 	}
 
-	res := p.PingLogic.Ping(ctx, pingReq.Name)
+	reply := p.PingLogic.Ping(pingReq.Name)
 
-	resp.Ok(ctx).Code(code.RequestOk).Msg("pong").
-		Data(auth.PingReply{Reply: res}).Send()
+	resp.Ok(ctx).Code(code.RequestOk).Msg("pong").Data(reply).Send()
+}
+
+// Pong
+// @Summary      Pong
+// @Description  test app api authentication if is work
+// @Tags         system
+// @Accept       json
+// @Produce      json
+// @Param        name   query      system.PingRequest  true  "pong name"
+// @Success      200  {object}  api.Response
+// @Router       /pong [GET]
+func (p PingHandler) Pong(ctx *gin.Context) {
+	pongReq := new(system.PingRequest)
+	err := bind.BindAndResp(ctx,
+		bind.Query(pongReq),
+	)
+	if err != nil {
+		return
+	}
+
+	reply := p.PingLogic.Pong(pongReq.Name)
+
+	resp.Ok(ctx).Code(code.RequestOk).Msg("ping").Data(reply).Send()
 }
 
 func NewAuthHandler(authen Authenticator) AuthHandler {
@@ -71,7 +95,7 @@ type AuthHandler struct {
 // @Router       /auth/login [POST]
 func (a AuthHandler) Login(ctx *gin.Context) {
 	loginRequest := new(auth.LoginOption)
-	if err := valid.BindAndResp(ctx, valid.Json(loginRequest)); err != nil {
+	if err := bind.BindAndResp(ctx, bind.Json(loginRequest)); err != nil {
 		return
 	}
 	signedJwt, err := a.Authlogic.TryLogin(loginRequest.Username, loginRequest.Password)
@@ -94,7 +118,7 @@ func (a AuthHandler) Login(ctx *gin.Context) {
 // @Router       /auth/register [POST]
 func (a AuthHandler) Register(ctx *gin.Context) {
 	registerRequest := new(auth.RegisterOption)
-	if err := valid.BindAndResp(ctx, valid.Json(registerRequest)); err != nil {
+	if err := bind.BindAndResp(ctx, bind.Json(registerRequest)); err != nil {
 		return
 	}
 	err := a.Authlogic.TryRegisterNewUser(registerRequest.Username, registerRequest.Password, registerRequest.Code)
@@ -136,8 +160,8 @@ func (a AuthHandler) Logout(ctx *gin.Context) {
 // @Router       /auth/forgotpwd [POST]
 func (a AuthHandler) ForgotPassword(ctx *gin.Context) {
 	changePasswordReq := new(auth.ForgotPasswordOption)
-	err := valid.BindAndResp(ctx,
-		valid.Json(changePasswordReq),
+	err := bind.BindAndResp(ctx,
+		bind.Json(changePasswordReq),
 	)
 	if err != nil {
 		return

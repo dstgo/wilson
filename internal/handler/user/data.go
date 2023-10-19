@@ -1,62 +1,55 @@
 package user
 
 import (
-	"fmt"
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/types/api/user"
 	"gorm.io/gorm"
 )
 
-func NewUserData(source *data.DataSource) UserData {
-	return UserData{DataSource: source}
+func NewUserData() UserData {
+	return UserData{}
 }
 
-type UserData struct {
-	*data.DataSource
-}
+type UserData struct{}
 
-func (u UserData) GetUserById(id uint) (entity.User, error) {
+func (u UserData) GetUserById(db *gorm.DB, id uint) (entity.User, error) {
 	findUser := entity.User{}
-	err := u.ORM().Where("id = ?", id).Find(&u).Error
+	err := db.Where("id = ?", id).Find(&findUser).Error
 	return findUser, err
 }
 
-func (u UserData) GetUserByName(username string) (entity.User, error) {
+func (u UserData) GetUserByName(db *gorm.DB, username string) (entity.User, error) {
 	findUser := entity.User{}
-	err := u.ORM().Where("username = ?", username).First(&findUser).Error
+	err := db.Where("username = ?", username).First(&findUser).Error
 	return findUser, err
 }
 
-func (u UserData) GetUserByUUID(uuid string) (entity.User, error) {
+func (u UserData) GetUserByUUID(db *gorm.DB, uuid string) (entity.User, error) {
 	findUser := entity.User{}
-	err := u.ORM().Where("uuid =?", uuid).First(&findUser).Error
+	err := db.Where("uuid =?", uuid).First(&findUser).Error
 	return findUser, err
 }
 
-func (u UserData) GetUserByEmail(email string) (entity.User, error) {
+func (u UserData) GetUserByEmail(db *gorm.DB, email string) (entity.User, error) {
 	findUser := entity.User{}
-	err := u.ORM().Model(findUser).Where("email =?", email).First(&findUser).Error
+	err := db.Model(findUser).Where("email =?", email).First(&findUser).Error
 	return findUser, err
 }
 
-func (u UserData) DeleteByUUID(uuid string) error {
-	return u.ORM().Delete(&entity.User{}, "uuid =?", uuid).Error
+func (u UserData) DeleteByUUID(db *gorm.DB, uuid string) error {
+	return db.Delete(&entity.User{}, "uuid =?", uuid).Error
 }
 
-func (u UserData) CreateUser(user entity.User) error {
-	return u.ORM().Create(&user).Error
+func (u UserData) CreateUser(db *gorm.DB, user entity.User) error {
+	return db.Create(&user).Error
 }
 
-func (u UserData) ListByPage(pageOpt user.PageOption) ([]entity.User, error) {
-
-	pageDB := data.Page(u.ORM(), pageOpt.Page, pageOpt.Size)
+func (u UserData) ListByPage(db *gorm.DB, pageOpt user.PageOption) ([]entity.User, error) {
+	pageDB := db
+	pageDB.Scopes(data.Pages(pageOpt.Page, pageOpt.Size))
 	if len(pageOpt.Order) > 0 {
-		if pageOpt.Desc {
-			pageDB = pageDB.Order(fmt.Sprintf("%s", pageOpt.Order))
-		} else {
-			pageDB = pageDB.Order(fmt.Sprintf("%s DESC", pageOpt.Order))
-		}
+		pageDB.Scopes(data.Order(pageOpt.Order, pageOpt.Desc))
 	}
 
 	var (
@@ -74,34 +67,34 @@ func (u UserData) ListByPage(pageOpt user.PageOption) ([]entity.User, error) {
 
 // ListAllUsers
 // in most time, you should use ListByPage
-func (u UserData) ListAllUsers() ([]entity.User, error) {
+func (u UserData) ListAllUsers(db *gorm.DB) ([]entity.User, error) {
 	var users []entity.User
-	err := u.ORM().Find(&users).Error
+	err := db.Find(&users).Error
 	return users, err
 }
 
-func (u UserData) Count() (int64, error) {
+func (u UserData) Count(db *gorm.DB) (int64, error) {
 	var count int64
-	err := u.ORM().Model(entity.User{}).Count(&count).Error
+	err := db.Model(entity.User{}).Count(&count).Error
 	return count, err
 }
 
-func (u UserData) UpdateUserInfo(user entity.User) error {
-	return u.ORM().Where("uuid = ?", user.UUID).Updates(&user).Error
+func (u UserData) UpdateUserInfo(db *gorm.DB, user entity.User) error {
+	return db.Where("uuid = ?", user.UUID).Updates(&user).Error
 }
 
-func (u UserData) DisableUser(id uint) error {
-	return u.ORM().Model(entity.User{}).Delete(entity.User{
+func (u UserData) DisableUser(db *gorm.DB, id uint) error {
+	return db.Model(entity.User{}).Delete(entity.User{
 		Model: gorm.Model{ID: id},
 	}).Error
 }
 
-func (u UserData) RemoveUser(id uint) error {
-	return u.ORM().Unscoped().Model(entity.User{}).Delete(entity.User{
+func (u UserData) RemoveUser(db *gorm.DB, id uint) error {
+	return db.Unscoped().Model(entity.User{}).Delete(entity.User{
 		Model: gorm.Model{ID: id},
 	}).Error
 }
 
-func (u UserData) RemoveByUUID(uuid string) error {
-	return u.ORM().Unscoped().Model(entity.User{}).Delete("uuid = ?", uuid).Error
+func (u UserData) RemoveByUUID(db *gorm.DB, uuid string) error {
+	return db.Unscoped().Model(entity.User{}).Delete("uuid = ?", uuid).Error
 }

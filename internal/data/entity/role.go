@@ -7,7 +7,6 @@ type Role struct {
 	gorm.Model
 	Name string `gorm:"type:varchar(255);comment:role display name;"`
 	Code string `gorm:"type:varchar(255);comment:role code;"`
-
 	RoleTable
 }
 
@@ -24,8 +23,11 @@ func (r RoleTable) TableComment() string {
 // Permission app permissions record table
 type Permission struct {
 	gorm.Model
+	Name   string `gorm:"type:varchar(255);comment:perm name;"`
 	Object string `gorm:"type:varchar(255);comment:resource will be accessed;"`
 	Action string `gorm:"type:varchar(255);comment:resource action;"`
+	Group  string `gorm:"type:varchar(255);comment:permission group;"`
+	Tag    string `gorm:"type:varchar(255);comment:perm's tag,define type of perm;"`
 
 	PermissionTable
 }
@@ -42,8 +44,8 @@ func (p PermissionTable) TableComment() string {
 
 // RolePermission role-permission relation table
 type RolePermission struct {
-	PermissionId uint       `gorm:"primaryKey;comment:id of permission;"`
-	Permission   Permission `gorm:"foreignKey:PermissionId;"`
+	PermId     uint       `gorm:"primaryKey;comment:id of permission;"`
+	Permission Permission `gorm:"foreignKey:PermId;"`
 
 	RoleId uint `gorm:"primaryKey;comment:id of role;"`
 	Role   Role `gorm:"foreignKey:RoleId;"`

@@ -5,8 +5,11 @@ import (
 	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/data"
+	"github.com/dstgo/wilson/internal/data/cache"
+	_ "github.com/dstgo/wilson/internal/handler/docs"
 	"github.com/dstgo/wilson/internal/handler/email"
 	"github.com/dstgo/wilson/internal/handler/middleware"
+	"github.com/dstgo/wilson/internal/handler/role"
 	"github.com/dstgo/wilson/internal/handler/system"
 	"github.com/dstgo/wilson/internal/handler/user"
 	"github.com/dstgo/wilson/internal/pkg/utils"
@@ -27,6 +30,7 @@ var HandlerProviderSet = wire.NewSet(
 	email.EmailRouterSet,
 	system.SystemRouterSet,
 	user.UserRouterSet,
+	role.RoleRouterSet,
 	wire.Struct(new(Router), "*"),
 )
 
@@ -35,6 +39,7 @@ type Router struct {
 	Email  email.HandlerRouter
 	System system.HandlerRouter
 	User   user.HandlerRouter
+	Role   role.HandlerRouter
 }
 
 // SetupHandler wilson http handlers
@@ -44,7 +49,7 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 		swaggerEnabled = serverConf.Swagger
 	)
 
-	authenticator := authen.NewCacheAuthor(cfg.JwtConf, authen.NewTokenRedisCache(datasource))
+	authenticator := authen.NewCacheAuthor(cfg.JwtConf, cache.NewRedisTokenCache(datasource))
 
 	// wrap http router
 	handlerRouter := route.NewRouter(httpserver.RouterGroup.Group(BasePath))
@@ -98,4 +103,4 @@ var Config = &ginSwagger.Config{
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
-//go:generate swag init --generatedTime --instanceName appapi -g handler.go -d ./,../types,../core/resp --output ./swagger && swag fmt -g handler.go -d ./
+//go:generate swag init --generatedTime --instanceName appapi -g handler.go -d ./,../types,../core/resp --output ./docs && swag fmt -g handler.go -d ./

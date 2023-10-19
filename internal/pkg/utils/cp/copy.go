@@ -2,6 +2,8 @@ package cp
 
 import "github.com/jinzhu/copier"
 
+// for some small structs, you should not use this package
+// because it will waste the performance and introduced new errors
 var (
 	TyperConverter = []copier.TypeConverter{}
 	FiledMapping   = []copier.FieldNameMapping{}
