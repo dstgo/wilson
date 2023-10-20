@@ -45,8 +45,9 @@ type RouterGroup interface {
 // RouterInfo describe a registered info
 // if IsGroup is true, the root represent itself
 type RouterInfo struct {
-	IsGroup bool
-	Group   *gin.RouterGroup
+	IsGroup   bool
+	Group     *gin.RouterGroup
+	GroupInfo *RouterInfo
 
 	Method   string
 	FullPath string
@@ -71,7 +72,7 @@ func NewRouter(group *gin.RouterGroup) *Router {
 // Walk
 // iterate each Group with fn
 // you should call this func on root router
-// param walker Walker
+// param walker
 // return error
 func (w *Router) Walk(walker Walker) error {
 	return w.routes.Walk(walker)
@@ -101,6 +102,7 @@ func (w *Router) addRoute(isGroup bool, method, path string, meta Meta, handlers
 		info.IsGroup = true
 	} else {
 		info.Group = w.root
+		info.GroupInfo = &info
 		w.root.Handle(method, path, handlers...)
 	}
 
