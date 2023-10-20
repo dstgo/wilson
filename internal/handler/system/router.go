@@ -39,30 +39,32 @@ func SetupRouter(api *route.Router, handler Handler) HandlerRouter {
 		authGroup.DELETE("/logout", route.Metas(meta.Name("route.auth.logout")), handler.Auth.Logout)
 	}
 	// role api
-	roleGroup := api.Group("role", nil)
+	roleGroup := api.Group("/role", nil)
+	roleHandler := handler.Role
 	{
-		roleHandler := handler.Role
-		// GET
-		roleGroup.GET("list", nil, roleHandler.GetRoleList)
-		roleGroup.GET("perms", nil, roleHandler.GetRolePerms)
-
-		// POST
-		roleGroup.POST("create", nil, roleHandler.CreateRole)
-		roleGroup.POST("update", nil, roleHandler.UpdateRole)
-		roleGroup.POST("grant", nil, roleHandler.GrantRolePerms)
-
-		// DELETE
-		roleGroup.DELETE("remove", nil, roleHandler.RemoveRole)
-
-		// permission
 
 		// GET
-		roleGroup.GET("list", nil, roleHandler.GetPermList)
+		roleGroup.GET("/list", nil, roleHandler.GetRoleList)
+		roleGroup.GET("/perms", nil, roleHandler.GetRolePerms)
+
 		// POST
-		roleGroup.POST("create", nil, roleHandler.CreatePermission)
-		roleGroup.POST("update", nil, roleHandler.UpdatePermission)
+		roleGroup.POST("/create", nil, roleHandler.CreateRole)
+		roleGroup.POST("/update", nil, roleHandler.UpdateRole)
+		roleGroup.POST("/grant", nil, roleHandler.GrantRolePerms)
+
 		// DELETE
-		roleGroup.DELETE("remove", nil, roleHandler.RemovePermission)
+		roleGroup.DELETE("/remove", nil, roleHandler.RemoveRole)
+	}
+	// perm api
+	permGroup := api.Group("/perm", nil)
+	{
+		// GET
+		permGroup.GET("/list", nil, roleHandler.GetPermList)
+		// POST
+		permGroup.POST("/create", nil, roleHandler.CreatePermission)
+		permGroup.POST("/update", nil, roleHandler.UpdatePermission)
+		// DELETE
+		permGroup.DELETE("/remove", nil, roleHandler.RemovePermission)
 	}
 	return types.NopObj
 }
