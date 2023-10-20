@@ -104,7 +104,7 @@ func (r *Response) Send() {
 			}
 
 			// overwrite http status
-			if e.HttpStatus >= 500 {
+			if e.HttpStatus > 0 {
 				r.status = e.HttpStatus
 			}
 
