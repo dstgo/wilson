@@ -19,6 +19,7 @@ var SystemRouterSet = wire.NewSet(
 type Handler struct {
 	Ping PingHandler
 	Auth AuthHandler
+	Role RoleHandler
 }
 
 func SetupRouter(api *route.Router, handler Handler) HandlerRouter {
@@ -36,6 +37,32 @@ func SetupRouter(api *route.Router, handler Handler) HandlerRouter {
 		authGroup.POST("/forgotpwd", route.Metas(meta.NoAuth, meta.Name("route.auth.forgotpasswd")), handler.Auth.ForgotPassword)
 		// DELETE
 		authGroup.DELETE("/logout", route.Metas(meta.Name("route.auth.logout")), handler.Auth.Logout)
+	}
+	// role api
+	roleGroup := api.Group("role", nil)
+	{
+		roleHandler := handler.Role
+		// GET
+		roleGroup.GET("list", nil, roleHandler.GetRoleList)
+		roleGroup.GET("perms", nil, roleHandler.GetRolePerms)
+
+		// POST
+		roleGroup.POST("create", nil, roleHandler.CreateRole)
+		roleGroup.POST("update", nil, roleHandler.UpdateRole)
+		roleGroup.POST("grant", nil, roleHandler.GrantRolePerms)
+
+		// DELETE
+		roleGroup.DELETE("remove", nil, roleHandler.RemoveRole)
+
+		// permission
+
+		// GET
+		roleGroup.GET("list", nil, roleHandler.GetPermList)
+		// POST
+		roleGroup.POST("create", nil, roleHandler.CreatePermission)
+		roleGroup.POST("update", nil, roleHandler.UpdatePermission)
+		// DELETE
+		roleGroup.DELETE("remove", nil, roleHandler.RemovePermission)
 	}
 	return types.NopObj
 }
