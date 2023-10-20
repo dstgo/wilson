@@ -3,8 +3,8 @@ package user
 import (
 	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/resp"
-	"github.com/dstgo/wilson/internal/types/api"
-	"github.com/dstgo/wilson/internal/types/api/user"
+	"github.com/dstgo/wilson/internal/types"
+	"github.com/dstgo/wilson/internal/types/user"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 )
@@ -31,12 +31,12 @@ type InfoHandler struct {
 // @Tags         user
 // @Accept       json
 // @Produce      json
-// @Param        uuid      query    api.Uid     true    "user unique id"
-// @Success      200  {object}  api.Response{data=user.Info}
+// @Param        uuid      query    types.Uid     true    "user unique id"
+// @Success      200  {object}  types.Response{data=user.Info}
 // @Router       /user/info [GET]
 // @security BearerAuth
 func (ui InfoHandler) GetUserInfo(ctx *gin.Context) {
-	var uuid api.Uid
+	var uuid types.Uid
 	if err := bind.BindAndResp(ctx, bind.Query(&uuid)); err != nil {
 		return
 	}
@@ -56,7 +56,7 @@ func (ui InfoHandler) GetUserInfo(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        userPageOptIon	query	user.PageOption	true	"comment"
-// @Success      200  {object}  api.Response{data=[]user.Info}
+// @Success      200  {object}  types.Response{data=[]user.Info}
 // @Router       /user/list [GET]
 // @security BearerAuth
 func (ui InfoHandler) GetUserInfoList(ctx *gin.Context) {
@@ -87,15 +87,15 @@ type ModifyHandler struct {
 // @Tags         user
 // @Accept       json
 // @Produce      json
-// @Param        uuid   query      api.Uid  true  "uuid"
+// @Param        uuid   query      types.Uid  true  "uuid"
 // @Param        updateInfoOption	body	user.UpdateInfoOption	true	"comment"
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /user/update [POST]
 // @security BearerAuth
 func (ui ModifyHandler) UpdateUserInfo(ctx *gin.Context) {
 	var (
 		updateUserOpt user.UpdateInfoOption
-		uuid          api.Uid
+		uuid          types.Uid
 	)
 
 	if err := bind.BindAndResp(ctx,
@@ -119,12 +119,12 @@ func (ui ModifyHandler) UpdateUserInfo(ctx *gin.Context) {
 // @Tags         user
 // @Accept       json
 // @Produce      json
-// @Param        uuid  query   api.Uid  true    "uuid"
-// @Success      200  {object}  api.Response
+// @Param        uuid  query   types.Uid  true    "uuid"
+// @Success      200  {object}  types.Response
 // @Router       /user/remove [DELETE]
 // @security BearerAuth
 func (ui ModifyHandler) RemoveUser(ctx *gin.Context) {
-	var uuid api.Uid
+	var uuid types.Uid
 	if err := bind.BindAndResp(ctx, bind.Query(&uuid)); err != nil {
 		return
 	}

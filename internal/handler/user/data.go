@@ -3,7 +3,7 @@ package user
 import (
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/entity"
-	"github.com/dstgo/wilson/internal/types/api/user"
+	"github.com/dstgo/wilson/internal/types/user"
 	"gorm.io/gorm"
 )
 

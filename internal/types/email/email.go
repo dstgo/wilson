@@ -1,7 +1,7 @@
 package email
 
 import (
-	"github.com/dstgo/wilson/internal/types/api/helper/rules"
+	"github.com/dstgo/wilson/internal/types/helper/rules"
 	"github.com/dstgo/wilson/pkg/vax"
 )
 

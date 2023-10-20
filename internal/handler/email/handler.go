@@ -7,8 +7,8 @@ import (
 	"github.com/dstgo/wilson/internal/data/cache"
 	"github.com/dstgo/wilson/internal/pkg/httpx"
 	"github.com/dstgo/wilson/internal/pkg/locale"
-	emailType "github.com/dstgo/wilson/internal/types/api/email"
 	"github.com/dstgo/wilson/internal/types/code"
+	emailType "github.com/dstgo/wilson/internal/types/email"
 	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -47,7 +47,7 @@ type EmailHandler struct {
 // @Accept       json
 // @Produce      json
 // @Param        email	query	string	true	"email"
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /email/code [GET]
 func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 	emailReq := new(emailType.SendCodeEmailOption)

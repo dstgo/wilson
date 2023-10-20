@@ -11,7 +11,7 @@ type NodeHandler struct {
 // @Tags         node
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /node/create [POST]
 func (n NodeHandler) Create(ctx *gin.Context) {
 
@@ -23,7 +23,7 @@ func (n NodeHandler) Create(ctx *gin.Context) {
 // @Tags         node
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /node/update [POST]
 func (n NodeHandler) Update(ctx *gin.Context) {
 
@@ -35,7 +35,7 @@ func (n NodeHandler) Update(ctx *gin.Context) {
 // @Tags         node
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /node/remove [DELETE]
 func (n NodeHandler) Remove(ctx *gin.Context) {
 
@@ -47,7 +47,7 @@ func (n NodeHandler) Remove(ctx *gin.Context) {
 // @Tags         node
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /node/list [GET]
 func (n NodeHandler) GetNodeList(ctx *gin.Context) {
 
@@ -59,7 +59,7 @@ func (n NodeHandler) GetNodeList(ctx *gin.Context) {
 // @Tags         node
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /node/info [GET]
 func (n NodeHandler) GetNodeInfo(ctx *gin.Context) {
 

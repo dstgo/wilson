@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/core/resp"
+	"github.com/dstgo/wilson/internal/core/role"
 	"github.com/dstgo/wilson/internal/pkg/httpx"
 	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/dstgo/wilson/internal/types/meta"
@@ -40,19 +41,26 @@ func UseAuthenticate(v authen.Parser) gin.HandlerFunc {
 			default:
 				respErr = errs.Forbidden(err).I18n("jwt.parsedFailed")
 			}
-			resp.Fail(ctx).Code(respErr.HttpStatus * 10).MsgI18n("error.forbidden").Error(respErr).Send()
+			resp.Fail(ctx).MsgI18n("err.forbidden").Error(respErr).Send()
 		}
 	}
 }
 
-func UseCasbin() gin.HandlerFunc {
+func UseRoleAuthorize(resolver role.Resolver) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		info := authen.GetContextTokenInfo(ctx)
+		var (
+			roles  = info.Roles
+			object = ctx.FullPath()
+			action = ctx.Request.Method
+		)
 
-	}
-}
+		err := resolver.ResolveAny(object, action, roles...)
+		if err != nil {
+			resp.Fail(ctx).MsgI18n("error.unauthorized").Error(errs.UnAuthorized(err)).Send()
+			return
+		}
 
-func UseApiKey() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-
+		ctx.Next()
 	}
 }

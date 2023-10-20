@@ -4,12 +4,12 @@ import (
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/core/log"
+	roleSo "github.com/dstgo/wilson/internal/core/role"
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/cache"
 	_ "github.com/dstgo/wilson/internal/handler/docs"
 	"github.com/dstgo/wilson/internal/handler/email"
 	"github.com/dstgo/wilson/internal/handler/middleware"
-	"github.com/dstgo/wilson/internal/handler/role"
 	"github.com/dstgo/wilson/internal/handler/system"
 	"github.com/dstgo/wilson/internal/handler/user"
 	"github.com/dstgo/wilson/internal/pkg/utils"
@@ -30,7 +30,6 @@ var HandlerProviderSet = wire.NewSet(
 	email.EmailRouterSet,
 	system.SystemRouterSet,
 	user.UserRouterSet,
-	role.RoleRouterSet,
 	wire.Struct(new(Router), "*"),
 )
 
@@ -39,7 +38,6 @@ type Router struct {
 	Email  email.HandlerRouter
 	System system.HandlerRouter
 	User   user.HandlerRouter
-	Role   role.HandlerRouter
 }
 
 // SetupHandler wilson http handlers
@@ -50,6 +48,8 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 	)
 
 	authenticator := authen.NewCacheAuthor(cfg.JwtConf, cache.NewRedisTokenCache(datasource))
+
+	roleResolver := roleSo.NewGormResolver(datasource.ORM())
 
 	// wrap http router
 	handlerRouter := route.NewRouter(httpserver.RouterGroup.Group(BasePath))
@@ -62,11 +62,12 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 	// add middleware chains
 	handlerRouter.Use(
 		middleware.UseAuthenticate(authenticator),
+		middleware.UseRoleAuthorize(roleResolver),
 	)
 
-	router, f, err := setupHandlerRouter(cfg, handlerRouter, datasource)
+	router, cleanup, err := setupHandlerRouter(cfg, handlerRouter, datasource)
 
-	log.L().Debugln("print all the api router tree...")
+	log.L().Debugln("print api router tree...")
 	utils.PrintRouters(handlerRouter, false)
 
 	// static swagger documentation
@@ -75,7 +76,7 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 		log.L().Infof("visit AppAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(DocPath, "index.html"))
 	}
 
-	return router, f, err
+	return router, cleanup, err
 }
 
 var Config = &ginSwagger.Config{

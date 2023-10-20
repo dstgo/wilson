@@ -1,9 +1,9 @@
 package role
 
 import (
-	"github.com/dstgo/wilson/internal/types/api"
-	"github.com/dstgo/wilson/internal/types/api/helper"
-	"github.com/dstgo/wilson/internal/types/api/helper/rules"
+	"github.com/dstgo/wilson/internal/types"
+	"github.com/dstgo/wilson/internal/types/helper"
+	"github.com/dstgo/wilson/internal/types/helper/rules"
 	"github.com/dstgo/wilson/pkg/vax"
 )
 
@@ -68,16 +68,16 @@ func (u UpdateRoleOption) Validate(lang string) error {
 }
 
 type GrantOption struct {
-	RoleId uint   `json:"roleId" label:"field.role.id" example:"1"`
-	Tag    string `json:"tag" label:"field.role.tag" example:"AppApi"`
-	PermId []uint `json:"permId" label:"field.perm.id"`
+	RoleId  uint   `json:"roleId" label:"field.role.id" example:"1"`
+	Tag     string `json:"tag" label:"field.role.tag" example:"AppApi"`
+	PermIds []uint `json:"permId" label:"field.perm.id"`
 }
 
 func (g GrantOption) Validate(lang string) error {
 	return vax.Struct(&g, lang,
 		vax.Field(&g.RoleId, vax.Required),
 		vax.Field(&g.Tag, rules.Required(rules.PermTag)...),
-		vax.Field(&g.PermId, vax.Required),
+		vax.Field(&g.PermIds, vax.Required),
 	)
 }
 
@@ -87,7 +87,7 @@ type PageOption struct {
 }
 
 type QueryRolePermsOption struct {
-	api.Id
+	types.Id
 	Tag string `json:"tag" uri:"tag" form:"tag" label:"field.perm.tag" example:"AppAPI"`
 }
 

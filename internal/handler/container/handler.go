@@ -11,7 +11,7 @@ type ContainerHandler struct {
 // @Tags         container
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /container/create [POST]
 // @security BearerAuth
 func (i ContainerHandler) Create(ctx *gin.Context) {
@@ -24,7 +24,7 @@ func (i ContainerHandler) Create(ctx *gin.Context) {
 // @Tags         container
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /container/update [POST]
 func (i ContainerHandler) Update(ctx *gin.Context) {
 
@@ -36,7 +36,7 @@ func (i ContainerHandler) Update(ctx *gin.Context) {
 // @Tags         container
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /container/delete [DELETE]
 func (i ContainerHandler) Delete(ctx *gin.Context) {
 
@@ -48,7 +48,7 @@ func (i ContainerHandler) Delete(ctx *gin.Context) {
 // @Tags         container
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /container/stop [POST]
 func (i ContainerHandler) Stop(ctx *gin.Context) {
 
@@ -60,7 +60,7 @@ func (i ContainerHandler) Stop(ctx *gin.Context) {
 // @Tags         container
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /container/start [POST]
 func (i ContainerHandler) Start(ctx *gin.Context) {
 
@@ -72,7 +72,7 @@ func (i ContainerHandler) Start(ctx *gin.Context) {
 // @Tags         container
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /container/restart [POST]
 func (i ContainerHandler) Restart(ctx *gin.Context) {
 
@@ -87,7 +87,7 @@ type ImageContainer struct {
 // @Tags         image
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /image/pull [GET]
 func (i ImageContainer) Pull(ctx *gin.Context) {
 
@@ -99,7 +99,7 @@ func (i ImageContainer) Pull(ctx *gin.Context) {
 // @Tags         image
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /image/create [POST]
 func (i ImageContainer) Create(ctx *gin.Context) {
 
@@ -111,7 +111,7 @@ func (i ImageContainer) Create(ctx *gin.Context) {
 // @Tags         image
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /image/delete [DELETE]
 func (i ImageContainer) Delete(ctx *gin.Context) {
 
@@ -123,7 +123,7 @@ func (i ImageContainer) Delete(ctx *gin.Context) {
 // @Tags         image
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  api.Response
+// @Success      200  {object}  types.Response
 // @Router       /image/tag [POST]
 func (i ImageContainer) Tag(ctx *gin.Context) {
 

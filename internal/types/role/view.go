@@ -22,6 +22,8 @@ type PermInfo struct {
 	Name string `json:"name" example:"updateUser"`
 	// define the object will be accessed
 	Object string `json:"object" example:"/user/update"`
+	// permission group
+	Group string `json:"group" example:"admin"`
 	// how to access the object
 	Action string `json:"action" example:"POST"`
 	// tag of permissions
