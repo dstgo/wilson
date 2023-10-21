@@ -20,7 +20,7 @@ var allowMethods = []string{
 
 type WalkRouteInfo struct {
 	IsGroup bool
-	group   *WalkRouteInfo
+	Group   *WalkRouteInfo
 
 	Method   string
 	FullPath string
@@ -135,15 +135,15 @@ func (r *RouterGroup) GET(path string, meta Meta, handlers ...gin.HandlerFunc) *
 }
 
 func (r *RouterGroup) POST(path string, meta Meta, handlers ...gin.HandlerFunc) *RouterHandler {
-	return r.Handle(http.MethodGet, path, meta, handlers...)
+	return r.Handle(http.MethodPost, path, meta, handlers...)
 }
 
 func (r *RouterGroup) DELETE(path string, meta Meta, handlers ...gin.HandlerFunc) *RouterHandler {
-	return r.Handle(http.MethodGet, path, meta, handlers...)
+	return r.Handle(http.MethodDelete, path, meta, handlers...)
 }
 
 func (r *RouterGroup) PUT(path string, meta Meta, handlers ...gin.HandlerFunc) *RouterHandler {
-	return r.Handle(http.MethodGet, path, meta, handlers...)
+	return r.Handle(http.MethodPut, path, meta, handlers...)
 }
 
 func (r *RouterGroup) OPTIONS(path string, meta Meta, handlers ...gin.HandlerFunc) *RouterHandler {
@@ -178,7 +178,7 @@ func (r *RouterGroup) Walk(walk func(info WalkRouteInfo) error) error {
 			Method:   handler.Method,
 			FullPath: handler.FullPath,
 			Meta:     handler.Meta,
-			group:    &groupInfo,
+			Group:    &groupInfo,
 		})
 	}
 

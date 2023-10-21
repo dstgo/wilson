@@ -21,7 +21,7 @@ type Handler struct {
 }
 
 func SetupRouter(api *ginx.RouterGroup, Handler Handler) HandlerRouter {
-	emailGroup := api.Group("route.email", nil)
+	emailGroup := api.Group("email", ginx.M(meta.Group("route.email.group")))
 	{
 		emailGroup.GET("code", ginx.M(meta.NoAuth, meta.Name("route.email.code")), Handler.Email.SendCodeEmail)
 	}

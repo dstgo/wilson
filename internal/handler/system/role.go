@@ -57,7 +57,7 @@ func (r RoleEnforcer) UpdateRole(option roleType.UpdateRoleOption) error {
 }
 
 func (r RoleEnforcer) UpdateRolePerms(option roleType.GrantOption) error {
-	err := r.resolver.UpdateRolePerms(option.RoleId, option.Tag, option.PermIds)
+	err := r.resolver.UpdateRolePermBatch(option.RoleId, option.Tag, option.PermIds)
 	if errors.Is(err, role.ErrPermissionNotFound) {
 		return errs.NewI18nError("perm.notfound").Err(err)
 	} else {

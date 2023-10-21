@@ -23,7 +23,7 @@ func Name(routeName string) ginx.E {
 	}
 }
 
-func GroupName(routeName string) ginx.E {
+func Group(routeName string) ginx.E {
 	return ginx.E{
 		Key: "GroupRouteName",
 		Val: routeName,
@@ -39,7 +39,7 @@ func Comment(routeComment string) ginx.E {
 
 func Roles(roles ...string) ginx.E {
 	return ginx.E{
-		Key: "role",
+		Key: "roles",
 		Val: roles,
 	}
 }

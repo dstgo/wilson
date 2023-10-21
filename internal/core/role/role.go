@@ -33,7 +33,14 @@ func (g GormResolver) ListAllRole() ([]role.RoleInfo, error) {
 }
 
 func (g GormResolver) CreateRole(roleInfo role.RoleInfo) error {
-	return createRole(g.db, makeRoleRecord(roleInfo))
+	_, err := createRole(g.db, makeRoleRecord(roleInfo))
+	return err
+}
+
+func (g GormResolver) CreateRoleInBatch(roles []role.RoleInfo) error {
+	records := makeRoleRecordList(roles)
+	_, err := createRoleInBatch(g.db, records)
+	return err
 }
 
 func (g GormResolver) UpdateRole(roleInfo role.RoleInfo) error {
@@ -103,8 +110,20 @@ func listRoles(db *gorm.DB, pageOpt role.PageOption) ([]entity.Role, error) {
 	return roleList, err
 }
 
-func createRole(db *gorm.DB, role entity.Role) error {
-	return db.Create(&role).Error
+func createRole(db *gorm.DB, role entity.Role) (entity.Role, error) {
+	err := db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "code"}},
+		DoNothing: true,
+	}).Create(&role).Error
+	return role, err
+}
+
+func createRoleInBatch(db *gorm.DB, roles []entity.Role) ([]entity.Role, error) {
+	err := db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "code"}},
+		DoNothing: true,
+	}).Create(&roles).Error
+	return roles, err
 }
 
 func removeRole(db *gorm.DB, roleId uint) error {
@@ -171,10 +190,8 @@ func insertRolePermBatch(db *gorm.DB, roleId uint, permIds []uint) error {
 
 	// create the new relation, if existed, do nothing
 	err := db.Clauses(clause.OnConflict{
-		Columns:     []clause.Column{{Name: "role_id"}, {Name: "perm_id"}},
-		Where:       clause.Where{},
-		TargetWhere: clause.Where{},
-		DoNothing:   true,
+		Columns:   []clause.Column{{Name: "role_id"}, {Name: "perm_id"}},
+		DoNothing: true,
 	}).Create(&rolePermList).Error
 
 	return err

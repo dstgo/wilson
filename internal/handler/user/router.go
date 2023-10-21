@@ -24,24 +24,20 @@ type Handler struct {
 
 func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
 	// user router
-	userRouter := api.Group("user", nil)
+	userRouter := api.Group("user", ginx.M(meta.Group("route.user.group")))
 	{
-		// user info
-		infoRouter := userRouter.Group("", ginx.M(meta.Name("route.user")))
 		infoHandler := handler.Info
-		{
-			infoRouter.GET("info", ginx.M(meta.Name("route.user.info"), meta.Anonymous), infoHandler.GetUserInfo)
-			infoRouter.GET("list", ginx.M(meta.Name("route.user.list"), meta.Roles(role.AdminRole.Code)), infoHandler.GetUserInfoList)
-		}
-
-		// user modify
-		modifyRouter := userRouter.Group("", ginx.M(meta.Name("route.user")))
 		modifyHandler := handler.Modify
-		{
-			modifyRouter.POST("update", ginx.M(meta.Name("route.user.update")), modifyHandler.UpdateUserInfo)
-			modifyRouter.DELETE("remove", ginx.M(meta.Name("route.user.remove"), meta.Roles(role.AdminRole.Code)), modifyHandler.RemoveUser)
-		}
 
+		// GET
+		userRouter.GET("info", ginx.M(meta.Name("route.user.info"), meta.Anonymous), infoHandler.GetUserInfo)
+		userRouter.GET("list", ginx.M(meta.Name("route.user.list"), meta.Roles(role.AdminRole.Code)), infoHandler.GetUserInfoList)
+
+		// POST
+		userRouter.POST("update", ginx.M(meta.Name("route.user.update")), modifyHandler.UpdateUserInfo)
+
+		// DELETE
+		userRouter.DELETE("remove", ginx.M(meta.Name("route.user.remove"), meta.Roles(role.AdminRole.Code)), modifyHandler.RemoveUser)
 	}
 
 	return types.NopObj

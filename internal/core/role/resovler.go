@@ -17,6 +17,7 @@ var (
 type Resolver interface {
 	GetPerm(permId uint) (role.PermInfo, error)
 	CreatePerm(permInfo role.PermInfo) error
+	CreatePermInBatch(permInfo []role.PermInfo) error
 	ListPerms(option role.PageOption) ([]role.PermInfo, error)
 	ListAllPerms(tag string) ([]role.PermInfo, error)
 	UpdatePerm(permInfo role.PermInfo) error
@@ -26,6 +27,7 @@ type Resolver interface {
 	ListRole(option role.PageOption) ([]role.RoleInfo, error)
 	ListAllRole() ([]role.RoleInfo, error)
 	CreateRole(roleInfo role.RoleInfo) error
+	CreateRoleInBatch(roleInfo []role.RoleInfo) error
 	UpdateRole(roleInfo role.RoleInfo) error
 	RemoveRole(roleId uint) error
 
@@ -35,10 +37,11 @@ type Resolver interface {
 	AddRolePerm(roleId uint, permId uint) error
 	// RemoveRolePerm remove specified permission from specified role
 	RemoveRolePerm(roleId uint, permId uint) error
-	// UpdateRolePerms update specified role permissions in batch
+	// UpdateRolePermBatch update specified role permissions in batch
 	// it will add and remove some permissions to make the records sync with the incoming permIds
 	// if there are some permissions not in permission record which is result of ListAllPerms, it will return error
-	UpdateRolePerms(roleId uint, tag string, permIds []uint) error
+	UpdateRolePermBatch(roleId uint, tag string, permIds []uint) error
+	CreateRolePermBatch(roles role.RoleInfo, perms []role.PermInfo) error
 
 	// ResolveAny judge specified role if any role is able to access permObj by the way of permAct
 	ResolveAny(permObj string, permAct string, roles ...string) error
@@ -102,7 +105,7 @@ func (g GormResolver) RemoveRolePerm(roleId uint, permId uint) error {
 	return removeRolePerm(g.db, roleId, permId)
 }
 
-func (g GormResolver) UpdateRolePerms(roleId uint, tag string, newPermIds []uint) error {
+func (g GormResolver) UpdateRolePermBatch(roleId uint, tag string, newPermIds []uint) error {
 
 	// get all the tag permissions
 	tagPerms, err := g.ListAllPerms(tag)
@@ -140,4 +143,51 @@ func (g GormResolver) UpdateRolePerms(roleId uint, tag string, newPermIds []uint
 
 	// commit
 	return tx.Commit().Error
+}
+
+func (g GormResolver) CreateRolePermBatch(role role.RoleInfo, perms []role.PermInfo) error {
+
+	tx := g.db.Begin()
+
+	// try to create role if code conflict do nothing
+	_, err := createRole(tx, makeRoleRecord(role))
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	ens := makePermRecordList(perms)
+	// try to create perm if conflict do nothing
+	_, err = createPermInBatch(tx, ens)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+
+	// query roles
+	queryRole, err := getRoleByCode(g.db, role.Code)
+	if err != nil {
+		return err
+	}
+
+	// query the permIds
+	queryEns, err := listAllPermsByPerms(g.db, ens)
+	if err != nil {
+		return err
+	}
+
+	var permIds []uint
+	for _, en := range queryEns {
+		permIds = append(permIds, en.ID)
+	}
+
+	// create the relation
+	err = insertRolePermBatch(g.db, queryRole.ID, permIds)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

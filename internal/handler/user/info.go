@@ -12,6 +12,7 @@ import (
 
 func NewUserInfo(ds *data.DataSource, userData UserData) UserInfo {
 	return UserInfo{
+		ds:       ds,
 		userData: userData,
 	}
 }

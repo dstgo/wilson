@@ -5,6 +5,8 @@ import (
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/types/role"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
+	"slices"
 )
 
 func (g GormResolver) GetPerm(permId uint) (role.PermInfo, error) {
@@ -16,11 +18,17 @@ func (g GormResolver) GetPerm(permId uint) (role.PermInfo, error) {
 }
 
 func (g GormResolver) CreatePerm(permInfo role.PermInfo) error {
-	err := createPerm(g.db, makePermEntity(permInfo))
+	_, err := createPerm(g.db, makePermRecord(permInfo))
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (g GormResolver) CreatePermInBatch(perms []role.PermInfo) error {
+	records := makePermRecordList(perms)
+	_, err := createPermInBatch(g.db, records)
+	return err
 }
 
 func (g GormResolver) ListPerms(option role.PageOption) ([]role.PermInfo, error) {
@@ -40,7 +48,7 @@ func (g GormResolver) ListAllPerms(tag string) ([]role.PermInfo, error) {
 }
 
 func (g GormResolver) UpdatePerm(permInfo role.PermInfo) error {
-	err := updatePerm(g.db, makePermEntity(permInfo))
+	err := updatePerm(g.db, makePermRecord(permInfo))
 	if err != nil {
 		return err
 	}
@@ -73,7 +81,7 @@ func makePermInfoList(perms []entity.Permission) (infos []role.PermInfo) {
 	return
 }
 
-func makePermEntity(perm role.PermInfo) entity.Permission {
+func makePermRecord(perm role.PermInfo) entity.Permission {
 	return entity.Permission{
 		Model:  gorm.Model{ID: perm.ID},
 		Name:   perm.Name,
@@ -84,9 +92,9 @@ func makePermEntity(perm role.PermInfo) entity.Permission {
 	}
 }
 
-func makePermEntityList(perms []role.PermInfo) (ens []entity.Permission) {
+func makePermRecordList(perms []role.PermInfo) (ens []entity.Permission) {
 	for _, perm := range perms {
-		ens = append(ens, makePermEntity(perm))
+		ens = append(ens, makePermRecord(perm))
 	}
 	return
 }
@@ -123,6 +131,54 @@ func listAllPerms(db *gorm.DB) ([]entity.Permission, error) {
 	return perms, err
 }
 
+func listAllPermsByPerms(db *gorm.DB, perms []entity.Permission) ([]entity.Permission, error) {
+	var (
+		objs   []string
+		acts   []string
+		groups []string
+		tags   []string
+		ens    = make([]entity.Permission, 0, len(perms))
+	)
+
+	for _, perm := range perms {
+		if !slices.Contains(objs, perm.Object) {
+			objs = append(objs, perm.Object)
+		}
+
+		if !slices.Contains(acts, perm.Object) {
+			acts = append(acts, perm.Action)
+		}
+
+		if !slices.Contains(groups, perm.Group) {
+			groups = append(groups, perm.Group)
+		}
+
+		if !slices.Contains(tags, perm.Tag) {
+			tags = append(tags, perm.Tag)
+		}
+	}
+
+	db = db.Model(entity.Permission{})
+	if len(objs) > 0 {
+		db = db.Where("`object` IN ?", objs)
+	}
+
+	if len(acts) > 0 {
+		db = db.Where("`action` IN ?", acts)
+	}
+
+	if len(groups) > 0 {
+		db = db.Where("`group` IN ?", groups)
+	}
+
+	if len(tags) > 0 {
+		db = db.Where("`tag` IN ?", tags)
+	}
+
+	err := db.Find(&ens).Error
+	return ens, err
+}
+
 func getPagePermList(db *gorm.DB, pageOpt role.PageOption) ([]entity.Permission, error) {
 	pageDB := db
 	pageDB.Scopes(data.Pages(pageOpt.Page, pageOpt.Size))
@@ -142,8 +198,21 @@ func findPerm(db *gorm.DB, obj, act, g, t string) (entity.Permission, error) {
 	return perm, err
 }
 
-func createPerm(db *gorm.DB, role entity.Permission) error {
-	return db.Create(&role).Error
+func createPerm(db *gorm.DB, roleInfo entity.Permission) (entity.Permission, error) {
+	err := db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "object"}, {Name: "action"}, {Name: "group"}, {Name: "tag"}},
+		DoNothing: true,
+	}).Create(&roleInfo).Error
+	return roleInfo, err
+}
+
+func createPermInBatch(db *gorm.DB, perms []entity.Permission) ([]entity.Permission, error) {
+	// create permission batch if conflicting do nothing
+	err := db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "object"}, {Name: "action"}, {Name: "group"}, {Name: "tag"}},
+		DoNothing: true,
+	}).Create(&perms).Error
+	return perms, err
 }
 
 func removePerm(db *gorm.DB, permId uint) error {
