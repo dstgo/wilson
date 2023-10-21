@@ -13,6 +13,7 @@ type NodeHandler struct {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /node/create [POST]
+// @security BearerAuth
 func (n NodeHandler) Create(ctx *gin.Context) {
 
 }
@@ -25,6 +26,7 @@ func (n NodeHandler) Create(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /node/update [POST]
+// @security BearerAuth
 func (n NodeHandler) Update(ctx *gin.Context) {
 
 }
@@ -37,6 +39,7 @@ func (n NodeHandler) Update(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /node/remove [DELETE]
+// @security BearerAuth
 func (n NodeHandler) Remove(ctx *gin.Context) {
 
 }
@@ -49,6 +52,7 @@ func (n NodeHandler) Remove(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /node/list [GET]
+// @security BearerAuth
 func (n NodeHandler) GetNodeList(ctx *gin.Context) {
 
 }
@@ -61,6 +65,7 @@ func (n NodeHandler) GetNodeList(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /node/info [GET]
+// @security BearerAuth
 func (n NodeHandler) GetNodeInfo(ctx *gin.Context) {
 
 }

@@ -1,4 +1,4 @@
-package route
+package ginx
 
 import "github.com/gin-gonic/gin"
 
@@ -36,7 +36,7 @@ func (e *E) Float() float64 {
 	return 0
 }
 
-func Metas(e ...E) Meta {
+func M(e ...E) Meta {
 	if len(e) == 0 {
 		return nil
 	}

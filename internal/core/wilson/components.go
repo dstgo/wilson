@@ -8,7 +8,6 @@ import (
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/data"
-	"github.com/dstgo/wilson/pkg/route"
 	"github.com/dstgo/wilson/pkg/sysinfo"
 	"github.com/sirupsen/logrus"
 	"runtime"
@@ -61,18 +60,6 @@ func LoadDataSource(ctx context.Context, dataConf *conf.DataConf) (*data.DataSou
 	}
 	log.L().Infof("load data datasource ok √")
 	return datasource, nil
-}
-
-func DebugPrintRouter(router *route.Router) error {
-	return router.Walk(func(info route.RouterInfo) error {
-		if !info.IsGroup {
-			log.L().
-				WithField("method", info.Method).
-				WithField("path", info.FullPath).
-				Debugln()
-		}
-		return nil
-	})
 }
 
 // on server shutdown hooks

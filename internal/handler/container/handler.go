@@ -26,6 +26,7 @@ func (i ContainerHandler) Create(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /container/update [POST]
+// @security BearerAuth
 func (i ContainerHandler) Update(ctx *gin.Context) {
 
 }
@@ -38,6 +39,7 @@ func (i ContainerHandler) Update(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /container/delete [DELETE]
+// @security BearerAuth
 func (i ContainerHandler) Delete(ctx *gin.Context) {
 
 }
@@ -50,6 +52,7 @@ func (i ContainerHandler) Delete(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /container/stop [POST]
+// @security BearerAuth
 func (i ContainerHandler) Stop(ctx *gin.Context) {
 
 }
@@ -62,6 +65,7 @@ func (i ContainerHandler) Stop(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /container/start [POST]
+// @security BearerAuth
 func (i ContainerHandler) Start(ctx *gin.Context) {
 
 }
@@ -74,6 +78,7 @@ func (i ContainerHandler) Start(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /container/restart [POST]
+// @security BearerAuth
 func (i ContainerHandler) Restart(ctx *gin.Context) {
 
 }
@@ -89,6 +94,7 @@ type ImageContainer struct {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /image/pull [GET]
+// @security BearerAuth
 func (i ImageContainer) Pull(ctx *gin.Context) {
 
 }
@@ -101,6 +107,7 @@ func (i ImageContainer) Pull(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /image/create [POST]
+// @security BearerAuth
 func (i ImageContainer) Create(ctx *gin.Context) {
 
 }
@@ -113,6 +120,7 @@ func (i ImageContainer) Create(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /image/delete [DELETE]
+// @security BearerAuth
 func (i ImageContainer) Delete(ctx *gin.Context) {
 
 }
@@ -125,6 +133,7 @@ func (i ImageContainer) Delete(ctx *gin.Context) {
 // @Produce      json
 // @Success      200  {object}  types.Response
 // @Router       /image/tag [POST]
+// @security BearerAuth
 func (i ImageContainer) Tag(ctx *gin.Context) {
 
 }

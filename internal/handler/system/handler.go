@@ -219,6 +219,7 @@ func (r RoleHandler) GetRoleList(ctx *gin.Context) {
 // @Param        queryOpt   query   types.Id true  "role perms query opt"
 // @Success      200  {object}  types.Response{data=[]role.PermGroup}
 // @Router       /role/perms [GET]
+// @security BearerAuth
 func (r RoleHandler) GetRolePerms(ctx *gin.Context) {
 	var queryOpt types.Id
 	if err := bind.BindAndResp(ctx, bind.Query(&queryOpt)); err != nil {
@@ -242,6 +243,7 @@ func (r RoleHandler) GetRolePerms(ctx *gin.Context) {
 // @Param        createRole   body      role.CreateRoleOption  true  "create role"
 // @Success      200  {object}  types.Response
 // @Router       /role/create [POST]
+// @security BearerAuth
 func (r RoleHandler) CreateRole(ctx *gin.Context) {
 	var createOpt role.CreateRoleOption
 	if err := bind.BindAndResp(ctx, bind.Json(&createOpt)); err != nil {
@@ -264,6 +266,7 @@ func (r RoleHandler) CreateRole(ctx *gin.Context) {
 // @Param        updateRole   body      role.UpdateRoleOption  true  "update role"
 // @Success      200  {object}  types.Response
 // @Router       /role/update [POST]
+// @security BearerAuth
 func (r RoleHandler) UpdateRole(ctx *gin.Context) {
 	var updateOpt role.UpdateRoleOption
 	if err := bind.BindAndResp(ctx, bind.Json(&updateOpt)); err != nil {
@@ -286,6 +289,7 @@ func (r RoleHandler) UpdateRole(ctx *gin.Context) {
 // @Param        GrantOption   body    role.GrantOption  true  "grant role"
 // @Success      200  {object}  types.Response
 // @Router       /role/grant [POST]
+// @security BearerAuth
 func (r RoleHandler) GrantRolePerms(ctx *gin.Context) {
 	var grantOption role.GrantOption
 	if err := bind.BindAndResp(ctx, bind.Json(&grantOption)); err != nil {
@@ -309,6 +313,7 @@ func (r RoleHandler) GrantRolePerms(ctx *gin.Context) {
 // @Param        id   query     types.Id  true  "roleD id"
 // @Success      200  {object}  types.Response
 // @Router       /role/remove [DELETE]
+// @security BearerAuth
 func (r RoleHandler) RemoveRole(ctx *gin.Context) {
 	var roleId types.Id
 	if err := bind.BindAndResp(ctx, bind.Query(&roleId)); err != nil {
@@ -332,6 +337,7 @@ func (r RoleHandler) RemoveRole(ctx *gin.Context) {
 // @Param        page  query    role.PageOption  true  "page option"
 // @Success      200  {object}  types.Response{data=[]role.PermInfo}
 // @Router       /perm/list [GET]
+// @security BearerAuth
 func (r RoleHandler) GetPermList(ctx *gin.Context) {
 	var pageOpt role.PageOption
 	if err := bind.BindAndResp(ctx, bind.Query(&pageOpt)); err != nil {
@@ -355,6 +361,7 @@ func (r RoleHandler) GetPermList(ctx *gin.Context) {
 // @Param        createPerm   body      role.CreatePermOption  true  "create perm"
 // @Success      200  {object}  types.Response
 // @Router       /perm/create [POST]
+// @security BearerAuth
 func (r RoleHandler) CreatePermission(ctx *gin.Context) {
 	var createOpt role.CreatePermOption
 	if err := bind.BindAndResp(ctx, bind.Json(&createOpt)); err != nil {
@@ -378,6 +385,7 @@ func (r RoleHandler) CreatePermission(ctx *gin.Context) {
 // @Param        updatePermOpt   body      role.UpdatePermOption  true  "update perm"
 // @Success      200  {object}  types.Response
 // @Router       /perm/update [POST]
+// @security BearerAuth
 func (r RoleHandler) UpdatePermission(ctx *gin.Context) {
 	var updateOpt role.UpdatePermOption
 	if err := bind.BindAndResp(ctx, bind.Json(&updateOpt)); err != nil {
@@ -400,6 +408,7 @@ func (r RoleHandler) UpdatePermission(ctx *gin.Context) {
 // @Param        id   query     types.Id  true  "perm id"
 // @Success      200  {object}  types.Response
 // @Router       /perm/remove [DELETE]
+// @security BearerAuth
 func (r RoleHandler) RemovePermission(ctx *gin.Context) {
 	var permId types.Id
 	if err := bind.BindAndResp(ctx, bind.Query(&permId)); err != nil {

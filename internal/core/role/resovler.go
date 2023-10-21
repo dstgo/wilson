@@ -44,7 +44,7 @@ type Resolver interface {
 	ResolveAny(permObj string, permAct string, roles ...string) error
 }
 
-var gormResolver Resolver = *(*GormResolver)(nil)
+var gormResolver Resolver = GormResolver{}
 
 func NewGormResolver(db *gorm.DB) GormResolver {
 	return GormResolver{db: db}

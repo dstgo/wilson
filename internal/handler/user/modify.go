@@ -4,8 +4,8 @@ import (
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/pkg/utils/cp"
-	"github.com/dstgo/wilson/internal/types/api/user"
 	"github.com/dstgo/wilson/internal/types/errs"
+	"github.com/dstgo/wilson/internal/types/user"
 	"github.com/duke-git/lancet/v2/cryptor"
 )
 

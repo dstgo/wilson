@@ -3,7 +3,8 @@ package system
 import (
 	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/meta"
-	"github.com/dstgo/wilson/pkg/route"
+	"github.com/dstgo/wilson/internal/types/role"
+	"github.com/dstgo/wilson/pkg/ginx"
 	"github.com/google/wire"
 )
 
@@ -22,49 +23,49 @@ type Handler struct {
 	Role RoleHandler
 }
 
-func SetupRouter(api *route.Router, handler Handler) HandlerRouter {
+func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
 	// system
 	{
-		api.GET("/ping", route.Metas(meta.NoAuth, meta.Name("route.sys.ping")), handler.Ping.Ping)
-		api.GET("/pong", route.Metas(meta.NoAuth, meta.Name("route.sys.ping")), handler.Ping.Pong)
+		api.GET("/ping", ginx.M(meta.NoAuth, meta.Name("route.sys.ping")), handler.Ping.Ping)
+		api.GET("/pong", ginx.M(meta.NoAuth, meta.Name("route.sys.pong")), handler.Ping.Pong)
 	}
 	// auth api
 	{
-		authGroup := api.Group("auth", nil)
+		authGroup := api.Group("auth", ginx.M(meta.Name("route.auth")))
 		// POST
-		authGroup.POST("/login", route.Metas(meta.NoAuth, meta.Name("route.auth.login")), handler.Auth.Login)
-		authGroup.POST("/register", route.Metas(meta.NoAuth, meta.Name("route.auth.register")), handler.Auth.Register)
-		authGroup.POST("/forgotpwd", route.Metas(meta.NoAuth, meta.Name("route.auth.forgotpasswd")), handler.Auth.ForgotPassword)
+		authGroup.POST("/login", ginx.M(meta.NoAuth, meta.Name("route.auth.login")), handler.Auth.Login)
+		authGroup.POST("/register", ginx.M(meta.NoAuth, meta.Name("route.auth.register")), handler.Auth.Register)
+		authGroup.POST("/forgotpwd", ginx.M(meta.NoAuth, meta.Name("route.auth.forgotPasswd")), handler.Auth.ForgotPassword)
 		// DELETE
-		authGroup.DELETE("/logout", route.Metas(meta.Name("route.auth.logout")), handler.Auth.Logout)
+		authGroup.DELETE("/logout", ginx.M(meta.Name("route.auth.logout")), handler.Auth.Logout)
 	}
 	// role api
-	roleGroup := api.Group("/role", nil)
+	roleGroup := api.Group("/role", ginx.M(meta.Name("route.role"), meta.Roles(role.AdminRole.Code)))
 	roleHandler := handler.Role
 	{
 
 		// GET
-		roleGroup.GET("/list", nil, roleHandler.GetRoleList)
-		roleGroup.GET("/perms", nil, roleHandler.GetRolePerms)
+		roleGroup.GET("/list", ginx.M(meta.Name("route.role.list")), roleHandler.GetRoleList)
+		roleGroup.GET("/perms", ginx.M(meta.Name("route.role.perms")), roleHandler.GetRolePerms)
 
 		// POST
-		roleGroup.POST("/create", nil, roleHandler.CreateRole)
-		roleGroup.POST("/update", nil, roleHandler.UpdateRole)
-		roleGroup.POST("/grant", nil, roleHandler.GrantRolePerms)
+		roleGroup.POST("/create", ginx.M(meta.Name("route.role.create")), roleHandler.CreateRole)
+		roleGroup.POST("/update", ginx.M(meta.Name("route.role.update")), roleHandler.UpdateRole)
+		roleGroup.POST("/grant", ginx.M(meta.Name("route.role.grant")), roleHandler.GrantRolePerms)
 
 		// DELETE
-		roleGroup.DELETE("/remove", nil, roleHandler.RemoveRole)
+		roleGroup.DELETE("/remove", ginx.M(meta.Name("route.role.remove")), roleHandler.RemoveRole)
 	}
 	// perm api
-	permGroup := api.Group("/perm", nil)
+	permGroup := api.Group("/perm", ginx.M(meta.Name("route.perm"), meta.Roles(role.AdminRole.Code)))
 	{
 		// GET
-		permGroup.GET("/list", nil, roleHandler.GetPermList)
+		permGroup.GET("/list", ginx.M(meta.Name("route.perm.list")), roleHandler.GetPermList)
 		// POST
-		permGroup.POST("/create", nil, roleHandler.CreatePermission)
-		permGroup.POST("/update", nil, roleHandler.UpdatePermission)
+		permGroup.POST("/create", ginx.M(meta.Name("route.perm.create")), roleHandler.CreatePermission)
+		permGroup.POST("/update", ginx.M(meta.Name("route.perm.update")), roleHandler.UpdatePermission)
 		// DELETE
-		permGroup.DELETE("/remove", nil, roleHandler.RemovePermission)
+		permGroup.DELETE("/remove", ginx.M(meta.Name("route.perm.delete")), roleHandler.RemovePermission)
 	}
 	return types.NopObj
 }

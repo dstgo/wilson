@@ -43,7 +43,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -79,7 +79,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/api.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -117,7 +117,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -151,7 +151,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -179,7 +179,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -187,6 +187,11 @@
         },
         "/container/delete": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "delete a specified container instance",
                 "consumes": [
                     "application/json"
@@ -202,7 +207,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -210,6 +215,11 @@
         },
         "/container/restart": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "restart the container instance",
                 "consumes": [
                     "application/json"
@@ -225,7 +235,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -233,6 +243,11 @@
         },
         "/container/start": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "start a container instance",
                 "consumes": [
                     "application/json"
@@ -248,7 +263,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -256,6 +271,11 @@
         },
         "/container/stop": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "stop a container instance",
                 "consumes": [
                     "application/json"
@@ -271,7 +291,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -279,6 +299,11 @@
         },
         "/container/update": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "update the container instance, like name, resource",
                 "consumes": [
                     "application/json"
@@ -294,7 +319,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -326,7 +351,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -334,6 +359,11 @@
         },
         "/image/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "create a new image on specified node",
                 "consumes": [
                     "application/json"
@@ -349,7 +379,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -357,6 +387,11 @@
         },
         "/image/delete": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "delete a specified image on specified node",
                 "consumes": [
                     "application/json"
@@ -372,7 +407,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -380,6 +415,11 @@
         },
         "/image/pull": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "pull a specified image on specified node",
                 "consumes": [
                     "application/json"
@@ -395,7 +435,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -403,6 +443,11 @@
         },
         "/image/tag": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "tag a specified image on specified nde",
                 "consumes": [
                     "application/json"
@@ -418,7 +463,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -426,6 +471,11 @@
         },
         "/node/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "create a new node",
                 "consumes": [
                     "application/json"
@@ -441,7 +491,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -449,6 +499,11 @@
         },
         "/node/info": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "get the specified node info",
                 "consumes": [
                     "application/json"
@@ -464,7 +519,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -472,6 +527,11 @@
         },
         "/node/list": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "get node list by page",
                 "consumes": [
                     "application/json"
@@ -487,7 +547,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -495,6 +555,11 @@
         },
         "/node/remove": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "remove the specified node",
                 "consumes": [
                     "application/json"
@@ -510,7 +575,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -518,6 +583,11 @@
         },
         "/node/update": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "update the specified node",
                 "consumes": [
                     "application/json"
@@ -533,7 +603,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -541,6 +611,11 @@
         },
         "/perm/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "create a new permission",
                 "consumes": [
                     "application/json"
@@ -549,7 +624,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "perm"
+                    "role"
                 ],
                 "summary": "CreatePermission",
                 "parameters": [
@@ -567,7 +642,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -575,6 +650,11 @@
         },
         "/perm/list": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get Permission list by page",
                 "consumes": [
                     "application/json"
@@ -583,7 +663,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "perm"
+                    "role"
                 ],
                 "summary": "GetPermList",
                 "parameters": [
@@ -621,7 +701,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/api.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -642,6 +722,11 @@
         },
         "/perm/remove": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "remove the specified permission",
                 "consumes": [
                     "application/json"
@@ -650,7 +735,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "perm"
+                    "role"
                 ],
                 "summary": "RemovePermission",
                 "parameters": [
@@ -664,7 +749,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -672,6 +757,11 @@
         },
         "/perm/update": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "update the specified permission info",
                 "consumes": [
                     "application/json"
@@ -680,7 +770,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "perm"
+                    "role"
                 ],
                 "summary": "UpdatePermission",
                 "parameters": [
@@ -698,7 +788,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -732,7 +822,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/api.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -774,7 +864,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -782,6 +872,11 @@
         },
         "/role/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "create a new role",
                 "consumes": [
                     "application/json"
@@ -808,7 +903,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -816,6 +911,11 @@
         },
         "/role/grant": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "grant permissions for the specified role",
                 "consumes": [
                     "application/json"
@@ -842,7 +942,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -896,7 +996,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/api.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -917,6 +1017,11 @@
         },
         "/role/perms": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "get permissions list belong to role",
                 "consumes": [
                     "application/json"
@@ -941,7 +1046,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/api.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -962,7 +1067,12 @@
         },
         "/role/remove": {
             "delete": {
-                "description": "remove a role",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "remove a role,and its permission record will be deleted too",
                 "consumes": [
                     "application/json"
                 ],
@@ -984,7 +1094,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -992,6 +1102,11 @@
         },
         "/role/update": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "update the specified role info",
                 "consumes": [
                     "application/json"
@@ -1018,7 +1133,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1055,7 +1170,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/api.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1132,7 +1247,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/api.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1180,7 +1295,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1224,7 +1339,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1232,23 +1347,6 @@
         }
     },
     "definitions": {
-        "api.Response": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer",
-                    "example": 2000
-                },
-                "data": {},
-                "err": {
-                    "type": "string"
-                },
-                "msg": {
-                    "type": "string",
-                    "example": "operation success"
-                }
-            }
-        },
         "auth.ForgotPasswordOption": {
             "type": "object",
             "properties": {
@@ -1404,7 +1502,18 @@
                     "type": "string",
                     "example": "POST"
                 },
+                "group": {
+                    "description": "permission group",
+                    "type": "string",
+                    "example": "admin"
+                },
+                "id": {
+                    "description": "permission id",
+                    "type": "integer",
+                    "example": 1
+                },
                 "name": {
+                    "description": "permission name",
                     "type": "string",
                     "example": "updateUser"
                 },
@@ -1427,6 +1536,11 @@
                     "description": "role code, must be alpha numeric",
                     "type": "string",
                     "example": "ADMIN"
+                },
+                "id": {
+                    "description": "role id",
+                    "type": "integer",
+                    "example": 1
                 },
                 "name": {
                     "description": "role name",
@@ -1459,6 +1573,23 @@
                     "description": "role name",
                     "type": "string",
                     "example": "admin"
+                }
+            }
+        },
+        "types.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 2000
+                },
+                "data": {},
+                "err": {
+                    "type": "string"
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "operation success"
                 }
             }
         },

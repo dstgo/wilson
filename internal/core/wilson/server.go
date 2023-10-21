@@ -7,6 +7,7 @@ import (
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/handler"
 	"github.com/dstgo/wilson/internal/pkg/locale"
+	"github.com/dstgo/wilson/pkg/vax"
 	"net/http"
 	"os/signal"
 	"sync"
@@ -44,6 +45,7 @@ func (a *App) Run(ctx context.Context) error {
 
 	bootTask := task.NewTask(ctx)
 
+	// http server goroutines
 	bootTask.AddJobs(func(ctx context.Context) error {
 		err := a.run()
 		stop()
@@ -54,6 +56,7 @@ func (a *App) Run(ctx context.Context) error {
 		return err
 	})
 
+	// daemon goroutines
 	bootTask.AddJobs(func(ctx context.Context) error {
 		select {
 		case <-c.Done():
@@ -101,11 +104,14 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.Logger) (*App, 
 		return nil, err
 	}
 
+	// set validation translator
+	vax.SetTranslator(locale.L())
+
 	// http server
 	engine, server = NewHttpServer(cfg, lang, logger)
 
 	// setup app handler router
-	_, cleanupHandler, err := handler.SetupHandler(cfg, engine, datasource)
+	_, cleanup, err := handler.SetupHandler(cfg, engine, datasource)
 	if err != nil {
 		return nil, err
 	}
@@ -115,8 +121,8 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.Logger) (*App, 
 
 	// execute on server shutdown
 	shutdownFn := func() {
-		if cleanupHandler != nil {
-			cleanupHandler()
+		if cleanup != nil {
+			cleanup()
 		}
 		CloseDataSource(datasource)
 		loggerw.Close()

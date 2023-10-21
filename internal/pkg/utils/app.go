@@ -2,7 +2,7 @@ package utils
 
 import (
 	"github.com/dstgo/wilson/internal/core/log"
-	"github.com/dstgo/wilson/pkg/route"
+	"github.com/dstgo/wilson/pkg/ginx"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -13,8 +13,8 @@ func IsDebugMode() bool {
 
 // PrintRouters
 // use for debugging, print all the route has benn register
-func PrintRouters(root *route.Router, printGroup bool) error {
-	return root.Walk(func(info route.RouterInfo) error {
+func PrintRouters(root *ginx.RouterGroup, printGroup bool) error {
+	return root.Walk(func(info ginx.WalkRouteInfo) error {
 		if !printGroup && info.IsGroup {
 			return nil
 		}

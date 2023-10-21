@@ -10,13 +10,13 @@ import (
 	user2 "github.com/dstgo/wilson/internal/api/user"
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/handler/user"
-	"github.com/dstgo/wilson/pkg/route"
+	"github.com/dstgo/wilson/pkg/ginx"
 )
 
 // Injectors from wire.go:
 
 //go:generate wire gen
-func setupOpenAPIRouter(open *route.Router, datasource *data.DataSource) Router {
+func setupOpenAPIRouter(open *ginx.RouterGroup, datasource *data.DataSource) Router {
 	userData := user.NewUserData()
 	infoLogic := user2.NewInfoLogic(userData)
 	userInfo := user.NewUserInfo(datasource, userData)

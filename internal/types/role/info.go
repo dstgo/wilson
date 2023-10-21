@@ -1,5 +1,13 @@
 package role
 
+var (
+	// AdminRole app static admin role,
+	AdminRole = RoleInfo{
+		Name: "AppAdmin",
+		Code: "1024",
+	}
+)
+
 type RoleInfo struct {
 	// role id
 	ID uint `json:"id" example:"1"`

@@ -15,6 +15,7 @@ gen:
 
 .PHONY: build
 build:
+	go vet
 	go build -trimpath -ldflags "-X main.Author=$(shell git config user.name) -X main.Version=$(shell git describe --tags --always)" -o ./bin/ github.com/dstgo/wilson
 
 .PHONY: gen_build

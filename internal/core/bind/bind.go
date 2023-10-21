@@ -2,7 +2,7 @@ package bind
 
 import (
 	"errors"
-	"github.com/dstgo/wilson/internal/pkg/httpx"
+	"github.com/dstgo/wilson/pkg/ginx/httpx"
 	"github.com/dstgo/wilson/pkg/vax"
 	"github.com/gin-gonic/gin"
 	"io"

@@ -2,7 +2,9 @@ package user
 
 import (
 	"github.com/dstgo/wilson/internal/types"
-	"github.com/dstgo/wilson/pkg/route"
+	"github.com/dstgo/wilson/internal/types/meta"
+	"github.com/dstgo/wilson/internal/types/role"
+	"github.com/dstgo/wilson/pkg/ginx"
 	"github.com/google/wire"
 )
 
@@ -20,24 +22,24 @@ type Handler struct {
 	Modify ModifyHandler
 }
 
-func SetupRouter(api *route.Router, handler Handler) HandlerRouter {
+func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
 	// user router
 	userRouter := api.Group("user", nil)
 	{
 		// user info
-		infoRouter := userRouter.Group("", nil)
+		infoRouter := userRouter.Group("", ginx.M(meta.Name("route.user")))
 		infoHandler := handler.Info
 		{
-			infoRouter.GET("info", route.Metas(), infoHandler.GetUserInfo)
-			infoRouter.GET("list", route.Metas(), infoHandler.GetUserInfoList)
+			infoRouter.GET("info", ginx.M(meta.Name("route.user.info"), meta.Anonymous), infoHandler.GetUserInfo)
+			infoRouter.GET("list", ginx.M(meta.Name("route.user.list"), meta.Roles(role.AdminRole.Code)), infoHandler.GetUserInfoList)
 		}
 
 		// user modify
-		modifyRouter := userRouter.Group("", nil)
+		modifyRouter := userRouter.Group("", ginx.M(meta.Name("route.user")))
 		modifyHandler := handler.Modify
 		{
-			modifyRouter.POST("update", route.Metas(), modifyHandler.UpdateUserInfo)
-			modifyRouter.DELETE("remove", route.Metas(), modifyHandler.RemoveUser)
+			modifyRouter.POST("update", ginx.M(meta.Name("route.user.update")), modifyHandler.UpdateUserInfo)
+			modifyRouter.DELETE("remove", ginx.M(meta.Name("route.user.remove"), meta.Roles(role.AdminRole.Code)), modifyHandler.RemoveUser)
 		}
 
 	}

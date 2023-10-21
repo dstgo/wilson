@@ -1,29 +1,44 @@
 package meta
 
-import "github.com/dstgo/wilson/pkg/route"
+import (
+	"github.com/dstgo/wilson/pkg/ginx"
+)
 
-// NoAuth means the router which use this meta has need to authenticate
-var NoAuth = route.E{
+// NoAuth means the router which use this meta has no need to authenticate
+var NoAuth = ginx.E{
 	Key: "NoAuth",
 	Val: struct{}{},
 }
 
-func Name(routeName string) route.E {
-	return route.E{
+// Anonymous means the router which use this meta has no need to authorize
+var Anonymous = ginx.E{
+	Key: "Anonymous",
+	Val: struct{}{},
+}
+
+func Name(routeName string) ginx.E {
+	return ginx.E{
 		Key: "RouteName",
 		Val: routeName,
 	}
 }
 
-func Comment(routeComment string) route.E {
-	return route.E{
+func GroupName(routeName string) ginx.E {
+	return ginx.E{
+		Key: "GroupRouteName",
+		Val: routeName,
+	}
+}
+
+func Comment(routeComment string) ginx.E {
+	return ginx.E{
 		Key: "RouteComment",
 		Val: routeComment,
 	}
 }
 
-func Roles(roles ...string) route.E {
-	return route.E{
+func Roles(roles ...string) ginx.E {
+	return ginx.E{
 		Key: "role",
 		Val: roles,
 	}

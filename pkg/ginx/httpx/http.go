@@ -1,7 +1,7 @@
 package httpx
 
 import (
-	"github.com/dstgo/wilson/internal/pkg/httpx/httpheader"
+	"github.com/dstgo/wilson/pkg/ginx/httpx/httpheader"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
 	"regexp"

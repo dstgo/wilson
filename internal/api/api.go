@@ -5,7 +5,7 @@ import (
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/data"
-	"github.com/dstgo/wilson/pkg/route"
+	"github.com/dstgo/wilson/pkg/ginx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	swaggerFiles "github.com/swaggo/files"
@@ -36,7 +36,7 @@ func SetupOpenAPI(cfg *conf.AppConf, engine *gin.Engine, datasource *data.DataSo
 		engine.GET(path.Join(DocPath, "*any"), ginSwagger.CustomWrapHandler(Config, swaggerFiles.NewHandler()))
 		log.L().Infof("visit OpenAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(DocPath, "index.html"))
 	}
-	root := route.NewRouter(engine.RouterGroup.Group(BasePath))
+	root := ginx.NewRouterGroup(engine.RouterGroup.Group(BasePath))
 
 	return setupOpenAPIRouter(root, datasource)
 }

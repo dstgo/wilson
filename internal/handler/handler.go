@@ -13,7 +13,7 @@ import (
 	"github.com/dstgo/wilson/internal/handler/system"
 	"github.com/dstgo/wilson/internal/handler/user"
 	"github.com/dstgo/wilson/internal/pkg/utils"
-	"github.com/dstgo/wilson/pkg/route"
+	"github.com/dstgo/wilson/pkg/ginx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	swaggerFiles "github.com/swaggo/files"
@@ -52,7 +52,7 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 	roleResolver := roleSo.NewGormResolver(datasource.ORM())
 
 	// wrap http router
-	handlerRouter := route.NewRouter(httpserver.RouterGroup.Group(BasePath))
+	handlerRouter := ginx.NewRouterGroup(httpserver.RouterGroup.Group(BasePath))
 
 	// attach global router components
 	handlerRouter.Attach(
@@ -78,6 +78,31 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 
 	return router, cleanup, err
 }
+
+//func initRouter(root *route.Router, resolver roleSo.Resolver) error {
+//	err := resolver.CreateRole(role.AdminRole)
+//	if err != nil {
+//		return err
+//	}
+//
+//	var perms []role.PermInfo
+//
+//	root.Walk(func(info route.RouterInfo) error {
+//
+//		name, b := info.Meta.Get(meta.Name("").Key)
+//		if !b {
+//			name.Val = info.FullPath
+//		}
+//
+//		perms = append(perms, role.PermInfo{
+//			Name:   name.String(),
+//			Object: info.FullPath,
+//			Group:,
+//			Action: info.Method,
+//			Tag:    "appapi",
+//		})
+//	})
+//}
 
 var Config = &ginSwagger.Config{
 	URL:                      "doc.json",

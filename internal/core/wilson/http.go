@@ -9,7 +9,6 @@ import (
 	"github.com/dstgo/wilson/internal/handler/middleware"
 	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/internal/types"
-	"github.com/dstgo/wilson/pkg/vax"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -51,9 +50,6 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 		IdleTimeout:       serverConf.HttpConf.IdleTimeout,
 		MaxHeaderBytes:    serverConf.HttpConf.MaxHeader,
 	}
-
-	// http request validate pkg
-	vax.SetTranslator(locale.L())
 
 	server.Handler = engine
 

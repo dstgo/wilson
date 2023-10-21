@@ -2,9 +2,9 @@ package resp
 
 import (
 	"errors"
-	"github.com/dstgo/wilson/internal/pkg/httpx"
 	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/internal/types/errs"
+	"github.com/dstgo/wilson/pkg/ginx/httpx"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
