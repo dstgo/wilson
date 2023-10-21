@@ -6,9 +6,9 @@ import "gorm.io/gorm"
 // represents a physical machine, which runs a lot of containers
 type Node struct {
 	gorm.Model
-	Name    string `gorm:"type:varchar(255);comment:node name;"`
-	Address string `gorm:"type:varchar(255);comment:node address;"`
-	Note    string `gorm:"type:varchar(255);comment:node note;"`
+	Name    string `gorm:"type:varchar(50);comment:node name;"`
+	Address string `gorm:"type:varchar(30);uniqueIndex;comment:node address;"`
+	Note    string `gorm:"type:varchar(100);comment:node note;"`
 
 	NodeTable
 }

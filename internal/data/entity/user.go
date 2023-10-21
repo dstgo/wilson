@@ -6,10 +6,10 @@ import (
 
 // User user entity represents from database table
 type User struct {
-	UUID     string `gorm:"uniqueIndex;type:varchar(256);comment:User UUID;"`
-	Username string `gorm:"uniqueIndex;type:varchar(256);comment:username;"`
-	Password string `gorm:"comment:User password;type:varchar(256);"`
-	Email    string `gorm:"uniqueIndex;type:varchar(256);comment:User concat email;"`
+	UUID     string `gorm:"uniqueIndex;type:varchar(40);comment:User UUID;"`
+	Username string `gorm:"uniqueIndex;type:varchar(30);comment:username;"`
+	Password string `gorm:"comment:User password;type:varchar(40);"`
+	Email    string `gorm:"uniqueIndex;type:varchar(80);comment:User concat email;"`
 
 	gorm.Model
 	UserTable
