@@ -1,0 +1,108 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Wilson open api documentation, to access these open api, you need to add apikey in query param named \"key\"",
+        "title": "Wilson App Open API Documentation",
+        "contact": {
+            "name": "dstgo",
+            "url": "https://github.com/dstgo"
+        },
+        "license": {
+            "name": "MIT LICENSE",
+            "url": "https://mit-license.org/"
+        },
+        "version": "v1.0.0"
+    },
+    "basePath": "/open/v1",
+    "paths": {
+        "/api": {
+            "get": {
+                "description": "get user info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "UserInfo",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "uuid",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/user.Info"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "types.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 2000
+                },
+                "data": {},
+                "err": {
+                    "type": "string"
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "operation success"
+                }
+            }
+        },
+        "user.Info": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2022-01-01 00:00:00"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "jacklove@lol.com"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "jack"
+                },
+                "uuid": {
+                    "type": "string",
+                    "example": "55BBA4ED-18D3-790F-EABF-A5330E527586"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "key",
+            "in": "query"
+        }
+    }
+}

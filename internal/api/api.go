@@ -1,6 +1,7 @@
 package api
 
 import (
+	_ "github.com/dstgo/wilson/internal/api/docs"
 	"github.com/dstgo/wilson/internal/api/user"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/core/log"
@@ -14,8 +15,8 @@ import (
 )
 
 const (
-	BasePath = "/open"
-	DocPath  = "/open/doc"
+	BasePath = "/open/v1"
+	DocPath  = "/open/v1/doc"
 )
 
 var ApiProviderSet = wire.NewSet(
@@ -54,8 +55,15 @@ var Config = &ginSwagger.Config{
 
 // swagger declarative api comment
 
-//	@title			Wilson App Internal API Documentation
-//	@version		v1.0.0
-//	@description	Wilson api documentation
-//	@BasePath		/open
-//go:generate swag init --generatedTime --instanceName openapi -g api.go -d ./,../types,../pkg/resp --output ./swagger && swag fmt -g api.go -d ./
+// @title		                    Wilson App Open API Documentation
+// @version		                    v1.0.0
+// @description                     Wilson open api documentation, to access these open api, you need to add apikey in query param named "key"
+// @contact.name                    dstgo
+// @contact.url                     https://github.com/dstgo
+// @BasePath                        /open/v1
+// @license.name                    MIT LICENSE
+// @license.url                     https://mit-license.org/
+// @securityDefinitions.apikey      ApiKeyAuth
+// @in                              query
+// @name                            key
+//go:generate swag init --generatedTime --instanceName openapi -g api.go -d ./,../types,../core/resp --output ./docs && swag fmt -g api.go -d ./

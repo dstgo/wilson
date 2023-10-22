@@ -7,9 +7,9 @@
 package api
 
 import (
-	user2 "github.com/dstgo/wilson/internal/api/user"
+	"github.com/dstgo/wilson/internal/api/user"
 	"github.com/dstgo/wilson/internal/data"
-	"github.com/dstgo/wilson/internal/handler/user"
+	user2 "github.com/dstgo/wilson/internal/handler/user"
 	"github.com/dstgo/wilson/pkg/ginx"
 )
 
@@ -17,14 +17,13 @@ import (
 
 //go:generate wire gen
 func setupOpenAPIRouter(open *ginx.RouterGroup, datasource *data.DataSource) Router {
-	userData := user.NewUserData()
-	infoLogic := user2.NewInfoLogic(userData)
-	userInfo := user.NewUserInfo(datasource, userData)
-	infoApi := user2.NewInfoApi(infoLogic, userInfo)
-	api := user2.API{
+	infoLogic := user.NewInfoLogic(datasource)
+	userInfo := user2.NewUserInfo(datasource)
+	infoApi := user.NewInfoApi(infoLogic, userInfo)
+	api := user.API{
 		Info: infoApi,
 	}
-	apiRouter := user2.SetupRouter(open, api)
+	apiRouter := user.SetupRouter(open, api)
 	router := Router{
 		User: apiRouter,
 	}
