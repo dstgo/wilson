@@ -8,7 +8,7 @@ import (
 type User struct {
 	UUID     string `gorm:"uniqueIndex;type:varchar(40);comment:User UUID;"`
 	Username string `gorm:"uniqueIndex;type:varchar(30);comment:username;"`
-	Password string `gorm:"comment:User password;type:varchar(40);"`
+	Password string `gorm:"comment:User password;type:varchar(255);"`
 	Email    string `gorm:"uniqueIndex;type:varchar(80);comment:User concat email;"`
 
 	gorm.Model

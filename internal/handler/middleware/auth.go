@@ -4,6 +4,7 @@ import (
 	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/core/resp"
 	"github.com/dstgo/wilson/internal/core/role"
+	"github.com/dstgo/wilson/internal/handler/user"
 	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/dstgo/wilson/internal/types/meta"
 	"github.com/dstgo/wilson/pkg/ginx"
@@ -46,7 +47,7 @@ func UseAuthenticate(v authen.Parser) gin.HandlerFunc {
 	}
 }
 
-func UseRoleAuthorize(resolver role.Resolver) gin.HandlerFunc {
+func UseRoleAuthorize(resolver role.Resolver, userRole user.UserRole) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// no need to authorize if no need to authenticate
 		metaData := ginx.MetaFromCtx(ctx)
@@ -56,14 +57,20 @@ func UseRoleAuthorize(resolver role.Resolver) gin.HandlerFunc {
 		}
 
 		info := authen.GetContextTokenInfo(ctx)
+		userRoles, err := userRole.GetUserRoleCodes(info.UUID)
+		if err != nil {
+			ctx.Abort()
+			resp.InternalFailed(ctx).MsgI18n("err.internal").Error(errs.DataBaseErr(err)).Send()
+			return
+		}
+
 		var (
-			roles  = info.Roles
+			roles  = userRoles
 			object = ctx.FullPath()
 			action = ctx.Request.Method
 		)
 
-		err := resolver.ResolveAny(object, action, roles...)
-		if err != nil {
+		if err := resolver.ResolveAny(object, action, roles...); err != nil {
 			ctx.Abort()
 			if errors.Is(err, role.ErrHasNoPermission) {
 				resp.Fail(ctx).MsgI18n("err.unauthorized").Error(errs.UnAuthorized(nil).I18n("role.noPerm")).Send()

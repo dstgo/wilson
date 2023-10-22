@@ -65,7 +65,7 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 	// add middleware chains
 	handlerRouter.Use(
 		middleware.UseAuthenticate(authenticator),
-		middleware.UseRoleAuthorize(roleResolver),
+		middleware.UseRoleAuthorize(roleResolver, user.NewUserRole(datasource)),
 	)
 
 	router, cleanup, err := setupHandlerRouter(cfg, handlerRouter, datasource)
@@ -100,6 +100,8 @@ func initRouterRole(root *ginx.RouterGroup, resolver roleSo.Resolver) error {
 
 	err := resolver.CreateRoleInBatch([]role.RoleInfo{
 		role.AdminRole,
+		role.UserRole,
+		role.AnonymousRole,
 	})
 
 	if err != nil {
@@ -177,16 +179,16 @@ var Config = &ginSwagger.Config{
 
 // swagger declarative api comment
 
-// @title		Wilson App Internal API Documentation
-// @version		v1.0.0
-// @description Wilson app http api documentation, use the Bearer Token to authenticate
-// @description It should be noted that when using swagger doc for API debugging, the Token needs to be manually prefixed with Bearer.
-// @contact.name dstgo
-// @contact.url https://github.com/dstgo
-// @BasePath	/api/v1
-// @license.name  MIT LICENSE
-// @license.url   https://mit-license.org/
-// @securityDefinitions.apikey BearerAuth
-// @in header
-// @name Authorization
+// @title	                        Wilson App Internal API Documentation
+// @version		                    v1.0.0
+// @description                     Wilson app http api documentation, use the Bearer Token to authenticate
+// @description                     It should be noted that when using swagger doc for API debugging, the Token needs to be manually prefixed with Bearer.
+// @contact.name                    dstgo
+// @contact.url                     https://github.com/dstgo
+// @BasePath	                    /api/v1
+// @license.name                    MIT LICENSE
+// @license.url                     https://mit-license.org/
+// @securityDefinitions.apikey      BearerAuth
+// @in                              header
+// @name                            Authorization
 //go:generate swag init --generatedTime --instanceName appapi -g handler.go -d ./,../types,../core/resp --output ./docs && swag fmt -g handler.go -d ./

@@ -13,8 +13,42 @@
         },
         "version": "v1.0.0"
     },
-    "basePath": "/api",
+    "basePath": "/api/v1",
     "paths": {
+        "/api": {
+            "get": {
+                "description": "create new user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "app"
+                ],
+                "summary": "CreateUser",
+                "parameters": [
+                    {
+                        "description": "CreateUserOption",
+                        "name": "createOpt",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.CreateUserOption"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/forgotpwd": {
             "post": {
                 "description": "forgot password",
@@ -1301,6 +1335,83 @@
                 }
             }
         },
+        "/user/roles": {
+            "get": {
+                "description": "get user roles",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "GetUserRoles",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "uuid",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/role.RoleInfo"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "get string by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "SaveUserRoles",
+                "parameters": [
+                    {
+                        "description": "SaveRoleOption",
+                        "name": "saveOption",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.SaveRoleOption"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/user/update": {
             "post": {
                 "security": [
@@ -1320,11 +1431,6 @@
                 ],
                 "summary": "UpdateUserInfo",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "name": "uuid",
-                        "in": "query"
-                    },
                     {
                         "description": "comment",
                         "name": "updateInfoOption",
@@ -1593,6 +1699,26 @@
                 }
             }
         },
+        "user.CreateUserOption": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "new email",
+                    "type": "string",
+                    "example": "jack@google.com"
+                },
+                "password": {
+                    "description": "new password",
+                    "type": "string",
+                    "example": "123456"
+                },
+                "username": {
+                    "description": "new username",
+                    "type": "string",
+                    "example": "jack"
+                }
+            }
+        },
         "user.Info": {
             "type": "object",
             "properties": {
@@ -1611,6 +1737,20 @@
                 "uuid": {
                     "type": "string",
                     "example": "55BBA4ED-18D3-790F-EABF-A5330E527586"
+                }
+            }
+        },
+        "user.SaveRoleOption": {
+            "type": "object",
+            "properties": {
+                "role_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "uuid": {
+                    "type": "string"
                 }
             }
         },

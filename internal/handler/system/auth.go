@@ -20,10 +20,9 @@ import (
 	"net/http"
 )
 
-func NewAuthenticator(cfg *conf.AppConf, ds *data.DataSource, userData user.UserData, codeCache cache.RedisEmailCodeCache, tokenCache cache.TokenCache) Authenticator {
+func NewAuthenticator(cfg *conf.AppConf, ds *data.DataSource, codeCache cache.RedisEmailCodeCache, tokenCache cache.TokenCache) Authenticator {
 	return Authenticator{
 		issue:      authen.NewCacheAuthor(cfg.JwtConf, tokenCache),
-		userData:   userData,
 		codeCache:  codeCache,
 		tokenCache: tokenCache,
 		ds:         ds,
@@ -32,7 +31,6 @@ func NewAuthenticator(cfg *conf.AppConf, ds *data.DataSource, userData user.User
 
 type Authenticator struct {
 	issue      authen.Issuer
-	userData   user.UserData
 	codeCache  cache.RedisEmailCodeCache
 	tokenCache cache.TokenCache
 	ds         *data.DataSource
@@ -48,9 +46,9 @@ func (a Authenticator) TryLogin(userName string, password string) (jwtx.Jwt, err
 
 	// try to find the user
 	if err := is.EmailFormat.Validate(locale.L().Default(), userName); err != nil {
-		userEntity, userErr = a.userData.GetUserByName(a.ds.ORM(), userName)
+		userEntity, userErr = user.GetUserByName(a.ds.ORM(), userName)
 	} else {
-		userEntity, userErr = a.userData.GetUserByEmail(a.ds.ORM(), userName)
+		userEntity, userErr = user.GetUserByEmail(a.ds.ORM(), userName)
 	}
 
 	// if user not found, return error
@@ -91,7 +89,7 @@ func (a Authenticator) TryRegisterNewUser(username string, password string, code
 	}
 
 	// try to find the userInfo
-	userInfo, err := a.userData.GetUserByName(a.ds.ORM(), username)
+	userInfo, err := user.GetUserByName(a.ds.ORM(), username)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return errs.DataBaseErr(err)
 	}
@@ -112,7 +110,7 @@ func (a Authenticator) TryRegisterNewUser(username string, password string, code
 		Email:    cacheEmail,
 	}
 
-	if err := a.userData.CreateUser(a.ds.ORM(), newUser); err != nil {
+	if err := user.CreateUser(a.ds.ORM(), newUser); err != nil {
 		return errs.DataBaseErr(err)
 	}
 
@@ -150,7 +148,7 @@ func (a Authenticator) ChangePassword(newPassword string, code string) error {
 	}
 
 	// find user by email
-	userInfo, err := a.userData.GetUserByEmail(a.ds.ORM(), emailCache)
+	userInfo, err := user.GetUserByEmail(a.ds.ORM(), emailCache)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return errs.ResourceNotFound(err).I18n("user.notfound")
 	} else if err != nil {
@@ -161,7 +159,7 @@ func (a Authenticator) ChangePassword(newPassword string, code string) error {
 	userInfo.Password = cryptor.Sha512WithBase64(newPassword)
 
 	// save
-	if err := a.userData.UpdateUserInfo(a.ds.ORM(), userInfo); err != nil {
+	if err := user.UpdateUserInfo(a.ds.ORM(), userInfo); err != nil {
 		return errs.DataBaseErr(err)
 	}
 

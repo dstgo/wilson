@@ -1,4 +1,4 @@
-basePath: /api
+basePath: /api/v1
 definitions:
   auth.ForgotPasswordOption:
     properties:
@@ -182,6 +182,21 @@ definitions:
         example: operation success
         type: string
     type: object
+  user.CreateUserOption:
+    properties:
+      email:
+        description: new email
+        example: jack@google.com
+        type: string
+      password:
+        description: new password
+        example: "123456"
+        type: string
+      username:
+        description: new username
+        example: jack
+        type: string
+    type: object
   user.Info:
     properties:
       createdAt:
@@ -195,6 +210,15 @@ definitions:
         type: string
       uuid:
         example: 55BBA4ED-18D3-790F-EABF-A5330E527586
+        type: string
+    type: object
+  user.SaveRoleOption:
+    properties:
+      role_ids:
+        items:
+          type: integer
+        type: array
+      uuid:
         type: string
     type: object
   user.UpdateInfoOption:
@@ -225,6 +249,28 @@ info:
   title: Wilson App Internal API Documentation
   version: v1.0.0
 paths:
+  /api:
+    get:
+      consumes:
+      - application/json
+      description: create new user
+      parameters:
+      - description: CreateUserOption
+        in: body
+        name: createOpt
+        required: true
+        schema:
+          $ref: '#/definitions/user.CreateUserOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Response'
+      summary: CreateUser
+      tags:
+      - app
   /auth/forgotpwd:
     post:
       consumes:
@@ -1009,15 +1055,59 @@ paths:
       summary: RemoveUser
       tags:
       - user
+  /user/roles:
+    get:
+      consumes:
+      - application/json
+      description: get user roles
+      parameters:
+      - in: query
+        name: uuid
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/role.RoleInfo'
+                  type: array
+              type: object
+      summary: GetUserRoles
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: get string by ID
+      parameters:
+      - description: SaveRoleOption
+        in: body
+        name: saveOption
+        required: true
+        schema:
+          $ref: '#/definitions/user.SaveRoleOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Response'
+      summary: SaveUserRoles
+      tags:
+      - user
   /user/update:
     post:
       consumes:
       - application/json
       description: update the specific user info
       parameters:
-      - in: query
-        name: uuid
-        type: string
       - description: comment
         in: body
         name: updateInfoOption

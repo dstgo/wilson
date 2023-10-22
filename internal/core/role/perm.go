@@ -14,11 +14,11 @@ func (g GormResolver) GetPerm(permId uint) (role.PermInfo, error) {
 	if err != nil {
 		return role.PermInfo{}, err
 	}
-	return makePermInfo(perm), nil
+	return role.MakePermInfo(perm), nil
 }
 
 func (g GormResolver) CreatePerm(permInfo role.PermInfo) error {
-	_, err := createPerm(g.db, makePermRecord(permInfo))
+	_, err := createPerm(g.db, role.MakePermRecord(permInfo))
 	if err != nil {
 		return err
 	}
@@ -26,7 +26,7 @@ func (g GormResolver) CreatePerm(permInfo role.PermInfo) error {
 }
 
 func (g GormResolver) CreatePermInBatch(perms []role.PermInfo) error {
-	records := makePermRecordList(perms)
+	records := role.MakePermRecordList(perms)
 	_, err := createPermInBatch(g.db, records)
 	return err
 }
@@ -36,7 +36,7 @@ func (g GormResolver) ListPerms(option role.PageOption) ([]role.PermInfo, error)
 	if err != nil {
 		return []role.PermInfo{}, err
 	}
-	return makePermInfoList(list), nil
+	return role.MakePermInfoList(list), nil
 }
 
 func (g GormResolver) ListAllPerms(tag string) ([]role.PermInfo, error) {
@@ -44,11 +44,11 @@ func (g GormResolver) ListAllPerms(tag string) ([]role.PermInfo, error) {
 	if err != nil {
 		return []role.PermInfo{}, err
 	}
-	return makePermInfoList(perms), nil
+	return role.MakePermInfoList(perms), nil
 }
 
 func (g GormResolver) UpdatePerm(permInfo role.PermInfo) error {
-	err := updatePerm(g.db, makePermRecord(permInfo))
+	err := updatePerm(g.db, role.MakePermRecord(permInfo))
 	if err != nil {
 		return err
 	}
@@ -63,43 +63,7 @@ func (g GormResolver) RemovePerm(permId uint) error {
 	return nil
 }
 
-func makePermInfo(perm entity.Permission) role.PermInfo {
-	return role.PermInfo{
-		ID:     perm.ID,
-		Name:   perm.Name,
-		Object: perm.Object,
-		Group:  perm.Group,
-		Action: perm.Action,
-		Tag:    perm.Tag,
-	}
-}
-
-func makePermInfoList(perms []entity.Permission) (infos []role.PermInfo) {
-	for _, perm := range perms {
-		infos = append(infos, makePermInfo(perm))
-	}
-	return
-}
-
-func makePermRecord(perm role.PermInfo) entity.Permission {
-	return entity.Permission{
-		Model:  gorm.Model{ID: perm.ID},
-		Name:   perm.Name,
-		Object: perm.Object,
-		Action: perm.Action,
-		Group:  perm.Group,
-		Tag:    perm.Tag,
-	}
-}
-
-func makePermRecordList(perms []role.PermInfo) (ens []entity.Permission) {
-	for _, perm := range perms {
-		ens = append(ens, makePermRecord(perm))
-	}
-	return
-}
-
-func makeRolePerms(roleId uint, permIds []uint) []entity.RolePermission {
+func MakeRolePerms(roleId uint, permIds []uint) []entity.RolePermission {
 	rolePermList := make([]entity.RolePermission, 0, len(permIds))
 	for _, permId := range permIds {
 		rolePermList = append(rolePermList, entity.RolePermission{RoleId: roleId, PermId: permId})
@@ -221,25 +185,4 @@ func removePerm(db *gorm.DB, permId uint) error {
 
 func updatePerm(db *gorm.DB, perm entity.Permission) error {
 	return db.Model(perm).Where("id = ?", perm.ID).Updates(&perm).Error
-}
-
-func makePermGroup(perms []entity.Permission) []role.PermGroup {
-	pg := make(map[string][]role.PermInfo, len(perms)/10)
-
-	for _, perm := range perms {
-		permInfo := role.PermInfo{Name: perm.Name, Object: perm.Object, Action: perm.Action}
-		if _, e := pg[perm.Group]; !e {
-			pg[perm.Group] = []role.PermInfo{permInfo}
-		} else {
-			pg[perm.Group] = append(pg[perm.Group], permInfo)
-		}
-	}
-
-	var groups []role.PermGroup
-
-	for groupName, perms := range pg {
-		groups = append(groups, role.PermGroup{Group: groupName, Perms: perms})
-	}
-
-	return groups
 }

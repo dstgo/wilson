@@ -13,7 +13,7 @@ func (g GormResolver) GetRole(roleId uint) (role.RoleInfo, error) {
 	if err != nil {
 		return role.RoleInfo{}, err
 	}
-	return makeRoleInfo(rocord), nil
+	return role.MakeRoleInfo(rocord), nil
 }
 
 func (g GormResolver) ListRole(option role.PageOption) ([]role.RoleInfo, error) {
@@ -21,7 +21,7 @@ func (g GormResolver) ListRole(option role.PageOption) ([]role.RoleInfo, error) 
 	if err != nil {
 		return []role.RoleInfo{}, err
 	}
-	return makeRoleInfoList(records), nil
+	return role.MakeRoleInfoList(records), nil
 }
 
 func (g GormResolver) ListAllRole() ([]role.RoleInfo, error) {
@@ -29,56 +29,26 @@ func (g GormResolver) ListAllRole() ([]role.RoleInfo, error) {
 	if err != nil {
 		return []role.RoleInfo{}, err
 	}
-	return makeRoleInfoList(records), nil
+	return role.MakeRoleInfoList(records), nil
 }
 
 func (g GormResolver) CreateRole(roleInfo role.RoleInfo) error {
-	_, err := createRole(g.db, makeRoleRecord(roleInfo))
+	_, err := createRole(g.db, role.MakeRoleRecord(roleInfo))
 	return err
 }
 
 func (g GormResolver) CreateRoleInBatch(roles []role.RoleInfo) error {
-	records := makeRoleRecordList(roles)
+	records := role.MakeRoleRecordList(roles)
 	_, err := createRoleInBatch(g.db, records)
 	return err
 }
 
 func (g GormResolver) UpdateRole(roleInfo role.RoleInfo) error {
-	return updateRole(g.db, makeRoleRecord(roleInfo))
+	return updateRole(g.db, role.MakeRoleRecord(roleInfo))
 }
 
 func (g GormResolver) RemoveRole(roleId uint) error {
 	return removeRole(g.db, roleId)
-}
-
-func makeRoleInfo(record entity.Role) role.RoleInfo {
-	return role.RoleInfo{
-		ID:   record.ID,
-		Name: record.Name,
-		Code: record.Code,
-	}
-}
-
-func makeRoleInfoList(records []entity.Role) (infos []role.RoleInfo) {
-	for _, record := range records {
-		infos = append(infos, makeRoleInfo(record))
-	}
-	return
-}
-
-func makeRoleRecord(info role.RoleInfo) entity.Role {
-	return entity.Role{
-		Model: gorm.Model{ID: info.ID},
-		Name:  info.Name,
-		Code:  info.Code,
-	}
-}
-
-func makeRoleRecordList(infos []role.RoleInfo) (records []entity.Role) {
-	for _, info := range infos {
-		records = append(records, makeRoleRecord(info))
-	}
-	return
 }
 
 func getRoleById(db *gorm.DB, id uint) (entity.Role, error) {
@@ -186,7 +156,7 @@ func insertRolePerm(db *gorm.DB, roleId uint, permId uint) error {
 // insertRolePermBatch insert new records if key has no conflicts,or do nothing
 func insertRolePermBatch(db *gorm.DB, roleId uint, permIds []uint) error {
 
-	rolePermList := makeRolePerms(roleId, permIds)
+	rolePermList := MakeRolePerms(roleId, permIds)
 
 	// create the new relation, if existed, do nothing
 	err := db.Clauses(clause.OnConflict{
@@ -206,6 +176,6 @@ func removeRolePermBatch(db *gorm.DB, roleId uint, permIds []uint) error {
 	if permIds == nil || len(permIds) == 0 {
 		return nil
 	}
-	rolePermList := makeRolePerms(roleId, permIds)
+	rolePermList := MakeRolePerms(roleId, permIds)
 	return db.Unscoped().Model(entity.RolePermission{}).Delete(&rolePermList).Error
 }

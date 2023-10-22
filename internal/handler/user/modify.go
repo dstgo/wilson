@@ -7,20 +7,43 @@ import (
 	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/dstgo/wilson/internal/types/user"
 	"github.com/duke-git/lancet/v2/cryptor"
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
-func NewUserModify(ds *data.DataSource, userdata UserData, userInfo UserInfo) UserModify {
+func NewUserModify(ds *data.DataSource, userInfo UserInfo) UserModify {
 	return UserModify{
-		userData: userdata,
 		userInfo: userInfo,
 		ds:       ds,
 	}
 }
 
 type UserModify struct {
-	userData UserData
 	userInfo UserInfo
 	ds       *data.DataSource
+}
+
+func (u UserModify) Create(createOpt user.CreateUserOption) error {
+	// try to find the user
+	user, err := u.userInfo.GetUserInfoByName(createOpt.Username)
+	if user.UUID != "" {
+		return errs.NewI18nError("user.alreadyExist")
+	} else if err != nil {
+		return err
+	}
+
+	err = CreateUser(u.ds.ORM(), entity.User{
+		UUID:     uuid.NewString(),
+		Username: createOpt.Username,
+		Password: cryptor.Sha512WithBase64(createOpt.Password),
+		Email:    createOpt.Email,
+	})
+
+	if err != nil {
+		return errs.DataBaseErr(err)
+	}
+
+	return nil
 }
 
 func (u UserModify) Update(updateOpt user.UpdateInfoOption) error {
@@ -37,7 +60,7 @@ func (u UserModify) Update(updateOpt user.UpdateInfoOption) error {
 
 	userTable.Password = cryptor.Sha512WithBase64(userTable.Password)
 
-	if err := u.userData.UpdateUserInfo(u.ds.ORM(), userTable); err != nil {
+	if err := UpdateUserInfo(u.ds.ORM(), userTable); err != nil {
 		return errs.DataBaseErr(err)
 	}
 
@@ -50,9 +73,33 @@ func (u UserModify) Remove(uuid string) error {
 		return err
 	}
 
-	if err := u.userData.RemoveByUUID(u.ds.ORM(), uuid); err != nil {
+	if err := RemoveByUUID(u.ds.ORM(), uuid); err != nil {
 		return errs.DataBaseErr(err)
 	}
 
 	return nil
+}
+
+func CreateUser(db *gorm.DB, user entity.User) error {
+	return db.Create(&user).Error
+}
+
+func UpdateUserInfo(db *gorm.DB, user entity.User) error {
+	return db.Where("uuid = ?", user.UUID).Updates(&user).Error
+}
+
+func DisableUser(db *gorm.DB, id uint) error {
+	return db.Model(entity.User{}).Delete(entity.User{
+		Model: gorm.Model{ID: id},
+	}).Error
+}
+
+func RemoveUser(db *gorm.DB, id uint) error {
+	return db.Unscoped().Model(entity.User{}).Delete(entity.User{
+		Model: gorm.Model{ID: id},
+	}).Error
+}
+
+func RemoveByUUID(db *gorm.DB, uuid string) error {
+	return db.Unscoped().Model(entity.User{}).Delete("uuid = ?", uuid).Error
 }

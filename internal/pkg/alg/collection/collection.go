@@ -28,10 +28,22 @@ func IsSubset[E comparable](s1, s2 []E) bool {
 // ComplementSet return the complement set of s2 relative to s1
 func ComplementSet[E comparable](s1, s2 []E) []E {
 	var result []E
+	// must be subset
 	if !IsSubset(s1, s2) {
 		return result
 	}
 
+	for _, e := range s2 {
+		if !slices.Contains(s1, e) {
+			result = append(result, e)
+		}
+	}
+	return result
+}
+
+// DifferenceSet return the difference set of s2 relative to s1
+func DifferenceSet[E comparable](s1, s2 []E) []E {
+	var result []E
 	for _, e := range s2 {
 		if !slices.Contains(s1, e) {
 			result = append(result, e)

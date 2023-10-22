@@ -45,7 +45,7 @@ type PingHandler struct {
 // @Router       /ping [GET]
 func (p PingHandler) Ping(ctx *gin.Context) {
 	pingReq := new(system.PingRequest)
-	err := bind.BindAndResp(ctx,
+	err := bind.Binds(ctx,
 		bind.Query(pingReq),
 	)
 	if err != nil {
@@ -68,7 +68,7 @@ func (p PingHandler) Ping(ctx *gin.Context) {
 // @Router       /pong [GET]
 func (p PingHandler) Pong(ctx *gin.Context) {
 	pongReq := new(system.PingRequest)
-	err := bind.BindAndResp(ctx,
+	err := bind.Binds(ctx,
 		bind.Query(pongReq),
 	)
 	if err != nil {
@@ -99,7 +99,7 @@ type AuthHandler struct {
 // @Router       /auth/login [POST]
 func (a AuthHandler) Login(ctx *gin.Context) {
 	loginRequest := new(auth.LoginOption)
-	if err := bind.BindAndResp(ctx, bind.Json(loginRequest)); err != nil {
+	if err := bind.Binds(ctx, bind.Json(loginRequest)); err != nil {
 		return
 	}
 	signedJwt, err := a.Authlogic.TryLogin(loginRequest.Username, loginRequest.Password)
@@ -122,7 +122,7 @@ func (a AuthHandler) Login(ctx *gin.Context) {
 // @Router       /auth/register [POST]
 func (a AuthHandler) Register(ctx *gin.Context) {
 	registerRequest := new(auth.RegisterOption)
-	if err := bind.BindAndResp(ctx, bind.Json(registerRequest)); err != nil {
+	if err := bind.Binds(ctx, bind.Json(registerRequest)); err != nil {
 		return
 	}
 	err := a.Authlogic.TryRegisterNewUser(registerRequest.Username, registerRequest.Password, registerRequest.Code)
@@ -164,7 +164,7 @@ func (a AuthHandler) Logout(ctx *gin.Context) {
 // @Router       /auth/forgotpwd [POST]
 func (a AuthHandler) ForgotPassword(ctx *gin.Context) {
 	changePasswordReq := new(auth.ForgotPasswordOption)
-	err := bind.BindAndResp(ctx,
+	err := bind.Binds(ctx,
 		bind.Json(changePasswordReq),
 	)
 	if err != nil {
@@ -198,7 +198,7 @@ type RoleHandler struct {
 // @Router       /role/list [GET]
 func (r RoleHandler) GetRoleList(ctx *gin.Context) {
 	var pageOpt role.PageOption
-	if err := bind.BindAndResp(ctx, bind.Query(&pageOpt)); err != nil {
+	if err := bind.Binds(ctx, bind.Query(&pageOpt)); err != nil {
 		return
 	}
 
@@ -222,7 +222,7 @@ func (r RoleHandler) GetRoleList(ctx *gin.Context) {
 // @security BearerAuth
 func (r RoleHandler) GetRolePerms(ctx *gin.Context) {
 	var queryOpt types.Id
-	if err := bind.BindAndResp(ctx, bind.Query(&queryOpt)); err != nil {
+	if err := bind.Binds(ctx, bind.Query(&queryOpt)); err != nil {
 		return
 	}
 
@@ -246,7 +246,7 @@ func (r RoleHandler) GetRolePerms(ctx *gin.Context) {
 // @security BearerAuth
 func (r RoleHandler) CreateRole(ctx *gin.Context) {
 	var createOpt role.CreateRoleOption
-	if err := bind.BindAndResp(ctx, bind.Json(&createOpt)); err != nil {
+	if err := bind.Binds(ctx, bind.Json(&createOpt)); err != nil {
 		return
 	}
 	err := r.enforcer.CreateRole(createOpt)
@@ -269,7 +269,7 @@ func (r RoleHandler) CreateRole(ctx *gin.Context) {
 // @security BearerAuth
 func (r RoleHandler) UpdateRole(ctx *gin.Context) {
 	var updateOpt role.UpdateRoleOption
-	if err := bind.BindAndResp(ctx, bind.Json(&updateOpt)); err != nil {
+	if err := bind.Binds(ctx, bind.Json(&updateOpt)); err != nil {
 		return
 	}
 	err := r.enforcer.UpdateRole(updateOpt)
@@ -292,7 +292,7 @@ func (r RoleHandler) UpdateRole(ctx *gin.Context) {
 // @security BearerAuth
 func (r RoleHandler) GrantRolePerms(ctx *gin.Context) {
 	var grantOption role.GrantOption
-	if err := bind.BindAndResp(ctx, bind.Json(&grantOption)); err != nil {
+	if err := bind.Binds(ctx, bind.Json(&grantOption)); err != nil {
 		return
 	}
 
@@ -316,7 +316,7 @@ func (r RoleHandler) GrantRolePerms(ctx *gin.Context) {
 // @security BearerAuth
 func (r RoleHandler) RemoveRole(ctx *gin.Context) {
 	var roleId types.Id
-	if err := bind.BindAndResp(ctx, bind.Query(&roleId)); err != nil {
+	if err := bind.Binds(ctx, bind.Query(&roleId)); err != nil {
 		return
 	}
 
@@ -340,7 +340,7 @@ func (r RoleHandler) RemoveRole(ctx *gin.Context) {
 // @security BearerAuth
 func (r RoleHandler) GetPermList(ctx *gin.Context) {
 	var pageOpt role.PageOption
-	if err := bind.BindAndResp(ctx, bind.Query(&pageOpt)); err != nil {
+	if err := bind.Binds(ctx, bind.Query(&pageOpt)); err != nil {
 		return
 	}
 
@@ -364,7 +364,7 @@ func (r RoleHandler) GetPermList(ctx *gin.Context) {
 // @security BearerAuth
 func (r RoleHandler) CreatePermission(ctx *gin.Context) {
 	var createOpt role.CreatePermOption
-	if err := bind.BindAndResp(ctx, bind.Json(&createOpt)); err != nil {
+	if err := bind.Binds(ctx, bind.Json(&createOpt)); err != nil {
 		return
 	}
 
@@ -388,7 +388,7 @@ func (r RoleHandler) CreatePermission(ctx *gin.Context) {
 // @security BearerAuth
 func (r RoleHandler) UpdatePermission(ctx *gin.Context) {
 	var updateOpt role.UpdatePermOption
-	if err := bind.BindAndResp(ctx, bind.Json(&updateOpt)); err != nil {
+	if err := bind.Binds(ctx, bind.Json(&updateOpt)); err != nil {
 		return
 	}
 	err := r.enforcer.UpdatePerm(updateOpt)
@@ -411,7 +411,7 @@ func (r RoleHandler) UpdatePermission(ctx *gin.Context) {
 // @security BearerAuth
 func (r RoleHandler) RemovePermission(ctx *gin.Context) {
 	var permId types.Id
-	if err := bind.BindAndResp(ctx, bind.Query(&permId)); err != nil {
+	if err := bind.Binds(ctx, bind.Query(&permId)); err != nil {
 		return
 	}
 

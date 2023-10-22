@@ -1,6 +1,7 @@
 package meta
 
 import (
+	"github.com/dstgo/wilson/internal/types/role"
 	"github.com/dstgo/wilson/pkg/ginx"
 )
 
@@ -37,7 +38,7 @@ func Comment(routeComment string) ginx.E {
 	}
 }
 
-func Roles(roles ...string) ginx.E {
+func Roles(roles ...role.RoleInfo) ginx.E {
 	return ginx.E{
 		Key: "roles",
 		Val: roles,

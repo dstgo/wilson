@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/dstgo/wilson/internal/api"
 	"github.com/dstgo/wilson/internal/conf"
+	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/handler"
 	"github.com/dstgo/wilson/internal/handler/middleware"
@@ -40,7 +41,7 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 	engine.NoMethod(middleware.NoMethodHandler())
 	engine.NoRoute(middleware.NotFoundHandler())
 
-	gin.ErrorLogger()
+	bind.HandlerChain = append(bind.HandlerChain, middleware.BindBadParamsHandler())
 
 	server := &http.Server{
 		Addr:              serverConf.HttpConf.Address,

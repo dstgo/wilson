@@ -94,7 +94,7 @@ func (g GormResolver) ListRolePerms(roleId uint) ([]role.PermGroup, error) {
 	if err != nil {
 		return []role.PermGroup{}, err
 	}
-	return makePermGroup(permRecords), nil
+	return role.MakePermGroup(permRecords), nil
 }
 
 func (g GormResolver) AddRolePerm(roleId uint, permId uint) error {
@@ -145,18 +145,18 @@ func (g GormResolver) UpdateRolePermBatch(roleId uint, tag string, newPermIds []
 	return tx.Commit().Error
 }
 
-func (g GormResolver) CreateRolePermBatch(role role.RoleInfo, perms []role.PermInfo) error {
+func (g GormResolver) CreateRolePermBatch(roleInfo role.RoleInfo, perms []role.PermInfo) error {
 
 	tx := g.db.Begin()
 
 	// try to create role if code conflict do nothing
-	_, err := createRole(tx, makeRoleRecord(role))
+	_, err := createRole(tx, role.MakeRoleRecord(roleInfo))
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	ens := makePermRecordList(perms)
+	ens := role.MakePermRecordList(perms)
 	// try to create perm if conflict do nothing
 	_, err = createPermInBatch(tx, ens)
 	if err != nil {
@@ -167,7 +167,7 @@ func (g GormResolver) CreateRolePermBatch(role role.RoleInfo, perms []role.PermI
 	tx.Commit()
 
 	// query roles
-	queryRole, err := getRoleByCode(g.db, role.Code)
+	queryRole, err := getRoleByCode(g.db, roleInfo.Code)
 	if err != nil {
 		return err
 	}

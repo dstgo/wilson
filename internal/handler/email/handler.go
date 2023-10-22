@@ -51,7 +51,7 @@ type EmailHandler struct {
 // @Router       /email/code [GET]
 func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 	emailReq := new(emailType.SendCodeEmailOption)
-	if err := bind.BindAndResp(ctx, bind.Query(emailReq)); err != nil {
+	if err := bind.Binds(ctx, bind.Query(emailReq)); err != nil {
 		return
 	}
 

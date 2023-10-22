@@ -4,6 +4,7 @@ import (
 	"github.com/dstgo/wilson/internal/types/helper"
 	"github.com/dstgo/wilson/internal/types/helper/rules"
 	"github.com/dstgo/wilson/pkg/vax"
+	"github.com/dstgo/wilson/pkg/vax/is"
 )
 
 type Info struct {
@@ -40,8 +41,32 @@ type UpdateInfoOption struct {
 
 func (u UpdateInfoOption) Validate(lang string) error {
 	return vax.Struct(&u, lang,
+		vax.Field(&u.UUID, vax.Required, is.UUID),
 		vax.Field(&u.Username, rules.Required(rules.Username)...),
 		vax.Field(&u.Email, rules.Required(rules.Email)...),
 		vax.Field(&u.Password, rules.Required(rules.Password)...),
+	)
+}
+
+var InitialUser = CreateUserOption{
+	Username: "admin",
+	Email:    "",
+	Password: "123456",
+}
+
+type CreateUserOption struct {
+	// new username
+	Username string `json:"username" example:"jack"`
+	// new email
+	Email string `json:"email" example:"jack@google.com"`
+	// new password
+	Password string `json:"password" example:"123456"`
+}
+
+func (c CreateUserOption) Validate(lang string) error {
+	return vax.Struct(&c, lang,
+		vax.Field(&c.Username, rules.Required(rules.Username)...),
+		vax.Field(&c.Email, rules.Required(rules.Email)...),
+		vax.Field(&c.Password, rules.Required(rules.Password)...),
 	)
 }

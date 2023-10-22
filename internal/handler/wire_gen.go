@@ -36,9 +36,8 @@ func setupHandlerRouter(appConf *conf.AppConf, router *ginx.RouterGroup, datasou
 	handlerRouter := email.SetupRouter(router, handler)
 	pingApp := system.NewPingLogic(appConf)
 	pingHandler := system.NewPingHandler(pingApp)
-	userData := user.NewUserData()
 	redisTokenCache := cache.NewRedisTokenCache(datasource)
-	authenticator := system.NewAuthenticator(appConf, datasource, userData, redisEmailCodeCache, redisTokenCache)
+	authenticator := system.NewAuthenticator(appConf, datasource, redisEmailCodeCache, redisTokenCache)
 	authHandler := system.NewAuthHandler(authenticator)
 	roleEnforcer := system.NewRoleEnforcer(datasource)
 	roleHandler := system.NewRoleHandler(roleEnforcer)
@@ -48,13 +47,16 @@ func setupHandlerRouter(appConf *conf.AppConf, router *ginx.RouterGroup, datasou
 		Role: roleHandler,
 	}
 	systemHandlerRouter := system.SetupRouter(router, systemHandler)
-	userInfo := user.NewUserInfo(datasource, userData)
+	userInfo := user.NewUserInfo(datasource)
 	infoHandler := user.NewInfoHandler(userInfo)
-	userModify := user.NewUserModify(datasource, userData, userInfo)
+	userModify := user.NewUserModify(datasource, userInfo)
 	modifyHandler := user.NewModifyHandler(userModify)
+	userRole := user.NewUserRole(datasource)
+	userRoleHandler := user.NewUserRoleHandler(userRole)
 	userHandler := user.Handler{
 		Info:   infoHandler,
 		Modify: modifyHandler,
+		Roles:  userRoleHandler,
 	}
 	userHandlerRouter := user.SetupRouter(router, userHandler)
 	router2 := Router{
