@@ -1,38 +1,35 @@
 package bind
 
 import (
-	"github.com/dstgo/wilson/internal/core/resp"
 	"github.com/dstgo/wilson/pkg/vax"
 	"github.com/gin-gonic/gin"
 )
+
+// Handler will be called when bind error occurs
+type Handler func(ctx *gin.Context, bindErr error)
+
+var HandlerChain []Handler
 
 type BindPair struct {
 	B Binding
 	V vax.Validatable
 }
 
-func BindAll(ctx *gin.Context, pairs ...BindPair) error {
+func Binds(ctx *gin.Context, pairs ...BindPair) error {
+	var bindErr error
 	for _, pair := range pairs {
-		err := Bind(ctx, pair)
-		if err != nil {
-			return err
+		if err := Bind(ctx, pair); err != nil {
+			bindErr = err
+			break
+		}
+	}
+
+	if len(HandlerChain) > 0 && bindErr != nil {
+		for _, handle := range HandlerChain {
+			handle(ctx, bindErr)
 		}
 	}
 	return nil
-}
-
-func BindAndResp(ctx *gin.Context, pairs ...BindPair) error {
-	err := BindAll(ctx, pairs...)
-	if err != nil {
-		switch err.(type) {
-		// validate internal occur error
-		case vax.InternalError:
-			resp.InternalFailed(ctx).MsgI18n("err.program").Error(err).Send()
-		default:
-			resp.Fail(ctx).MsgI18n("err.badparams").Error(err).Send()
-		}
-	}
-	return err
 }
 
 func Bind(ctx *gin.Context, pair BindPair) error {
