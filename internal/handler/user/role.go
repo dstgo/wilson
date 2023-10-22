@@ -53,12 +53,25 @@ func (u UserRole) GetUserRoleCodes(uuid string) ([]string, error) {
 }
 
 func (u UserRole) SaveRoles(uuid string, saveRoleIds []uint) error {
+	if len(saveRoleIds) == 0 {
+		return nil
+	}
+
 	db := u.ds.ORM()
 	queryUser, err := GetUserByUUID(db, uuid)
 	if err != nil {
 		return errs.DataBaseErr(err)
 	} else if queryUser.ID == 0 {
 		return errs.NewI18nError("user.notfound")
+	}
+
+	// confirm roles had been exists in db
+	var findRoles []entity.Role
+	err = db.Model(entity.Role{}).Where("id IN ?", saveRoleIds).Find(&findRoles).Error
+	if err != nil {
+		return errs.DataBaseErr(err)
+	} else if len(findRoles) != len(saveRoleIds) {
+		return errs.NewI18nError("role.invalidList")
 	}
 
 	queryRoles, err := ListAllUserRoles(db, queryUser.ID)
