@@ -9,57 +9,59 @@ package handler
 import (
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/data"
-	"github.com/dstgo/wilson/internal/handler/auth"
+	"github.com/dstgo/wilson/internal/data/cache"
 	"github.com/dstgo/wilson/internal/handler/email"
 	"github.com/dstgo/wilson/internal/handler/system"
 	"github.com/dstgo/wilson/internal/handler/user"
-	"github.com/dstgo/wilson/pkg/route"
+	"github.com/dstgo/wilson/pkg/ginx"
+)
+
+import (
+	_ "github.com/dstgo/wilson/internal/handler/docs"
 )
 
 // Injectors from wire.go:
 
 //go:generate wire gen
-func setupHandlerRouter(appConf *conf.AppConf, api *route.Router, datasource *data.DataSource) (Router, func(), error) {
-	infoData := user.NewInfoData(datasource)
-	codeCache := email.NewEmailCodeCache(datasource)
-	redisTokenCache := auth.NewTokenRedisCache(datasource)
-	authenticator := auth.NewAuthenticator(appConf, infoData, codeCache, redisTokenCache)
-	authHandler := auth.NewAuthHandler(authenticator)
-	roleLogic := auth.NewRoleLogic()
-	roleHandler := auth.NewRoleHandler(roleLogic)
-	handler := auth.Handler{
-		Auth: authHandler,
-		Role: roleHandler,
-	}
-	handlerRouter := auth.SetupRouter(api, handler)
+func setupHandlerRouter(appConf *conf.AppConf, router *ginx.RouterGroup, datasource *data.DataSource) (Router, func(), error) {
 	sender, cleanup, err := email.NewSender(appConf)
 	if err != nil {
 		return Router{}, nil, err
 	}
-	emailHandler := email.NewEmailHandler(appConf, sender, codeCache)
-	handler2 := email.Handler{
+	redisEmailCodeCache := cache.NewRedisEmailCodeCache(datasource)
+	emailHandler := email.NewEmailHandler(appConf, sender, redisEmailCodeCache)
+	handler := email.Handler{
 		Email: emailHandler,
 	}
-	emailHandlerRouter := email.SetupRouter(api, handler2)
-	pingLogic := system.NewPingLogic(appConf)
-	pingHandler := system.NewPingHandler(pingLogic)
+	handlerRouter := email.SetupRouter(router, handler)
+	pingApp := system.NewPingLogic(appConf)
+	pingHandler := system.NewPingHandler(pingApp)
+	redisTokenCache := cache.NewRedisTokenCache(datasource)
+	authenticator := system.NewAuthenticator(appConf, datasource, redisEmailCodeCache, redisTokenCache)
+	authHandler := system.NewAuthHandler(authenticator)
+	roleEnforcer := system.NewRoleEnforcer(datasource)
+	roleHandler := system.NewRoleHandler(roleEnforcer)
 	systemHandler := system.Handler{
 		Ping: pingHandler,
+		Auth: authHandler,
+		Role: roleHandler,
 	}
-	systemHandlerRouter := system.SetupRouter(api, systemHandler)
-	infoLogic := user.NewInfoLogic(infoData)
-	infoHandler := user.NewInfoHandler(infoLogic)
+	systemHandlerRouter := system.SetupRouter(router, systemHandler)
+	userInfo := user.NewUserInfo(datasource)
+	userModify := user.NewUserModify(datasource, userInfo)
+	infoHandler := user.NewInfoHandler(userInfo, userModify)
+	adminHandler := user.NewAdminHandler(userInfo, userModify)
 	userHandler := user.Handler{
-		Info: infoHandler,
+		Info:  infoHandler,
+		Admin: adminHandler,
 	}
-	userHandlerRouter := user.SetupRouter(api, userHandler)
-	router := Router{
-		Auth:   handlerRouter,
-		Email:  emailHandlerRouter,
+	userHandlerRouter := user.SetupRouter(router, userHandler)
+	router2 := Router{
+		Email:  handlerRouter,
 		System: systemHandlerRouter,
 		User:   userHandlerRouter,
 	}
-	return router, func() {
+	return router2, func() {
 		cleanup()
 	}, nil
 }

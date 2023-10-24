@@ -1,0 +1,71 @@
+basePath: /open/v1
+definitions:
+  types.Response:
+    properties:
+      code:
+        example: 2000
+        type: integer
+      data: {}
+      err:
+        type: string
+      msg:
+        example: operation success
+        type: string
+    type: object
+  user.Info:
+    properties:
+      createdAt:
+        example: "2022-01-01 00:00:00"
+        type: string
+      email:
+        example: jacklove@lol.com
+        type: string
+      username:
+        example: jack
+        type: string
+      uuid:
+        example: 55BBA4ED-18D3-790F-EABF-A5330E527586
+        type: string
+    type: object
+info:
+  contact:
+    name: dstgo
+    url: https://github.com/dstgo
+  description: Wilson open api documentation, to access these open api, you need to
+    add apikey in query param named "key"
+  license:
+    name: MIT LICENSE
+    url: https://mit-license.org/
+  title: Wilson App Open API Documentation
+  version: v1.0.0
+paths:
+  /api:
+    get:
+      consumes:
+      - application/json
+      description: get user info
+      parameters:
+      - in: query
+        name: uuid
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/user.Info'
+              type: object
+      summary: UserInfo
+      tags:
+      - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: query
+    name: key
+    type: apiKey
+swagger: "2.0"

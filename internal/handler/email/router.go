@@ -3,7 +3,7 @@ package email
 import (
 	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/meta"
-	"github.com/dstgo/wilson/pkg/route"
+	"github.com/dstgo/wilson/pkg/ginx"
 	"github.com/google/wire"
 )
 
@@ -20,10 +20,10 @@ type Handler struct {
 	Email EmailHandler
 }
 
-func SetupRouter(api *route.Router, Handler Handler) HandlerRouter {
-	emailGroup := api.Group("email", nil)
+func SetupRouter(api *ginx.RouterGroup, Handler Handler) HandlerRouter {
+	emailGroup := api.Group("email", ginx.M(meta.Group("route.email.group")))
 	{
-		emailGroup.GET("code", route.MetaSum(meta.NoAuth), Handler.Email.SendCodeEmail)
+		emailGroup.GET("code", ginx.M(meta.NoAuth, meta.Name("route.email.code")), Handler.Email.SendCodeEmail)
 	}
 	return types.NopObj
 }

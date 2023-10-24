@@ -2,24 +2,21 @@ package test
 
 import (
 	"fmt"
-	"github.com/dstgo/wilson/internal/pkg/httpx"
-	route2 "github.com/dstgo/wilson/pkg/route"
+	"github.com/dstgo/wilson/pkg/ginx"
+	"github.com/dstgo/wilson/pkg/ginx/httpx"
 	"github.com/gin-gonic/gin"
 	"testing"
 )
 
 func TestHttpRoute(t *testing.T) {
-	router := route2.NewRouter(&gin.Default().RouterGroup)
-	var NoAuth = route2.E{
-		Key: "noauth",
-		Val: struct{}{},
-	}
-	router.GET("ping", route2.MetaSum(NoAuth), nil)
-	group := router.Group("a", nil)
-	group.GET("abc", nil, nil)
+	engine := gin.Default()
+	group := ginx.NewRouterGroup(&engine.RouterGroup)
+	group.GET("/ping", nil)
+	userGroup := group.Group("/user", nil)
+	userGroup.GET("/info", nil)
 
-	router.Walk(func(info route2.RouterInfo) error {
-		fmt.Println(fmt.Sprintf("%+v", info))
+	group.Walk(func(info ginx.WalkRouteInfo) error {
+		fmt.Println(info)
 		return nil
 	})
 }

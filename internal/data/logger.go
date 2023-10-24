@@ -44,15 +44,15 @@ func (g *GormLogger) LogMode(level logger.LogLevel) logger.Interface {
 }
 
 func (g *GormLogger) Info(ctx context.Context, s string, i ...interface{}) {
-	g.l.WithContext(ctx).Infof(s, i)
+	g.l.WithContext(ctx).Infof(s, i...)
 }
 
 func (g *GormLogger) Warn(ctx context.Context, s string, i ...interface{}) {
-	g.l.WithContext(ctx).Warnf(s, i)
+	g.l.WithContext(ctx).Warnf(s, i...)
 }
 
 func (g *GormLogger) Error(ctx context.Context, s string, i ...interface{}) {
-	g.l.WithContext(ctx).Errorf(s, i)
+	g.l.WithContext(ctx).Errorf(s, i...)
 }
 
 func (g *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql string, rowsAffected int64), err error) {
@@ -62,5 +62,5 @@ func (g *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql 
 		WithField("sql", sql).
 		WithField("rowAffected", affected).
 		WithError(err).
-		Debugln("gorm trace")
+		Traceln("gorm trace")
 }

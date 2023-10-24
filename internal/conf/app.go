@@ -2,7 +2,7 @@ package conf
 
 import (
 	"fmt"
-	"github.com/dstgo/wilson/internal/pkg/httpx"
+	"github.com/dstgo/wilson/pkg/ginx/httpx"
 	"net/smtp"
 	"time"
 )

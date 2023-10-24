@@ -1,11 +1,13 @@
 package user
 
-import "github.com/dstgo/wilson/internal/handler/user"
+import (
+	"github.com/dstgo/wilson/internal/data"
+)
 
-func NewInfoLogic(userData user.InfoData) InfoLogic {
-	return InfoLogic{userData: userData}
+func NewInfoLogic(ds *data.DataSource) InfoLogic {
+	return InfoLogic{ds: ds}
 }
 
 type InfoLogic struct {
-	userData user.InfoData
+	ds *data.DataSource
 }

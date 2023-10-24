@@ -9,11 +9,10 @@ import (
 var UserApiProviderSet = wire.NewSet(
 	NewInfoLogic,
 	NewInfoApi,
-	user.NewInfoData,
-	user.NewInfoLogic,
+	user.NewUserInfo,
 )
 
-func NewInfoApi(info InfoLogic, hInfo user.InfoLogic) InfoApi {
+func NewInfoApi(info InfoLogic, hInfo user.UserInfo) InfoApi {
 	return InfoApi{
 		info:  info,
 		hInfo: hInfo,
@@ -22,18 +21,18 @@ func NewInfoApi(info InfoLogic, hInfo user.InfoLogic) InfoApi {
 
 type InfoApi struct {
 	info  InfoLogic
-	hInfo user.InfoLogic
+	hInfo user.UserInfo
 }
 
 // UserInfo
-//
-//	@Summary		path params example
-//	@Description	get user simple info
-//	@Tags
-//	@Accept			json
-//	@Produce		json
-//	@Param			name	query		string	true	"comment"
-//	@Router			/open/user/info [get]
+// @Summary      UserInfo
+// @Description  get user info
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param        uuid query     types.Uid  true  "user uuid"
+// @Success      200  {object}  types.Response{data=user.Info}
+// @Router       /api [GET]
 func (i InfoApi) UserInfo(ctx *gin.Context) {
 
 }

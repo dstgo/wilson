@@ -1,43 +1,41 @@
 package entity
 
 import (
-	"database/sql/driver"
-	"encoding/json"
-	"errors"
-	"time"
+	"fmt"
+	"gorm.io/gorm"
 )
 
 // Instance represents an instance, usually a docker container
 type Instance struct {
-	ID    string `gorm:"comment:docker container id;"`
-	Uid   string `gorm:"comment:safe unique id, sha1 from instance.id;"`
-	Name  string `gorm:"comment:docker container name;"`
-	Image string `gorm:"comment:docker image name;"`
-	Note  string `gorm:"comment:remark note;"`
+	gorm.Model
+	Uid    string `gorm:"type:varchar(40);uniqueIndex;comment:safe unique id, sha1 from instance.id;"`
+	Name   string `gorm:"type:varchar(50);comment:docker container name;"`
+	Image  string `gorm:"type:varchar(100);comment:docker image label;"`
+	Note   string `gorm:"type:varchar(100);comment:remark note;"`
+	Cpu    uint64 `gorm:"comment:cpu count limit;"`
+	Memory uint64 `gorm:"comment:memory limit;"`
+	Disk   uint64 `gorm:"comment:disk limit;"`
 
-	Meta InstanceMeta `gorm:"instance metadata info, json format stored in db"`
+	// foreign keys
+	UserId uint `gorm:"comment:id of user who own instance;"`
+	User   User `gorm:"foreignKey:UserId;"`
 
-	ExpiredAt time.Time
-	UpdatedAt time.Time
-	CreatedAt time.Time
+	NodeId uint `gorm:"comment:id of node which own instance;"`
+	Node   Node `gorm:"foreignKey:NodeId;"`
+
+	InstanceTable
 }
 
-type InstanceMeta map[string]any
+type InstanceTable struct{}
 
-func (m InstanceMeta) Scan(src any) error {
-	if s, ok := src.(string); ok {
-		err := json.Unmarshal([]byte(s), &m)
-		if err != nil {
-			return err
-		}
-	}
-	return errors.New("can not convert to InstanceMeta")
+func (i InstanceTable) BeforeCreate(db *gorm.DB) error {
+	return db.Set(tableOptions, fmt.Sprintf("comment '%s'", i.TableComment())).Error
 }
 
-func (m InstanceMeta) Value() (driver.Value, error) {
-	marshal, err := json.Marshal(m)
-	if err != nil {
-		return "", err
-	}
-	return string(marshal), nil
+func (i InstanceTable) TableName() string {
+	return "instances"
+}
+
+func (i InstanceTable) TableComment() string {
+	return "remote instance record table"
 }

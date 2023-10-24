@@ -3,11 +3,11 @@ package middleware
 import (
 	"errors"
 	"fmt"
-	"github.com/dstgo/wilson/internal/pkg/httpx"
-	"github.com/dstgo/wilson/internal/pkg/httpx/httpheader"
-	"github.com/dstgo/wilson/internal/pkg/resp"
+	"github.com/dstgo/wilson/internal/core/resp"
 	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/code"
+	"github.com/dstgo/wilson/pkg/ginx/httpx"
+	"github.com/dstgo/wilson/pkg/ginx/httpx/httpheader"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/exp/slices"
@@ -98,7 +98,7 @@ func UseRecovery(logger *logrus.Logger) gin.HandlerFunc {
 					return
 				}
 
-				resp.InternalErr(ctx).Code(code.InternalServerError).MsgI18n("err.internal").Send()
+				resp.InternalFailed(ctx).Code(code.InternalServerError).MsgI18n("err.internal").Send()
 			}
 		}()
 

@@ -6,9 +6,10 @@ import (
 	"fmt"
 	"github.com/dstgo/task"
 	"github.com/dstgo/wilson/internal/conf"
+	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/data/entity"
-	"github.com/dstgo/wilson/internal/pkg/errorx"
-	"github.com/dstgo/wilson/internal/pkg/log"
+	"github.com/dstgo/wilson/internal/pkg/utils"
+	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 )
@@ -83,12 +84,15 @@ func (d *DataSource) Redis() *redis.Client {
 }
 
 func (d *DataSource) ORM() *gorm.DB {
+	if utils.IsDebugMode() {
+		return d.orm.Debug()
+	}
 	return d.orm
 }
 
 func (d *DataSource) Close() error {
 	db, err := d.orm.DB()
-	return errorx.Join(
+	return errs.Join(
 		err,
 		db.Close(),
 		d.redis.Close(),
@@ -98,7 +102,7 @@ func (d *DataSource) Close() error {
 func NewDataSource(ctx context.Context, databaseConf *conf.DataConf) (*DataSource, error) {
 	datasource := new(DataSource)
 
-	var errs error
+	var es error
 	// async task to load each db
 	dataTask := task.NewTask(func(err any) {
 		log.L().Panicln(err)
@@ -108,7 +112,7 @@ func NewDataSource(ctx context.Context, databaseConf *conf.DataConf) (*DataSourc
 	dataTask.AddJobs(func() {
 		db, err := NewDBClient(ctx, databaseConf.DatabaseConf)
 		if err != nil {
-			errs = errorx.Join(errs, err).Err()
+			es = errs.Join(es, err).Err()
 			log.L().Errorf("gorm db connected failed: %s", err)
 			return
 		}
@@ -120,7 +124,7 @@ func NewDataSource(ctx context.Context, databaseConf *conf.DataConf) (*DataSourc
 	dataTask.AddJobs(func() {
 		redisClient, err := NewRedisClient(ctx, databaseConf.RedisConf)
 		if err != nil {
-			errs = errorx.Join(errs, err).Err()
+			es = errs.Join(es, err).Err()
 			log.L().Errorf("redis client connected failed: %s", err)
 			return
 		}
@@ -130,5 +134,5 @@ func NewDataSource(ctx context.Context, databaseConf *conf.DataConf) (*DataSourc
 
 	dataTask.Run()
 
-	return datasource, errs
+	return datasource, es
 }

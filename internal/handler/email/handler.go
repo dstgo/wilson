@@ -2,12 +2,13 @@ package email
 
 import (
 	"github.com/dstgo/wilson/internal/conf"
-	"github.com/dstgo/wilson/internal/pkg/httpx"
+	"github.com/dstgo/wilson/internal/core/bind"
+	"github.com/dstgo/wilson/internal/core/resp"
+	"github.com/dstgo/wilson/internal/data/cache"
 	"github.com/dstgo/wilson/internal/pkg/locale"
-	resp2 "github.com/dstgo/wilson/internal/pkg/resp"
-	"github.com/dstgo/wilson/internal/pkg/validate"
 	"github.com/dstgo/wilson/internal/types/code"
-	"github.com/dstgo/wilson/internal/types/request"
+	emailType "github.com/dstgo/wilson/internal/types/email"
+	"github.com/dstgo/wilson/pkg/ginx/httpx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/google/wire"
@@ -18,11 +19,11 @@ import (
 
 var EmailProviderSet = wire.NewSet(
 	NewSender,
-	NewEmailCodeCache,
+	cache.EmailCodeCacheProvider,
 	NewEmailHandler,
 )
 
-func NewEmailHandler(cfg *conf.AppConf, emailLogic Sender, codeCache CodeCache) EmailHandler {
+func NewEmailHandler(cfg *conf.AppConf, emailLogic Sender, codeCache cache.RedisEmailCodeCache) EmailHandler {
 	return EmailHandler{
 		EmailLogic:   emailLogic,
 		cfg:          cfg.EmailConf,
@@ -35,21 +36,21 @@ type EmailHandler struct {
 	EmailLogic   Sender
 	cfg          *conf.EmailConf
 	fallbackLang string
-	codeCache    CodeCache
+	codeCache    cache.RedisEmailCodeCache
 }
 
 // SendCodeEmail
-//
-//	@Summary		auth code email api
-//	@Description	auth code email api
-//	@Tags			email
-//	@Accept			x-www-form-urlencoded
-//	@Produce		json
-//	@Param			email	query	string	true	"email"
-//	@Router			/email/code [GET]
+// @Summary      SendCodeEmail
+// @Description  auth code email api
+// @Tags         email
+// @Accept       json
+// @Produce      json
+// @Param        email	query	string	true	"email"
+// @Success      200  {object}  types.Response
+// @Router       /email/code [GET]
 func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
-	emailReq := new(request.Email)
-	if err := validate.BindAndResp(ctx, validate.Query(emailReq)); err != nil {
+	emailReq := new(emailType.SendCodeEmailOption)
+	if err := bind.Binds(ctx, bind.Query(emailReq)); err != nil {
 		return
 	}
 
@@ -59,10 +60,7 @@ func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 
 	// store in redis
 	if err := e.codeCache.Set(ctx, authcode, emailReq.Email, e.cfg.Expire()); err != nil {
-		resp2.InternalErr(ctx).
-			Code(code.DatabaseError).
-			MsgI18n("email.sendFail").
-			Error(resp2.DataBaseErr(err)).Send()
+		resp.InternalFailed(ctx).Error(emailType.ErrSendFailed).Send()
 		return
 	}
 
@@ -70,7 +68,7 @@ func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 	ee := email.NewEmail()
 	ee.From = e.cfg.User
 	ee.To = append(ee.To, emailReq.Email)
-	ee.Subject = locale.GetWithCtx(ctx, "email.codeSubject")
+	ee.Subject = locale.GetWithLang(httpx.GetFirstAcceptLanguage(ctx), "email.code.subject")
 
 	// judge language
 	language := httpx.GetFirstAcceptLanguage(ctx)
@@ -88,8 +86,8 @@ func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 	})
 
 	if err != nil {
-		resp2.Fail(ctx).Code(code.EmailSendFailed).MsgI18n("email.sendFail").Error(err).Send()
+		resp.Fail(ctx).Code(code.EmailSendFailed).MsgI18n("email.sendFail").Error(err).Send()
 	} else {
-		resp2.Ok(ctx).Code(code.EmailSendOk).MsgI18n("email.sendOk").Send()
+		resp.Ok(ctx).Code(code.EmailSendOk).MsgI18n("email.sendOk").Send()
 	}
 }

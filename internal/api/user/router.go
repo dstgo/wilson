@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/dstgo/wilson/internal/types"
-	"github.com/dstgo/wilson/pkg/route"
+	"github.com/dstgo/wilson/pkg/ginx"
 	"github.com/google/wire"
 )
 
@@ -19,7 +19,7 @@ type API struct {
 	Info InfoApi
 }
 
-func SetupRouter(open *route.Router, api API) APIRouter {
+func SetupRouter(open *ginx.RouterGroup, api API) APIRouter {
 	// register open user info api
 	return types.NopObj
 }
