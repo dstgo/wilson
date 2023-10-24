@@ -29,7 +29,7 @@ func Binds(ctx *gin.Context, pairs ...BindPair) error {
 			handle(ctx, bindErr)
 		}
 	}
-	return nil
+	return bindErr
 }
 
 func Bind(ctx *gin.Context, pair BindPair) error {
