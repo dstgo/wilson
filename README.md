@@ -24,12 +24,23 @@ wilson is an open source, distributed, front-end and back-end separation, modern
 - Open API support
 - Distributed server management
 
-## Build
+## Run
+Generate configuration template
+```sh
+$ wilson gen --d /etc/wilson
+```
+Run web server
+```sh
+$ wilson server --f /etc/wilson/config.yaml
+```
 
-Enter the project root directory and execute the following command
+
+## Construct
+
+Enter the source code root directory and use make to build
 
 ```sh
-make
+make install
 ```
 
 ## How to contribute
