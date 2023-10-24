@@ -1,3 +1,6 @@
+pkg=$(shell go list)
+user=$(shell git config user.name)
+version=$(shell git describe --tags --always)
 
 .PHONY: init
 init:
@@ -16,7 +19,7 @@ gen:
 .PHONY: build
 build:
 	go vet
-	go build -trimpath -ldflags "-X main.Author=$(shell git config user.name) -X main.Version=$(shell git describe --tags --always)" -o ./bin/ github.com/dstgo/wilson
+	go build -trimpath -ldflags "-X $(pkg)/cmd.Author=$(user) -X $(pkg)/cmd.Version=$(version)" -o ./bin/ $(pkg)
 
 .PHONY: gen_build
 gen_build:
