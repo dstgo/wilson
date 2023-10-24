@@ -16,6 +16,11 @@ func (g GormResolver) GetRole(roleId uint) (role.RoleInfo, error) {
 	return role.MakeRoleInfo(rocord), nil
 }
 
+func (g GormResolver) GetRoleByCode(code string) (role.RoleInfo, error) {
+	byCode, err := getRoleByCode(g.db, code)
+	return role.MakeRoleInfo(byCode), err
+}
+
 func (g GormResolver) ListRole(option role.PageOption) ([]role.RoleInfo, error) {
 	records, err := listRoles(g.db, option)
 	if err != nil {
@@ -146,11 +151,11 @@ func getRolePerms(db *gorm.DB, id uint) ([]entity.Permission, error) {
 func insertRolePerm(db *gorm.DB, roleId uint, permId uint) error {
 	// create the new relation, if existed, do nothing
 	return db.Clauses(clause.OnConflict{
-		Columns:     []clause.Column{{Name: "role_id"}, {Name: "perm_id"}},
+		Columns:     []clause.Column{{Name: "role_id"}, {Name: "permission_id"}},
 		Where:       clause.Where{},
 		TargetWhere: clause.Where{},
 		DoNothing:   true,
-	}).Create(&entity.RolePermission{RoleId: roleId, PermId: permId}).Error
+	}).Create(&entity.RolePermission{RoleId: roleId, PermissionId: permId}).Error
 }
 
 // insertRolePermBatch insert new records if key has no conflicts,or do nothing
@@ -159,8 +164,7 @@ func insertRolePermBatch(db *gorm.DB, roleId uint, permIds []uint) error {
 	rolePermList := MakeRolePerms(roleId, permIds)
 
 	// create the new relation, if existed, do nothing
-	err := db.Clauses(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "role_id"}, {Name: "perm_id"}},
+	err := db.Debug().Clauses(clause.OnConflict{
 		DoNothing: true,
 	}).Create(&rolePermList).Error
 
@@ -169,7 +173,7 @@ func insertRolePermBatch(db *gorm.DB, roleId uint, permIds []uint) error {
 
 func removeRolePerm(db *gorm.DB, roleId uint, permId uint) error {
 	return db.Model(entity.RolePermission{}).
-		Where("role_id = ? AND perm_id = ?", roleId, permId).Delete(nil).Error
+		Where("role_id = ? AND permission_id = ?", roleId, permId).Delete(nil).Error
 }
 
 func removeRolePermBatch(db *gorm.DB, roleId uint, permIds []uint) error {

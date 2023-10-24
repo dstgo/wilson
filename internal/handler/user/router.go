@@ -18,32 +18,33 @@ var UserRouterSet = wire.NewSet(
 )
 
 type Handler struct {
-	Info   InfoHandler
-	Modify ModifyHandler
-	Roles  RoleHandler
+	Info  InfoHandler
+	Admin AdminHandler
 }
 
 func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
 	// user router
-	userRouter := api.Group("user", ginx.M(meta.Group("route.user.group")))
+	userRouter := api.Group("/user", nil)
 	{
+		// user info handler
 		infoHandler := handler.Info
-		modifyHandler := handler.Modify
-		roleHandler := handler.Roles
+		profileGroup := userRouter.Group("", ginx.M(meta.Group("route.user.profile.group"), meta.Roles(role.UserRole)))
+		{
+			profileGroup.GET("/profile", ginx.M(meta.Name("route.user.profile.info")), infoHandler.GetUserInfo)
+			profileGroup.POST("/profile", ginx.M(meta.Name("route.user.profile.save")), infoHandler.UpdateUserInfo)
+		}
 
-		// GET
-		userRouter.GET("info", ginx.M(meta.Name("route.user.info"), meta.Roles(role.UserRole)), infoHandler.GetUserInfo)
-		userRouter.GET("list", ginx.M(meta.Name("route.user.list"), meta.Roles(role.AdminRole)), infoHandler.GetUserInfoList)
-		userRouter.GET("roles", ginx.M(meta.Name("route.user.getRoles"), meta.Roles(role.AdminRole)), roleHandler.GetUserRoles)
+		// user admin handler
+		adminHandler := handler.Admin
+		adminGroup := userRouter.Group("/admin", ginx.M(meta.Group("route.user.admin.group"), meta.Roles(role.AdminRole)))
+		{
+			adminGroup.GET("/list", ginx.M(meta.Name("route.user.list")), adminHandler.GetUserInfoList)
 
-		// POST
-		userRouter.POST("update", ginx.M(meta.Name("route.user.update"), meta.Roles(role.UserRole)), modifyHandler.UpdateUserInfo)
-		userRouter.POST("create", ginx.M(meta.Name("route.user.create"), meta.Roles(role.AdminRole)), modifyHandler.CreateUser)
-		userRouter.POST("roles", ginx.M(meta.Name("route.user.saveRoles"), meta.Roles(role.AdminRole)), roleHandler.SaveUserRoles)
+			adminGroup.POST("/create", ginx.M(meta.Name("route.user.create")), adminHandler.CreateUser)
+			adminGroup.POST("/save", ginx.M(meta.Name("route.user.save")), adminHandler.SaveUser)
 
-		// DELETE
-		userRouter.DELETE("remove", ginx.M(meta.Name("route.user.remove"), meta.Roles(role.AdminRole)), modifyHandler.RemoveUser)
-
+			adminGroup.DELETE("/remove", ginx.M(meta.Name("route.user.remove")), adminHandler.RemoveUser)
+		}
 	}
 
 	return types.NopObj

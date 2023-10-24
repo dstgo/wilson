@@ -13,15 +13,12 @@ import (
 	"github.com/dstgo/wilson/internal/handler/system"
 	"github.com/dstgo/wilson/internal/handler/user"
 	"github.com/dstgo/wilson/internal/pkg/utils"
-	"github.com/dstgo/wilson/internal/types/meta"
-	"github.com/dstgo/wilson/internal/types/role"
 	"github.com/dstgo/wilson/pkg/ginx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"path"
-	"reflect"
 )
 
 const (
@@ -65,7 +62,7 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 	// add middleware chains
 	handlerRouter.Use(
 		middleware.UseAuthenticate(authenticator),
-		middleware.UseRoleAuthorize(roleResolver, user.NewUserRole(datasource)),
+		middleware.UseRoleAuthorize(roleResolver, user.NewUserInfo(datasource)),
 	)
 
 	router, cleanup, err := setupHandlerRouter(cfg, handlerRouter, datasource)
@@ -74,7 +71,7 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 	}
 
 	// initialize router role access
-	err = initRouterRole(handlerRouter, roleResolver)
+	err = initRouterRole(datasource, handlerRouter, roleResolver)
 	if err != nil {
 		return Router{}, nil, err
 	}
@@ -89,81 +86,6 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 	}
 
 	return router, cleanup, nil
-}
-
-func initRouterRole(root *ginx.RouterGroup, resolver roleSo.Resolver) error {
-
-	log.L().Info("starting to initialize router acl...")
-	var (
-		permsMap = make(map[string][]role.PermInfo)
-	)
-
-	err := resolver.CreateRoleInBatch([]role.RoleInfo{
-		role.AdminRole,
-		role.UserRole,
-		role.AnonymousRole,
-	})
-
-	if err != nil {
-		return err
-	}
-
-	root.Walk(func(info ginx.WalkRouteInfo) error {
-		if info.IsGroup {
-			return nil
-		}
-
-		var (
-			name      string
-			groupName string
-			tag       = "appapi"
-		)
-
-		routeName, b := info.Meta.Get(meta.Name("").Key)
-		if !b {
-			routeName.Val = info.FullPath
-		}
-		name = routeName.String()
-
-		if info.Group != nil {
-			group, b := info.Group.Meta.Get(meta.Group("").Key)
-			if !b {
-				group.Val = info.Group.FullPath
-			}
-			groupName = group.String()
-		}
-
-		permInfo := role.PermInfo{
-			Name:   name,
-			Object: info.FullPath,
-			Group:  groupName,
-			Action: info.Method,
-			Tag:    tag,
-		}
-
-		// must be []string
-		roles, b := info.Meta.Get(meta.Roles().Key)
-		if roles.Val == nil {
-			return nil
-		}
-
-		for rs, i := reflect.ValueOf(roles.Val), 0; i < rs.Len(); i++ {
-			r := rs.Index(i).String()
-			permsMap[r] = append(permsMap[r], permInfo)
-
-		}
-
-		return nil
-	})
-
-	// related role and permissions
-	for roleCode, perms := range permsMap {
-		if err := resolver.CreateRolePermBatch(role.RoleInfo{Code: roleCode}, perms); err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 var Config = &ginSwagger.Config{

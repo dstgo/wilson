@@ -3,6 +3,7 @@ package user
 import (
 	"github.com/dstgo/wilson/internal/types/helper"
 	"github.com/dstgo/wilson/internal/types/helper/rules"
+	"github.com/dstgo/wilson/internal/types/role"
 	"github.com/dstgo/wilson/pkg/vax"
 	"github.com/dstgo/wilson/pkg/vax/is"
 )
@@ -13,6 +14,7 @@ type Info struct {
 	Email    string `json:"email" example:"jacklove@lol.com"`
 	// used for copy from gorm.model
 	helper.CreatedAt `copier:"Model"`
+	Roles            []role.RoleInfo `json:"roles"`
 }
 
 type PageOption struct {
@@ -30,7 +32,7 @@ func (p PageOption) Validate(lang string) error {
 }
 
 type UpdateInfoOption struct {
-	UUID string `json:"-" swaggerignore:"true"`
+	UUID string `json:"-" swaggerignore:"true" example:"55BBA4ED-18D3-790F-EABF-A5330E527586"`
 	// new username
 	Username string `json:"username" example:"jack"`
 	// new email
@@ -41,17 +43,38 @@ type UpdateInfoOption struct {
 
 func (u UpdateInfoOption) Validate(lang string) error {
 	return vax.Struct(&u, lang,
-		vax.Field(&u.UUID, vax.Required, is.UUID),
 		vax.Field(&u.Username, rules.Required(rules.Username)...),
 		vax.Field(&u.Email, rules.Required(rules.Email)...),
 		vax.Field(&u.Password, rules.Required(rules.Password)...),
 	)
 }
 
+type SaveUserDetailOption struct {
+	UUID string `json:"-" swaggerignore:"true" example:"55BBA4ED-18D3-790F-EABF-A5330E527586"`
+	// new username
+	Username string `json:"username" example:"jack"`
+	// new email
+	Email string `json:"email" example:"jack@google.com"`
+	// new password
+	Password string `json:"password" example:"123456"`
+	// new roles
+	Roles []string `json:"roles"`
+}
+
+func (u SaveUserDetailOption) Validate(lang string) error {
+	return vax.Struct(&u, lang,
+		vax.Field(&u.UUID, vax.Required, is.UUID),
+		vax.Field(&u.Username, rules.Required(rules.Username)...),
+		vax.Field(&u.Email, rules.Required(rules.Email)...),
+		vax.Field(&u.Password, rules.Required(rules.Password)...),
+		vax.Field(&u.Roles, vax.Required),
+	)
+}
+
 var InitialUser = CreateUserOption{
-	Username: "admin",
+	Username: "dstadmin",
 	Email:    "",
-	Password: "123456",
+	Password: "0123456789",
 }
 
 type CreateUserOption struct {
@@ -61,6 +84,8 @@ type CreateUserOption struct {
 	Email string `json:"email" example:"jack@google.com"`
 	// new password
 	Password string `json:"password" example:"123456"`
+	// new roles
+	Roles []string `json:"roles"`
 }
 
 func (c CreateUserOption) Validate(lang string) error {
@@ -68,5 +93,6 @@ func (c CreateUserOption) Validate(lang string) error {
 		vax.Field(&c.Username, rules.Required(rules.Username)...),
 		vax.Field(&c.Email, rules.Required(rules.Email)...),
 		vax.Field(&c.Password, rules.Required(rules.Password)...),
+		vax.Field(&c.Roles, vax.Required),
 	)
 }

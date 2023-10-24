@@ -18,12 +18,16 @@ const (
 	EmailSendFailed = 4006
 
 	ResourceNotFound = 4040
+
+	Forbidden    = 4030
+	UnAuthorized = 4010
 )
 
 const (
-	InternalServerError = 5000
-	UnknownError        = 5001
-	DatabaseError       = 5002
-	NetworkError        = 5003
-	FilesystemError     = 5004
+	InternalServerError = 5000 + iota
+	UnknownError
+	DatabaseError
+	NetworkError
+	ProgramError
+	FilesystemError
 )

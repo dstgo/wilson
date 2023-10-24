@@ -1,36 +1,28 @@
 package user
 
 import (
-	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/pkg/alg/collection"
-	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/dstgo/wilson/internal/types/role"
+	"github.com/dstgo/wilson/internal/types/system"
+	"github.com/dstgo/wilson/internal/types/user"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
-func NewUserRole(ds *data.DataSource) UserRole {
-	return UserRole{ds: ds}
-}
-
-type UserRole struct {
-	ds *data.DataSource
-}
-
-func (u UserRole) GetUserRoles(uuid string) ([]role.RoleInfo, error) {
+func (u UserInfo) GetUserRoles(uuid string) ([]role.RoleInfo, error) {
 	db := u.ds.ORM()
 	roleInfos := make([]role.RoleInfo, 0)
 	queryUser, err := GetUserByUUID(db, uuid)
 	if err != nil {
-		return roleInfos, errs.DataBaseErr(err)
+		return roleInfos, system.ErrDatabase.Wrap(err)
 	} else if queryUser.ID == 0 {
-		return roleInfos, errs.NewI18nError("user.notfound")
+		return roleInfos, user.ErrUserNotFound
 	}
 
 	roles, err := ListAllUserRoles(u.ds.ORM(), queryUser.ID)
 	if err != nil {
-		return roleInfos, errs.DataBaseErr(err)
+		return roleInfos, system.ErrDatabase.Wrap(err)
 	}
 
 	roleInfos = role.MakeRoleInfoList(roles)
@@ -38,7 +30,7 @@ func (u UserRole) GetUserRoles(uuid string) ([]role.RoleInfo, error) {
 	return roleInfos, nil
 }
 
-func (u UserRole) GetUserRoleCodes(uuid string) ([]string, error) {
+func (u UserInfo) GetUserRoleCodes(uuid string) ([]string, error) {
 	var codes []string
 	roles, err := u.GetUserRoles(uuid)
 	if err != nil {
@@ -52,7 +44,24 @@ func (u UserRole) GetUserRoleCodes(uuid string) ([]string, error) {
 	return codes, err
 }
 
-func (u UserRole) SaveRoles(uuid string, saveRoleIds []uint) error {
+func (u UserModify) SaveRolesByCode(uuid string, codes []string) error {
+	var roles []entity.Role
+
+	db := u.ds.ORM()
+	err := db.Model(entity.Role{}).Where("code IN ?", codes).Find(&roles).Error
+	if err != nil {
+		return system.ErrDatabase.Wrap(err)
+	}
+
+	var roleIds []uint
+	for _, e := range roles {
+		roleIds = append(roleIds, e.ID)
+	}
+
+	return u.SaveRoles(uuid, roleIds)
+}
+
+func (u UserModify) SaveRoles(uuid string, saveRoleIds []uint) error {
 	if len(saveRoleIds) == 0 {
 		return nil
 	}
@@ -60,23 +69,23 @@ func (u UserRole) SaveRoles(uuid string, saveRoleIds []uint) error {
 	db := u.ds.ORM()
 	queryUser, err := GetUserByUUID(db, uuid)
 	if err != nil {
-		return errs.DataBaseErr(err)
+		return system.ErrDatabase.Wrap(err)
 	} else if queryUser.ID == 0 {
-		return errs.NewI18nError("user.notfound")
+		return user.ErrUserNotFound
 	}
 
 	// confirm roles had been exists in db
 	var findRoles []entity.Role
 	err = db.Model(entity.Role{}).Where("id IN ?", saveRoleIds).Find(&findRoles).Error
 	if err != nil {
-		return errs.DataBaseErr(err)
+		return system.ErrDatabase.Wrap(err)
 	} else if len(findRoles) != len(saveRoleIds) {
-		return errs.NewI18nError("role.invalidList")
+		return role.ErrInvalidRoles
 	}
 
 	queryRoles, err := ListAllUserRoles(db, queryUser.ID)
 	if err != nil {
-		return errs.DataBaseErr(err)
+		return system.ErrDatabase.Wrap(err)
 	}
 
 	// convert ids
@@ -94,17 +103,17 @@ func (u UserRole) SaveRoles(uuid string, saveRoleIds []uint) error {
 	// insert extra roles
 	if err := CreateUserRoleInBatch(tx, createdRecordList); err != nil {
 		tx.Rollback()
-		return errs.DataBaseErr(err)
+		return system.ErrDatabase.Wrap(err)
 	}
 
 	// remove obsolete roles
 	if err := RemoveUserRoleInBatch(tx, queryUser.ID, obsoleteRoleIds); err != nil {
 		tx.Rollback()
-		return errs.DataBaseErr(err)
+		return system.ErrDatabase.Wrap(err)
 	}
 
 	if tx.Commit().Error != nil {
-		return errs.DataBaseErr(tx.Commit().Error)
+		return system.ErrDatabase.Wrap(tx.Commit().Error)
 	}
 
 	return nil

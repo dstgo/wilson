@@ -48,15 +48,12 @@ func setupHandlerRouter(appConf *conf.AppConf, router *ginx.RouterGroup, datasou
 	}
 	systemHandlerRouter := system.SetupRouter(router, systemHandler)
 	userInfo := user.NewUserInfo(datasource)
-	infoHandler := user.NewInfoHandler(userInfo)
 	userModify := user.NewUserModify(datasource, userInfo)
-	modifyHandler := user.NewModifyHandler(userModify)
-	userRole := user.NewUserRole(datasource)
-	userRoleHandler := user.NewUserRoleHandler(userRole)
+	infoHandler := user.NewInfoHandler(userInfo, userModify)
+	adminHandler := user.NewAdminHandler(userInfo, userModify)
 	userHandler := user.Handler{
-		Info:   infoHandler,
-		Modify: modifyHandler,
-		Roles:  userRoleHandler,
+		Info:  infoHandler,
+		Admin: adminHandler,
 	}
 	userHandlerRouter := user.SetupRouter(router, userHandler)
 	router2 := Router{

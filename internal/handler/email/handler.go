@@ -8,7 +8,6 @@ import (
 	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/internal/types/code"
 	emailType "github.com/dstgo/wilson/internal/types/email"
-	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/dstgo/wilson/pkg/ginx/httpx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -61,8 +60,7 @@ func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 
 	// store in redis
 	if err := e.codeCache.Set(ctx, authcode, emailReq.Email, e.cfg.Expire()); err != nil {
-		resp.InternalFailed(ctx).Error(errs.DataBaseErr(err)).
-			MsgI18n("email.sendFail").Send()
+		resp.InternalFailed(ctx).Error(emailType.ErrSendFailed).Send()
 		return
 	}
 
@@ -70,7 +68,7 @@ func (e EmailHandler) SendCodeEmail(ctx *gin.Context) {
 	ee := email.NewEmail()
 	ee.From = e.cfg.User
 	ee.To = append(ee.To, emailReq.Email)
-	ee.Subject = locale.GetWithLang(httpx.GetFirstAcceptLanguage(ctx), "email.codeSubject")
+	ee.Subject = locale.GetWithLang(httpx.GetFirstAcceptLanguage(ctx), "email.code.subject")
 
 	// judge language
 	language := httpx.GetFirstAcceptLanguage(ctx)

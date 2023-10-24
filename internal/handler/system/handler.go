@@ -36,6 +36,7 @@ type PingHandler struct {
 
 // Ping
 // @Summary      Ping
+// @Description  [guest]
 // @Description  test app api if is accessible
 // @Tags         system
 // @Accept       json
@@ -59,6 +60,7 @@ func (p PingHandler) Ping(ctx *gin.Context) {
 
 // Pong
 // @Summary      Pong
+// @Description  [guest]
 // @Description  test app api authentication if is work
 // @Tags         system
 // @Accept       json
@@ -90,6 +92,7 @@ type AuthHandler struct {
 
 // Login
 // @Summary      Login
+// @Description  [guest]
 // @Description  if login success, return jwt token
 // @Tags         auth
 // @Accept       json
@@ -102,7 +105,7 @@ func (a AuthHandler) Login(ctx *gin.Context) {
 	if err := bind.Binds(ctx, bind.Json(loginRequest)); err != nil {
 		return
 	}
-	signedJwt, err := a.Authlogic.TryLogin(loginRequest.Username, loginRequest.Password)
+	signedJwt, err := a.Authlogic.TryLogin(ctx, loginRequest.Username, loginRequest.Password)
 	if err != nil {
 		resp.Fail(ctx).Code(code.LoginFailed).MsgI18n("auth.loginFail").Error(err).Send()
 		return
@@ -113,6 +116,7 @@ func (a AuthHandler) Login(ctx *gin.Context) {
 
 // Register
 // @Summary      Register
+// @Description  [guest]
 // @Description  user register api
 // @Tags         auth
 // @Accept       json
@@ -125,7 +129,7 @@ func (a AuthHandler) Register(ctx *gin.Context) {
 	if err := bind.Binds(ctx, bind.Json(registerRequest)); err != nil {
 		return
 	}
-	err := a.Authlogic.TryRegisterNewUser(registerRequest.Username, registerRequest.Password, registerRequest.Code)
+	err := a.Authlogic.TryRegisterNewUser(ctx, registerRequest.Username, registerRequest.Password, registerRequest.Code)
 	if err != nil {
 		resp.Fail(ctx).Code(code.RegisterFailed).MsgI18n("auth.registerFail").Error(err).Send()
 		return
@@ -135,6 +139,7 @@ func (a AuthHandler) Register(ctx *gin.Context) {
 
 // Logout
 // @Summary      Logout
+// @Description  [user]
 // @Description  user logout
 // @Tags         auth
 // @Accept       json
@@ -145,7 +150,7 @@ func (a AuthHandler) Register(ctx *gin.Context) {
 func (a AuthHandler) Logout(ctx *gin.Context) {
 	// get user info from parsed request context
 	tokenInfo := authen.GetContextTokenInfo(ctx)
-	err := a.Authlogic.TryLogout(tokenInfo.ID)
+	err := a.Authlogic.TryLogout(ctx, tokenInfo.ID)
 	if err != nil {
 		resp.Fail(ctx).Code(code.LogoutFailed).MsgI18n("auth.logoutFail").Error(err).Send()
 		return
@@ -155,6 +160,7 @@ func (a AuthHandler) Logout(ctx *gin.Context) {
 
 // ForgotPassword
 // @Summary      ForgotPassword
+// @Description  [guest]
 // @Description  forgot password
 // @Tags         auth
 // @Accept       json
@@ -171,7 +177,7 @@ func (a AuthHandler) ForgotPassword(ctx *gin.Context) {
 		return
 	}
 
-	err = a.Authlogic.ChangePassword(changePasswordReq.Password, changePasswordReq.Code)
+	err = a.Authlogic.ChangePassword(ctx, changePasswordReq.Password, changePasswordReq.Code)
 	if err != nil {
 		resp.Fail(ctx).MsgI18n("auth.changePasswdFail").Error(err).Send()
 		return
@@ -189,6 +195,7 @@ type RoleHandler struct {
 
 // GetRoleList
 // @Summary      GetRoleList
+// @Description  [admin]
 // @Description  get role list by page
 // @Tags         role
 // @Accept       json
@@ -212,6 +219,7 @@ func (r RoleHandler) GetRoleList(ctx *gin.Context) {
 
 // GetRolePerms
 // @Summary      GetRolePerms
+// @Description  [admin]
 // @Description  get permissions list belong to role
 // @Tags         role
 // @Accept       json
@@ -236,6 +244,7 @@ func (r RoleHandler) GetRolePerms(ctx *gin.Context) {
 
 // CreateRole
 // @Summary      CreateRole
+// @Description  [admin]
 // @Description  create a new role
 // @Tags         role
 // @Accept       json
@@ -259,6 +268,7 @@ func (r RoleHandler) CreateRole(ctx *gin.Context) {
 
 // UpdateRole
 // @Summary      UpdateRole
+// @Description  [admin]
 // @Description  update the specified role info
 // @Tags         role
 // @Accept       json
@@ -282,6 +292,7 @@ func (r RoleHandler) UpdateRole(ctx *gin.Context) {
 
 // GrantRolePerms
 // @Summary      GrantRolePerms
+// @Description  [admin]
 // @Description  grant permissions for the specified role
 // @Tags         role
 // @Accept       json
@@ -306,6 +317,7 @@ func (r RoleHandler) GrantRolePerms(ctx *gin.Context) {
 
 // RemoveRole
 // @Summary      RemoveRole
+// @Description  [admin]
 // @Description  remove a role,and its permission record will be deleted too
 // @Tags         role
 // @Accept       json
@@ -330,6 +342,7 @@ func (r RoleHandler) RemoveRole(ctx *gin.Context) {
 
 // GetPermList
 // @Summary      GetPermList
+// @Description  [admin]
 // @Description  Get Permission list by page
 // @Tags         role
 // @Accept       json
@@ -354,6 +367,7 @@ func (r RoleHandler) GetPermList(ctx *gin.Context) {
 
 // CreatePermission
 // @Summary      CreatePermission
+// @Description  [admin]
 // @Description  create a new permission
 // @Tags         role
 // @Accept       json
@@ -378,6 +392,7 @@ func (r RoleHandler) CreatePermission(ctx *gin.Context) {
 
 // UpdatePermission
 // @Summary      UpdatePermission
+// @Description  [admin]
 // @Description  update the specified permission info
 // @Tags         role
 // @Accept       json
@@ -401,6 +416,7 @@ func (r RoleHandler) UpdatePermission(ctx *gin.Context) {
 
 // RemovePermission
 // @Summary      RemovePermission
+// @Description  [admin]
 // @Description  remove the specified permission
 // @Tags         role
 // @Accept       json

@@ -7,7 +7,7 @@ import (
 
 type SaveRoleOption struct {
 	types.Uid
-	RoleIds []uint `json:"role_ids" label:"field.role.list"`
+	RoleIds []uint `json:"roleIds" label:"field.role.list"`
 }
 
 func (s SaveRoleOption) Validate(lang string) error {

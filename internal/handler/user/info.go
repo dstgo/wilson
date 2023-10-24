@@ -5,8 +5,8 @@ import (
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/pkg/utils/cp"
-	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/dstgo/wilson/internal/types/helper"
+	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/dstgo/wilson/internal/types/user"
 	"gorm.io/gorm"
 )
@@ -23,50 +23,41 @@ type UserInfo struct {
 
 func (u UserInfo) GetUserInfoByEmail(email string) (user.Info, error) {
 	userEntity, err := GetUserByEmail(u.ds.ORM(), email)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return user.Info{}, errs.ResourceNotFound(err).I18n("user.notfound")
+	if errors.Is(err, gorm.ErrRecordNotFound) || (err != nil && userEntity.ID == 0) {
+		return user.Info{}, user.ErrUserNotFound
+	} else if err != nil {
+		return user.Info{}, system.ErrDatabase.Wrap(err)
 	}
-	userInfo := user.Info{
-		UUID:      userEntity.UUID,
-		Username:  userEntity.Username,
-		Email:     userEntity.Email,
-		CreatedAt: helper.CreatedAt{CreatedAt: userEntity.CreatedAt},
-	}
-	return userInfo, nil
+
+	return u.GetUserInfoById(userEntity.ID)
 }
 
 func (u UserInfo) GetUserInfoByUUID(uuid string) (user.Info, error) {
 	userEntity, err := GetUserByUUID(u.ds.ORM(), uuid)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return user.Info{}, errs.ResourceNotFound(err).I18n("user.notfound")
+	if errors.Is(err, gorm.ErrRecordNotFound) || (err != nil && userEntity.ID == 0) {
+		return user.Info{}, user.ErrUserNotFound
+	} else if err != nil {
+		return user.Info{}, system.ErrDatabase.Wrap(err)
 	}
-	userInfo := user.Info{
-		UUID:      userEntity.UUID,
-		Username:  userEntity.Username,
-		Email:     userEntity.Email,
-		CreatedAt: helper.CreatedAt{CreatedAt: userEntity.CreatedAt},
-	}
-	return userInfo, nil
+
+	return u.GetUserInfoById(userEntity.ID)
 }
 
 func (u UserInfo) GetUserInfoByName(name string) (user.Info, error) {
 	userEntity, err := GetUserByName(u.ds.ORM(), name)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return user.Info{}, errs.ResourceNotFound(err).I18n("user.notfound")
+	if errors.Is(err, gorm.ErrRecordNotFound) || (err != nil && userEntity.ID == 0) {
+		return user.Info{}, user.ErrUserNotFound
+	} else if err != nil {
+		return user.Info{}, system.ErrDatabase.Wrap(err)
 	}
-	userInfo := user.Info{
-		UUID:      userEntity.UUID,
-		Username:  userEntity.Username,
-		Email:     userEntity.Email,
-		CreatedAt: helper.CreatedAt{CreatedAt: userEntity.CreatedAt},
-	}
-	return userInfo, nil
+
+	return u.GetUserInfoById(userEntity.ID)
 }
 
 func (u UserInfo) GetUserInfoById(userId uint) (user.Info, error) {
 	userEntity, err := GetUserById(u.ds.ORM(), userId)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return user.Info{}, errs.ResourceNotFound(err).I18n("user.notfound")
+		return user.Info{}, user.ErrUserNotFound
 	}
 	userInfo := user.Info{
 		UUID:      userEntity.UUID,
@@ -74,19 +65,26 @@ func (u UserInfo) GetUserInfoById(userId uint) (user.Info, error) {
 		Email:     userEntity.Email,
 		CreatedAt: helper.CreatedAt{CreatedAt: userEntity.CreatedAt},
 	}
+
+	roles, err := u.GetUserRoles(userEntity.UUID)
+	if err != nil {
+		return user.Info{}, err
+	}
+	userInfo.Roles = roles
+
 	return userInfo, nil
 }
 
 func (u UserInfo) GetUserInfoList(opt user.PageOption) ([]user.Info, error) {
 	pageUser, err := ListByPage(u.ds.ORM(), opt)
 	if err != nil {
-		return []user.Info{}, errs.DataBaseErr(err)
+		return []user.Info{}, system.ErrDatabase.Wrap(err)
 	}
 
 	userInfoList := make([]user.Info, 0, len(pageUser))
 
 	if err := cp.Copy(&pageUser, &userInfoList); err != nil {
-		return []user.Info{}, errs.ProgramErr(err)
+		return []user.Info{}, system.ErrProgram.Wrap(err)
 	}
 
 	return userInfoList, err
@@ -132,7 +130,7 @@ func ListByPage(db *gorm.DB, pageOpt user.PageOption) ([]entity.User, error) {
 		pageDB = pageDB.Where("username LIKE ? OR email LIKE ?", query, query)
 	}
 
-	err := pageDB.Find(&users).Error
+	err := pageDB.Preload("Roles").Find(&users).Error
 	return users, err
 }
 

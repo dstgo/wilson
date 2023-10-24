@@ -17,6 +17,13 @@ func (g GormResolver) GetPerm(permId uint) (role.PermInfo, error) {
 	return role.MakePermInfo(perm), nil
 }
 
+func (g GormResolver) MatchPerm(name, obj, act, group, tag string) (role.PermInfo, error) {
+	var permInfo entity.Permission
+	err := g.db.Model(entity.Permission{}).
+		Where("name = ? AND object = ? AND action = ? AND group = ? AND tag = ?", name, obj, act, group, tag).Find(&permInfo).Error
+	return role.MakePermInfo(permInfo), err
+}
+
 func (g GormResolver) CreatePerm(permInfo role.PermInfo) error {
 	_, err := createPerm(g.db, role.MakePermRecord(permInfo))
 	if err != nil {
@@ -66,7 +73,7 @@ func (g GormResolver) RemovePerm(permId uint) error {
 func MakeRolePerms(roleId uint, permIds []uint) []entity.RolePermission {
 	rolePermList := make([]entity.RolePermission, 0, len(permIds))
 	for _, permId := range permIds {
-		rolePermList = append(rolePermList, entity.RolePermission{RoleId: roleId, PermId: permId})
+		rolePermList = append(rolePermList, entity.RolePermission{RoleId: roleId, PermissionId: permId})
 	}
 	return rolePermList
 }

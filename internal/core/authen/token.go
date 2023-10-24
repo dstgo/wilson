@@ -31,9 +31,8 @@ var (
 // UserPayload
 // basic user info
 type UserPayload struct {
-	Username string   `json:"username"`
-	UUID     string   `json:"uuid"`
-	Roles    []string `json:"roles"`
+	Username string `json:"username"`
+	UUID     string `json:"uuid"`
 }
 
 type UserClaims struct {

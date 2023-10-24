@@ -1,21 +1,29 @@
 package entity
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 )
 
 // User user entity represents from database table
 type User struct {
+	gorm.Model
+	UserTable
+
 	UUID     string `gorm:"uniqueIndex;type:varchar(40);comment:User UUID;"`
 	Username string `gorm:"uniqueIndex;type:varchar(30);comment:username;"`
 	Password string `gorm:"comment:User password;type:varchar(255);"`
 	Email    string `gorm:"uniqueIndex;type:varchar(80);comment:User concat email;"`
 
-	gorm.Model
-	UserTable
+	Instances []Instance `gorm:"foreignKey:UserId;"`
+	Roles     []Role     `gorm:"many2many:users_roles;"`
 }
 
 type UserTable struct{}
+
+func (u UserTable) BeforeCreate(db *gorm.DB) error {
+	return db.Set(tableOptions, fmt.Sprintf("comment '%s'", u.TableComment())).Error
+}
 
 func (u UserTable) TableName() string {
 	return "users"
@@ -36,7 +44,15 @@ type UserRole struct {
 	UserRoleTable
 }
 
+func (u UserRole) BeforeCreate(db *gorm.DB) error {
+	return db.SetupJoinTable(User{}, "Roles", UserRole{})
+}
+
 type UserRoleTable struct{}
+
+func (u UserRoleTable) BeforeCreate(db *gorm.DB) error {
+	return db.Set(tableOptions, fmt.Sprintf("comment '%s'", u.TableComment())).Error
+}
 
 func (u UserRoleTable) TableName() string {
 	return "users_roles"

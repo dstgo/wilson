@@ -2,8 +2,18 @@ package data
 
 import (
 	"fmt"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
+
+func DialTestDB() (*gorm.DB, error) {
+	dsn := "root:123456@tcp(192.168.48.138:3306)/wilson?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn))
+	if err != nil {
+		return db, err
+	}
+	return db, nil
+}
 
 type GormOption func(*gorm.DB) *gorm.DB
 

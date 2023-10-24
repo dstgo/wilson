@@ -5,13 +5,17 @@ import (
 	"github.com/dstgo/wilson/internal/core/resp"
 	"github.com/dstgo/wilson/internal/core/role"
 	"github.com/dstgo/wilson/internal/handler/user"
+	"github.com/dstgo/wilson/internal/types/auth"
 	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/dstgo/wilson/internal/types/meta"
+	roleType "github.com/dstgo/wilson/internal/types/role"
+	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/dstgo/wilson/pkg/ginx"
 	"github.com/dstgo/wilson/pkg/ginx/httpx"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/pkg/errors"
+	"net/http"
 )
 
 func UseAuthenticate(v authen.Parser) gin.HandlerFunc {
@@ -35,19 +39,19 @@ func UseAuthenticate(v authen.Parser) gin.HandlerFunc {
 			ctx.Next()
 		} else {
 			ctx.Abort()
-			var respErr *errs.LocaleError
+			var respErr errs.LocaleError
 			switch {
 			case errors.Is(err, jwt.ErrTokenExpired):
-				respErr = errs.UnAuthorized(err).I18n("jwt.expired")
+				respErr = auth.ErrJwtExpired.Wrap(err).Status(http.StatusUnauthorized)
 			default:
-				respErr = errs.Forbidden(err).I18n("jwt.parsedFailed")
+				respErr = auth.ErrJwtParsedFailed.Wrap(err).Status(http.StatusForbidden)
 			}
 			resp.Fail(ctx).MsgI18n("err.forbidden").Error(respErr).Send()
 		}
 	}
 }
 
-func UseRoleAuthorize(resolver role.Resolver, userRole user.UserRole) gin.HandlerFunc {
+func UseRoleAuthorize(resolver role.Resolver, userRole user.UserInfo) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// no need to authorize if no need to authenticate
 		metaData := ginx.MetaFromCtx(ctx)
@@ -60,7 +64,7 @@ func UseRoleAuthorize(resolver role.Resolver, userRole user.UserRole) gin.Handle
 		userRoles, err := userRole.GetUserRoleCodes(info.UUID)
 		if err != nil {
 			ctx.Abort()
-			resp.InternalFailed(ctx).MsgI18n("err.internal").Error(errs.DataBaseErr(err)).Send()
+			resp.InternalFailed(ctx).MsgI18n("err.internal").Error(err).Send()
 			return
 		}
 
@@ -73,9 +77,9 @@ func UseRoleAuthorize(resolver role.Resolver, userRole user.UserRole) gin.Handle
 		if err := resolver.ResolveAny(object, action, roles...); err != nil {
 			ctx.Abort()
 			if errors.Is(err, role.ErrHasNoPermission) {
-				resp.Fail(ctx).MsgI18n("err.unauthorized").Error(errs.UnAuthorized(nil).I18n("role.noPerm")).Send()
+				resp.Forbidden(ctx).MsgI18n("err.unauthorized").Error(roleType.ErrNoPemrAccess).Send()
 			} else {
-				resp.InternalFailed(ctx).MsgI18n("err.internal").Error(errs.DataBaseErr(err)).Send()
+				resp.InternalFailed(ctx).MsgI18n("err.internal").Error(system.ErrDatabase.Wrap(err)).Send()
 			}
 			return
 		}

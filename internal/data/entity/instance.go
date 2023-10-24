@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -26,6 +27,10 @@ type Instance struct {
 }
 
 type InstanceTable struct{}
+
+func (i InstanceTable) BeforeCreate(db *gorm.DB) error {
+	return db.Set(tableOptions, fmt.Sprintf("comment '%s'", i.TableComment())).Error
+}
 
 func (i InstanceTable) TableName() string {
 	return "instances"

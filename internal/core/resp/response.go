@@ -32,6 +32,21 @@ func InternalFailed(ctx *gin.Context) *Response {
 	return NewResponse(ctx).Status(http.StatusInternalServerError)
 }
 
+func Forbidden(ctx *gin.Context) *Response {
+	return NewResponse(ctx).Status(http.StatusForbidden)
+}
+
+func UnAuthorized(ctx *gin.Context) *Response {
+	return NewResponse(ctx).Status(http.StatusUnauthorized)
+}
+
+// Status
+// response with status code
+func Status(ctx *gin.Context, statusCode int) *Response {
+	return NewResponse(ctx).Status(statusCode)
+
+}
+
 type Response struct {
 	// current response error
 	err error
@@ -99,8 +114,8 @@ func (r *Response) Send() {
 			// if httpcode >= 500, which means internal server error happened.
 			// for non-internal errors, detailed error information can be displayed externally
 			// otherwise only simple description information can be returned to avoid leaking sensitive data
-			if e.HttpStatus < 500 && e.Er != nil {
-				errMsg = errs.Wrap(e.Er, errMsg).Error()
+			if e.HttpStatus < 500 && e.Err != nil {
+				errMsg = errs.Wrap(e.Err, errMsg).Error()
 			}
 
 			// overwrite http status
@@ -113,9 +128,13 @@ func (r *Response) Send() {
 				r.CustomCode = e.ErrorCode
 			}
 
-			// error msg fallback
 			if len(errMsg) == 0 {
-				errMsg = e.LangCode
+				// error msg fallback
+				if len(e.Fb) == 0 {
+					errMsg = e.LangCode
+				} else {
+					errMsg = e.Fb
+				}
 			}
 
 			r.ErrorMsg = errMsg

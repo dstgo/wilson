@@ -15,43 +15,9 @@
     },
     "basePath": "/api/v1",
     "paths": {
-        "/api": {
-            "get": {
-                "description": "create new user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "app"
-                ],
-                "summary": "CreateUser",
-                "parameters": [
-                    {
-                        "description": "CreateUserOption",
-                        "name": "createOpt",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user.CreateUserOption"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/types.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/auth/forgotpwd": {
             "post": {
-                "description": "forgot password",
+                "description": "[guest]\nforgot password",
                 "consumes": [
                     "application/json"
                 ],
@@ -85,7 +51,7 @@
         },
         "/auth/login": {
             "post": {
-                "description": "if login success, return jwt token",
+                "description": "[guest]\nif login success, return jwt token",
                 "consumes": [
                     "application/json"
                 ],
@@ -136,7 +102,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "user logout",
+                "description": "[user]\nuser logout",
                 "consumes": [
                     "application/json"
                 ],
@@ -159,7 +125,7 @@
         },
         "/auth/register": {
             "post": {
-                "description": "user register api",
+                "description": "[guest]\nuser register api",
                 "consumes": [
                     "application/json"
                 ],
@@ -650,7 +616,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "create a new permission",
+                "description": "[admin]\ncreate a new permission",
                 "consumes": [
                     "application/json"
                 ],
@@ -689,7 +655,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get Permission list by page",
+                "description": "[admin]\nGet Permission list by page",
                 "consumes": [
                     "application/json"
                 ],
@@ -761,7 +727,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "remove the specified permission",
+                "description": "[admin]\nremove the specified permission",
                 "consumes": [
                     "application/json"
                 ],
@@ -796,7 +762,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "update the specified permission info",
+                "description": "[admin]\nupdate the specified permission info",
                 "consumes": [
                     "application/json"
                 ],
@@ -830,7 +796,7 @@
         },
         "/ping": {
             "get": {
-                "description": "test app api if is accessible",
+                "description": "[guest]\ntest app api if is accessible",
                 "consumes": [
                     "application/json"
                 ],
@@ -874,7 +840,7 @@
         },
         "/pong": {
             "get": {
-                "description": "test app api authentication if is work",
+                "description": "[guest]\ntest app api authentication if is work",
                 "consumes": [
                     "application/json"
                 ],
@@ -911,7 +877,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "create a new role",
+                "description": "[admin]\ncreate a new role",
                 "consumes": [
                     "application/json"
                 ],
@@ -950,7 +916,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "grant permissions for the specified role",
+                "description": "[admin]\ngrant permissions for the specified role",
                 "consumes": [
                     "application/json"
                 ],
@@ -984,7 +950,7 @@
         },
         "/role/list": {
             "get": {
-                "description": "get role list by page",
+                "description": "[admin]\nget role list by page",
                 "consumes": [
                     "application/json"
                 ],
@@ -1056,7 +1022,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "get permissions list belong to role",
+                "description": "[admin]\nget permissions list belong to role",
                 "consumes": [
                     "application/json"
                 ],
@@ -1106,7 +1072,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "remove a role,and its permission record will be deleted too",
+                "description": "[admin]\nremove a role,and its permission record will be deleted too",
                 "consumes": [
                     "application/json"
                 ],
@@ -1141,7 +1107,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "update the specified role info",
+                "description": "[admin]\nupdate the specified role info",
                 "consumes": [
                     "application/json"
                 ],
@@ -1173,14 +1139,9 @@
                 }
             }
         },
-        "/user/info": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "get specific user simple info",
+        "/user/admin/create": {
+            "post": {
+                "description": "[admin]\ncreate new user",
                 "consumes": [
                     "application/json"
                 ],
@@ -1190,44 +1151,36 @@
                 "tags": [
                     "user"
                 ],
-                "summary": "GetUserInfo",
+                "summary": "CreateUser",
                 "parameters": [
                     {
-                        "type": "string",
-                        "name": "uuid",
-                        "in": "query"
+                        "description": "CreateUserOption",
+                        "name": "createOpt",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.CreateUserOption"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/types.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/user.Info"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
             }
         },
-        "/user/list": {
+        "/user/admin/list": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "get specific user list",
+                "description": "[admin]\nget specific user list",
                 "consumes": [
                     "application/json"
                 ],
@@ -1300,14 +1253,76 @@
                 }
             }
         },
-        "/user/remove": {
+        "/user/admin/profile": {
+            "get": {
+                "description": "[admin]\nget specified user information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "GetSpecUserInfo",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "uuid",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "[admin]\nsave specified user information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "SaveUser",
+                "parameters": [
+                    {
+                        "description": "updateInfoOption",
+                        "name": "updateInfoOption",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.SaveUserDetailOption"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/admin/remove": {
             "delete": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Remove the specific user",
+                "description": "[admin]\nRemove the specific user",
                 "consumes": [
                     "application/json"
                 ],
@@ -1335,9 +1350,14 @@
                 }
             }
         },
-        "/user/roles": {
+        "/user/profile": {
             "get": {
-                "description": "get user roles",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "[user]\nget own user info",
                 "consumes": [
                     "application/json"
                 ],
@@ -1347,14 +1367,7 @@
                 "tags": [
                     "user"
                 ],
-                "summary": "GetUserRoles",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "name": "uuid",
-                        "in": "query"
-                    }
-                ],
+                "summary": "GetUserInfo",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1367,10 +1380,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/role.RoleInfo"
-                                            }
+                                            "$ref": "#/definitions/user.Info"
                                         }
                                     }
                                 }
@@ -1380,46 +1390,12 @@
                 }
             },
             "post": {
-                "description": "get string by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "summary": "SaveUserRoles",
-                "parameters": [
-                    {
-                        "description": "SaveRoleOption",
-                        "name": "saveOption",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user.SaveRoleOption"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/types.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/update": {
-            "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "update the specific user info",
+                "description": "[user]\nupdate own user info",
                 "consumes": [
                     "application/json"
                 ],
@@ -1432,7 +1408,7 @@
                 "summary": "UpdateUserInfo",
                 "parameters": [
                     {
-                        "description": "comment",
+                        "description": "updateInfoOption",
                         "name": "updateInfoOption",
                         "in": "body",
                         "required": true,
@@ -1712,6 +1688,13 @@
                     "type": "string",
                     "example": "123456"
                 },
+                "roles": {
+                    "description": "new roles",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "username": {
                     "description": "new username",
                     "type": "string",
@@ -1730,6 +1713,12 @@
                     "type": "string",
                     "example": "jacklove@lol.com"
                 },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/role.RoleInfo"
+                    }
+                },
                 "username": {
                     "type": "string",
                     "example": "jack"
@@ -1740,17 +1729,30 @@
                 }
             }
         },
-        "user.SaveRoleOption": {
+        "user.SaveUserDetailOption": {
             "type": "object",
             "properties": {
-                "role_ids": {
+                "email": {
+                    "description": "new email",
+                    "type": "string",
+                    "example": "jack@google.com"
+                },
+                "password": {
+                    "description": "new password",
+                    "type": "string",
+                    "example": "123456"
+                },
+                "roles": {
+                    "description": "new roles",
                     "type": "array",
                     "items": {
-                        "type": "integer"
+                        "type": "string"
                     }
                 },
-                "uuid": {
-                    "type": "string"
+                "username": {
+                    "description": "new username",
+                    "type": "string",
+                    "example": "jack"
                 }
             }
         },
