@@ -35,7 +35,7 @@ $ wilson server --f /etc/wilson/config.yaml
 ```
 
 
-## Construct
+## Build
 
 Enter the source code root directory and use make to build
 
