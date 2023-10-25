@@ -21,8 +21,6 @@ Access https://github.com/dstgo/wilson for more information.`,
 }
 
 var (
-	configFile string
-
 	Author string
 
 	Version string
