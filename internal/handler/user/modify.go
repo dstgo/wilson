@@ -128,13 +128,13 @@ func UpdateUserInfo(db *gorm.DB, user entity.User) error {
 
 func DisableUser(db *gorm.DB, id uint) error {
 	return db.Model(entity.User{}).Delete(entity.User{
-		Model: gorm.Model{ID: id},
+		Id: id,
 	}).Error
 }
 
 func RemoveUser(db *gorm.DB, id uint) error {
 	return db.Unscoped().Model(entity.User{}).Delete(entity.User{
-		Model: gorm.Model{ID: id},
+		Id: id,
 	}).Error
 }
 

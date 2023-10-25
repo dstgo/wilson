@@ -5,7 +5,6 @@ import (
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/pkg/utils/cp"
-	"github.com/dstgo/wilson/internal/types/helper"
 	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/dstgo/wilson/internal/types/user"
 	"gorm.io/gorm"
@@ -23,35 +22,35 @@ type UserInfo struct {
 
 func (u UserInfo) GetUserInfoByEmail(email string) (user.Info, error) {
 	userEntity, err := GetUserByEmail(u.ds.ORM(), email)
-	if errors.Is(err, gorm.ErrRecordNotFound) || (err != nil && userEntity.ID == 0) {
+	if errors.Is(err, gorm.ErrRecordNotFound) || (err != nil && userEntity.Id == 0) {
 		return user.Info{}, user.ErrUserNotFound
 	} else if err != nil {
 		return user.Info{}, system.ErrDatabase.Wrap(err)
 	}
 
-	return u.GetUserInfoById(userEntity.ID)
+	return u.GetUserInfoById(userEntity.Id)
 }
 
 func (u UserInfo) GetUserInfoByUUID(uuid string) (user.Info, error) {
 	userEntity, err := GetUserByUUID(u.ds.ORM(), uuid)
-	if errors.Is(err, gorm.ErrRecordNotFound) || (err != nil && userEntity.ID == 0) {
+	if errors.Is(err, gorm.ErrRecordNotFound) || (err != nil && userEntity.Id == 0) {
 		return user.Info{}, user.ErrUserNotFound
 	} else if err != nil {
 		return user.Info{}, system.ErrDatabase.Wrap(err)
 	}
 
-	return u.GetUserInfoById(userEntity.ID)
+	return u.GetUserInfoById(userEntity.Id)
 }
 
 func (u UserInfo) GetUserInfoByName(name string) (user.Info, error) {
 	userEntity, err := GetUserByName(u.ds.ORM(), name)
-	if errors.Is(err, gorm.ErrRecordNotFound) || (err != nil && userEntity.ID == 0) {
+	if errors.Is(err, gorm.ErrRecordNotFound) || (err != nil && userEntity.Id == 0) {
 		return user.Info{}, user.ErrUserNotFound
 	} else if err != nil {
 		return user.Info{}, system.ErrDatabase.Wrap(err)
 	}
 
-	return u.GetUserInfoById(userEntity.ID)
+	return u.GetUserInfoById(userEntity.Id)
 }
 
 func (u UserInfo) GetUserInfoById(userId uint) (user.Info, error) {
@@ -59,11 +58,12 @@ func (u UserInfo) GetUserInfoById(userId uint) (user.Info, error) {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return user.Info{}, user.ErrUserNotFound
 	}
+
 	userInfo := user.Info{
 		UUID:      userEntity.UUID,
 		Username:  userEntity.Username,
 		Email:     userEntity.Email,
-		CreatedAt: helper.CreatedAt{CreatedAt: userEntity.CreatedAt},
+		CreatedAt: userEntity.CreatedAt,
 	}
 
 	roles, err := u.GetUserRoles(userEntity.UUID)

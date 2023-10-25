@@ -191,5 +191,5 @@ func removePerm(db *gorm.DB, permId uint) error {
 }
 
 func updatePerm(db *gorm.DB, perm entity.Permission) error {
-	return db.Model(perm).Where("id = ?", perm.ID).Updates(&perm).Error
+	return db.Model(perm).Where("id = ?", perm.Id).Updates(&perm).Error
 }

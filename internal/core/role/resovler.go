@@ -79,7 +79,7 @@ func (g GormResolver) ResolveAny(permObj string, permAct string, roles ...string
 	}
 	permIds := make([]uint, 0, len(perm))
 	for _, permission := range perm {
-		permIds = append(permIds, permission.ID)
+		permIds = append(permIds, permission.Id)
 	}
 
 	var rolePerms []entity.RolePermission
@@ -121,7 +121,7 @@ func (g GormResolver) UpdateRolePermBatch(roleId uint, tag string, newPermIds []
 
 	allPermIds := make([]uint, 0, len(tagPerms))
 	for _, perm := range tagPerms {
-		allPermIds = append(allPermIds, perm.ID)
+		allPermIds = append(allPermIds, perm.Id)
 	}
 
 	// there has unexpected permId in params if is not subset
@@ -186,11 +186,11 @@ func (g GormResolver) CreateRolePermBatch(roleInfo role.RoleInfo, perms []role.P
 
 	var permIds []uint
 	for _, en := range queryEns {
-		permIds = append(permIds, en.ID)
+		permIds = append(permIds, en.Id)
 	}
 
 	// create the relation
-	err = insertRolePermBatch(g.db, queryRole.ID, permIds)
+	err = insertRolePermBatch(g.db, queryRole.Id, permIds)
 	if err != nil {
 		return err
 	}
