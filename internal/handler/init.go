@@ -116,7 +116,7 @@ func initRouterRole(source *data.DataSource, root *ginx.RouterGroup, resolver ro
 	}
 
 	// if first user created, then
-	if firstUser.ID > 0 {
+	if firstUser.Id > 0 {
 		userRole := user.NewUserModify(source, user.NewUserInfo(source))
 		err := userRole.SaveRolesByCode(firstUser.UUID, []string{
 			role.AdminRole.Code,

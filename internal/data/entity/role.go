@@ -7,8 +7,10 @@ import (
 
 // Role app roles record table
 type Role struct {
-	gorm.Model
 	RoleTable
+	Id        uint   `gorm:"primarykey"`
+	CreatedAt uint64 `gorm:"autoCreateTime:nano;"`
+	UpdatedAt uint64 `gorm:"autoUpdateTime:nano;"`
 
 	Name string `gorm:"type:varchar(50);comment:role display name;"`
 	Code string `gorm:"type:varchar(50);uniqueIndex;comment:role code;"`
@@ -33,8 +35,11 @@ func (r RoleTable) TableComment() string {
 
 // Permission app permissions record table
 type Permission struct {
-	gorm.Model
 	PermissionTable
+
+	Id        uint   `gorm:"primarykey"`
+	CreatedAt uint64 `gorm:"autoCreateTime:nano;"`
+	UpdatedAt uint64 `gorm:"autoUpdateTime:nano;"`
 
 	Name   string `gorm:"type:varchar(50);comment:perm name;"`
 	Object string `gorm:"type:varchar(100);uniqueIndex:perm;comment:resource will be accessed;"`

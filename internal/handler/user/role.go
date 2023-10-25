@@ -16,11 +16,11 @@ func (u UserInfo) GetUserRoles(uuid string) ([]role.RoleInfo, error) {
 	queryUser, err := GetUserByUUID(db, uuid)
 	if err != nil {
 		return roleInfos, system.ErrDatabase.Wrap(err)
-	} else if queryUser.ID == 0 {
+	} else if queryUser.Id == 0 {
 		return roleInfos, user.ErrUserNotFound
 	}
 
-	roles, err := ListAllUserRoles(u.ds.ORM(), queryUser.ID)
+	roles, err := ListAllUserRoles(u.ds.ORM(), queryUser.Id)
 	if err != nil {
 		return roleInfos, system.ErrDatabase.Wrap(err)
 	}
@@ -55,7 +55,7 @@ func (u UserModify) SaveRolesByCode(uuid string, codes []string) error {
 
 	var roleIds []uint
 	for _, e := range roles {
-		roleIds = append(roleIds, e.ID)
+		roleIds = append(roleIds, e.Id)
 	}
 
 	return u.SaveRoles(uuid, roleIds)
@@ -70,7 +70,7 @@ func (u UserModify) SaveRoles(uuid string, saveRoleIds []uint) error {
 	queryUser, err := GetUserByUUID(db, uuid)
 	if err != nil {
 		return system.ErrDatabase.Wrap(err)
-	} else if queryUser.ID == 0 {
+	} else if queryUser.Id == 0 {
 		return user.ErrUserNotFound
 	}
 
@@ -83,7 +83,7 @@ func (u UserModify) SaveRoles(uuid string, saveRoleIds []uint) error {
 		return role.ErrInvalidRoles
 	}
 
-	queryRoles, err := ListAllUserRoles(db, queryUser.ID)
+	queryRoles, err := ListAllUserRoles(db, queryUser.Id)
 	if err != nil {
 		return system.ErrDatabase.Wrap(err)
 	}
@@ -91,7 +91,7 @@ func (u UserModify) SaveRoles(uuid string, saveRoleIds []uint) error {
 	// convert ids
 	var queryRoleIds []uint
 	for _, queryRole := range queryRoles {
-		queryRoleIds = append(queryRoleIds, queryRole.ID)
+		queryRoleIds = append(queryRoleIds, queryRole.Id)
 	}
 
 	extraRoleIds := collection.DifferenceSet(queryRoleIds, saveRoleIds)
@@ -99,7 +99,7 @@ func (u UserModify) SaveRoles(uuid string, saveRoleIds []uint) error {
 
 	tx := db.Begin()
 
-	createdRecordList := role.MakeUserRoleRecordList(queryUser.ID, extraRoleIds)
+	createdRecordList := role.MakeUserRoleRecordList(queryUser.Id, extraRoleIds)
 	// insert extra roles
 	if err := CreateUserRoleInBatch(tx, createdRecordList); err != nil {
 		tx.Rollback()
@@ -107,7 +107,7 @@ func (u UserModify) SaveRoles(uuid string, saveRoleIds []uint) error {
 	}
 
 	// remove obsolete roles
-	if err := RemoveUserRoleInBatch(tx, queryUser.ID, obsoleteRoleIds); err != nil {
+	if err := RemoveUserRoleInBatch(tx, queryUser.Id, obsoleteRoleIds); err != nil {
 		tx.Rollback()
 		return system.ErrDatabase.Wrap(err)
 	}

@@ -6,7 +6,6 @@ import (
 	"github.com/dstgo/wilson/internal/types/helper"
 	"github.com/dstgo/wilson/internal/types/helper/rules"
 	"github.com/dstgo/wilson/pkg/vax"
-	"gorm.io/gorm"
 )
 
 type CreateRoleOption struct {
@@ -67,6 +66,15 @@ func (q QueryRolePermsOption) Validate(lang string) error {
 	)
 }
 
+type RoleInfo struct {
+	// role id
+	Id uint `json:"id" example:"1"`
+	// role name
+	Name string `json:"name" example:"admin"`
+	// role code, must be alpha numeric
+	Code string `json:"code" example:"ADMIN"`
+}
+
 var (
 	// AdminRole app static admin role,
 	AdminRole = RoleInfo{
@@ -84,18 +92,9 @@ var (
 	}
 )
 
-type RoleInfo struct {
-	// role id
-	ID uint `json:"id" example:"1"`
-	// role name
-	Name string `json:"name" example:"admin"`
-	// role code, must be alpha numeric
-	Code string `json:"code" example:"ADMIN"`
-}
-
 func MakeRoleInfo(record entity.Role) RoleInfo {
 	return RoleInfo{
-		ID:   record.ID,
+		Id:   record.Id,
 		Name: record.Name,
 		Code: record.Code,
 	}
@@ -110,9 +109,9 @@ func MakeRoleInfoList(records []entity.Role) (infos []RoleInfo) {
 
 func MakeRoleRecord(info RoleInfo) entity.Role {
 	return entity.Role{
-		Model: gorm.Model{ID: info.ID},
-		Name:  info.Name,
-		Code:  info.Code,
+		Id:   info.Id,
+		Name: info.Name,
+		Code: info.Code,
 	}
 }
 

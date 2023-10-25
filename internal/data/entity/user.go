@@ -7,8 +7,11 @@ import (
 
 // User user entity represents from database table
 type User struct {
-	gorm.Model
 	UserTable
+
+	Id        uint   `gorm:"primaryKey;"`
+	CreatedAt uint64 `gorm:"autoCreateTime:nano;"`
+	UpdatedAt uint64 `gorm:"autoUpdateTime:nano;"`
 
 	UUID     string `gorm:"uniqueIndex;type:varchar(40);comment:User UUID;"`
 	Username string `gorm:"uniqueIndex;type:varchar(30);comment:username;"`

@@ -52,6 +52,7 @@ func LogBanner(cfg *conf.AppConf, logger *logrus.Logger) error {
 }
 
 func LoadDataSource(ctx context.Context, dataConf *conf.DataConf) (*data.DataSource, error) {
+
 	log.L().Infoln("attempt to load wilson datasource...")
 	datasource, err := data.NewDataSource(ctx, dataConf)
 	if err != nil {

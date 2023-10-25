@@ -7,7 +7,7 @@ import (
 
 // Instance represents an instance, usually a docker container
 type Instance struct {
-	gorm.Model
+	Id     uint   `gorm:"primaryKey;"`
 	Uid    string `gorm:"type:varchar(40);uniqueIndex;comment:safe unique id, sha1 from instance.id;"`
 	Name   string `gorm:"type:varchar(50);comment:docker container name;"`
 	Image  string `gorm:"type:varchar(100);comment:docker image label;"`
@@ -15,6 +15,9 @@ type Instance struct {
 	Cpu    uint64 `gorm:"comment:cpu count limit;"`
 	Memory uint64 `gorm:"comment:memory limit;"`
 	Disk   uint64 `gorm:"comment:disk limit;"`
+
+	CreatedAt uint64 `gorm:"autoCreateTime:nano;"`
+	UpdatedAt uint64 `gorm:"autoUpdateTime:nano;"`
 
 	// foreign keys
 	UserId uint `gorm:"comment:id of user who own instance;"`

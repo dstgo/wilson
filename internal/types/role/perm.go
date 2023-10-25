@@ -4,7 +4,6 @@ import (
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/types/helper/rules"
 	"github.com/dstgo/wilson/pkg/vax"
-	"gorm.io/gorm"
 )
 
 type CreatePermOption struct {
@@ -48,7 +47,7 @@ type PermGroup struct {
 
 type PermInfo struct {
 	// permission id
-	ID uint `json:"id" example:"1"`
+	Id uint `json:"id" example:"1"`
 	// permission name
 	Name string `json:"name" example:"updateUser"`
 	// define the object will be accessed
@@ -84,7 +83,7 @@ func MakePermGroup(perms []entity.Permission) []PermGroup {
 
 func MakePermInfo(perm entity.Permission) PermInfo {
 	return PermInfo{
-		ID:     perm.ID,
+		Id:     perm.Id,
 		Name:   perm.Name,
 		Object: perm.Object,
 		Group:  perm.Group,
@@ -102,7 +101,7 @@ func MakePermInfoList(perms []entity.Permission) (infos []PermInfo) {
 
 func MakePermRecord(perm PermInfo) entity.Permission {
 	return entity.Permission{
-		Model:  gorm.Model{ID: perm.ID},
+		Id:     perm.Id,
 		Name:   perm.Name,
 		Object: perm.Object,
 		Action: perm.Action,

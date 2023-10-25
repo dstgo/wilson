@@ -156,7 +156,7 @@ func (a Authenticator) ChangePassword(ctx context.Context, newPassword string, c
 
 	// find user by email
 	userInfo, err := user.GetUserByEmail(a.ds.ORM(), emailCache)
-	if errors.Is(err, gorm.ErrRecordNotFound) || err == nil && userInfo.ID == 0 {
+	if errors.Is(err, gorm.ErrRecordNotFound) || err == nil && userInfo.Id == 0 {
 		return usert.ErrUserNotFound
 	} else if err != nil {
 		return system.ErrDatabase.Wrap(err)

@@ -120,7 +120,7 @@ func removeRole(db *gorm.DB, roleId uint) error {
 }
 
 func updateRole(db *gorm.DB, role entity.Role) error {
-	return db.Model(role).Where("id = ?", role.ID).Update("name = ?", role.Name).Error
+	return db.Model(role).Where("id = ?", role.Id).Update("name = ?", role.Name).Error
 }
 
 // GetRolePermIds get all id of the permissions belonging to specified role

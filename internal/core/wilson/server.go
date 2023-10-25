@@ -8,31 +8,53 @@ import (
 	"github.com/dstgo/wilson/internal/handler"
 	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/pkg/vax"
-	"net/http"
-	"os/signal"
-	"sync"
-	"syscall"
-
 	"github.com/pkg/errors"
-
-	"github.com/dstgo/wilson/pkg/task"
+	"net/http"
+	"sync"
 
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
+type Options func(app *App)
+
+func (o Options) Apply(app *App) {
+	o(app)
+}
+
+func WithCtx(ctx context.Context) Options {
+	return func(app *App) {
+		app.ctx = ctx
+	}
+}
+
+func WithConf(appConf *conf.AppConf) Options {
+	return func(app *App) {
+		app.cfg = appConf
+	}
+}
+
+func WithLogger(logger *log.Logger) Options {
+	return func(app *App) {
+		app.Logger = logger
+	}
+}
+
 type App struct {
-	server      *http.Server
-	logger      *logrus.Logger
-	cfg         *conf.AppConf
-	once        sync.Once
+	ctx context.Context
+
+	cfg    *conf.AppConf
+	Logger *log.Logger
+	Locale *locale.Locale
+	server *http.Server
+	once   sync.Once
+
 	shutddownFn func()
 }
 
 func (a *App) run() error {
 	appConf := a.cfg.ServerConf
-	a.logger.Infof("wilson app boot successfully, http server is listenning at %s, tls enable %t", a.server.Addr, appConf.HttpConf.TlsConf.Enable)
+	a.Logger.L().Infof("wilson app boot successfully, http server is listenning at %s, tls enable %t", a.server.Addr, appConf.HttpConf.TlsConf.Enable)
 	tlsConf := a.cfg.ServerConf.HttpConf.TlsConf
 	if tlsConf.Enable {
 		return a.server.ListenAndServeTLS(tlsConf.Cert, tlsConf.Pem)
@@ -40,84 +62,78 @@ func (a *App) run() error {
 	return a.server.ListenAndServe()
 }
 
-func (a *App) Run(ctx context.Context) error {
-	c, stop := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGKILL, syscall.SIGABRT, syscall.SIGTERM)
-
-	bootTask := task.NewTask(ctx)
-
-	// http server goroutines
-	bootTask.AddJobs(func(ctx context.Context) error {
-		err := a.run()
-		stop()
-		if errors.Is(err, http.ErrServerClosed) {
-			a.logger.Infoln("http server closed successfully")
-			return nil
-		}
-		return err
-	})
-
-	// daemon goroutines
-	bootTask.AddJobs(func(ctx context.Context) error {
-		select {
-		case <-c.Done():
-			a.Shutdown()
-		}
+func (a *App) Run() error {
+	err := a.run()
+	if errors.Is(err, http.ErrServerClosed) {
+		a.Logger.L().Infoln("http server closed successfully")
 		return nil
-	})
-
-	return bootTask.Run()
+	}
+	return err
 }
 
 func (a *App) Shutdown() {
 	a.once.Do(func() {
-		a.logger.Infof("wilson app ready to shutdown")
+		a.Logger.L().Infof("wilson app ready to shutdown")
 		a.server.Shutdown(context.Background())
 		a.shutddownFn()
 	})
 }
 
-func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.Logger) (*App, error) {
+func NewApp(options ...Options) (*App, error) {
+
+	app := new(App)
+
+	// apply options
+	for _, option := range options {
+		option.Apply(app)
+	}
+
+	if app.cfg == nil {
+		return app, errors.New("empty app configuration")
+	}
 
 	var (
-		lang       *locale.Locale
 		engine     *gin.Engine
 		server     *http.Server
 		datasource *data.DataSource
-		err        error
-		logger     = loggerw.L()
+
+		lang = app.Locale
+
+		err error
 	)
 
-	// locale
-	lang, err = NewLocale(cfg.LocaleConf)
-	if err != nil {
-		return nil, err
+	if app.Locale == nil {
+		// locale
+		lang, err = NewLocale(app.cfg.LocaleConf)
+		if err != nil {
+			return nil, err
+		}
+		locale.Setup(lang)
+		// set validation translator
+		vax.SetTranslator(locale.L())
 	}
-	locale.Setup(lang)
 
-	if err = LogBanner(cfg, logger); err != nil {
+	if err = LogBanner(app.cfg, app.Logger.L()); err != nil {
 		return nil, err
 	}
 
 	// datasource
-	datasource, err = LoadDataSource(ctx, cfg.DataConf)
+	datasource, err = LoadDataSource(app.ctx, app.cfg.DataConf)
 	if err != nil {
 		return nil, err
 	}
 
-	// set validation translator
-	vax.SetTranslator(locale.L())
-
 	// http server
-	engine, server = NewHttpServer(cfg, lang, logger)
+	engine, server = NewHttpServer(app.cfg, lang, app.Logger.L())
 
 	// setup app handler router
-	_, cleanup, err := handler.SetupHandler(cfg, engine, datasource)
+	_, cleanup, err := handler.SetupHandler(app.cfg, engine, datasource)
 	if err != nil {
 		return nil, err
 	}
 
 	// setup app open api router
-	_ = api.SetupOpenAPI(cfg, engine, datasource)
+	_ = api.SetupOpenAPI(app.cfg, engine, datasource)
 
 	// execute on server shutdown
 	shutdownFn := func() {
@@ -125,15 +141,11 @@ func NewApp(ctx context.Context, cfg *conf.AppConf, loggerw *log.Logger) (*App, 
 			cleanup()
 		}
 		CloseDataSource(datasource)
-		loggerw.Close()
+		app.Logger.Close()
 	}
 
-	app := &App{
-		server:      server,
-		logger:      logger,
-		cfg:         cfg,
-		shutddownFn: shutdownFn,
-	}
+	app.server = server
+	app.shutddownFn = shutdownFn
 
 	return app, nil
 }

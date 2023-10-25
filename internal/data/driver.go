@@ -3,7 +3,6 @@ package data
 import (
 	"fmt"
 	"github.com/dstgo/wilson/internal/conf"
-	mysqldriver "github.com/go-sql-driver/mysql"
 	"gorm.io/driver/clickhouse"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
@@ -63,17 +62,7 @@ var SupportDrivers = map[string]DBDriver{
 }
 
 func MysqlDriver(cfg *conf.DatabaseConf) (gorm.Dialector, error) {
-	dsn := MysqlDsn(cfg)
-	dsnConf, err := mysqldriver.ParseDSN(dsn)
-	if err != nil {
-		return nil, err
-	}
-	client := mysql.New(mysql.Config{
-		DriverName: cfg.Driver,
-		DSN:        dsn,
-		DSNConfig:  dsnConf,
-	})
-	return client, nil
+	return mysql.Open(MysqlDsn(cfg)), nil
 }
 
 func SqlLiteDriver(cfg *conf.DatabaseConf) (gorm.Dialector, error) {
