@@ -8,12 +8,12 @@ import (
 // Role app roles record table
 type Role struct {
 	RoleTable
-	Id        uint   `gorm:"primarykey"`
-	CreatedAt uint64 `gorm:"autoCreateTime:nano;"`
-	UpdatedAt uint64 `gorm:"autoUpdateTime:nano;"`
-
+	Id   uint   `gorm:"primarykey"`
 	Name string `gorm:"type:varchar(50);comment:role display name;"`
 	Code string `gorm:"type:varchar(50);uniqueIndex;comment:role code;"`
+
+	CreatedAt uint64 `gorm:"autoCreateTime:nano;"`
+	UpdatedAt uint64 `gorm:"autoUpdateTime:nano;"`
 
 	Perms []Permission `gorm:"many2many:role_permission;"`
 	Users []User       `gorm:"many2many:users_roles;"`
@@ -37,15 +37,15 @@ func (r RoleTable) TableComment() string {
 type Permission struct {
 	PermissionTable
 
-	Id        uint   `gorm:"primarykey"`
-	CreatedAt uint64 `gorm:"autoCreateTime:nano;"`
-	UpdatedAt uint64 `gorm:"autoUpdateTime:nano;"`
-
+	Id     uint   `gorm:"primarykey"`
 	Name   string `gorm:"type:varchar(50);comment:perm name;"`
 	Object string `gorm:"type:varchar(100);uniqueIndex:perm;comment:resource will be accessed;"`
 	Action string `gorm:"type:varchar(50);uniqueIndex:perm;comment:resource action;"`
 	Group  string `gorm:"type:varchar(30);uniqueIndex:perm;comment:permission group;"`
 	Tag    string `gorm:"type:varchar(30);uniqueIndex:perm;comment:perm's tag,define type of perm;"`
+
+	CreatedAt uint64 `gorm:"autoCreateTime:nano;"`
+	UpdatedAt uint64 `gorm:"autoUpdateTime:nano;"`
 
 	Roles []Role `gorm:"many2many:role_permission;"`
 }

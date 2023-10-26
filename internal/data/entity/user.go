@@ -9,14 +9,14 @@ import (
 type User struct {
 	UserTable
 
-	Id        uint   `gorm:"primaryKey;"`
-	CreatedAt uint64 `gorm:"autoCreateTime:nano;"`
-	UpdatedAt uint64 `gorm:"autoUpdateTime:nano;"`
-
+	Id       uint   `gorm:"primaryKey;"`
 	UUID     string `gorm:"uniqueIndex;type:varchar(40);comment:User UUID;"`
 	Username string `gorm:"uniqueIndex;type:varchar(30);comment:username;"`
 	Password string `gorm:"comment:User password;type:varchar(255);"`
 	Email    string `gorm:"uniqueIndex;type:varchar(80);comment:User concat email;"`
+
+	CreatedAt uint64 `gorm:"autoCreateTime:nano;"`
+	UpdatedAt uint64 `gorm:"autoUpdateTime:nano;"`
 
 	Instances []Instance `gorm:"foreignKey:UserId;"`
 	Roles     []Role     `gorm:"many2many:users_roles;"`
