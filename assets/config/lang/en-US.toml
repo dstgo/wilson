@@ -1,3 +1,44 @@
+[route]
+# System routing
+sys.group = "System"
+sys.ping = "Ping test"
+sys.pong = "Pong test"
+# Authentication routing
+auth.group = "Authentication"
+auth.login = "User login"
+auth.register = "User Registration"
+auth.logout = "User logged out"
+auth.forgopasswd = "User retrieves password"
+# User personal routing
+user.profile.group = "Personal Information"
+user.profile.info = "Query information"
+user.profile.save = "Update information"
+# User management routing
+user.admin.group = "User Management"
+user.admin.info = "Query user information"
+user.admin.list = "Query user list"
+user.admin.create = "Create user"
+user.admin.save = "Update User"
+user.admin.remove = "Remove user"
+# Email routing
+email.group = "Email"
+email.code = "Send verification code email"
+email.notify = "Send notification email"
+#role routing
+role.group = "role"
+role.list = "Get role list"
+role.perms = "Get role permission list"
+role.create = "Create role"
+role.update = "Update role"
+role.grant = "Role Grant"
+role.remove = "Remove role"
+#Permission routing
+perm.group = "Permissions"
+perm.list = "Get permission list"
+perm.create = "Create permission"
+perm.update = "Update permissions"
+perm.remove = "Remove Permission"
+
 # Data verification part
 [validate]
 isnil = "must be null"
@@ -78,7 +119,11 @@ longitude = "Must be a valid longitude"
 ssn = "Must be a valid SSN code"
 version = "Must be a valid semantic version"
 
-# Some commonly used field names
+[rule]
+perm.object = "Permission subject can only consist of alphanumeric characters, forward slashes and underscores"
+
+
+# Field Name
 [field]
 name = "name"
 email = "email"
@@ -87,13 +132,39 @@ password = "password"
 phone = "Mobile phone number"
 age = "age"
 userid = "User ID"
+uuid = "User Unique Identifier"
 code = "verification code"
+page = "number of pages"
+pagesize = "page capacity"
+perm.name = "Permission Name"
+perm.id = "Permission Identifier"
+perm.list = "Permission List"
+perm.object = "Permission Subject"
+perm.action = "Action Restrictions"
+perm.tag = "Permission Tag"
+role.id = "role identifier"
+role.name = "Role name"
+role.code = "role code"
+role.list = "Role List"
 
 # Error message section
+[op]
+ok = "Operation successful"
+fail = "Operation failed"
+query.ok = "Query successful"
+query.fail = "Query failed"
+create.ok = "Created successfully"
+create.fail = "Creation failed"
+update.ok = "Update successful"
+update.fail = "Update failed"
+delete.ok = "Delete successfully"
+delete.fail = "Deletion failed"
+
 [err]
 unknown = "Unknown error"
 badparams = "Parameter verification failed"
 forbidden = "Authentication failed"
+unauthorized = "no access"
 database = "Database error"
 filesystem = "File IO error"
 network = "Network error"
@@ -103,13 +174,13 @@ methodnotallowed = "Unsupported HTTP method"
 internal = "Server internal error"
 
 [email]
-codeSubject = "Verification code email from wilson, please check it in time"
+code.subject = "Verification code email from wilson, please check it in time"
+code.expired = "Verification code has expired"
 sendFail = "Failed to send email"
 sendOk = "Email has been sent"
-codeExpired = "Verification code has expired"
 
 [jwt]
-parsedFailed = "User authentication failed, please try to log in again"
+parsed.failed = "User authentication failed, please try to log in again"
 expired = "User credentials have expired, please log in again"
 
 [auth]
@@ -126,3 +197,14 @@ changePasswdOk = "Password changed successfully"
 notfound = "User does not exist"
 alreadyExist = "User already exists"
 wrongPassword = "Wrong password"
+
+[role]
+notfound = "The role does not exist"
+codeConflict = "The same role code already exists"
+invalidList = "Infinite character list"
+
+[perm]
+notfound = "Permission does not exist"
+invalidList = "Invalid permission list"
+conflict = "The same permission definition already exists"
+noPerm = "The current user role does not have permission to access"

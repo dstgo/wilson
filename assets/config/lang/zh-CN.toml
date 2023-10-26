@@ -1,3 +1,44 @@
+[route]
+# 系统路由
+sys.group = "系统"
+sys.ping = "Ping测试"
+sys.pong = "Pong测试"
+# 认证路由
+auth.group = "认证"
+auth.login = "用户登录"
+auth.register = "用户注册"
+auth.logout = "用户登出"
+auth.forgopasswd = "用户找回密码"
+# 用户个人路由
+user.profile.group = "个人信息"
+user.profile.info = "查询信息"
+user.profile.save = "更新信息"
+# 用户管理路由
+user.admin.group = "用户管理"
+user.admin.info = "查询用户信息"
+user.admin.list = "查询用户列表"
+user.admin.create = "创建用户"
+user.admin.save = "更新用户"
+user.admin.remove = "删除用户"
+# 邮箱路由
+email.group = "邮箱"
+email.code = "发送验证码邮件"
+email.notify = "发送通知邮件"
+# 角色路由
+role.group = "角色"
+role.list = "获取角色列表"
+role.perms = "获取角色权限列表"
+role.creae = "创建角色"
+role.update = "更新角色"
+role.grant = "角色授权"
+role.remove = "删除角色"
+# 权限路由
+perm.group = "权限"
+perm.list = "获取权限列表"
+perm.create = "创建权限"
+perm.update = "更新权限"
+perm.remove = "删除权限"
+
 # 数据校验部分
 [validate]
 isnil = "必须是空值"
@@ -78,7 +119,11 @@ longitude = "必须是有效经度"
 ssn = "必须是有效的SSN代码"
 version = "必须是有效语义版本"
 
-# 一些常用的字段名称
+[rule]
+perm.object = "权限主体只能由字母数字，正斜杠和下划线组成"
+
+
+# 字段名称
 [field]
 name = "名称"
 email = "邮箱"
@@ -87,13 +132,39 @@ password = "密码"
 phone = "手机号码"
 age = "年龄"
 userid = "用户标识符"
+uuid = "用户唯一标识符"
 code = "验证码"
+page = "页数"
+pagesize = "页容量"
+perm.name = "权限名称"
+perm.id = "权限标识符"
+perm.list = "权限列表"
+perm.object = "权限主体"
+perm.action = "行为限制"
+perm.tag = "权限标签"
+role.id = "角色标识符"
+role.name = "角色名称"
+role.code = "角色代码"
+role.list = "角色列表"
 
 # 错误信息部分
+[op]
+ok = "操作成功"
+fail = "操作失败"
+query.ok = "查询成功"
+query.fail = "查询失败"
+create.ok = "创建成功"
+create.fail = "创建失败"
+update.ok = "更新成功"
+update.fail = "更新失败"
+delete.ok = "删除成功"
+delete.fail = "删除失败"
+
 [err]
 unknown = "未知错误"
 badparams = "参数校验未通过"
 forbidden = "认证未通过"
+unauthorized = "无权访问"
 database = "数据库错误"
 filesystem = "文件IO错误"
 network = "网络错误"
@@ -103,13 +174,13 @@ methodnotallowed = "不支持的HTTP方法"
 internal = "服务器内部错误"
 
 [email]
-codeSubject = "来自wilson的验证码邮件，请及时查看"
+code.subject = "来自wilson的验证码邮件，请及时查看"
+code.expired = "验证码已过期"
 sendFail = "邮件发送失败"
 sendOk = "邮件已发送"
-codeExpired = "验证码已过期"
 
 [jwt]
-parsedFailed = "用户认证失败，请尝试重新登录"
+parsed.failed = "用户认证失败，请尝试重新登录"
 expired = "用户凭证过期，请重新登录"
 
 [auth]
@@ -126,4 +197,15 @@ changePasswdOk = "密码修改成功"
 notfound = "用户不存在"
 alreadyExist = "用户已存在"
 wrongPassword = "密码错误"
+
+[role]
+notfound = "角色不存在"
+codeConflict = "已存在相同的角色代码"
+invalidList = "无限的角色列表"
+
+[perm]
+notfound = "不存在的权限"
+invalidList = "无效的权限列表"
+conflict = "已存在相同的权限定义"
+noPerm = "当前用户角色没有权限访问"
 
