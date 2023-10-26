@@ -26,7 +26,7 @@ var serverCmd = &cobra.Command{
 	Short:   "Run wilson backend server",
 	Example: "wilson server --f /etc/wilson/config.yaml",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := serve(configFile, Author, Version); err != nil {
+		if err := serve(configFile, Author, Version); err != nil && !errors.Is(err, context.Canceled) {
 			slog.Error(errors.Wrap(err, "wilson server running failed").Error())
 		}
 	},
@@ -88,6 +88,7 @@ func serve(configFile string, author string, version string) error {
 
 	serverTask, causeFunc := task.New(signalCtx)
 	defer causeFunc(nil)
+	defer app.Shutdown()
 
 	serverTask.Add(func(ctx context.Context) error {
 		defer cancel()
@@ -96,14 +97,6 @@ func serve(configFile string, author string, version string) error {
 		}
 		// run the http server
 		return app.Run()
-	})
-
-	serverTask.Add(func(ctx context.Context) error {
-		select {
-		case <-signalCtx.Done():
-			app.Shutdown()
-		}
-		return nil
 	})
 
 	return serverTask.Run()

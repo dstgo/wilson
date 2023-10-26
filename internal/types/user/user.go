@@ -42,14 +42,14 @@ type UpdateInfoOption struct {
 
 func (u UpdateInfoOption) Validate(lang string) error {
 	return vax.Struct(&u, lang,
-		vax.Field(&u.Username, rules.Required(rules.Username)...),
-		vax.Field(&u.Email, rules.Required(rules.Email)...),
-		vax.Field(&u.Password, rules.Required(rules.Password)...),
+		vax.Field(&u.Username, rules.Username...),
+		vax.Field(&u.Email, rules.Email...),
+		vax.Field(&u.Password, vax.When(len(u.Password) > 0, rules.Password...)),
 	)
 }
 
 type SaveUserDetailOption struct {
-	UUID string `json:"-" swaggerignore:"true" example:"55BBA4ED-18D3-790F-EABF-A5330E527586"`
+	UUID string `json:"uuid" example:"55BBA4ED-18D3-790F-EABF-A5330E527586"`
 	// new username
 	Username string `json:"username" example:"jack"`
 	// new email

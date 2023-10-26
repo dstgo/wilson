@@ -13,6 +13,10 @@ import (
 	"github.com/dstgo/wilson/pkg/ginx"
 )
 
+import (
+	_ "github.com/dstgo/wilson/internal/api/docs"
+)
+
 // Injectors from wire.go:
 
 //go:generate wire gen

@@ -205,8 +205,8 @@ definitions:
   user.Info:
     properties:
       createdAt:
-        example: "2022-01-01 00:00:00"
-        type: string
+        example: 947416200
+        type: integer
       email:
         example: jacklove@lol.com
         type: string
@@ -239,6 +239,9 @@ definitions:
       username:
         description: new username
         example: jack
+        type: string
+      uuid:
+        example: 55BBA4ED-18D3-790F-EABF-A5330E527586
         type: string
     type: object
   user.UpdateInfoOption:
@@ -1009,6 +1012,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/types.Response'
+      security:
+      - BearerAuth: []
       summary: CreateUser
       tags:
       - user
@@ -1082,6 +1087,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/types.Response'
+      security:
+      - BearerAuth: []
       summary: GetSpecUserInfo
       tags:
       - user
@@ -1105,6 +1112,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/types.Response'
+      security:
+      - BearerAuth: []
       summary: SaveUser
       tags:
       - user

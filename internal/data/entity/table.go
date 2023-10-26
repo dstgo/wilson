@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -15,7 +16,7 @@ type Table interface {
 	TableComment() string
 }
 
-var tables = []any{
+var tables = []Table{
 	// user
 	&User{},
 	// node
@@ -31,6 +32,15 @@ var tables = []any{
 	&UserRole{},
 }
 
+// Migrate auto migration all the table defined
 func Migrate(db *gorm.DB) error {
-	return db.AutoMigrate(tables...)
+	for _, table := range tables {
+		if !db.Migrator().HasTable(table) {
+			err := db.Set(tableOptions, fmt.Sprintf(`comment '%s'`, table.TableComment())).Migrator().CreateTable(table)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }

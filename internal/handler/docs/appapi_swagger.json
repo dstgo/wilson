@@ -1141,6 +1141,11 @@
         },
         "/user/admin/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "[admin]\ncreate new user",
                 "consumes": [
                     "application/json"
@@ -1255,6 +1260,11 @@
         },
         "/user/admin/profile": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "[admin]\nget specified user information",
                 "consumes": [
                     "application/json"
@@ -1283,6 +1293,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "[admin]\nsave specified user information",
                 "consumes": [
                     "application/json"
@@ -1706,8 +1721,8 @@
             "type": "object",
             "properties": {
                 "createdAt": {
-                    "type": "string",
-                    "example": "2022-01-01 00:00:00"
+                    "type": "integer",
+                    "example": 947416200
                 },
                 "email": {
                     "type": "string",
@@ -1753,6 +1768,10 @@
                     "description": "new username",
                     "type": "string",
                     "example": "jack"
+                },
+                "uuid": {
+                    "type": "string",
+                    "example": "55BBA4ED-18D3-790F-EABF-A5330E527586"
                 }
             }
         },

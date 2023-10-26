@@ -38,12 +38,13 @@ func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
 		adminHandler := handler.Admin
 		adminGroup := userRouter.Group("/admin", ginx.M(meta.Group("route.user.admin.group"), meta.Roles(role.AdminRole)))
 		{
-			adminGroup.GET("/list", ginx.M(meta.Name("route.user.list")), adminHandler.GetUserInfoList)
+			adminGroup.GET("/list", ginx.M(meta.Name("route.user.admin.list")), adminHandler.GetUserInfoList)
+			adminGroup.GET("/profile", ginx.M(meta.Name("route.user.admin.info")), adminHandler.GetSpecUserInfo)
 
-			adminGroup.POST("/create", ginx.M(meta.Name("route.user.create")), adminHandler.CreateUser)
-			adminGroup.POST("/save", ginx.M(meta.Name("route.user.save")), adminHandler.SaveUser)
+			adminGroup.POST("/create", ginx.M(meta.Name("route.user.admin.create")), adminHandler.CreateUser)
+			adminGroup.POST("/profile", ginx.M(meta.Name("route.user.admin.update")), adminHandler.SaveUser)
 
-			adminGroup.DELETE("/remove", ginx.M(meta.Name("route.user.remove")), adminHandler.RemoveUser)
+			adminGroup.DELETE("/remove", ginx.M(meta.Name("route.user.admin.remove")), adminHandler.RemoveUser)
 		}
 	}
 

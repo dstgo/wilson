@@ -59,6 +59,26 @@
         }
     },
     "definitions": {
+        "role.RoleInfo": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "role code, must be alpha numeric",
+                    "type": "string",
+                    "example": "ADMIN"
+                },
+                "id": {
+                    "description": "role id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "role name",
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
         "types.Response": {
             "type": "object",
             "properties": {
@@ -80,12 +100,18 @@
             "type": "object",
             "properties": {
                 "createdAt": {
-                    "type": "string",
-                    "example": "2022-01-01 00:00:00"
+                    "type": "integer",
+                    "example": 947416200
                 },
                 "email": {
                     "type": "string",
                     "example": "jacklove@lol.com"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/role.RoleInfo"
+                    }
                 },
                 "username": {
                     "type": "string",

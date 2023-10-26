@@ -1,5 +1,20 @@
 basePath: /open/v1
 definitions:
+  role.RoleInfo:
+    properties:
+      code:
+        description: role code, must be alpha numeric
+        example: ADMIN
+        type: string
+      id:
+        description: role id
+        example: 1
+        type: integer
+      name:
+        description: role name
+        example: admin
+        type: string
+    type: object
   types.Response:
     properties:
       code:
@@ -15,11 +30,15 @@ definitions:
   user.Info:
     properties:
       createdAt:
-        example: "2022-01-01 00:00:00"
-        type: string
+        example: 947416200
+        type: integer
       email:
         example: jacklove@lol.com
         type: string
+      roles:
+        items:
+          $ref: '#/definitions/role.RoleInfo'
+        type: array
       username:
         example: jack
         type: string
