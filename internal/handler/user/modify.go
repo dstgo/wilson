@@ -94,7 +94,9 @@ func (u UserModify) Update(updateOpt user.UpdateInfoOption) error {
 		return system.ErrProgram.Wrap(err)
 	}
 
-	userTable.Password = cryptor.Sha512WithBase64(userTable.Password)
+	if len(userTable.Password) > 0 {
+		userTable.Password = cryptor.Sha512WithBase64(userTable.Password)
+	}
 
 	if err := UpdateUserInfo(u.ds.ORM(), userTable); err != nil {
 		return system.ErrDatabase.Wrap(err)
@@ -104,15 +106,22 @@ func (u UserModify) Update(updateOpt user.UpdateInfoOption) error {
 }
 
 func (u UserModify) Remove(uuid string) error {
-	// try to find the user
-	if _, err := u.userInfo.GetUserInfoByUUID(uuid); err != nil {
-		return err
+	db := u.ds.ORM()
+	findUser, err := GetUserByUUID(db, uuid)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return system.ErrDatabase.Wrap(err)
+	} else if len(findUser.UUID) == 0 {
+		return user.ErrUserNotFound
+	}
+
+	err = u.ds.ORM().Model(&findUser).Association("Roles").Clear()
+	if err != nil {
+		return system.ErrDatabase.Wrap(err)
 	}
 
 	if err := RemoveByUUID(u.ds.ORM(), uuid); err != nil {
 		return system.ErrDatabase.Wrap(err)
 	}
-
 	return nil
 }
 
@@ -126,18 +135,10 @@ func UpdateUserInfo(db *gorm.DB, user entity.User) error {
 	return db.Where("uuid = ?", user.UUID).Updates(&user).Error
 }
 
-func DisableUser(db *gorm.DB, id uint) error {
-	return db.Model(entity.User{}).Delete(entity.User{
-		Id: id,
-	}).Error
-}
-
 func RemoveUser(db *gorm.DB, id uint) error {
-	return db.Unscoped().Model(entity.User{}).Delete(entity.User{
-		Id: id,
-	}).Error
+	return db.Delete(entity.User{}, "id = ?", id).Error
 }
 
 func RemoveByUUID(db *gorm.DB, uuid string) error {
-	return db.Unscoped().Model(entity.User{}).Delete("uuid = ?", uuid).Error
+	return db.Delete(&entity.User{}, "uuid = ?", uuid).Error
 }

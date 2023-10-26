@@ -1,6 +1,7 @@
 package data
 
 import (
+	"errors"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -48,4 +49,15 @@ func LikeSuffix(pattern string) string {
 
 func LikePrefix(pattern string) string {
 	return fmt.Sprintf("%s%s", LikeDelim, pattern)
+}
+
+func HasRecordFound(db *gorm.DB) (bool, error) {
+	err := db.Error
+	rows := db.RowsAffected
+
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return false, err
+	} else {
+		return rows != 0, nil
+	}
 }

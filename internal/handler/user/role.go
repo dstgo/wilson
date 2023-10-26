@@ -1,8 +1,8 @@
 package user
 
 import (
+	"errors"
 	"github.com/dstgo/wilson/internal/data/entity"
-	"github.com/dstgo/wilson/internal/pkg/alg/collection"
 	"github.com/dstgo/wilson/internal/types/role"
 	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/dstgo/wilson/internal/types/user"
@@ -62,13 +62,10 @@ func (u UserModify) SaveRolesByCode(uuid string, codes []string) error {
 }
 
 func (u UserModify) SaveRoles(uuid string, saveRoleIds []uint) error {
-	if len(saveRoleIds) == 0 {
-		return nil
-	}
-
 	db := u.ds.ORM()
+
 	queryUser, err := GetUserByUUID(db, uuid)
-	if err != nil {
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return system.ErrDatabase.Wrap(err)
 	} else if queryUser.Id == 0 {
 		return user.ErrUserNotFound
@@ -77,45 +74,17 @@ func (u UserModify) SaveRoles(uuid string, saveRoleIds []uint) error {
 	// confirm roles had been exists in db
 	var findRoles []entity.Role
 	err = db.Model(entity.Role{}).Where("id IN ?", saveRoleIds).Find(&findRoles).Error
-	if err != nil {
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return system.ErrDatabase.Wrap(err)
 	} else if len(findRoles) != len(saveRoleIds) {
 		return role.ErrInvalidRoles
 	}
 
-	queryRoles, err := ListAllUserRoles(db, queryUser.Id)
+	// replace user-role association
+	err = db.Model(&queryUser).Association("Roles").Replace(&findRoles)
 	if err != nil {
 		return system.ErrDatabase.Wrap(err)
 	}
-
-	// convert ids
-	var queryRoleIds []uint
-	for _, queryRole := range queryRoles {
-		queryRoleIds = append(queryRoleIds, queryRole.Id)
-	}
-
-	extraRoleIds := collection.DifferenceSet(queryRoleIds, saveRoleIds)
-	obsoleteRoleIds := collection.DifferenceSet(saveRoleIds, queryRoleIds)
-
-	tx := db.Begin()
-
-	createdRecordList := role.MakeUserRoleRecordList(queryUser.Id, extraRoleIds)
-	// insert extra roles
-	if err := CreateUserRoleInBatch(tx, createdRecordList); err != nil {
-		tx.Rollback()
-		return system.ErrDatabase.Wrap(err)
-	}
-
-	// remove obsolete roles
-	if err := RemoveUserRoleInBatch(tx, queryUser.Id, obsoleteRoleIds); err != nil {
-		tx.Rollback()
-		return system.ErrDatabase.Wrap(err)
-	}
-
-	if tx.Commit().Error != nil {
-		return system.ErrDatabase.Wrap(tx.Commit().Error)
-	}
-
 	return nil
 }
 

@@ -99,6 +99,7 @@ type AdminHandler struct {
 // @Param        uuid query     types.Uid  true  "user uuid"
 // @Success      200  {object}  types.Response
 // @Router       /user/admin/profile [GET]
+// @security BearerAuth
 func (a AdminHandler) GetSpecUserInfo(ctx *gin.Context) {
 	var uuid types.Uid
 	if err := bind.Binds(ctx, bind.Query(&uuid)); err != nil {
@@ -148,6 +149,7 @@ func (a AdminHandler) GetUserInfoList(ctx *gin.Context) {
 // @Param        createOpt      body     user.CreateUserOption  true  "CreateUserOption"
 // @Success      200  {object}  types.Response
 // @Router       /user/admin/create [POST]
+// @security BearerAuth
 func (a AdminHandler) CreateUser(ctx *gin.Context) {
 	var createOpt user.CreateUserOption
 	if err := bind.Binds(ctx, bind.Json(&createOpt)); err != nil {
@@ -171,6 +173,7 @@ func (a AdminHandler) CreateUser(ctx *gin.Context) {
 // @Param        updateInfoOption	body	user.SaveUserDetailOption	true	"updateInfoOption"
 // @Success      200  {object}  types.Response
 // @Router       /user/admin/profile [POST]
+// @security BearerAuth
 func (a AdminHandler) SaveUser(ctx *gin.Context) {
 	var saveOption user.SaveUserDetailOption
 	if err := bind.Binds(ctx, bind.Json(&saveOption)); err != nil {

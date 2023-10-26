@@ -2,8 +2,8 @@ package role
 
 import (
 	"errors"
+	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/entity"
-	"github.com/dstgo/wilson/internal/pkg/alg/collection"
 	"github.com/dstgo/wilson/internal/types/role"
 	"gorm.io/gorm"
 )
@@ -60,35 +60,23 @@ type GormResolver struct {
 }
 
 func (g GormResolver) ResolveAny(permObj string, permAct string, roles ...string) error {
-	var roleIds []uint
-	// find all roles
-	err := g.db.Model(entity.Role{}).Select("id").Where("code IN ?", roles).Find(&roleIds).Error
+
+	db := g.db
+	var findRoles []entity.Role
+
+	found, err := data.HasRecordFound(db.Find(&findRoles, "code IN ?", roles))
 	if err != nil {
 		return err
-	}
-
-	if len(roleIds) < len(roles) {
+	} else if !found {
 		return ErrRoleNotFound
 	}
 
-	var perm []entity.Permission
+	var perms []entity.Permission
 
-	err = g.db.Model(entity.Permission{}).Where("object = ? AND action = ?", permObj, permAct).Find(&perm).Error
+	err = db.Model(&findRoles).Association("Perms").Find(&perms, "object = ? AND action = ?", permObj, permAct)
 	if err != nil {
 		return err
-	}
-	permIds := make([]uint, 0, len(perm))
-	for _, permission := range perm {
-		permIds = append(permIds, permission.Id)
-	}
-
-	var rolePerms []entity.RolePermission
-	err = g.db.Model(entity.RolePermission{}).Where("role_id IN ? AND permission_id IN ?", roleIds, permIds).Find(&rolePerms).Error
-	if err != nil {
-		return err
-	}
-
-	if len(rolePerms) == 0 {
+	} else if len(perms) == 0 {
 		return ErrHasNoPermission
 	}
 
@@ -113,87 +101,57 @@ func (g GormResolver) RemoveRolePerm(roleId uint, permId uint) error {
 
 func (g GormResolver) UpdateRolePermBatch(roleId uint, tag string, newPermIds []uint) error {
 
-	// get all the tag permissions
-	tagPerms, err := g.ListAllPerms(tag)
+	var findRole entity.Role
+
+	found, err := data.HasRecordFound(g.db.First(&findRole, "id = ?", roleId))
 	if err != nil {
 		return err
+	} else if !found {
+		return ErrRoleNotFound
 	}
 
-	allPermIds := make([]uint, 0, len(tagPerms))
-	for _, perm := range tagPerms {
-		allPermIds = append(allPermIds, perm.Id)
-	}
+	var findPerms []entity.Permission
 
-	// there has unexpected permId in params if is not subset
-	if !collection.IsSubset(newPermIds, allPermIds) {
+	hasFound, err := data.HasRecordFound(g.db.Find(&findPerms, "id IN ?", newPermIds))
+	if err != nil {
+		return err
+	} else if !hasFound || len(findPerms) < len(newPermIds) {
 		return ErrPermissionNotFound
 	}
 
-	// find the complement set
-	deletedSet := collection.ComplementSet(newPermIds, allPermIds)
-
-	// start transaction
-	tx := g.db.Begin()
-
-	// insert new permIds
-	if err = insertRolePermBatch(tx, roleId, newPermIds); err != nil {
-		tx.Rollback()
+	err = g.db.Model(&findRole).Association("Perms").Replace(findPerms)
+	if err != nil {
 		return err
 	}
-
-	// remove the complement set
-	if err = removeRolePermBatch(tx, roleId, deletedSet); err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	// commit
-	return tx.Commit().Error
+	return nil
 }
 
 func (g GormResolver) CreateRolePermBatch(roleInfo role.RoleInfo, perms []role.PermInfo) error {
 
-	tx := g.db.Begin()
+	var findRole entity.Role
 
-	// try to create role if code conflict do nothing
-	_, err := createRole(tx, role.MakeRoleRecord(roleInfo))
+	found, err := data.HasRecordFound(g.db.Find(&findRole, "code = ?", roleInfo.Code))
 	if err != nil {
-		tx.Rollback()
 		return err
+	} else if !found {
+		return ErrRoleNotFound
 	}
 
-	ens := role.MakePermRecordList(perms)
-	// try to create perm if conflict do nothing
-	_, err = createPermInBatch(tx, ens)
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
+	permsList := role.MakePermRecordList(perms)
 
-	tx.Commit()
-
-	// query roles
-	queryRole, err := getRoleByCode(g.db, roleInfo.Code)
+	_, err = createPermInBatch(g.db, permsList)
 	if err != nil {
 		return err
 	}
 
-	// query the permIds
-	queryEns, err := listAllPermsByPerms(g.db, ens)
+	permRecords, err := listAllPermsByPerms(g.db, permsList)
 	if err != nil {
 		return err
 	}
 
-	var permIds []uint
-	for _, en := range queryEns {
-		permIds = append(permIds, en.Id)
-	}
-
-	// create the relation
-	err = insertRolePermBatch(g.db, queryRole.Id, permIds)
+	err = g.db.Model(&findRole).Association("Perms").Append(&permRecords)
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
