@@ -28,11 +28,14 @@ func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
 	systemGroup := api.Group("", ginx.M(meta.Group("route.sys.group")))
 	{
 		systemGroup.GET("/ping", ginx.M(meta.NoAuth, meta.Name("route.sys.ping")), handler.Ping.Ping)
-		systemGroup.GET("/pong", ginx.M(meta.NoAuth, meta.Name("route.sys.pong")), handler.Ping.Pong)
+		systemGroup.GET("/pong", ginx.M(meta.Anonymous, meta.Name("route.sys.pong")), handler.Ping.Pong)
 	}
+
 	// auth api
 	authGroup := api.Group("auth", ginx.M(meta.Group("route.auth.group")))
 	{
+		// GET
+		authGroup.GET("/refresh", ginx.M(meta.NoAuth, meta.Name("route.auth.refresh")), handler.Auth.Refresh)
 		// POST
 		authGroup.POST("/login", ginx.M(meta.NoAuth, meta.Name("route.auth.login")), handler.Auth.Login)
 		authGroup.POST("/register", ginx.M(meta.NoAuth, meta.Name("route.auth.register")), handler.Auth.Register)
@@ -40,6 +43,7 @@ func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
 		// DELETE
 		authGroup.DELETE("/logout", ginx.M(meta.Name("route.auth.logout")), handler.Auth.Logout)
 	}
+
 	// role api
 	roleGroup := api.Group("/role", ginx.M(meta.Group("route.role.group"), meta.Roles(role.AdminRole)))
 	roleHandler := handler.Role
@@ -57,6 +61,7 @@ func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
 		// DELETE
 		roleGroup.DELETE("/remove", ginx.M(meta.Name("route.role.remove")), roleHandler.RemoveRole)
 	}
+
 	// perm api
 	permGroup := api.Group("/perm", ginx.M(meta.Group("route.perm.group"), meta.Roles(role.AdminRole)))
 	{

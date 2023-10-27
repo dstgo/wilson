@@ -13,7 +13,6 @@ import (
 	"github.com/dstgo/wilson/pkg/ginx"
 	"github.com/dstgo/wilson/pkg/ginx/httpx"
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/pkg/errors"
 	"net/http"
 )
@@ -29,24 +28,22 @@ func UseAuthenticate(v authen.Parser) gin.HandlerFunc {
 		}
 
 		token := httpx.GetBearerTokenFromCtx(ctx)
-		jwtToken, err := v.Parse(ctx, token)
+		parsedToken, err := v.Parse(ctx, token)
 		if err == nil {
-			var userClaims authen.UserClaims
-			if res, e := jwtToken.Claims.(*authen.UserClaims); e {
-				userClaims = *res
-			}
-			authen.SetContextTokenInfo(ctx, userClaims)
+			authen.SetContextTokenInfo(ctx, parsedToken.Access.Payload)
 			ctx.Next()
 		} else {
 			ctx.Abort()
 			var respErr errs.LocaleError
 			switch {
-			case errors.Is(err, jwt.ErrTokenExpired):
-				respErr = auth.ErrJwtExpired.Wrap(err).Status(http.StatusUnauthorized)
+			case errors.Is(err, authen.ErrTokenExpired):
+				respErr = auth.ErrTokenExpired.Wrap(err)
+			case errors.Is(err, authen.ErrTokenNeedRefreshed):
+				respErr = auth.ErrTokenNeedRefresh.Wrap(err)
 			default:
-				respErr = auth.ErrJwtParsedFailed.Wrap(err).Status(http.StatusForbidden)
+				respErr = auth.ErrTokenParsedFailed.Wrap(err)
 			}
-			resp.Fail(ctx).MsgI18n("err.forbidden").Error(respErr).Send()
+			resp.Fail(ctx).Status(http.StatusUnauthorized).MsgI18n("err.unauthorized").Error(respErr).Transparent().Send()
 		}
 	}
 }
@@ -77,9 +74,9 @@ func UseRoleAuthorize(resolver role.Resolver, userRole user.UserInfo) gin.Handle
 		if err := resolver.ResolveAny(object, action, roles...); err != nil {
 			ctx.Abort()
 			if errors.Is(err, role.ErrHasNoPermission) {
-				resp.Forbidden(ctx).MsgI18n("err.unauthorized").Error(roleType.ErrNoPemrAccess).Send()
+				resp.Forbidden(ctx).MsgI18n("err.forbidden").Error(roleType.ErrNoPemrAccess).Send()
 			} else {
-				resp.InternalFailed(ctx).MsgI18n("err.internal").Error(system.ErrDatabase.Wrap(err)).Send()
+				resp.InternalFailed(ctx).MsgI18n("err.internal").Error(system.ErrDatabase.Wrap(err)).Transparent().Send()
 			}
 			return
 		}

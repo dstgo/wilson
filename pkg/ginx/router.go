@@ -77,12 +77,14 @@ func (r *RouterGroup) Group(path string, subMeta Meta, handlers ...gin.HandlerFu
 		subMeta = make(Meta)
 	}
 
-	// copy meta
-	maps.Copy(subMeta, r.Meta)
+	cloneGroupMeta := maps.Clone(r.Meta)
+
+	// copy meta, overwrite group meta
+	maps.Copy(cloneGroupMeta, subMeta)
 
 	subRoot := r.root.Group(path, append(gin.HandlersChain{MetaHandler(subMeta)}, handlers...)...)
 
-	subGroup.Meta = subMeta
+	subGroup.Meta = cloneGroupMeta
 	subGroup.root = subRoot
 	subGroup.FullPath = joinPaths(r.FullPath, path)
 	subGroup.middles = append(r.middles)
@@ -99,8 +101,11 @@ func (r *RouterGroup) Handle(method string, path string, meta Meta, handlers ...
 	if meta == nil {
 		meta = make(Meta)
 	}
+
+	cloneGroupMeta := maps.Clone(r.Meta)
+
 	// copy meta
-	maps.Copy(meta, r.Meta)
+	maps.Copy(cloneGroupMeta, meta)
 
 	// inherit middlewares from group
 	handlers = append(gin.HandlersChain{MetaHandler(meta)}, append(r.middles, handlers...)...)
@@ -112,7 +117,7 @@ func (r *RouterGroup) Handle(method string, path string, meta Meta, handlers ...
 	subHandler.group = r
 	subHandler.Method = method
 	subHandler.FullPath = joinPaths(r.FullPath, path)
-	subHandler.Meta = meta
+	subHandler.Meta = cloneGroupMeta
 
 	r.handlers = append(r.handlers, subHandler)
 

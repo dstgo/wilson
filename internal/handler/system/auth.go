@@ -9,7 +9,6 @@ import (
 	"github.com/dstgo/wilson/internal/data/cache"
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/handler/user"
-	"github.com/dstgo/wilson/internal/pkg/jwtx"
 	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/internal/types/auth"
 	emailType "github.com/dstgo/wilson/internal/types/email"
@@ -23,30 +22,37 @@ import (
 	"net/http"
 )
 
-func NewAuthenticator(cfg *conf.AppConf, ds *data.DataSource, codeCache cache.RedisEmailCodeCache, tokenCache cache.TokenCache) Authenticator {
+func NewAuthenticator(cfg *conf.AppConf, ds *data.DataSource, codeCache cache.RedisEmailCodeCache) Authenticator {
 	info := user.NewUserInfo(ds)
 	modify := user.NewUserModify(ds, info)
+	tokenCache := cache.NewAccessTokenCache(ds)
+	tokenAuthor := authen.NewRefreshTokenAuthor(cfg.JwtConf, tokenCache, cache.NewRefreshTokenCache(ds))
+
 	return Authenticator{
-		issue:      authen.NewCacheAuthor(cfg.JwtConf, tokenCache),
+		issuer:     tokenAuthor,
 		codeCache:  codeCache,
-		tokenCache: tokenCache,
 		ds:         ds,
 		userInfo:   info,
 		userModify: modify,
+		tokenCache: tokenCache,
+		refresher:  tokenAuthor,
 	}
 }
 
 type Authenticator struct {
-	userInfo   user.UserInfo
-	userModify user.UserModify
-	issue      authen.Issuer
+	ds         *data.DataSource
 	codeCache  cache.RedisEmailCodeCache
 	tokenCache cache.TokenCache
-	ds         *data.DataSource
+
+	userInfo   user.UserInfo
+	userModify user.UserModify
+
+	issuer    authen.Issuer
+	refresher authen.Refresher
 }
 
-func (a Authenticator) TryLogin(ctx context.Context, userName string, password string) (jwtx.Jwt, error) {
-	var token jwtx.Jwt
+func (a Authenticator) TryLogin(ctx context.Context, userName string, password string, persistent bool) (authen.Token, error) {
+	var token authen.Token
 
 	var (
 		userEntity entity.User
@@ -74,13 +80,14 @@ func (a Authenticator) TryLogin(ctx context.Context, userName string, password s
 	}
 
 	// issue token
-	issueToken, err := a.issue.Issue(ctx, authen.UserPayload{
-		Username: userEntity.Username,
-		UUID:     userEntity.UUID,
-	}, -1)
+	issueToken, err := a.issuer.Issue(ctx, authen.UserPayload{
+		Username:   userEntity.Username,
+		UUID:       userEntity.UUID,
+		Persistent: persistent,
+	})
 
 	if err != nil {
-		return token, system.ErrProgram.Wrap(err)
+		return token, auth.ErrTokenIssueFailed.Wrap(err)
 	}
 
 	token = issueToken
@@ -132,7 +139,7 @@ func (a Authenticator) TryLogout(ctx context.Context, tokenId string) error {
 	_, ok, err := a.tokenCache.Get(ctx, tokenId)
 	// check again if token is expired
 	if !ok && err == nil {
-		return auth.ErrJwtExpired.Wrap(err).Status(http.StatusUnauthorized)
+		return auth.ErrTokenExpired.Wrap(err).Status(http.StatusUnauthorized)
 	} else if err != nil {
 		return system.ErrDatabase.Wrap(err)
 	}
@@ -171,4 +178,8 @@ func (a Authenticator) ChangePassword(ctx context.Context, newPassword string, c
 	}
 
 	return nil
+}
+
+func (a Authenticator) RefreshToken(ctx context.Context, accessToken string, refreshToken string) (authen.Token, error) {
+	return a.refresher.Refresh(ctx, accessToken, refreshToken)
 }

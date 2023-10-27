@@ -8,7 +8,8 @@ auth.group = "认证"
 auth.login = "用户登录"
 auth.register = "用户注册"
 auth.logout = "用户登出"
-auth.forgopasswd = "用户找回密码"
+auth.forgotPasswd = "用户找回密码"
+auth.refresh = "刷新令牌"
 # 用户个人路由
 user.profile.group = "个人信息"
 user.profile.info = "查询信息"
@@ -119,6 +120,7 @@ longitude = "必须是有效经度"
 ssn = "必须是有效的SSN代码"
 version = "必须是有效语义版本"
 
+# 自定义校验规则
 [rule]
 perm.object = "权限主体只能由字母数字，正斜杠和下划线组成"
 
@@ -146,6 +148,8 @@ role.id = "角色标识符"
 role.name = "角色名称"
 role.code = "角色代码"
 role.list = "角色列表"
+token.access = "认证令牌"
+token.refresh = "刷新令牌"
 
 # 错误信息部分
 [op]
@@ -163,8 +167,8 @@ delete.fail = "删除失败"
 [err]
 unknown = "未知错误"
 badparams = "参数校验未通过"
-forbidden = "认证未通过"
-unauthorized = "无权访问"
+forbidden = "无权访问"
+unauthorized = "认证未通过"
 database = "数据库错误"
 filesystem = "文件IO错误"
 network = "网络错误"
@@ -181,7 +185,10 @@ sendOk = "邮件已发送"
 
 [jwt]
 parsed.failed = "用户认证失败，请尝试重新登录"
+issue.failed = "凭证签发失败"
 expired = "用户凭证过期，请重新登录"
+refresh = "用户凭证需要重新申请"
+invalid = "无效的令牌"
 
 [auth]
 loginFail = "登录失败"
@@ -192,6 +199,8 @@ logoutFail = "退出登录失败"
 logoutOk = "退出登录成功"
 changePasswdFail = "密码修改失败"
 changePasswdOk = "密码修改成功"
+refresh.failed = "令牌刷新失败"
+refresh.ok = "令牌刷新成功"
 
 [user]
 notfound = "用户不存在"

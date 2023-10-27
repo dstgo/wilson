@@ -123,6 +123,50 @@
                 }
             }
         },
+        "/auth/refresh": {
+            "get": {
+                "description": "[user]\nrefresh token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Refresh",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "refresh token",
+                        "name": "refresh",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/auth.Token"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/auth/register": {
             "post": {
                 "description": "[guest]\nuser register api",
@@ -950,6 +994,11 @@
         },
         "/role/list": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "[admin]\nget role list by page",
                 "consumes": [
                     "application/json"
@@ -1467,6 +1516,10 @@
                     "type": "string",
                     "example": "123456789"
                 },
+                "persistent": {
+                    "type": "boolean",
+                    "example": true
+                },
                 "username": {
                     "description": "length of the username must be in range [6,20], and username must be Alphanumeric",
                     "type": "string",
@@ -1496,6 +1549,10 @@
                     "type": "string",
                     "example": "123456789"
                 },
+                "persistent": {
+                    "type": "boolean",
+                    "example": true
+                },
                 "username": {
                     "description": "length of the username must be in range [6,20], and username must be Alphanumeric",
                     "type": "string",
@@ -1506,7 +1563,13 @@
         "auth.Token": {
             "type": "object",
             "properties": {
+                "refresh": {
+                    "description": "refresh token",
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InN0cmFuZ2VyIiwidXNlcklkIjoiMDA1YjQzOTctOTRjMi00YWZjLWIzNTEtNWIzY2VkNzI4MDkzIiwiaXNzIjoid2lsc29uIiwiZXhwIjoxNjk3MzI0ODY4LCJpYXQiOjE2OTcyODg4NjgsImp0aSI6IjdkZDI4NDZlLTFkZjEtNDBkMS04YmZlLTA3ZGI3ZmE4NmFhYiJ9.HnAaz-WOmugqfdz_oXphsJY_zQl3FCzrtYCm90WJgGU"
+                },
                 "token": {
+                    "description": "access token",
                     "type": "string",
                     "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InN0cmFuZ2VyIiwidXNlcklkIjoiMDA1YjQzOTctOTRjMi00YWZjLWIzNTEtNWIzY2VkNzI4MDkzIiwiaXNzIjoid2lsc29uIiwiZXhwIjoxNjk3MzI0ODY4LCJpYXQiOjE2OTcyODg4NjgsImp0aSI6IjdkZDI4NDZlLTFkZjEtNDBkMS04YmZlLTA3ZGI3ZmE4NmFhYiJ9.HnAaz-WOmugqfdz_oXphsJY_zQl3FCzrtYCm90WJgGU"
                 }
