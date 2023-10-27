@@ -61,6 +61,9 @@ type Response struct {
 	// fallback message
 	fallback string
 
+	// decide whether to show  error full details in response
+	transparent bool
+
 	// custom CustomCode
 	CustomCode int `json:"code"`
 	// response mgs
@@ -100,6 +103,11 @@ func (r *Response) Error(err error) *Response {
 	return r
 }
 
+func (r *Response) Transparent() *Response {
+	r.transparent = true
+	return r
+}
+
 func (r *Response) Send() {
 	if r.ctx == nil {
 		panic("response gin context is nil")
@@ -114,7 +122,7 @@ func (r *Response) Send() {
 			// if httpcode >= 500, which means internal server error happened.
 			// for non-internal errors, detailed error information can be displayed externally
 			// otherwise only simple description information can be returned to avoid leaking sensitive data
-			if e.HttpStatus < 500 && e.Err != nil {
+			if e.HttpStatus < 500 && e.Err != nil && !r.transparent {
 				errMsg = errs.Wrap(e.Err, errMsg).Error()
 			}
 
