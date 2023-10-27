@@ -108,7 +108,7 @@ func (r *Response) Send() {
 	if r.err != nil {
 		r.ErrorMsg = r.err.Error()
 
-		var e *errs.LocaleError
+		var e errs.LocaleError
 		if errors.As(r.err, &e) {
 			errMsg := locale.GetWithLang(r.locale, e.LangCode)
 			// if httpcode >= 500, which means internal server error happened.
