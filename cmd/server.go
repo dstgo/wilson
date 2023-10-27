@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"context"
+	"github.com/dstgo/task"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/core/wilson"
 	"github.com/dstgo/wilson/pkg/config"
-	"github.com/dstgo/wilson/pkg/task"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -79,6 +79,7 @@ func serve(configFile string, author string, version string) error {
 
 	// listen signal
 	signalCtx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGKILL, syscall.SIGABRT, syscall.SIGTERM)
+	defer cancel()
 
 	// create app
 	app, err := newServer(signalCtx, configFile, author, version)
@@ -90,14 +91,15 @@ func serve(configFile string, author string, version string) error {
 	defer causeFunc(nil)
 	defer app.Shutdown()
 
-	serverTask.Add(func(ctx context.Context) error {
-		defer cancel()
+	serverWorker := task.NewWorker(func(ctx context.Context) error {
 		if initial {
 			return nil
 		}
 		// run the http server
 		return app.Run()
 	})
+
+	serverTask.Add(serverWorker)
 
 	return serverTask.Run()
 }

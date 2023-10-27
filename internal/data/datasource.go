@@ -4,12 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/dstgo/task"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/pkg/utils"
 	"github.com/dstgo/wilson/internal/types/errs"
-	"github.com/dstgo/wilson/pkg/task"
 	"github.com/go-redis/redis/v8"
 	errors2 "github.com/pkg/errors"
 	"gorm.io/gorm"
@@ -116,7 +116,7 @@ func NewDataSource(ctx context.Context, databaseConf *conf.DataConf) (*DataSourc
 	defer cancel(nil)
 
 	// connect to gorm db
-	dataTask.Add(func(ctx context.Context) error {
+	gormDataWorker := task.NewWorker(func(ctx context.Context) error {
 		db, err := NewDBClient(ctx, databaseConf.DatabaseConf)
 		if err != nil {
 			return errors2.Wrap(err, "gorm db connected failed")
@@ -127,7 +127,7 @@ func NewDataSource(ctx context.Context, databaseConf *conf.DataConf) (*DataSourc
 	})
 
 	// connect to redis db
-	dataTask.Add(func(ctx context.Context) error {
+	redisDataWorker := task.NewWorker(func(ctx context.Context) error {
 		redisClient, err := NewRedisClient(ctx, databaseConf.RedisConf)
 		if err != nil {
 			return errors2.Wrap(err, "redis client connected failed")
@@ -136,6 +136,8 @@ func NewDataSource(ctx context.Context, databaseConf *conf.DataConf) (*DataSourc
 		datasource.redis = redisClient
 		return nil
 	})
+
+	dataTask.Add(gormDataWorker, redisDataWorker)
 
 	err := dataTask.Run()
 	if err != nil {
