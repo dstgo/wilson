@@ -14,6 +14,8 @@ type LoginOption struct {
 	Username string `json:"username" label:"field.username" example:"123456@example.com/username"`
 	// length of the password must be in range [10,30]
 	Password string `json:"password" label:"field.password" example:"123456789"`
+
+	Persistent bool `json:"persistent" example:"true"`
 }
 
 func (l LoginOption) Validate(lang string) error {

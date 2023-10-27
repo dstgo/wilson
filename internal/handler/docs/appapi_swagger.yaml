@@ -17,6 +17,9 @@ definitions:
         description: length of the password must be in range [10,30]
         example: "123456789"
         type: string
+      persistent:
+        example: true
+        type: boolean
       username:
         description: length of the username must be in range [6,20], and username
           must be Alphanumeric
@@ -40,6 +43,9 @@ definitions:
         description: length of the password must be in range [10,30]
         example: "123456789"
         type: string
+      persistent:
+        example: true
+        type: boolean
       username:
         description: length of the username must be in range [6,20], and username
           must be Alphanumeric
@@ -48,7 +54,12 @@ definitions:
     type: object
   auth.Token:
     properties:
+      refresh:
+        description: refresh token
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InN0cmFuZ2VyIiwidXNlcklkIjoiMDA1YjQzOTctOTRjMi00YWZjLWIzNTEtNWIzY2VkNzI4MDkzIiwiaXNzIjoid2lsc29uIiwiZXhwIjoxNjk3MzI0ODY4LCJpYXQiOjE2OTcyODg4NjgsImp0aSI6IjdkZDI4NDZlLTFkZjEtNDBkMS04YmZlLTA3ZGI3ZmE4NmFhYiJ9.HnAaz-WOmugqfdz_oXphsJY_zQl3FCzrtYCm90WJgGU
+        type: string
       token:
+        description: access token
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InN0cmFuZ2VyIiwidXNlcklkIjoiMDA1YjQzOTctOTRjMi00YWZjLWIzNTEtNWIzY2VkNzI4MDkzIiwiaXNzIjoid2lsc29uIiwiZXhwIjoxNjk3MzI0ODY4LCJpYXQiOjE2OTcyODg4NjgsImp0aSI6IjdkZDI4NDZlLTFkZjEtNDBkMS04YmZlLTA3ZGI3ZmE4NmFhYiJ9.HnAaz-WOmugqfdz_oXphsJY_zQl3FCzrtYCm90WJgGU
         type: string
     type: object
@@ -342,6 +353,34 @@ paths:
       security:
       - BearerAuth: []
       summary: Logout
+      tags:
+      - auth
+  /auth/refresh:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        [user]
+        refresh token
+      parameters:
+      - description: refresh token
+        in: query
+        name: refresh
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth.Token'
+              type: object
+      summary: Refresh
       tags:
       - auth
   /auth/register:
@@ -909,6 +948,8 @@ paths:
                     $ref: '#/definitions/role.RoleInfo'
                   type: array
               type: object
+      security:
+      - BearerAuth: []
       summary: GetRoleList
       tags:
       - role

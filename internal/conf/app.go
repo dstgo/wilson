@@ -48,9 +48,11 @@ type RpcConf struct {
 
 // JwtConf jwt config
 type JwtConf struct {
-	Sig string        `mapstructure:"sig"`
-	Isu string        `mapstructure:"isu"`
-	Exp time.Duration `mapstructure:"exp"`
+	Sig   string        `mapstructure:"sig"`
+	Isu   string        `mapstructure:"isu"`
+	Exp   time.Duration `mapstructure:"exp"`
+	RExp  time.Duration `mapstructure:"rexp"`
+	Delay time.Duration `mapstructure:"delay"`
 }
 
 // LogConf app logger config

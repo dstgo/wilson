@@ -17,10 +17,11 @@ const (
 
 	EmailSendFailed = 4006
 
-	ResourceNotFound = 4040
-
-	Forbidden    = 4030
-	UnAuthorized = 4010
+	UnAuthorized       = 4010
+	TokenNeedFresh     = 4011
+	TokenRefreshFailed = 4012
+	Forbidden          = 4030
+	ResourceNotFound   = 4040
 )
 
 const (

@@ -4,18 +4,17 @@ import (
 	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/resp"
-	"github.com/dstgo/wilson/internal/data/cache"
 	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/auth"
 	"github.com/dstgo/wilson/internal/types/code"
 	"github.com/dstgo/wilson/internal/types/role"
 	"github.com/dstgo/wilson/internal/types/system"
+	"github.com/dstgo/wilson/pkg/ginx/httpx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 )
 
 var SystemProviderSet = wire.NewSet(
-	cache.TokenCacheProvider,
 	NewPingHandler,
 	NewPingLogic,
 	NewAuthenticator,
@@ -83,11 +82,11 @@ func (p PingHandler) Pong(ctx *gin.Context) {
 }
 
 func NewAuthHandler(authen Authenticator) AuthHandler {
-	return AuthHandler{Authlogic: authen}
+	return AuthHandler{authenticator: authen}
 }
 
 type AuthHandler struct {
-	Authlogic Authenticator
+	authenticator Authenticator
 }
 
 // Login
@@ -105,13 +104,13 @@ func (a AuthHandler) Login(ctx *gin.Context) {
 	if err := bind.Binds(ctx, bind.Json(loginRequest)); err != nil {
 		return
 	}
-	signedJwt, err := a.Authlogic.TryLogin(ctx, loginRequest.Username, loginRequest.Password)
+	token, err := a.authenticator.TryLogin(ctx, loginRequest.Username, loginRequest.Password, loginRequest.Persistent)
 	if err != nil {
-		resp.Fail(ctx).Code(code.LoginFailed).MsgI18n("auth.loginFail").Error(err).Send()
+		resp.Fail(ctx).Code(code.LoginFailed).MsgI18n("auth.loginFail").Error(err).Transparent().Send()
 		return
 	}
 	resp.Ok(ctx).Code(code.LoginOk).MsgI18n("auth.loginOk").
-		Data(auth.Token{Token: signedJwt.SignedJwt}).Send()
+		Data(auth.Token{Token: token.Access.Tk.SignedJwt, Refresh: token.Refresh.Tk.SignedJwt}).Send()
 }
 
 // Register
@@ -129,9 +128,9 @@ func (a AuthHandler) Register(ctx *gin.Context) {
 	if err := bind.Binds(ctx, bind.Json(registerRequest)); err != nil {
 		return
 	}
-	err := a.Authlogic.TryRegisterNewUser(ctx, registerRequest.Username, registerRequest.Password, registerRequest.Code)
+	err := a.authenticator.TryRegisterNewUser(ctx, registerRequest.Username, registerRequest.Password, registerRequest.Code)
 	if err != nil {
-		resp.Fail(ctx).Code(code.RegisterFailed).MsgI18n("auth.registerFail").Error(err).Send()
+		resp.Fail(ctx).Code(code.RegisterFailed).MsgI18n("auth.registerFail").Error(err).Transparent().Send()
 		return
 	}
 	resp.Ok(ctx).Code(code.RegisterOk).MsgI18n("auth.registerOk").Send()
@@ -150,12 +149,40 @@ func (a AuthHandler) Register(ctx *gin.Context) {
 func (a AuthHandler) Logout(ctx *gin.Context) {
 	// get user info from parsed request context
 	tokenInfo := authen.GetContextTokenInfo(ctx)
-	err := a.Authlogic.TryLogout(ctx, tokenInfo.ID)
+	err := a.authenticator.TryLogout(ctx, tokenInfo.ID)
 	if err != nil {
-		resp.Fail(ctx).Code(code.LogoutFailed).MsgI18n("auth.logoutFail").Error(err).Send()
+		resp.Fail(ctx).Code(code.LogoutFailed).MsgI18n("auth.logoutFail").Error(err).Transparent().Send()
 		return
 	}
 	resp.Ok(ctx).Code(code.LogoutOK).MsgI18n("auth.logoutOk").Send()
+}
+
+// Refresh
+// @Summary      Refresh
+// @Description  [user]
+// @Description  refresh token
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        refresh   query     string  true  "refresh token"
+// @Success      200  {object}  types.Response{data=auth.Token}
+// @Router       /auth/refresh [GET]
+func (a AuthHandler) Refresh(ctx *gin.Context) {
+	var refresh auth.RefreshTokenOption
+	accessToken := httpx.GetBearerTokenFromCtx(ctx)
+	refresh.Access = accessToken
+	if err := bind.Binds(ctx, bind.Query(&refresh)); err != nil {
+		return
+	}
+
+	token, err := a.authenticator.RefreshToken(ctx, refresh.Access, refresh.Refresh)
+	if err != nil {
+		resp.Fail(ctx).Code(code.TokenRefreshFailed).MsgI18n("auth.refresh.failed").Error(err).Transparent().Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n("auth.refresh.ok").Data(auth.Token{
+		Token: token.Access.Tk.SignedJwt,
+	}).Send()
 }
 
 // ForgotPassword
@@ -177,9 +204,9 @@ func (a AuthHandler) ForgotPassword(ctx *gin.Context) {
 		return
 	}
 
-	err = a.Authlogic.ChangePassword(ctx, changePasswordReq.Password, changePasswordReq.Code)
+	err = a.authenticator.ChangePassword(ctx, changePasswordReq.Password, changePasswordReq.Code)
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("auth.changePasswdFail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n("auth.changePasswdFail").Error(err).Transparent().Send()
 		return
 	}
 	resp.Ok(ctx).MsgI18n("auth.changePasswdOk").Send()
@@ -203,6 +230,7 @@ type RoleHandler struct {
 // @Param        page  query    role.PageOption  true  "page option"
 // @Success      200  {object}  types.Response{data=[]role.RoleInfo}
 // @Router       /role/list [GET]
+// @security BearerAuth
 func (r RoleHandler) GetRoleList(ctx *gin.Context) {
 	var pageOpt role.PageOption
 	if err := bind.Binds(ctx, bind.Query(&pageOpt)); err != nil {

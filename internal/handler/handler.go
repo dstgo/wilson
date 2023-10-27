@@ -47,7 +47,7 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 		swaggerEnabled = serverConf.Swagger
 	)
 
-	authenticator := authen.NewCacheAuthor(cfg.JwtConf, cache.NewRedisTokenCache(datasource))
+	authenticator := authen.NewRefreshTokenAuthor(cfg.JwtConf, cache.NewAccessTokenCache(datasource), cache.NewRefreshTokenCache(datasource))
 
 	roleResolver := roleSo.NewGormResolver(datasource.ORM())
 
