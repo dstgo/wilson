@@ -8,7 +8,8 @@ auth.group = "Authentication"
 auth.login = "User login"
 auth.register = "User Registration"
 auth.logout = "User logged out"
-auth.forgopasswd = "User retrieves password"
+auth.forgotPasswd = "User retrieves password"
+auth.refresh = "Refresh token"
 # User personal routing
 user.profile.group = "Personal Information"
 user.profile.info = "Query information"
@@ -119,6 +120,7 @@ longitude = "Must be a valid longitude"
 ssn = "Must be a valid SSN code"
 version = "Must be a valid semantic version"
 
+# Custom verification rules
 [rule]
 perm.object = "Permission subject can only consist of alphanumeric characters, forward slashes and underscores"
 
@@ -146,6 +148,8 @@ role.id = "role identifier"
 role.name = "Role name"
 role.code = "role code"
 role.list = "Role List"
+token.access = "Authentication token"
+token.refresh = "Refresh token"
 
 # Error message section
 [op]
@@ -163,8 +167,8 @@ delete.fail = "Deletion failed"
 [err]
 unknown = "Unknown error"
 badparams = "Parameter verification failed"
-forbidden = "Authentication failed"
-unauthorized = "no access"
+forbidden = "no access"
+unauthorized = "Authentication failed"
 database = "Database error"
 filesystem = "File IO error"
 network = "Network error"
@@ -181,7 +185,10 @@ sendOk = "Email has been sent"
 
 [jwt]
 parsed.failed = "User authentication failed, please try to log in again"
+issue.failed = "Certificate issuance failed"
 expired = "User credentials have expired, please log in again"
+refresh = "User credentials need to be reapplied"
+invalid = "Invalid token"
 
 [auth]
 loginFail = "Login failed"
@@ -192,6 +199,8 @@ logoutFail = "Logout failed"
 logoutOk = "Logout successfully"
 changePasswdFail = "Password change failed"
 changePasswdOk = "Password changed successfully"
+refresh.failed = "Token refresh failed"
+refresh.ok = "Token refreshed successfully"
 
 [user]
 notfound = "User does not exist"
