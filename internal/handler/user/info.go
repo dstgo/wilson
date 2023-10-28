@@ -7,8 +7,26 @@ import (
 	"github.com/dstgo/wilson/internal/pkg/utils/cp"
 	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/dstgo/wilson/internal/types/user"
+	"github.com/duke-git/lancet/v2/cryptor"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
+
+type UserIdGenerator interface {
+	Generate() string
+}
+
+var generator UserIdGenerator = Sha256UUIDGen{}
+
+type Sha256UUIDGen struct{}
+
+func (s Sha256UUIDGen) Generate() string {
+	return cryptor.Sha256(uuid.NewString())
+}
+
+func GenerateUserId() string {
+	return generator.Generate()
+}
 
 func NewUserInfo(ds *data.DataSource) UserInfo {
 	return UserInfo{

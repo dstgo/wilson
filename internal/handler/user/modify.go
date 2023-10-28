@@ -8,7 +8,6 @@ import (
 	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/dstgo/wilson/internal/types/user"
 	"github.com/duke-git/lancet/v2/cryptor"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -35,7 +34,7 @@ func (u UserModify) Create(createOpt user.CreateUserOption) error {
 	}
 
 	newUser := entity.User{
-		UUID:     uuid.NewString(),
+		UUID:     GenerateUserId(),
 		Username: createOpt.Username,
 		Password: cryptor.Sha512WithBase64(createOpt.Password),
 		Email:    createOpt.Email,
