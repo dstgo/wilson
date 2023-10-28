@@ -16,6 +16,12 @@ func (g GormResolver) GetRole(roleId uint) (role.RoleInfo, error) {
 	return role.MakeRoleInfo(rocord), nil
 }
 
+func (g GormResolver) GetRoleInBatch(roleIds []uint) ([]role.RoleInfo, error) {
+	var roles []role.RoleInfo
+	err := g.db.Model(entity.Role{}).Find(&roles, "id IN ?", roleIds).Error
+	return roles, err
+}
+
 func (g GormResolver) GetRoleByCode(code string) (role.RoleInfo, error) {
 	byCode, err := getRoleByCode(g.db, code)
 	return role.MakeRoleInfo(byCode), err
