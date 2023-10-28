@@ -186,9 +186,10 @@ sendOk = "邮件已发送"
 [jwt]
 parsed.failed = "用户认证失败，请尝试重新登录"
 issue.failed = "凭证签发失败"
-expired = "用户凭证过期，请重新登录"
-refresh = "用户凭证需要重新申请"
-invalid = "无效的令牌"
+expired = "用户凭证失效，请重新登录"
+refresh = "用户凭证过期，请重新申请"
+invalid = "无效的凭证"
+redundant = "凭证无需更新"
 
 [auth]
 loginFail = "登录失败"

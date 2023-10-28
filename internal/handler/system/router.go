@@ -41,7 +41,7 @@ func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
 		authGroup.POST("/register", ginx.M(meta.NoAuth, meta.Name("route.auth.register")), handler.Auth.Register)
 		authGroup.POST("/forgotpwd", ginx.M(meta.NoAuth, meta.Name("route.auth.forgotPasswd")), handler.Auth.ForgotPassword)
 		// DELETE
-		authGroup.DELETE("/logout", ginx.M(meta.Name("route.auth.logout")), handler.Auth.Logout)
+		authGroup.DELETE("/logout", ginx.M(meta.Name("route.auth.logout"), meta.Roles(role.UserRole)), handler.Auth.Logout)
 	}
 
 	// role api

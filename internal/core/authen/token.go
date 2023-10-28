@@ -5,7 +5,6 @@ import (
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/data/cache"
 	"github.com/dstgo/wilson/internal/pkg/jwtx"
-	"github.com/dstgo/wilson/internal/types/auth"
 	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
@@ -14,11 +13,12 @@ import (
 )
 
 var (
-	ErrTokenExpired        = errors.New("access token expired")
-	ErrTokenNeedRefreshed  = errors.New("token need to be refreshed")
-	ErrInvalidTokenPayload = errors.New("invalid token payload")
-	ErrInvalidToken        = errors.New("invalid token")
-	ErrTokenMisMatch       = errors.New("token mismatch")
+	ErrTokenExpired          = errors.New("access token expired")
+	ErrTokenNeedRefreshed    = errors.New("token need to be refreshed")
+	ErrInvalidTokenPayload   = errors.New("invalid token payload")
+	ErrInvalidToken          = errors.New("invalid token")
+	ErrTokenMisMatch         = errors.New("token mismatch")
+	ErrTokenExpirationExceed = errors.New("token expiration exceeded")
 )
 
 // Parser
@@ -253,7 +253,7 @@ func (r RefreshTokenAuthor) Refresh(ctx context.Context, accessToken string, ref
 	access, err := r.parseAccess(ctx, accessToken)
 	// if no need to refresh, just return error
 	if err != nil && !errors.Is(err, ErrTokenNeedRefreshed) {
-		return token, auth.ErrTokenInvalid.Wrap(err)
+		return token, err
 		// if access token has not expired, renewal expiration time
 	} else if err == nil {
 		renew = true
@@ -266,27 +266,31 @@ func (r RefreshTokenAuthor) Refresh(ctx context.Context, accessToken string, ref
 
 	// access token id should same as refresh token id
 	if access.Payload.ID != refresh.Payload.ID {
-		return token, auth.ErrTokenInvalid.Wrap(ErrTokenMisMatch)
+		return token, ErrTokenMisMatch
 	}
 
 	var ttl time.Duration
 
 	if renew {
-
+		expiredAt := access.Payload.ExpiresAt.Time
+		duration := expiredAt.Sub(time.Now())
+		// renew 1/2 per-time
+		increment := r.accessTokenExp / 2
 		// renew cache ttl
 		oldTTL, err := r.accessCache.TTL(ctx, access.Payload.ID)
 		if err != nil {
 			return token, system.ErrDatabase.Wrap(err)
 		}
 
-		// prevent ttl from becoming too large
-		ttl = oldTTL
-		increment := r.accessTokenExp / 10
-		if oldTTL < r.accessTokenExp*2 {
+		// prevent access expiration-time becoming too large
+		if duration < r.accessTokenExp*2 {
+			access.Payload.ExpiresAt = jwt.NewNumericDate(access.Payload.ExpiresAt.Add(increment))
 			ttl = oldTTL + increment
-			access.Payload.ExpiresAt.Add(increment)
+		} else {
+			return token, ErrTokenExpirationExceed
 		}
 	} else {
+		access.Payload.IssuedAt = jwt.NewNumericDate(time.Now())
 		access.Payload.ExpiresAt = jwt.NewNumericDate(time.Now().Add(r.accessTokenExp))
 		ttl = r.accessTokenExp + r.delay
 	}

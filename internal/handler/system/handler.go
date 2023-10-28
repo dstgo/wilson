@@ -159,8 +159,13 @@ func (a AuthHandler) Logout(ctx *gin.Context) {
 
 // Refresh
 // @Summary      Refresh
-// @Description  [user]
-// @Description  refresh token
+// @Description  [guest]
+// @Description  carry refresh token in query params, access token in header
+// @Description  if refresh-token expired , Refresher will not refresh token [4012]
+// @Description  else if access-token has expired after delay duration, Refresher will not refresh token [4012]
+// @Description  else if access-token has expired before delay duration, Refresher will issue a new access-token [2005]
+// @Description  else if access-token has not expired, Refresher will renewal the 1/10 access-token ttl per time  [2005]
+// @Description  else if access-token has not expired, and ttl >= 2 * conf.JwtConf.Exp, Refresher will not refresh token [4013]
 // @Tags         auth
 // @Accept       json
 // @Produce      json
@@ -177,10 +182,10 @@ func (a AuthHandler) Refresh(ctx *gin.Context) {
 
 	token, err := a.authenticator.RefreshToken(ctx, refresh.Access, refresh.Refresh)
 	if err != nil {
-		resp.Fail(ctx).Code(code.TokenRefreshFailed).MsgI18n("auth.refresh.failed").Error(err).Transparent().Send()
+		resp.Fail(ctx).Code(code.RefreshFailed).MsgI18n("auth.refresh.failed").Error(err).Transparent().Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("auth.refresh.ok").Data(auth.Token{
+	resp.Ok(ctx).Code(code.RefreshOk).MsgI18n("auth.refresh.ok").Data(auth.Token{
 		Token: token.Access.Tk.SignedJwt,
 	}).Send()
 }

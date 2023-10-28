@@ -132,11 +132,11 @@ jwt:
   # jwt issuer
   isu: wilson
   # jwt expire time
-  exp: 1m
+  exp: 4h
   # refresh jwt expire time
-  rexp: 96h
+  rexp: 108h
   # access token delay expiration time
-  delay: 1m
+  delay: 10m
 
 email:
   # email host

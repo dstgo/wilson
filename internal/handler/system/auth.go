@@ -19,30 +19,32 @@ import (
 	"github.com/duke-git/lancet/v2/cryptor"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
-	"net/http"
 )
 
 func NewAuthenticator(cfg *conf.AppConf, ds *data.DataSource, codeCache cache.RedisEmailCodeCache) Authenticator {
 	info := user.NewUserInfo(ds)
 	modify := user.NewUserModify(ds, info)
 	tokenCache := cache.NewAccessTokenCache(ds)
-	tokenAuthor := authen.NewRefreshTokenAuthor(cfg.JwtConf, tokenCache, cache.NewRefreshTokenCache(ds))
+	refreshTokenCache := cache.NewRefreshTokenCache(ds)
+	tokenAuthor := authen.NewRefreshTokenAuthor(cfg.JwtConf, tokenCache, refreshTokenCache)
 
 	return Authenticator{
-		issuer:     tokenAuthor,
-		codeCache:  codeCache,
-		ds:         ds,
-		userInfo:   info,
-		userModify: modify,
-		tokenCache: tokenCache,
-		refresher:  tokenAuthor,
+		issuer:       tokenAuthor,
+		codeCache:    codeCache,
+		ds:           ds,
+		userInfo:     info,
+		userModify:   modify,
+		tokenCache:   tokenCache,
+		refreshCache: refreshTokenCache,
+		refresher:    tokenAuthor,
 	}
 }
 
 type Authenticator struct {
-	ds         *data.DataSource
-	codeCache  cache.RedisEmailCodeCache
-	tokenCache cache.TokenCache
+	ds           *data.DataSource
+	codeCache    cache.RedisEmailCodeCache
+	tokenCache   cache.TokenCache
+	refreshCache cache.TokenCache
 
 	userInfo   user.UserInfo
 	userModify user.UserModify
@@ -136,15 +138,13 @@ func (a Authenticator) TryRegisterNewUser(ctx context.Context, username string, 
 }
 
 func (a Authenticator) TryLogout(ctx context.Context, tokenId string) error {
-	_, ok, err := a.tokenCache.Get(ctx, tokenId)
-	// check again if token is expired
-	if !ok && err == nil {
-		return auth.ErrTokenExpired.Wrap(err).Status(http.StatusUnauthorized)
-	} else if err != nil {
+
+	err := a.tokenCache.Del(ctx, tokenId)
+	if err != nil {
 		return system.ErrDatabase.Wrap(err)
 	}
 
-	err = a.tokenCache.Del(ctx, tokenId)
+	err = a.refreshCache.Del(ctx, tokenId)
 	if err != nil {
 		return system.ErrDatabase.Wrap(err)
 	}
@@ -181,5 +181,13 @@ func (a Authenticator) ChangePassword(ctx context.Context, newPassword string, c
 }
 
 func (a Authenticator) RefreshToken(ctx context.Context, accessToken string, refreshToken string) (authen.Token, error) {
-	return a.refresher.Refresh(ctx, accessToken, refreshToken)
+	token, err := a.refresher.Refresh(ctx, accessToken, refreshToken)
+	if errors.Is(err, authen.ErrTokenExpirationExceed) {
+		return token, auth.ErrRedundantExpiration.Wrap(err)
+	} else if errors.Is(err, system.ErrDatabase) {
+		return token, err
+	} else if err != nil {
+		return token, auth.ErrTokenInvalid.Wrap(err)
+	}
+	return token, nil
 }

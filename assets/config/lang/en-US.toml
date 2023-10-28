@@ -186,9 +186,10 @@ sendOk = "Email has been sent"
 [jwt]
 parsed.failed = "User authentication failed, please try to log in again"
 issue.failed = "Certificate issuance failed"
-expired = "User credentials have expired, please log in again"
-refresh = "User credentials need to be reapplied"
-invalid = "Invalid token"
+expired = "User credentials expired, please log in again"
+refresh = "User certificate has expired, please apply again"
+invalid = "Invalid credentials"
+redundant = "Credentials do not need to be updated"
 
 [auth]
 loginFail = "Login failed"

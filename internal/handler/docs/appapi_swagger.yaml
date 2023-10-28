@@ -360,8 +360,13 @@ paths:
       consumes:
       - application/json
       description: |-
-        [user]
-        refresh token
+        [guest]
+        carry refresh token in query params, access token in header
+        if refresh-token expired , Refresher will not refresh token [4012]
+        else if access-token has expired after delay duration, Refresher will not refresh token [4012]
+        else if access-token has expired before delay duration, Refresher will issue a new access-token [2005]
+        else if access-token has not expired, Refresher will renewal the 1/10 access-token ttl per time  [2005]
+        else if access-token has not expired, and ttl >= 2 * conf.JwtConf.Exp, Refresher will not refresh token [4013]
       parameters:
       - description: refresh token
         in: query
