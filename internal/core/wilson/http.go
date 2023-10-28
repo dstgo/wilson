@@ -33,6 +33,7 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 	engine.MaxMultipartMemory = serverConf.HttpConf.MultipartMax
 
 	engine.Use(
+		middleware.UseRequestId(),
 		middleware.UseLogger(logger, path.Join(handler.DocPath, "*any"), path.Join(api.DocPath, "*any")),
 		middleware.UseRecovery(logger),
 		middleware.UseAcceptLanguage(lang.Default()),
@@ -70,10 +71,9 @@ func NewLocale(cfg *locale.Conf) (*locale.Locale, error) {
 func NewLogger(logConf *conf.LogConf) (*log.Logger, error) {
 	logConf.TimeFormat = types.DateTimeFormat
 	logConf.Order = []string{
-		types.LogIpKey, types.LogHttpMethodKey,
-		types.LogHttpStatusKey, types.LogRequestPathKey,
-		types.LogRequestUrlKey, types.LogRequestCostKey,
-		types.LogRequestContentType, types.LogHttpContentLength,
+		types.LogIpKey, types.LogHttpMethodKey, types.LogHttpStatusKey, types.LogRequestCostKey,
+		types.LogRequestPathKey, types.LogRequestUrlKey, types.LogRequestQuery, types.LogRequestHeader,
+		types.LogRequestContentType, types.LogHttpContentLength, types.LogRequestBody,
 		types.LogResponseContentType, types.LogHttpResponseLength,
 		types.LogRecoverRequestKey, types.LogRecoverErrorKey,
 		types.LogRecoverStackKey, types.LogRequestIdKey}
