@@ -2,10 +2,10 @@ package user
 
 import (
 	"github.com/dstgo/wilson/internal/core/authen"
-	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/resp"
 	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/user"
+	"github.com/dstgo/wilson/pkg/ginx/bind"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 )

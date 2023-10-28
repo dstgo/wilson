@@ -2,13 +2,13 @@ package system
 
 import (
 	"github.com/dstgo/wilson/internal/core/authen"
-	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/resp"
 	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/auth"
 	"github.com/dstgo/wilson/internal/types/code"
 	"github.com/dstgo/wilson/internal/types/role"
 	"github.com/dstgo/wilson/internal/types/system"
+	"github.com/dstgo/wilson/pkg/ginx/bind"
 	"github.com/dstgo/wilson/pkg/ginx/httpx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -161,11 +161,11 @@ func (a AuthHandler) Logout(ctx *gin.Context) {
 // @Summary      Refresh
 // @Description  [guest]
 // @Description  carry refresh token in query params, access token in header
-// @Description  if refresh-token expired , Refresher will not refresh token [4012]
-// @Description  else if access-token has expired after delay duration, Refresher will not refresh token [4012]
-// @Description  else if access-token has expired before delay duration, Refresher will issue a new access-token [2005]
-// @Description  else if access-token has not expired, Refresher will renewal the 1/10 access-token ttl per time  [2005]
-// @Description  else if access-token has not expired, and ttl >= 2 * conf.JwtConf.Exp, Refresher will not refresh token [4013]
+// @Description  if refresh-token expired , TokenRefresher will not refresh token [4012]
+// @Description  else if access-token has expired after delay duration, TokenRefresher will not refresh token [4012]
+// @Description  else if access-token has expired before delay duration, TokenRefresher will issue a new access-token [2005]
+// @Description  else if access-token has not expired, TokenRefresher will renewal the 1/10 access-token ttl per time  [2005]
+// @Description  else if access-token has not expired, and ttl >= 2 * conf.JwtConf.Exp, TokenRefresher will not refresh token [4013]
 // @Tags         auth
 // @Accept       json
 // @Produce      json
@@ -470,4 +470,46 @@ func (r RoleHandler) RemovePermission(ctx *gin.Context) {
 		return
 	}
 	resp.Ok(ctx).MsgI18n("op.delete.ok").Send()
+}
+
+type APIKeyHandler struct {
+}
+
+// ListAPIKeys
+// @Summary      ListAPIKeys
+// @Description  list specified user api keys
+// @Tags         key
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Account ID"
+// @Success      200  {object}  types.Response
+// @Router       /key/list [GET]
+func (a APIKeyHandler) ListAPIKeys(ctx *gin.Context) {
+
+}
+
+// CreateAPIKey
+// @Summary      CreateAPIKey
+// @Description  create specified user api key
+// @Tags         key
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Account ID"
+// @Success      200  {object}  types.Response
+// @Router       /key/create [POST]
+func (a APIKeyHandler) CreateAPIKey(ctx *gin.Context) {
+
+}
+
+// RemoveAPIKey
+// @Summary      RemoveAPIKey
+// @Description  remove specified api key
+// @Tags         key
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Account ID"
+// @Success      200  {object}  types.Response
+// @Router       /key/remove [DELETE]
+func (a APIKeyHandler) RemoveAPIKey(ctx *gin.Context) {
+
 }
