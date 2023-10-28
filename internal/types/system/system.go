@@ -4,6 +4,12 @@ import (
 	"github.com/dstgo/wilson/pkg/vax"
 )
 
+const (
+	AppAPI = "appapi"
+
+	OpenAPI = "openapi"
+)
+
 type PingRequest struct {
 	// name must be one of [wilson, wendy]
 	Name string `json:"name" uri:"name" form:"name" label:"field.name" example:"wilson"`

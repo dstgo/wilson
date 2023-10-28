@@ -8,6 +8,7 @@ import (
 	"github.com/dstgo/wilson/internal/handler/user"
 	"github.com/dstgo/wilson/internal/types/meta"
 	"github.com/dstgo/wilson/internal/types/role"
+	"github.com/dstgo/wilson/internal/types/system"
 	usert "github.com/dstgo/wilson/internal/types/user"
 	"github.com/dstgo/wilson/pkg/ginx"
 	"reflect"
@@ -62,7 +63,7 @@ func initRouterRole(source *data.DataSource, root *ginx.RouterGroup, resolver ro
 		var (
 			name      string
 			groupName string
-			tag       = "appapi"
+			tag       = system.AppAPI
 		)
 
 		routeName, b := info.Meta.Get(meta.Name("").Key)
