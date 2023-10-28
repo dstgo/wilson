@@ -21,24 +21,24 @@ var (
 	ErrTokenExpirationExceed = errors.New("token expiration exceeded")
 )
 
-// Parser
-// The Parser should verify if the request has been authenticated.
-type Parser interface {
+// TokenParser
+// The TokenParser should verify if the request has been authenticated.
+type TokenParser interface {
 	Parse(ctx context.Context, token string) (Token, error)
 }
 
-// Issuer
-// The Issuer should issue a new jwt token and return the token info
-type Issuer interface {
+// TokenIssuer
+// The TokenIssuer should issue a new jwt token and return the token info
+type TokenIssuer interface {
 	Issue(ctx context.Context, payload UserPayload) (Token, error)
 }
 
-// Refresher
-// if refresh-token expired , Refresher will not refresh token
-// else if access-token has expired after delay duration, Refresher will not refresh token
-// else if access-token has expired before delay duration, Refresher will issue a new access-token
-// else if access-token has not expired, Refresher will renewal the access-token expired time
-type Refresher interface {
+// TokenRefresher
+// if refresh-token expired , TokenRefresher will not refresh token
+// else if access-token has expired after delay duration, TokenRefresher will not refresh token
+// else if access-token has expired before delay duration, TokenRefresher will issue a new access-token
+// else if access-token has not expired, TokenRefresher will renewal the access-token expired time
+type TokenRefresher interface {
 	Refresh(ctx context.Context, accessToken string, refreshToken string) (Token, error)
 }
 
@@ -52,17 +52,17 @@ type Jwt struct {
 	Payload UserClaims
 }
 
+type UserClaims struct {
+	UserPayload
+	jwt.RegisteredClaims
+}
+
 // UserPayload
 // basic user info
 type UserPayload struct {
 	Username   string `json:"username"`
 	UUID       string `json:"uuid"`
 	Persistent bool   `json:"persistent"`
-}
-
-type UserClaims struct {
-	UserPayload
-	jwt.RegisteredClaims
 }
 
 func NewRefreshTokenAuthor(cfg *conf.JwtConf, accessCache cache.TokenCache, refreshCache cache.TokenCache) RefreshTokenAuthor {
