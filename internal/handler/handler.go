@@ -47,9 +47,13 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 		swaggerEnabled = serverConf.Swagger
 	)
 
-	authenticator := authen.NewRefreshTokenAuthor(cfg.JwtConf, cache.NewAccessTokenCache(datasource), cache.NewRefreshTokenCache(datasource))
-
-	roleResolver := roleSo.NewGormResolver(datasource.ORM())
+	var (
+		accessTokenCache   = cache.NewAccessTokenCache(datasource)
+		refreshTokenCache  = cache.NewRefreshTokenCache(datasource)
+		tokenAuthenticator = authen.NewRefreshTokenAuthor(cfg.JwtConf, accessTokenCache, refreshTokenCache)
+		roleResolver       = roleSo.NewGormResolver(datasource.ORM())
+		userInfo           = user.NewUserInfo(datasource)
+	)
 
 	// wrap http router
 	handlerRouter := ginx.NewRouterGroup(httpserver.RouterGroup.Group(BasePath))
@@ -61,8 +65,8 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 
 	// add middleware chains
 	handlerRouter.Use(
-		middleware.UseAuthenticate(authenticator),
-		middleware.UseRoleAuthorize(roleResolver, user.NewUserInfo(datasource)),
+		middleware.UseAuthenticate(tokenAuthenticator),
+		middleware.UseRoleAuthorize(roleResolver, userInfo),
 	)
 
 	router, cleanup, err := setupHandlerRouter(cfg, handlerRouter, datasource)
@@ -71,7 +75,7 @@ func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.Da
 	}
 
 	// initialize router role access
-	err = initRouterRole(datasource, handlerRouter, roleResolver)
+	err = initHandlerData(handlerRouter, datasource, roleResolver)
 	if err != nil {
 		return Router{}, nil, err
 	}

@@ -125,7 +125,7 @@
         },
         "/auth/refresh": {
             "get": {
-                "description": "[guest]\ncarry refresh token in query params, access token in header\nif refresh-token expired , Refresher will not refresh token [4012]\nelse if access-token has expired after delay duration, Refresher will not refresh token [4012]\nelse if access-token has expired before delay duration, Refresher will issue a new access-token [2005]\nelse if access-token has not expired, Refresher will renewal the 1/10 access-token ttl per time  [2005]\nelse if access-token has not expired, and ttl \u003e= 2 * conf.JwtConf.Exp, Refresher will not refresh token [4013]",
+                "description": "[guest]\ncarry refresh token in query params, access token in header\nif refresh-token expired , TokenRefresher will not refresh token [4012]\nelse if access-token has expired after delay duration, TokenRefresher will not refresh token [4012]\nelse if access-token has expired before delay duration, TokenRefresher will issue a new access-token [2005]\nelse if access-token has not expired, TokenRefresher will renewal the 1/10 access-token ttl per time  [2005]\nelse if access-token has not expired, and ttl \u003e= 2 * conf.JwtConf.Exp, TokenRefresher will not refresh token [4013]",
                 "consumes": [
                     "application/json"
                 ],
@@ -513,6 +513,108 @@
                 }
             }
         },
+        "/key/create": {
+            "post": {
+                "description": "create specified user api key",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "key"
+                ],
+                "summary": "CreateAPIKey",
+                "parameters": [
+                    {
+                        "description": "CreateKeyOption",
+                        "name": "CreateKeyOption",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.CreateKeyOption"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/key/list": {
+            "get": {
+                "description": "list specified user api keys",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "key"
+                ],
+                "summary": "ListAPIKeys",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/auth.APIKey"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/key/remove": {
+            "delete": {
+                "description": "remove specified api key",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "key"
+                ],
+                "summary": "RemoveAPIKey",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "key",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/node/create": {
             "post": {
                 "security": [
@@ -736,6 +838,12 @@
                         "example": 10,
                         "description": "size of page",
                         "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "appapi",
+                        "name": "tag",
                         "in": "query"
                     }
                 ],
@@ -1036,6 +1144,12 @@
                         "example": 10,
                         "description": "size of page",
                         "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "appapi",
+                        "name": "tag",
                         "in": "query"
                     }
                 ],
@@ -1493,6 +1607,37 @@
         }
     },
     "definitions": {
+        "auth.APIKey": {
+            "type": "object",
+            "properties": {
+                "expiredAt": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.CreateKeyOption": {
+            "type": "object",
+            "properties": {
+                "expiredAt": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "perms": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
         "auth.ForgotPasswordOption": {
             "type": "object",
             "properties": {

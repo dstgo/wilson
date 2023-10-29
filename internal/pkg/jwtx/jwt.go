@@ -33,8 +33,10 @@ func ParseJwt(tokenStr, secret string, method jwt.SigningMethod, claims jwt.Clai
 		return []byte(secret), nil
 	}, jwt.WithValidMethods([]string{method.Alg()}))
 
-	jwtToken.Token = token
-	jwtToken.Claims = token.Claims
+	if token != nil {
+		jwtToken.Token = token
+		jwtToken.Claims = token.Claims
+	}
 
 	return jwtToken, err
 }

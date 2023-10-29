@@ -12,8 +12,8 @@ var (
 )
 
 var (
-	ErrPermNotFound  = errs.NewI18nError("perm.notfound").FallBack("permission not found").Code(code.ResourceNotFound)
-	ErrPermCojnflict = errs.NewI18nError("perm.conflict").FallBack("permission already exists")
-	ErrNoPemrAccess  = errs.NewI18nError("perm.noPerm").FallBack("no enough permission to access")
-	ErrInvalidPerm   = errs.NewI18nError("perm.invalidPerm").FallBack("invalid permissions")
+	ErrPermNotFound = errs.NewI18nError("perm.notfound").FallBack("permission not found").Code(code.ResourceNotFound)
+	ErrPermConflict = errs.NewI18nError("perm.conflict").FallBack("permission already exists")
+	ErrPermNoAccess = errs.NewI18nError("perm.noPerm").FallBack("no enough permission to access")
+	ErrInvalidPerm  = errs.NewI18nError("perm.invalidPerm").FallBack("invalid permissions")
 )

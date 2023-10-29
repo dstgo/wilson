@@ -21,6 +21,8 @@ var SystemProviderSet = wire.NewSet(
 	NewAuthHandler,
 	NewRoleEnforcer,
 	NewRoleHandler,
+	NewAPIKey,
+	NewAPIKeyHandler,
 )
 
 func NewPingHandler(logic PingApp) PingHandler {
@@ -472,7 +474,12 @@ func (r RoleHandler) RemovePermission(ctx *gin.Context) {
 	resp.Ok(ctx).MsgI18n("op.delete.ok").Send()
 }
 
+func NewAPIKeyHandler(apikey ApiKey) APIKeyHandler {
+	return APIKeyHandler{apikey: apikey}
+}
+
 type APIKeyHandler struct {
+	apikey ApiKey
 }
 
 // ListAPIKeys
@@ -481,11 +488,17 @@ type APIKeyHandler struct {
 // @Tags         key
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  types.Response
+// @Success      200  {object}  types.Response{data=[]auth.APIKey}
 // @Router       /key/list [GET]
 func (a APIKeyHandler) ListAPIKeys(ctx *gin.Context) {
-
+	info := authen.GetContextTokenInfo(ctx)
+	uuid := info.UUID
+	keys, err := a.apikey.ListApiKey(ctx, uuid)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n("op.query.fail").Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n("op.query.ok").Data(keys).Send()
 }
 
 // CreateAPIKey
@@ -494,11 +507,23 @@ func (a APIKeyHandler) ListAPIKeys(ctx *gin.Context) {
 // @Tags         key
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "Account ID"
+// @Param        CreateKeyOption   body   auth.CreateKeyOption  true  "CreateKeyOption"
 // @Success      200  {object}  types.Response
 // @Router       /key/create [POST]
 func (a APIKeyHandler) CreateAPIKey(ctx *gin.Context) {
+	var createOpt auth.CreateKeyOption
+	createOpt.Uid = authen.GetContextTokenInfo(ctx).UUID
 
+	if err := bind.Binds(ctx, bind.Json(&createOpt)); err != nil {
+		return
+	}
+
+	err := a.apikey.CreateAPiKey(ctx, createOpt)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n("op.create.fail").Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n("op.create.ok").Send()
 }
 
 // RemoveAPIKey
@@ -507,9 +532,20 @@ func (a APIKeyHandler) CreateAPIKey(ctx *gin.Context) {
 // @Tags         key
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "Account ID"
+// @Param        RemoveKeyOption   query     auth.RemoveKeyOption  true  "RemoveKeyOption"
 // @Success      200  {object}  types.Response
 // @Router       /key/remove [DELETE]
 func (a APIKeyHandler) RemoveAPIKey(ctx *gin.Context) {
+	var removeOpt auth.RemoveKeyOption
+	removeOpt.UUID = authen.GetContextTokenInfo(ctx).UUID
+	if err := bind.Binds(ctx, bind.Query(&removeOpt)); err != nil {
+		return
+	}
 
+	err := a.apikey.RemoveApiKey(ctx, removeOpt.UUID, removeOpt.Key)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n("op.delete.fail").Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n("op.delete.ok").Send()
 }

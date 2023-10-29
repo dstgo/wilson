@@ -17,9 +17,13 @@ func (g GormResolver) GetPerm(permId uint) (role.PermInfo, error) {
 	return role.MakePermInfo(perm), nil
 }
 
-func (g GormResolver) GetPermInBatch(ids []uint) ([]role.PermInfo, error) {
+func (g GormResolver) GetPermInBatch(ids []uint, tag string) ([]role.PermInfo, error) {
 	var perms []entity.Permission
-	err := g.db.Find(&perms, "id IN ?", ids).Error
+	db := g.db
+	if tag != "" {
+		db = g.db.Where("tag = ?", tag)
+	}
+	err := db.Find(&perms, "id IN ?", ids).Error
 	if err != nil {
 		return []role.PermInfo{}, err
 	}

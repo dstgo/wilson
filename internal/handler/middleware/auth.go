@@ -17,7 +17,7 @@ import (
 	"net/http"
 )
 
-func UseAuthenticate(v authen.Parser) gin.HandlerFunc {
+func UseAuthenticate(v authen.TokenParser) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		routeMeta := ginx.MetaFromCtx(ctx)
 
@@ -74,7 +74,7 @@ func UseRoleAuthorize(resolver role.Resolver, userRole user.UserInfo) gin.Handle
 		if err := resolver.ResolveAny(object, action, roles...); err != nil {
 			ctx.Abort()
 			if errors.Is(err, role.ErrHasNoPermission) {
-				resp.Forbidden(ctx).MsgI18n("err.forbidden").Error(roleType.ErrNoPemrAccess).Send()
+				resp.Forbidden(ctx).MsgI18n("err.forbidden").Error(roleType.ErrPermNoAccess).Send()
 			} else {
 				resp.InternalFailed(ctx).MsgI18n("err.internal").Error(system.ErrDatabase.Wrap(err)).Transparent().Send()
 			}
@@ -82,5 +82,28 @@ func UseRoleAuthorize(resolver role.Resolver, userRole user.UserInfo) gin.Handle
 		}
 
 		ctx.Next()
+	}
+}
+
+func UseOpenAPIAuth(author authen.KeyAuthor) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var (
+			obj = ctx.FullPath()
+			act = ctx.Request.Method
+			key = ctx.Query("key")
+		)
+		apikey, err := author.Authenticate(ctx, key, obj, act)
+		if err == nil {
+			authen.SetContextAPIInfo(ctx, apikey)
+			ctx.Next()
+		} else {
+			ctx.Abort()
+			switch {
+			case errors.Is(err, system.ErrDatabase):
+				resp.InternalFailed(ctx).MsgI18n("err.internal").Error(err).Transparent().Send()
+			default:
+				resp.Forbidden(ctx).MsgI18n("err.forbidden").Error(err).Transparent().Send()
+			}
+		}
 	}
 }

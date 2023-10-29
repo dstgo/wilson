@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"github.com/dstgo/wilson/internal/core/log"
 	roleSo "github.com/dstgo/wilson/internal/core/role"
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/entity"
@@ -14,12 +13,35 @@ import (
 	"reflect"
 )
 
-func initFirstUser(source *data.DataSource) (entity.User, error) {
+func initHandlerData(group *ginx.RouterGroup, source *data.DataSource, resolver roleSo.Resolver) error {
+	initRoles := []role.RoleInfo{
+		role.AdminRole,
+		role.UserRole,
+		role.AnonymousRole,
+	}
+
+	err := initRouterRole(group, resolver, initRoles...)
+	if err != nil {
+		return err
+	}
+	_, err = initFirstUser(source, initRoles...)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func initFirstUser(source *data.DataSource, userRoles ...role.RoleInfo) (entity.User, error) {
 	info := user.NewUserInfo(source)
 
 	count, err := user.Count(source.ORM())
 	if err != nil {
 		return entity.User{}, err
+	}
+
+	var codes []string
+	for _, r := range userRoles {
+		codes = append(codes, r.Code)
 	}
 
 	if count == 0 {
@@ -32,24 +54,28 @@ func initFirstUser(source *data.DataSource) (entity.User, error) {
 		if err != nil {
 			return entity.User{}, err
 		}
+
+		// if first user created, then
+		if userEn.Id > 0 {
+			userRole := user.NewUserModify(source, user.NewUserInfo(source))
+			err := userRole.SaveRolesByCode(userEn.UUID, codes)
+			if err != nil {
+				return userEn, err
+			}
+		}
 		return userEn, nil
 	}
 
 	return entity.User{}, nil
 }
 
-func initRouterRole(source *data.DataSource, root *ginx.RouterGroup, resolver roleSo.Resolver) error {
+func initRouterRole(root *ginx.RouterGroup, resolver roleSo.Resolver, roles ...role.RoleInfo) error {
 
-	log.L().Info("starting to initialize router acl...")
 	var (
 		permsMap = make(map[string][]role.PermInfo)
 	)
 
-	err := resolver.CreateRoleInBatch([]role.RoleInfo{
-		role.AdminRole,
-		role.UserRole,
-		role.AnonymousRole,
-	})
+	err := resolver.CreateRoleInBatch(roles)
 
 	if err != nil {
 		return err
@@ -106,24 +132,6 @@ func initRouterRole(source *data.DataSource, root *ginx.RouterGroup, resolver ro
 	// related role and permissions
 	for roleCode, perms := range permsMap {
 		if err := resolver.CreateRolePermBatch(role.RoleInfo{Code: roleCode}, perms); err != nil {
-			return err
-		}
-	}
-
-	// initialize first user roles
-	firstUser, err := initFirstUser(source)
-	if err != nil {
-		return err
-	}
-
-	// if first user created, then
-	if firstUser.Id > 0 {
-		userRole := user.NewUserModify(source, user.NewUserInfo(source))
-		err := userRole.SaveRolesByCode(firstUser.UUID, []string{
-			role.AdminRole.Code,
-			role.UserRole.Code,
-		})
-		if err != nil {
 			return err
 		}
 	}

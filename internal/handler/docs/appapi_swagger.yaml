@@ -1,5 +1,25 @@
 basePath: /api/v1
 definitions:
+  auth.APIKey:
+    properties:
+      expiredAt:
+        type: integer
+      key:
+        type: string
+      name:
+        type: string
+    type: object
+  auth.CreateKeyOption:
+    properties:
+      expiredAt:
+        type: integer
+      name:
+        type: string
+      perms:
+        items:
+          type: integer
+        type: array
+    type: object
   auth.ForgotPasswordOption:
     properties:
       code:
@@ -362,11 +382,11 @@ paths:
       description: |-
         [guest]
         carry refresh token in query params, access token in header
-        if refresh-token expired , Refresher will not refresh token [4012]
-        else if access-token has expired after delay duration, Refresher will not refresh token [4012]
-        else if access-token has expired before delay duration, Refresher will issue a new access-token [2005]
-        else if access-token has not expired, Refresher will renewal the 1/10 access-token ttl per time  [2005]
-        else if access-token has not expired, and ttl >= 2 * conf.JwtConf.Exp, Refresher will not refresh token [4013]
+        if refresh-token expired , TokenRefresher will not refresh token [4012]
+        else if access-token has expired after delay duration, TokenRefresher will not refresh token [4012]
+        else if access-token has expired before delay duration, TokenRefresher will issue a new access-token [2005]
+        else if access-token has not expired, TokenRefresher will renewal the 1/10 access-token ttl per time  [2005]
+        else if access-token has not expired, and ttl >= 2 * conf.JwtConf.Exp, TokenRefresher will not refresh token [4013]
       parameters:
       - description: refresh token
         in: query
@@ -603,6 +623,69 @@ paths:
       summary: Tag
       tags:
       - image
+  /key/create:
+    post:
+      consumes:
+      - application/json
+      description: create specified user api key
+      parameters:
+      - description: CreateKeyOption
+        in: body
+        name: CreateKeyOption
+        required: true
+        schema:
+          $ref: '#/definitions/auth.CreateKeyOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Response'
+      summary: CreateAPIKey
+      tags:
+      - key
+  /key/list:
+    get:
+      consumes:
+      - application/json
+      description: list specified user api keys
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/auth.APIKey'
+                  type: array
+              type: object
+      summary: ListAPIKeys
+      tags:
+      - key
+  /key/remove:
+    delete:
+      consumes:
+      - application/json
+      description: remove specified api key
+      parameters:
+      - in: query
+        name: key
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Response'
+      summary: RemoveAPIKey
+      tags:
+      - key
   /node/create:
     post:
       consumes:
@@ -741,6 +824,10 @@ paths:
         in: query
         name: size
         type: integer
+      - example: appapi
+        in: query
+        name: tag
+        type: string
       produces:
       - application/json
       responses:
@@ -939,6 +1026,10 @@ paths:
         in: query
         name: size
         type: integer
+      - example: appapi
+        in: query
+        name: tag
+        type: string
       produces:
       - application/json
       responses:

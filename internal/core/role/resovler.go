@@ -16,7 +16,7 @@ var (
 
 type Resolver interface {
 	GetPerm(permId uint) (role.PermInfo, error)
-	GetPermInBatch(permIds []uint) ([]role.PermInfo, error)
+	GetPermInBatch(permIds []uint, tag string) ([]role.PermInfo, error)
 	MatchPerm(name, obj, act, group, tag string) (role.PermInfo, error)
 	CreatePerm(permInfo role.PermInfo) error
 	CreatePermInBatch(permInfo []role.PermInfo) error

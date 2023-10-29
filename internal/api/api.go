@@ -4,8 +4,12 @@ import (
 	_ "github.com/dstgo/wilson/internal/api/docs"
 	"github.com/dstgo/wilson/internal/api/user"
 	"github.com/dstgo/wilson/internal/conf"
+	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/core/log"
+	"github.com/dstgo/wilson/internal/core/role"
 	"github.com/dstgo/wilson/internal/data"
+	"github.com/dstgo/wilson/internal/data/cache"
+	"github.com/dstgo/wilson/internal/handler/middleware"
 	"github.com/dstgo/wilson/pkg/ginx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -29,17 +33,35 @@ type Router struct {
 }
 
 // SetupOpenAPI initializes app open api router configuration
-func SetupOpenAPI(cfg *conf.AppConf, engine *gin.Engine, datasource *data.DataSource) Router {
+func SetupOpenAPI(cfg *conf.AppConf, engine *gin.Engine, datasource *data.DataSource) (Router, error) {
 	if !cfg.ServerConf.OpenAPI {
-		return Router{}
+		return Router{}, nil
 	}
+
+	var (
+		roleResolver = role.NewGormResolver(datasource.ORM())
+		apikeyCache  = cache.NewAPIKeyCache(datasource.Redis())
+		keyAuthor    = authen.NewAPIKeyCacheAuthor(datasource, roleResolver, apikeyCache)
+	)
+
+	openapiRouter := ginx.NewRouterGroup(engine.RouterGroup.Group(BasePath))
+
+	openapiRouter.Attach(
+		middleware.UseOpenAPIAuth(keyAuthor),
+	)
+
 	if cfg.ServerConf.Swagger {
 		engine.GET(path.Join(DocPath, "*any"), ginSwagger.CustomWrapHandler(Config, swaggerFiles.NewHandler()))
 		log.L().Infof("visit OpenAPI Doc on http://%s%s", cfg.ServerConf.HttpConf.Address, path.Join(DocPath, "index.html"))
 	}
-	root := ginx.NewRouterGroup(engine.RouterGroup.Group(BasePath))
+	router := setupOpenAPIRouter(openapiRouter, datasource)
 
-	return setupOpenAPIRouter(root, datasource)
+	err := initApiRouterACL(openapiRouter, roleResolver)
+	if err != nil {
+		return router, err
+	}
+
+	return router, nil
 }
 
 var Config = &ginSwagger.Config{

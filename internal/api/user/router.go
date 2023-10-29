@@ -20,6 +20,6 @@ type API struct {
 }
 
 func SetupRouter(open *ginx.RouterGroup, api API) APIRouter {
-	// register open user info api
+	open.GET("/info", ginx.M(), api.Info.KeyInfo)
 	return types.NopObj
 }

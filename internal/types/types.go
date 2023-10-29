@@ -2,7 +2,6 @@ package types
 
 import (
 	"github.com/dstgo/wilson/pkg/vax"
-	"github.com/dstgo/wilson/pkg/vax/is"
 	"github.com/spf13/cast"
 )
 
@@ -47,7 +46,7 @@ type Uid struct {
 
 func (u Uid) Validate(lang string) error {
 	return vax.Struct(&u, lang,
-		vax.Field(&u.UUID, vax.Required, is.UUID),
+		vax.Field(&u.UUID, vax.Required),
 	)
 }
 

@@ -52,6 +52,7 @@ func (g GrantOption) Validate(lang string) error {
 type PageOption struct {
 	helper.PageOption
 	Search string `json:"search" uri:"search" form:"search" example:"admin"`
+	Tag    string `json:"tag" uri:"tag" form:"tag" example:"appapi"`
 }
 
 type QueryRolePermsOption struct {

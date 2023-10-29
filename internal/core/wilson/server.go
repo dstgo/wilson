@@ -133,7 +133,10 @@ func NewApp(options ...Options) (*App, error) {
 	}
 
 	// setup app open api router
-	_ = api.SetupOpenAPI(app.cfg, engine, datasource)
+	_, err = api.SetupOpenAPI(app.cfg, engine, datasource)
+	if err != nil {
+		return nil, err
+	}
 
 	// execute on server shutdown
 	shutdownFn := func() {

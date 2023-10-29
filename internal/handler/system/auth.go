@@ -49,8 +49,8 @@ type Authenticator struct {
 	userInfo   user.UserInfo
 	userModify user.UserModify
 
-	issuer    authen.Issuer
-	refresher authen.Refresher
+	issuer    authen.TokenIssuer
+	refresher authen.TokenRefresher
 }
 
 func (a Authenticator) TryLogin(ctx context.Context, userName string, password string, persistent bool) (authen.Token, error) {
