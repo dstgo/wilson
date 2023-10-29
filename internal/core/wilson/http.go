@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"github.com/dstgo/wilson/internal/api"
 	"github.com/dstgo/wilson/internal/conf"
-	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/handler"
 	"github.com/dstgo/wilson/internal/handler/middleware"
 	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/internal/types"
+	"github.com/dstgo/wilson/pkg/ginx/bind"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -33,6 +33,7 @@ func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger
 	engine.MaxMultipartMemory = serverConf.HttpConf.MultipartMax
 
 	engine.Use(
+		middleware.UseRequestId(),
 		middleware.UseLogger(logger, path.Join(handler.DocPath, "*any"), path.Join(api.DocPath, "*any")),
 		middleware.UseRecovery(logger),
 		middleware.UseAcceptLanguage(lang.Default()),
@@ -70,10 +71,9 @@ func NewLocale(cfg *locale.Conf) (*locale.Locale, error) {
 func NewLogger(logConf *conf.LogConf) (*log.Logger, error) {
 	logConf.TimeFormat = types.DateTimeFormat
 	logConf.Order = []string{
-		types.LogIpKey, types.LogHttpMethodKey,
-		types.LogHttpStatusKey, types.LogRequestPathKey,
-		types.LogRequestUrlKey, types.LogRequestCostKey,
-		types.LogRequestContentType, types.LogHttpContentLength,
+		types.LogIpKey, types.LogHttpMethodKey, types.LogHttpStatusKey, types.LogRequestCostKey,
+		types.LogRequestPathKey, types.LogRequestUrlKey, types.LogRequestQuery, types.LogRequestHeader,
+		types.LogRequestContentType, types.LogHttpContentLength, types.LogRequestBody,
 		types.LogResponseContentType, types.LogHttpResponseLength,
 		types.LogRecoverRequestKey, types.LogRecoverErrorKey,
 		types.LogRecoverStackKey, types.LogRequestIdKey}

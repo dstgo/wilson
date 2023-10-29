@@ -17,10 +17,32 @@ func (g GormResolver) GetPerm(permId uint) (role.PermInfo, error) {
 	return role.MakePermInfo(perm), nil
 }
 
+func (g GormResolver) GetPermInBatch(ids []uint, tag string) ([]role.PermInfo, error) {
+	var perms []entity.Permission
+	db := g.db
+	if tag != "" {
+		db = g.db.Where("tag = ?", tag)
+	}
+	err := db.Find(&perms, "id IN ?", ids).Error
+	if err != nil {
+		return []role.PermInfo{}, err
+	}
+	return role.MakePermInfoList(perms), nil
+}
+
 func (g GormResolver) MatchPerm(name, obj, act, group, tag string) (role.PermInfo, error) {
 	var permInfo entity.Permission
-	err := g.db.Model(entity.Permission{}).
-		Where("name = ? AND object = ? AND action = ? AND group = ? AND tag = ?", name, obj, act, group, tag).Find(&permInfo).Error
+	db := g.db
+	if name != "" {
+		db = db.Where("name = ?", name)
+	}
+	if group != "" {
+		db = db.Where("group = ?", group)
+	}
+	if tag != "" {
+		db = db.Where("tag = ?", tag)
+	}
+	err := db.Where("object = ?", obj).Where("action = ?", act).Find(&permInfo).Error
 	return role.MakePermInfo(permInfo), err
 }
 

@@ -123,6 +123,10 @@ func GetBearerToken(authHeader string) string {
 	return strings.TrimSpace(strings.TrimPrefix(authHeader, httpheader.BearerToken))
 }
 
-func GetContentType(ctx *gin.Context) string {
+func GetRequestContentType(ctx *gin.Context) string {
 	return ctx.GetHeader(httpheader.ContentType)
+}
+
+func GetResponseContentType(ctx *gin.Context) string {
+	return ctx.Writer.Header().Get(httpheader.ContentType)
 }

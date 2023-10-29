@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/dstgo/size"
@@ -14,6 +15,15 @@ import (
 	"time"
 )
 
+func UseRequestId() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		requestId := uuid.NewString()
+		// set response header X-Request-ID
+		httpx.SetRequestId(ctx, requestId)
+		ctx.Next()
+	}
+}
+
 func UseLogger(logger *logrus.Logger, skips ...string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// skip logger
@@ -24,12 +34,9 @@ func UseLogger(logger *logrus.Logger, skips ...string) gin.HandlerFunc {
 
 		var (
 			request   = ctx.Request
-			requestId = uuid.NewString()
+			requestId = httpx.GetRequestId(ctx)
 			startTime = time.Now()
 		)
-
-		// set response header X-Request-ID
-		httpx.SetRequestId(ctx, requestId)
 
 		// next handlers
 		ctx.Next()
@@ -42,28 +49,50 @@ func UseLogger(logger *logrus.Logger, skips ...string) gin.HandlerFunc {
 			status       = ctx.Writer.Status()
 			responseSize = ctx.Writer.Size()
 			requestSize  = request.ContentLength
-			contentType  = request.Header.Get("Content-Type")
-			responseType = ctx.Writer.Header().Get("Content-Type")
+			contentType  = httpx.GetRequestContentType(ctx)
+			responseType = httpx.GetResponseContentType(ctx)
+
+			body  string
+			query string
 
 			clientIp = ctx.ClientIP()
 			err      = ctx.Errors
 		)
+
+		query = describeJson(ctx, ctx.Request.URL.Query())
+
+		switch ctx.ContentType() {
+		case gin.MIMEJSON:
+			rawJson, err := httpx.DescribeRawJson(ctx.Request.Body)
+			if err != nil {
+				ctx.Error(err)
+			}
+			body = string(rawJson)
+		case gin.MIMEMultipartPOSTForm, gin.MIMEPOSTForm:
+			form, err := ctx.MultipartForm()
+			if err != nil {
+				ctx.Error(err)
+			} else {
+				body = describeJson(ctx, httpx.DescribeFormData(form))
+			}
+		}
 
 		if len(path) == 0 {
 			path = "not found"
 		}
 
 		entry := logger.WithContext(ctx).
+			// IP
 			WithField(types.LogIpKey, clientIp).
-			WithField(types.LogHttpMethodKey, method).
-			WithField(types.LogRequestPathKey, path).
-			WithField(types.LogRequestUrlKey, url).
-			WithField(types.LogHttpStatusKey, status).
-			WithField(types.LogRequestCostKey, fmt.Sprintf("%dms", costTime)).
-			WithField(types.LogRequestContentType, contentType).
-			WithField(types.LogHttpContentLength, closedSize(requestSize)).
-			WithField(types.LogResponseContentType, responseType).
-			WithField(types.LogHttpResponseLength, closedSize(int64(responseSize))).
+			// method status cost
+			WithField(types.LogHttpMethodKey, method).WithField(types.LogHttpStatusKey, status).WithField(types.LogRequestCostKey, fmt.Sprintf("%dms", costTime)).
+			// path url query
+			WithField(types.LogRequestPathKey, path).WithField(types.LogRequestUrlKey, url).WithField(types.LogRequestQuery, query).
+			// request type length body
+			WithField(types.LogRequestContentType, contentType).WithField(types.LogHttpContentLength, closedSize(requestSize)).WithField(types.LogRequestBody, body).
+			// response type length
+			WithField(types.LogResponseContentType, responseType).WithField(types.LogHttpResponseLength, closedSize(int64(responseSize))).
+			// trace id
 			WithField(types.LogRequestIdKey, requestId)
 
 		// log by status
@@ -89,4 +118,12 @@ func closedSize(s int64) string {
 	default:
 		return size.ParseTargetSize(meta.String(), size.B).String()
 	}
+}
+
+func describeJson(ctx *gin.Context, val any) string {
+	marshal, err := json.Marshal(val)
+	if err != nil {
+		ctx.Error(err)
+	}
+	return string(marshal)
 }

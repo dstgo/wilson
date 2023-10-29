@@ -1,5 +1,14 @@
 basePath: /api/v1
 definitions:
+  auth.APIKey:
+    properties:
+      expiredAt:
+        type: integer
+      key:
+        type: string
+      name:
+        type: string
+    type: object
   auth.ForgotPasswordOption:
     properties:
       code:
@@ -11,11 +20,22 @@ definitions:
         example: "123456789"
         type: string
     type: object
+  auth.KeyCreateOption:
+    properties:
+      expiredAt:
+        type: integer
+      name:
+        type: string
+      perms:
+        items:
+          type: integer
+        type: array
+    type: object
   auth.LoginOption:
     properties:
       password:
         description: length of the password must be in range [10,30]
-        example: "123456789"
+        example: "0123456789"
         type: string
       persistent:
         example: true
@@ -23,13 +43,7 @@ definitions:
       username:
         description: length of the username must be in range [6,20], and username
           must be Alphanumeric
-        example: 123456@example.com/username
-        type: string
-    type: object
-  auth.PingReply:
-    properties:
-      reply:
-        example: hello wendy! Now is 2023-10-17 11:07:21.696 +08:00.
+        example: dstadmin
         type: string
     type: object
   auth.RegisterOption:
@@ -41,7 +55,7 @@ definitions:
         type: string
       password:
         description: length of the password must be in range [10,30]
-        example: "123456789"
+        example: "0123456789"
         type: string
       persistent:
         example: true
@@ -49,7 +63,7 @@ definitions:
       username:
         description: length of the username must be in range [6,20], and username
           must be Alphanumeric
-        example: 123456@example.com/username
+        example: dstadmin
         type: string
     type: object
   auth.Token:
@@ -179,6 +193,12 @@ definitions:
       name:
         description: role name
         example: admin
+        type: string
+    type: object
+  system.PingReply:
+    properties:
+      reply:
+        example: hello wendy! Now is 2023-10-17 11:07:21.696 +08:00.
         type: string
     type: object
   types.Response:
@@ -362,11 +382,11 @@ paths:
       description: |-
         [guest]
         carry refresh token in query params, access token in header
-        if refresh-token expired , Refresher will not refresh token [4012]
-        else if access-token has expired after delay duration, Refresher will not refresh token [4012]
-        else if access-token has expired before delay duration, Refresher will issue a new access-token [2005]
-        else if access-token has not expired, Refresher will renewal the 1/10 access-token ttl per time  [2005]
-        else if access-token has not expired, and ttl >= 2 * conf.JwtConf.Exp, Refresher will not refresh token [4013]
+        if refresh-token expired , TokenRefresher will not refresh token [4012]
+        else if access-token has expired after delay duration, TokenRefresher will not refresh token [4012]
+        else if access-token has expired before delay duration, TokenRefresher will issue a new access-token [2005]
+        else if access-token has not expired, TokenRefresher will renewal the 1/10 access-token ttl per time  [2005]
+        else if access-token has not expired, and ttl >= 2 * conf.JwtConf.Exp, TokenRefresher will not refresh token [4013]
       parameters:
       - description: refresh token
         in: query
@@ -603,6 +623,69 @@ paths:
       summary: Tag
       tags:
       - image
+  /key/create:
+    post:
+      consumes:
+      - application/json
+      description: create specified user api key
+      parameters:
+      - description: KeyCreateOption
+        in: body
+        name: KeyCreateOption
+        required: true
+        schema:
+          $ref: '#/definitions/auth.KeyCreateOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Response'
+      summary: CreateAPIKey
+      tags:
+      - key
+  /key/list:
+    get:
+      consumes:
+      - application/json
+      description: list specified user api keys
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/auth.APIKey'
+                  type: array
+              type: object
+      summary: ListAPIKeys
+      tags:
+      - key
+  /key/remove:
+    delete:
+      consumes:
+      - application/json
+      description: remove specified api key
+      parameters:
+      - in: query
+        name: key
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Response'
+      summary: RemoveAPIKey
+      tags:
+      - key
   /node/create:
     post:
       consumes:
@@ -741,6 +824,10 @@ paths:
         in: query
         name: size
         type: integer
+      - example: appapi
+        in: query
+        name: tag
+        type: string
       produces:
       - application/json
       responses:
@@ -832,7 +919,7 @@ paths:
             - $ref: '#/definitions/types.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/auth.PingReply'
+                  $ref: '#/definitions/system.PingReply'
               type: object
       summary: Ping
       tags:
@@ -939,6 +1026,10 @@ paths:
         in: query
         name: size
         type: integer
+      - example: appapi
+        in: query
+        name: tag
+        type: string
       produces:
       - application/json
       responses:

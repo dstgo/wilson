@@ -15,3 +15,9 @@ var (
 	ErrTokenIssueFailed    = errs.NewI18nError("jwt.issue.failed").FallBack("token issue failed").Status(http.StatusInternalServerError)
 	ErrRedundantExpiration = errs.NewI18nError("jwt.redundant").FallBack("redundant expiration").Code(code.RedundantRefresh)
 )
+
+var (
+	ErrInvalidKey          = errs.NewI18nError("key.invalid").FallBack("invalid key")
+	ErrKeyNoPerm           = errs.NewI18nError("key.noperm").FallBack("key has no permission")
+	ErrInvalidKeyExpration = errs.NewI18nError("key.nopexp").FallBack("invalid expiration time")
+)

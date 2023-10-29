@@ -16,6 +16,7 @@ var (
 
 type Resolver interface {
 	GetPerm(permId uint) (role.PermInfo, error)
+	GetPermInBatch(permIds []uint, tag string) ([]role.PermInfo, error)
 	MatchPerm(name, obj, act, group, tag string) (role.PermInfo, error)
 	CreatePerm(permInfo role.PermInfo) error
 	CreatePermInBatch(permInfo []role.PermInfo) error
@@ -25,6 +26,7 @@ type Resolver interface {
 	RemovePerm(permId uint) error
 
 	GetRole(roleId uint) (role.RoleInfo, error)
+	GetRoleInBatch(roleIds []uint) ([]role.RoleInfo, error)
 	GetRoleByCode(code string) (role.RoleInfo, error)
 	ListRole(option role.PageOption) ([]role.RoleInfo, error)
 	ListAllRole() ([]role.RoleInfo, error)

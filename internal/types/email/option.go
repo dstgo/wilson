@@ -1,7 +1,7 @@
 package email
 
 import (
-	"github.com/dstgo/wilson/internal/types/helper/rules"
+	"github.com/dstgo/wilson/internal/types/helper"
 	"github.com/dstgo/wilson/pkg/vax"
 )
 
@@ -12,6 +12,6 @@ type SendCodeEmailOption struct {
 
 func (e SendCodeEmailOption) Validate(lang string) error {
 	return vax.Struct(&e, lang,
-		vax.Field(&e.Email, rules.Required(rules.Email)...),
+		vax.Field(&e.Email, helper.RequiredRules(RuleEmail)...),
 	)
 }

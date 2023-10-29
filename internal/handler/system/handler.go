@@ -2,13 +2,12 @@ package system
 
 import (
 	"github.com/dstgo/wilson/internal/core/authen"
-	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/resp"
-	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/auth"
 	"github.com/dstgo/wilson/internal/types/code"
 	"github.com/dstgo/wilson/internal/types/role"
 	"github.com/dstgo/wilson/internal/types/system"
+	"github.com/dstgo/wilson/pkg/ginx/bind"
 	"github.com/dstgo/wilson/pkg/ginx/httpx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -21,6 +20,8 @@ var SystemProviderSet = wire.NewSet(
 	NewAuthHandler,
 	NewRoleEnforcer,
 	NewRoleHandler,
+	NewAPIKey,
+	NewAPIKeyHandler,
 )
 
 func NewPingHandler(logic PingApp) PingHandler {
@@ -41,7 +42,7 @@ type PingHandler struct {
 // @Accept       json
 // @Produce      json
 // @Param        name	query	system.PingRequest	true	"ping name"
-// @Success      200  {object}  types.Response{data=auth.PingReply}
+// @Success      200  {object}  types.Response{data=system.PingReply}
 // @Router       /ping [GET]
 func (p PingHandler) Ping(ctx *gin.Context) {
 	pingReq := new(system.PingRequest)
@@ -161,11 +162,11 @@ func (a AuthHandler) Logout(ctx *gin.Context) {
 // @Summary      Refresh
 // @Description  [guest]
 // @Description  carry refresh token in query params, access token in header
-// @Description  if refresh-token expired , Refresher will not refresh token [4012]
-// @Description  else if access-token has expired after delay duration, Refresher will not refresh token [4012]
-// @Description  else if access-token has expired before delay duration, Refresher will issue a new access-token [2005]
-// @Description  else if access-token has not expired, Refresher will renewal the 1/10 access-token ttl per time  [2005]
-// @Description  else if access-token has not expired, and ttl >= 2 * conf.JwtConf.Exp, Refresher will not refresh token [4013]
+// @Description  if refresh-token expired , TokenRefresher will not refresh token [4012]
+// @Description  else if access-token has expired after delay duration, TokenRefresher will not refresh token [4012]
+// @Description  else if access-token has expired before delay duration, TokenRefresher will issue a new access-token [2005]
+// @Description  else if access-token has not expired, TokenRefresher will renewal the 1/10 access-token ttl per time  [2005]
+// @Description  else if access-token has not expired, and ttl >= 2 * conf.JwtConf.Exp, TokenRefresher will not refresh token [4013]
 // @Tags         auth
 // @Accept       json
 // @Produce      json
@@ -257,12 +258,12 @@ func (r RoleHandler) GetRoleList(ctx *gin.Context) {
 // @Tags         role
 // @Accept       json
 // @Produce      json
-// @Param        queryOpt   query   types.Id true  "role perms query opt"
+// @Param        queryOpt   query   system.Id true  "role perms query opt"
 // @Success      200  {object}  types.Response{data=[]role.PermGroup}
 // @Router       /role/perms [GET]
 // @security BearerAuth
 func (r RoleHandler) GetRolePerms(ctx *gin.Context) {
-	var queryOpt types.Id
+	var queryOpt system.Id
 	if err := bind.Binds(ctx, bind.Query(&queryOpt)); err != nil {
 		return
 	}
@@ -355,12 +356,12 @@ func (r RoleHandler) GrantRolePerms(ctx *gin.Context) {
 // @Tags         role
 // @Accept       json
 // @Produce      json
-// @Param        id   query     types.Id  true  "roleD id"
+// @Param        id   query     system.Id  true  "roleD id"
 // @Success      200  {object}  types.Response
 // @Router       /role/remove [DELETE]
 // @security BearerAuth
 func (r RoleHandler) RemoveRole(ctx *gin.Context) {
-	var roleId types.Id
+	var roleId system.Id
 	if err := bind.Binds(ctx, bind.Query(&roleId)); err != nil {
 		return
 	}
@@ -454,17 +455,93 @@ func (r RoleHandler) UpdatePermission(ctx *gin.Context) {
 // @Tags         role
 // @Accept       json
 // @Produce      json
-// @Param        id   query     types.Id  true  "perm id"
+// @Param        id   query     system.Id  true  "perm id"
 // @Success      200  {object}  types.Response
 // @Router       /perm/remove [DELETE]
 // @security BearerAuth
 func (r RoleHandler) RemovePermission(ctx *gin.Context) {
-	var permId types.Id
+	var permId system.Id
 	if err := bind.Binds(ctx, bind.Query(&permId)); err != nil {
 		return
 	}
 
 	err := r.enforcer.RemovePerm(permId.Uint())
+	if err != nil {
+		resp.Fail(ctx).MsgI18n("op.delete.fail").Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n("op.delete.ok").Send()
+}
+
+func NewAPIKeyHandler(apikey ApiKey) APIKeyHandler {
+	return APIKeyHandler{apikey: apikey}
+}
+
+type APIKeyHandler struct {
+	apikey ApiKey
+}
+
+// ListAPIKeys
+// @Summary      ListAPIKeys
+// @Description  list specified user api keys
+// @Tags         key
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  types.Response{data=[]auth.APIKey}
+// @Router       /key/list [GET]
+func (a APIKeyHandler) ListAPIKeys(ctx *gin.Context) {
+	info := authen.GetContextTokenInfo(ctx)
+	uuid := info.UUID
+	keys, err := a.apikey.ListApiKey(ctx, uuid)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n("op.query.fail").Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n("op.query.ok").Data(keys).Send()
+}
+
+// CreateAPIKey
+// @Summary      CreateAPIKey
+// @Description  create specified user api key
+// @Tags         key
+// @Accept       json
+// @Produce      json
+// @Param        KeyCreateOption   body   auth.KeyCreateOption  true  "KeyCreateOption"
+// @Success      200  {object}  types.Response
+// @Router       /key/create [POST]
+func (a APIKeyHandler) CreateAPIKey(ctx *gin.Context) {
+	var createOpt auth.KeyCreateOption
+	createOpt.Uid = authen.GetContextTokenInfo(ctx).UUID
+
+	if err := bind.Binds(ctx, bind.Json(&createOpt)); err != nil {
+		return
+	}
+
+	err := a.apikey.CreateAPiKey(ctx, createOpt)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n("op.create.fail").Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n("op.create.ok").Send()
+}
+
+// RemoveAPIKey
+// @Summary      RemoveAPIKey
+// @Description  remove specified api key
+// @Tags         key
+// @Accept       json
+// @Produce      json
+// @Param        KeyRemoveOption   query     auth.KeyRemoveOption  true  "KeyRemoveOption"
+// @Success      200  {object}  types.Response
+// @Router       /key/remove [DELETE]
+func (a APIKeyHandler) RemoveAPIKey(ctx *gin.Context) {
+	var removeOpt auth.KeyRemoveOption
+	removeOpt.UUID = authen.GetContextTokenInfo(ctx).UUID
+	if err := bind.Binds(ctx, bind.Query(&removeOpt)); err != nil {
+		return
+	}
+
+	err := a.apikey.RemoveApiKey(ctx, removeOpt.UUID, removeOpt.Key)
 	if err != nil {
 		resp.Fail(ctx).MsgI18n("op.delete.fail").Error(err).Send()
 		return

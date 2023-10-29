@@ -118,7 +118,7 @@ func (r RoleEnforcer) CreatePerm(option roleType.CreatePermOption) error {
 	if err != nil {
 		return system.ErrDatabase.Wrap(err)
 	} else if perm.Id > 0 {
-		return roleType.ErrPermCojnflict
+		return roleType.ErrPermConflict
 	}
 
 	err = r.resolver.CreatePerm(roleType.PermInfo{

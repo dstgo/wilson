@@ -40,10 +40,13 @@ func setupHandlerRouter(appConf *conf.AppConf, router *ginx.RouterGroup, datasou
 	authHandler := system.NewAuthHandler(authenticator)
 	roleEnforcer := system.NewRoleEnforcer(datasource)
 	roleHandler := system.NewRoleHandler(roleEnforcer)
+	apiKey := system.NewAPIKey(datasource)
+	apiKeyHandler := system.NewAPIKeyHandler(apiKey)
 	systemHandler := system.Handler{
 		Ping: pingHandler,
 		Auth: authHandler,
 		Role: roleHandler,
+		Key:  apiKeyHandler,
 	}
 	systemHandlerRouter := system.SetupRouter(router, systemHandler)
 	userInfo := user.NewUserInfo(datasource)

@@ -1,17 +1,9 @@
 package auth
 
-import "github.com/dstgo/wilson/pkg/vax"
-
-type RefreshTokenOption struct {
-	Refresh string `json:"refresh" form:"refresh" uri:"refresh" label:"field.token.access"`
-	Access  string `json:"access" form:"access" uri:"access" label:"field.token.refresh"`
-}
-
-func (r RefreshTokenOption) Validate(lang string) error {
-	return vax.Struct(&r, lang,
-		vax.Field(&r.Refresh, vax.Required),
-		vax.Field(&r.Access, vax.Required),
-	)
+type APIKey struct {
+	Name      string `json:"name"`
+	Key       string `json:"key"`
+	ExpiredAt uint64 `json:"expiredAt"`
 }
 
 type Token struct {

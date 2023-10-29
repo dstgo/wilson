@@ -1,18 +1,12 @@
 basePath: /open/v1
 definitions:
-  role.RoleInfo:
+  auth.APIKey:
     properties:
-      code:
-        description: role code, must be alpha numeric
-        example: ADMIN
-        type: string
-      id:
-        description: role id
-        example: 1
+      expiredAt:
         type: integer
+      key:
+        type: string
       name:
-        description: role name
-        example: admin
         type: string
     type: object
   types.Response:
@@ -27,25 +21,6 @@ definitions:
         example: operation success
         type: string
     type: object
-  user.Info:
-    properties:
-      createdAt:
-        example: 947416200
-        type: integer
-      email:
-        example: jacklove@lol.com
-        type: string
-      roles:
-        items:
-          $ref: '#/definitions/role.RoleInfo'
-        type: array
-      username:
-        example: jack
-        type: string
-      uuid:
-        example: 55BBA4ED-18D3-790F-EABF-A5330E527586
-        type: string
-    type: object
 info:
   contact:
     name: dstgo
@@ -58,15 +33,11 @@ info:
   title: Wilson App Open API Documentation
   version: v1.0.0
 paths:
-  /api:
+  /info:
     get:
       consumes:
       - application/json
-      description: get user info
-      parameters:
-      - in: query
-        name: uuid
-        type: string
+      description: get the key info
       produces:
       - application/json
       responses:
@@ -77,9 +48,11 @@ paths:
             - $ref: '#/definitions/types.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/user.Info'
+                  $ref: '#/definitions/auth.APIKey'
               type: object
-      summary: UserInfo
+      security:
+      - ApiKeyAuth: []
+      summary: KeyInfo
       tags:
       - user
 securityDefinitions:

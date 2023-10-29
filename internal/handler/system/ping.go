@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/types"
-	"github.com/dstgo/wilson/internal/types/auth"
+	"github.com/dstgo/wilson/internal/types/system"
 	"time"
 )
 
@@ -18,10 +18,10 @@ func NewPingLogic(conf *conf.AppConf) PingApp {
 	}
 }
 
-func (p PingApp) Ping(name string) auth.PingReply {
-	return auth.PingReply{Reply: fmt.Sprintf("hello %s! Now is %s.", name, time.Now().Format(types.DateTimeFormat))}
+func (p PingApp) Ping(name string) system.PingReply {
+	return system.PingReply{Reply: fmt.Sprintf("hello %s! Now is %s.", name, time.Now().Format(types.DateTimeFormat))}
 }
 
-func (p PingApp) Pong(name string) auth.PingReply {
-	return auth.PingReply{Reply: fmt.Sprintf("goodbye %s! Now is %s.", name, time.Now().Format(types.DateTimeFormat))}
+func (p PingApp) Pong(name string) system.PingReply {
+	return system.PingReply{Reply: fmt.Sprintf("goodbye %s! Now is %s.", name, time.Now().Format(types.DateTimeFormat))}
 }

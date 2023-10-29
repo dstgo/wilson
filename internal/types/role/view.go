@@ -1,42 +1,31 @@
 package role
 
-import (
-	"github.com/dstgo/wilson/internal/data/entity"
-	"github.com/dstgo/wilson/internal/types/helper/rules"
-	"github.com/dstgo/wilson/pkg/vax"
+import "github.com/dstgo/wilson/internal/data/entity"
+
+var (
+	// AdminRole app static admin role,
+	AdminRole = RoleInfo{
+		Name: "Admin",
+		Code: "1024",
+	}
+
+	UserRole = RoleInfo{
+		Name: "User",
+		Code: "0512",
+	}
+	AnonymousRole = RoleInfo{
+		Name: "Guest",
+		Code: "0000",
+	}
 )
 
-type CreatePermOption struct {
-	Name string `json:"name" label:"field.perm.name" example:"updateUser"`
-	// define the object will be accessed
-	Object string `json:"object" label:"field.perm.object" example:"/user/update"`
-	// how to access the object
-	Action string `json:"action" label:"field.perm.action" example:"POST"`
-	// permission group
-	Group string `json:"group" label:"field.perm.group" example:"UserGroup"`
-	// tag of permission
-	Tag string `json:"tag" label:"field.perm.tag" example:"AppAPI"`
-}
-
-func (c CreatePermOption) Validate(lang string) error {
-	return vax.Struct(&c, lang,
-		vax.Field(&c.Name, rules.Required(rules.RoleName)...),
-		vax.Field(&c.Object, rules.Required(rules.PermObject)...),
-		vax.Field(&c.Action, rules.Required(rules.PermAction)...),
-		vax.Field(&c.Group, vax.Required, vax.RangeLength(1, 60, false)),
-		vax.Field(&c.Tag, rules.Required(rules.PermTag)...),
-	)
-}
-
-type UpdatePermOption struct {
-	Id   uint   `json:"id" example:"1"`
-	Name string `json:"name" label:"field.perm.name" example:"updateUser"`
-}
-
-func (u UpdatePermOption) Validate(lang string) error {
-	return vax.Struct(&u, lang,
-		vax.Field(&u.Id, vax.Required),
-		vax.Field(&u.Name, rules.Required(rules.RoleName)...))
+type RoleInfo struct {
+	// role id
+	Id uint `json:"id" example:"1"`
+	// role name
+	Name string `json:"name" example:"admin"`
+	// role code, must be alpha numeric
+	Code string `json:"code" example:"ADMIN"`
 }
 
 type PermGroup struct {
@@ -115,4 +104,45 @@ func MakePermRecordList(perms []PermInfo) (ens []entity.Permission) {
 		ens = append(ens, MakePermRecord(perm))
 	}
 	return
+}
+
+func MakeRoleInfo(record entity.Role) RoleInfo {
+	return RoleInfo{
+		Id:   record.Id,
+		Name: record.Name,
+		Code: record.Code,
+	}
+}
+
+func MakeRoleInfoList(records []entity.Role) (infos []RoleInfo) {
+	for _, record := range records {
+		infos = append(infos, MakeRoleInfo(record))
+	}
+	return
+}
+
+func MakeRoleRecord(info RoleInfo) entity.Role {
+	return entity.Role{
+		Id:   info.Id,
+		Name: info.Name,
+		Code: info.Code,
+	}
+}
+
+func MakeRoleRecordList(infos []RoleInfo) (records []entity.Role) {
+	for _, info := range infos {
+		records = append(records, MakeRoleRecord(info))
+	}
+	return
+}
+
+func MakeUserRoleRecordList(userId uint, roleIds []uint) []entity.UserRole {
+	var records []entity.UserRole
+	for _, id := range roleIds {
+		records = append(records, entity.UserRole{
+			UserId: userId,
+			RoleId: id,
+		})
+	}
+	return records
 }

@@ -21,6 +21,7 @@ type Handler struct {
 	Ping PingHandler
 	Auth AuthHandler
 	Role RoleHandler
+	Key  APIKeyHandler
 }
 
 func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
@@ -72,6 +73,18 @@ func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
 		permGroup.POST("/update", ginx.M(meta.Name("route.perm.update")), roleHandler.UpdatePermission)
 		// DELETE
 		permGroup.DELETE("/remove", ginx.M(meta.Name("route.perm.delete")), roleHandler.RemovePermission)
+	}
+
+	// api key api
+	keyGroup := api.Group("/key", ginx.M(meta.Group("route.key.group"), meta.Roles(role.AdminRole)))
+	keyHandler := handler.Key
+	{
+		// GET
+		keyGroup.GET("/list", ginx.M(meta.Name("route.key.list")), keyHandler.ListAPIKeys)
+		// POST
+		keyGroup.POST("/create", ginx.M(meta.Name("route.key.create")), keyHandler.CreateAPIKey)
+		// DELETE
+		keyGroup.DELETE("/remove", ginx.M(meta.Name("route.key.remove")), keyHandler.RemoveAPIKey)
 	}
 	return types.NopObj
 }

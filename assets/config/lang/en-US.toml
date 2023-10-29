@@ -39,6 +39,13 @@ perm.list = "Get permission list"
 perm.create = "Create permission"
 perm.update = "Update permissions"
 perm.remove = "Remove Permission"
+# APIKey routing
+key.group = "OpenAPI"
+key.list = "Get key list"
+key.create = "Create key"
+key.remove = "Delete key"
+
+
 
 # Data verification part
 [validate]
@@ -190,6 +197,11 @@ expired = "User credentials expired, please log in again"
 refresh = "User certificate has expired, please apply again"
 invalid = "Invalid credentials"
 redundant = "Credentials do not need to be updated"
+
+[key]
+invalid = "Invalid key"
+noperm = "Insufficient key permissions"
+nopexp = "Invalid expiration time"
 
 [auth]
 loginFail = "Login failed"

@@ -2,10 +2,10 @@ package user
 
 import (
 	"github.com/dstgo/wilson/internal/core/authen"
-	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/resp"
-	"github.com/dstgo/wilson/internal/types"
+	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/dstgo/wilson/internal/types/user"
+	"github.com/dstgo/wilson/pkg/ginx/bind"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 )
@@ -96,12 +96,12 @@ type AdminHandler struct {
 // @Tags         user
 // @Accept       json
 // @Produce      json
-// @Param        uuid query     types.Uid  true  "user uuid"
+// @Param        uuid query     system.Uid  true  "user uuid"
 // @Success      200  {object}  types.Response
 // @Router       /user/admin/profile [GET]
 // @security BearerAuth
 func (a AdminHandler) GetSpecUserInfo(ctx *gin.Context) {
-	var uuid types.Uid
+	var uuid system.Uid
 	if err := bind.Binds(ctx, bind.Query(&uuid)); err != nil {
 		return
 	}
@@ -195,12 +195,12 @@ func (a AdminHandler) SaveUser(ctx *gin.Context) {
 // @Tags         user
 // @Accept       json
 // @Produce      json
-// @Param        uuid  query   types.Uid  true    "uuid"
+// @Param        uuid  query   system.Uid  true    "uuid"
 // @Success      200  {object}  types.Response
 // @Router       /user/admin/remove [DELETE]
 // @security BearerAuth
 func (a AdminHandler) RemoveUser(ctx *gin.Context) {
-	var uuid types.Uid
+	var uuid system.Uid
 	if err := bind.Binds(ctx, bind.Query(&uuid)); err != nil {
 		return
 	}

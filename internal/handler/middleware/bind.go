@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/resp"
+	"github.com/dstgo/wilson/pkg/ginx/bind"
 	"github.com/dstgo/wilson/pkg/vax"
 	"github.com/gin-gonic/gin"
 )

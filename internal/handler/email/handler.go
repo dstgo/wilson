@@ -2,12 +2,12 @@ package email
 
 import (
 	"github.com/dstgo/wilson/internal/conf"
-	"github.com/dstgo/wilson/internal/core/bind"
 	"github.com/dstgo/wilson/internal/core/resp"
 	"github.com/dstgo/wilson/internal/data/cache"
 	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/internal/types/code"
 	emailType "github.com/dstgo/wilson/internal/types/email"
+	"github.com/dstgo/wilson/pkg/ginx/bind"
 	"github.com/dstgo/wilson/pkg/ginx/httpx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"

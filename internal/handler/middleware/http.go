@@ -13,7 +13,6 @@ import (
 	"golang.org/x/exp/slices"
 	"net"
 	"net/http"
-	"net/http/httputil"
 	"os"
 	"runtime/debug"
 	"strings"
@@ -56,7 +55,6 @@ func UseRecovery(logger *logrus.Logger) gin.HandlerFunc {
 			if panicErr := recover(); panicErr != nil {
 				var (
 					brokenPipe bool
-					readBody   bool
 				)
 
 				var err any
@@ -72,15 +70,7 @@ func UseRecovery(logger *logrus.Logger) gin.HandlerFunc {
 				}
 				err = panicErr
 
-				contentType := httpx.GetContentType(ctx)
-				if slices.Contains([]string{"application/json"}, contentType) {
-					readBody = true
-				}
-
-				request, _ := httputil.DumpRequest(ctx.Request, readBody)
-
 				entry := logger.
-					WithField(types.LogRecoverRequestKey, string(request)).
 					WithField(types.LogRecoverErrorKey, fmt.Sprintf("%v", err)).
 					WithField(types.LogRequestIdKey, httpx.GetRequestId(ctx))
 
