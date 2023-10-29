@@ -528,12 +528,12 @@
                 "summary": "CreateAPIKey",
                 "parameters": [
                     {
-                        "description": "CreateKeyOption",
-                        "name": "CreateKeyOption",
+                        "description": "KeyCreateOption",
+                        "name": "KeyCreateOption",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.CreateKeyOption"
+                            "$ref": "#/definitions/auth.KeyCreateOption"
                         }
                     }
                 ],
@@ -980,7 +980,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/auth.PingReply"
+                                            "$ref": "#/definitions/system.PingReply"
                                         }
                                     }
                                 }
@@ -1621,7 +1621,22 @@
                 }
             }
         },
-        "auth.CreateKeyOption": {
+        "auth.ForgotPasswordOption": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "auth code get from user binding email",
+                    "type": "string",
+                    "example": "F294484D"
+                },
+                "password": {
+                    "description": "length of the password must be in range [10,30]",
+                    "type": "string",
+                    "example": "123456789"
+                }
+            }
+        },
+        "auth.KeyCreateOption": {
             "type": "object",
             "properties": {
                 "expiredAt": {
@@ -1635,21 +1650,6 @@
                     "items": {
                         "type": "integer"
                     }
-                }
-            }
-        },
-        "auth.ForgotPasswordOption": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "description": "auth code get from user binding email",
-                    "type": "string",
-                    "example": "F294484D"
-                },
-                "password": {
-                    "description": "length of the password must be in range [10,30]",
-                    "type": "string",
-                    "example": "123456789"
                 }
             }
         },
@@ -1669,15 +1669,6 @@
                     "description": "length of the username must be in range [6,20], and username must be Alphanumeric",
                     "type": "string",
                     "example": "123456@example.com/username"
-                }
-            }
-        },
-        "auth.PingReply": {
-            "type": "object",
-            "properties": {
-                "reply": {
-                    "type": "string",
-                    "example": "hello wendy! Now is 2023-10-17 11:07:21.696 +08:00."
                 }
             }
         },
@@ -1878,6 +1869,15 @@
                     "description": "role name",
                     "type": "string",
                     "example": "admin"
+                }
+            }
+        },
+        "system.PingReply": {
+            "type": "object",
+            "properties": {
+                "reply": {
+                    "type": "string",
+                    "example": "hello wendy! Now is 2023-10-17 11:07:21.696 +08:00."
                 }
             }
         },

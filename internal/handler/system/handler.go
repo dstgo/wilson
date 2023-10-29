@@ -3,7 +3,6 @@ package system
 import (
 	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/core/resp"
-	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/auth"
 	"github.com/dstgo/wilson/internal/types/code"
 	"github.com/dstgo/wilson/internal/types/role"
@@ -43,7 +42,7 @@ type PingHandler struct {
 // @Accept       json
 // @Produce      json
 // @Param        name	query	system.PingRequest	true	"ping name"
-// @Success      200  {object}  types.Response{data=auth.PingReply}
+// @Success      200  {object}  types.Response{data=system.PingReply}
 // @Router       /ping [GET]
 func (p PingHandler) Ping(ctx *gin.Context) {
 	pingReq := new(system.PingRequest)
@@ -259,12 +258,12 @@ func (r RoleHandler) GetRoleList(ctx *gin.Context) {
 // @Tags         role
 // @Accept       json
 // @Produce      json
-// @Param        queryOpt   query   types.Id true  "role perms query opt"
+// @Param        queryOpt   query   system.Id true  "role perms query opt"
 // @Success      200  {object}  types.Response{data=[]role.PermGroup}
 // @Router       /role/perms [GET]
 // @security BearerAuth
 func (r RoleHandler) GetRolePerms(ctx *gin.Context) {
-	var queryOpt types.Id
+	var queryOpt system.Id
 	if err := bind.Binds(ctx, bind.Query(&queryOpt)); err != nil {
 		return
 	}
@@ -357,12 +356,12 @@ func (r RoleHandler) GrantRolePerms(ctx *gin.Context) {
 // @Tags         role
 // @Accept       json
 // @Produce      json
-// @Param        id   query     types.Id  true  "roleD id"
+// @Param        id   query     system.Id  true  "roleD id"
 // @Success      200  {object}  types.Response
 // @Router       /role/remove [DELETE]
 // @security BearerAuth
 func (r RoleHandler) RemoveRole(ctx *gin.Context) {
-	var roleId types.Id
+	var roleId system.Id
 	if err := bind.Binds(ctx, bind.Query(&roleId)); err != nil {
 		return
 	}
@@ -456,12 +455,12 @@ func (r RoleHandler) UpdatePermission(ctx *gin.Context) {
 // @Tags         role
 // @Accept       json
 // @Produce      json
-// @Param        id   query     types.Id  true  "perm id"
+// @Param        id   query     system.Id  true  "perm id"
 // @Success      200  {object}  types.Response
 // @Router       /perm/remove [DELETE]
 // @security BearerAuth
 func (r RoleHandler) RemovePermission(ctx *gin.Context) {
-	var permId types.Id
+	var permId system.Id
 	if err := bind.Binds(ctx, bind.Query(&permId)); err != nil {
 		return
 	}
@@ -507,11 +506,11 @@ func (a APIKeyHandler) ListAPIKeys(ctx *gin.Context) {
 // @Tags         key
 // @Accept       json
 // @Produce      json
-// @Param        CreateKeyOption   body   auth.CreateKeyOption  true  "CreateKeyOption"
+// @Param        KeyCreateOption   body   auth.KeyCreateOption  true  "KeyCreateOption"
 // @Success      200  {object}  types.Response
 // @Router       /key/create [POST]
 func (a APIKeyHandler) CreateAPIKey(ctx *gin.Context) {
-	var createOpt auth.CreateKeyOption
+	var createOpt auth.KeyCreateOption
 	createOpt.Uid = authen.GetContextTokenInfo(ctx).UUID
 
 	if err := bind.Binds(ctx, bind.Json(&createOpt)); err != nil {
@@ -532,11 +531,11 @@ func (a APIKeyHandler) CreateAPIKey(ctx *gin.Context) {
 // @Tags         key
 // @Accept       json
 // @Produce      json
-// @Param        RemoveKeyOption   query     auth.RemoveKeyOption  true  "RemoveKeyOption"
+// @Param        KeyRemoveOption   query     auth.KeyRemoveOption  true  "KeyRemoveOption"
 // @Success      200  {object}  types.Response
 // @Router       /key/remove [DELETE]
 func (a APIKeyHandler) RemoveAPIKey(ctx *gin.Context) {
-	var removeOpt auth.RemoveKeyOption
+	var removeOpt auth.KeyRemoveOption
 	removeOpt.UUID = authen.GetContextTokenInfo(ctx).UUID
 	if err := bind.Binds(ctx, bind.Query(&removeOpt)); err != nil {
 		return

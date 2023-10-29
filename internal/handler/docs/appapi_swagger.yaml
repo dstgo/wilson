@@ -9,17 +9,6 @@ definitions:
       name:
         type: string
     type: object
-  auth.CreateKeyOption:
-    properties:
-      expiredAt:
-        type: integer
-      name:
-        type: string
-      perms:
-        items:
-          type: integer
-        type: array
-    type: object
   auth.ForgotPasswordOption:
     properties:
       code:
@@ -30,6 +19,17 @@ definitions:
         description: length of the password must be in range [10,30]
         example: "123456789"
         type: string
+    type: object
+  auth.KeyCreateOption:
+    properties:
+      expiredAt:
+        type: integer
+      name:
+        type: string
+      perms:
+        items:
+          type: integer
+        type: array
     type: object
   auth.LoginOption:
     properties:
@@ -44,12 +44,6 @@ definitions:
         description: length of the username must be in range [6,20], and username
           must be Alphanumeric
         example: 123456@example.com/username
-        type: string
-    type: object
-  auth.PingReply:
-    properties:
-      reply:
-        example: hello wendy! Now is 2023-10-17 11:07:21.696 +08:00.
         type: string
     type: object
   auth.RegisterOption:
@@ -199,6 +193,12 @@ definitions:
       name:
         description: role name
         example: admin
+        type: string
+    type: object
+  system.PingReply:
+    properties:
+      reply:
+        example: hello wendy! Now is 2023-10-17 11:07:21.696 +08:00.
         type: string
     type: object
   types.Response:
@@ -629,12 +629,12 @@ paths:
       - application/json
       description: create specified user api key
       parameters:
-      - description: CreateKeyOption
+      - description: KeyCreateOption
         in: body
-        name: CreateKeyOption
+        name: KeyCreateOption
         required: true
         schema:
-          $ref: '#/definitions/auth.CreateKeyOption'
+          $ref: '#/definitions/auth.KeyCreateOption'
       produces:
       - application/json
       responses:
@@ -919,7 +919,7 @@ paths:
             - $ref: '#/definitions/types.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/auth.PingReply'
+                  $ref: '#/definitions/system.PingReply'
               type: object
       summary: Ping
       tags:

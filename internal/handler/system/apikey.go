@@ -24,7 +24,7 @@ type ApiKey struct {
 	keyIssuer authen.KeyIssuer
 }
 
-func (a ApiKey) CreateAPiKey(ctx context.Context, option auth.CreateKeyOption) error {
+func (a ApiKey) CreateAPiKey(ctx context.Context, option auth.KeyCreateOption) error {
 	_, err := a.keyIssuer.Issue(ctx, option.Uid, option.Name, option.ExpiredAt, option.Perms)
 	return err
 }
