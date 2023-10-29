@@ -39,6 +39,13 @@ perm.list = "获取权限列表"
 perm.create = "创建权限"
 perm.update = "更新权限"
 perm.remove = "删除权限"
+# APIKey路由
+key.group = "OpenAPI"
+key.list = "获取key列表"
+key.create = "创建key"
+key.remove = "删除key"
+
+
 
 # 数据校验部分
 [validate]
@@ -190,6 +197,11 @@ expired = "用户凭证失效，请重新登录"
 refresh = "用户凭证过期，请重新申请"
 invalid = "无效的凭证"
 redundant = "凭证无需更新"
+
+[key]
+invalid = "无效的密钥"
+noperm = "密钥权限不足"
+nopexp = "无效的过期时间"
 
 [auth]
 loginFail = "登录失败"
