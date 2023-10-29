@@ -35,7 +35,7 @@ definitions:
     properties:
       password:
         description: length of the password must be in range [10,30]
-        example: "123456789"
+        example: "0123456789"
         type: string
       persistent:
         example: true
@@ -43,7 +43,7 @@ definitions:
       username:
         description: length of the username must be in range [6,20], and username
           must be Alphanumeric
-        example: 123456@example.com/username
+        example: dstadmin
         type: string
     type: object
   auth.RegisterOption:
@@ -55,7 +55,7 @@ definitions:
         type: string
       password:
         description: length of the password must be in range [10,30]
-        example: "123456789"
+        example: "0123456789"
         type: string
       persistent:
         example: true
@@ -63,7 +63,7 @@ definitions:
       username:
         description: length of the username must be in range [6,20], and username
           must be Alphanumeric
-        example: 123456@example.com/username
+        example: dstadmin
         type: string
     type: object
   auth.Token:
