@@ -1,6 +1,7 @@
 package system
 
 import (
+	"github.com/dstgo/wilson/internal/types/helper"
 	"github.com/dstgo/wilson/pkg/vax"
 	"github.com/spf13/cast"
 )
@@ -18,7 +19,7 @@ type PingRequest struct {
 
 func (p PingRequest) Validate(lang string) error {
 	return vax.Struct(&p, lang,
-		vax.Field(&p.Name, vax.Required, vax.RangeLength(1, 10, false), vax.In("wilson", "wendy")),
+		vax.Field(&p.Name, helper.RequiredRules(RulePing)...),
 	)
 }
 

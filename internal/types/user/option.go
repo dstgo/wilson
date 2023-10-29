@@ -1,8 +1,8 @@
 package user
 
 import (
+	"github.com/dstgo/wilson/internal/types/email"
 	"github.com/dstgo/wilson/internal/types/helper"
-	"github.com/dstgo/wilson/internal/types/helper/rules"
 	"github.com/dstgo/wilson/pkg/vax"
 )
 
@@ -33,9 +33,9 @@ type CreateUserOption struct {
 
 func (c CreateUserOption) Validate(lang string) error {
 	return vax.Struct(&c, lang,
-		vax.Field(&c.Username, rules.Required(rules.Username)...),
-		vax.Field(&c.Email, rules.Required(rules.Email)...),
-		vax.Field(&c.Password, rules.Required(rules.Password)...),
+		vax.Field(&c.Username, helper.RequiredRules(RuleUsername)...),
+		vax.Field(&c.Email, helper.RequiredRules(email.RuleEmail)...),
+		vax.Field(&c.Password, helper.RequiredRules(RulePassword)...),
 		vax.Field(&c.Roles, vax.Required),
 	)
 }
@@ -52,9 +52,9 @@ type UpdateInfoOption struct {
 
 func (u UpdateInfoOption) Validate(lang string) error {
 	return vax.Struct(&u, lang,
-		vax.Field(&u.Username, rules.Username...),
-		vax.Field(&u.Email, rules.Email...),
-		vax.Field(&u.Password, vax.When(len(u.Password) > 0, rules.Password...)),
+		vax.Field(&u.Username, RuleUsername...),
+		vax.Field(&u.Email, email.RuleEmail...),
+		vax.Field(&u.Password, vax.When(u.Password != "", RulePassword...)),
 	)
 }
 
@@ -73,9 +73,9 @@ type SaveUserDetailOption struct {
 func (u SaveUserDetailOption) Validate(lang string) error {
 	return vax.Struct(&u, lang,
 		vax.Field(&u.UUID, vax.Required),
-		vax.Field(&u.Username, rules.Required(rules.Username)...),
-		vax.Field(&u.Email, rules.Required(rules.Email)...),
-		vax.Field(&u.Password, rules.Required(rules.Password)...),
+		vax.Field(&u.Username, helper.RequiredRules(RuleUsername)...),
+		vax.Field(&u.Email, helper.RequiredRules(email.RuleEmail)...),
+		vax.Field(&u.Password, helper.RequiredRules(RulePassword)...),
 		vax.Field(&u.Roles, vax.Required),
 	)
 }

@@ -1,24 +1,26 @@
 package auth
 
 import (
-	"github.com/dstgo/wilson/internal/types/helper/rules"
+	"github.com/dstgo/wilson/internal/types/email"
+	"github.com/dstgo/wilson/internal/types/helper"
 	"github.com/dstgo/wilson/internal/types/system"
+	"github.com/dstgo/wilson/internal/types/user"
 	"github.com/dstgo/wilson/pkg/vax"
 )
 
 type LoginOption struct {
 	// length of the username must be in range [6,20], and username must be Alphanumeric
-	Username string `json:"username" label:"field.username" example:"123456@example.com/username"`
+	Username string `json:"username" label:"field.username" example:"dstadmin"`
 	// length of the password must be in range [10,30]
-	Password string `json:"password" label:"field.password" example:"123456789"`
+	Password string `json:"password" label:"field.password" example:"0123456789"`
 
 	Persistent bool `json:"persistent" example:"true"`
 }
 
 func (l LoginOption) Validate(lang string) error {
 	return vax.Struct(&l, lang,
-		vax.Field(&l.Username, rules.Required(rules.Username)...),
-		vax.Field(&l.Password, rules.Required(rules.Password)...),
+		vax.Field(&l.Username, helper.RequiredRules(user.RuleUsername)...),
+		vax.Field(&l.Password, helper.RequiredRules(user.RulePassword)...),
 	)
 }
 
@@ -31,7 +33,7 @@ type RegisterOption struct {
 func (r RegisterOption) Validate(lang string) error {
 	return vax.Struct(&r, lang,
 		vax.Field(&r.LoginOption),
-		vax.Field(&r.Code, rules.Required(rules.EmailCode)...),
+		vax.Field(&r.Code, helper.RequiredRules(email.RuleEmailCode)...),
 	)
 }
 
@@ -44,8 +46,8 @@ type ForgotPasswordOption struct {
 
 func (f ForgotPasswordOption) Validate(lang string) error {
 	return vax.Struct(&f, lang,
-		vax.Field(&f.Password, rules.Required(rules.Username)...),
-		vax.Field(&f.Code, rules.Required(rules.EmailCode)...),
+		vax.Field(&f.Password, helper.RequiredRules(user.RuleUsername)...),
+		vax.Field(&f.Code, helper.RequiredRules(email.RuleEmailCode)...),
 	)
 }
 

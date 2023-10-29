@@ -2,16 +2,7 @@ package helper
 
 import (
 	"github.com/dstgo/wilson/pkg/vax"
-	"time"
 )
-
-type CreatedAt struct {
-	CreatedAt time.Time `json:"createdAt" example:"2022-01-01 00:00:00"`
-}
-
-type UpdatedAt struct {
-	UpdatedAt time.Time `json:"updatedAt" example:"2022-01-01 00:00:00"`
-}
 
 type PageOption struct {
 	// page

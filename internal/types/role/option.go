@@ -2,7 +2,6 @@ package role
 
 import (
 	"github.com/dstgo/wilson/internal/types/helper"
-	"github.com/dstgo/wilson/internal/types/helper/rules"
 	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/dstgo/wilson/pkg/vax"
 )
@@ -27,11 +26,11 @@ type CreatePermOption struct {
 
 func (c CreatePermOption) Validate(lang string) error {
 	return vax.Struct(&c, lang,
-		vax.Field(&c.Name, rules.Required(rules.RoleName)...),
-		vax.Field(&c.Object, rules.Required(rules.PermObject)...),
-		vax.Field(&c.Action, rules.Required(rules.PermAction)...),
-		vax.Field(&c.Group, vax.Required, vax.RangeLength(1, 60, false)),
-		vax.Field(&c.Tag, rules.Required(rules.PermTag)...),
+		vax.Field(&c.Name, helper.RequiredRules(RuleRoleName)...),
+		vax.Field(&c.Object, helper.RequiredRules(RulePermObj)...),
+		vax.Field(&c.Action, helper.RequiredRules(RulePermAct)...),
+		vax.Field(&c.Group, helper.RequiredRules(RulePermGroup)...),
+		vax.Field(&c.Tag, helper.RequiredRules(RulePermTag)...),
 	)
 }
 
@@ -43,7 +42,7 @@ type UpdatePermOption struct {
 func (u UpdatePermOption) Validate(lang string) error {
 	return vax.Struct(&u, lang,
 		vax.Field(&u.Id, vax.Required),
-		vax.Field(&u.Name, rules.Required(rules.RoleName)...))
+		vax.Field(&u.Name, helper.RequiredRules(RuleRoleName)...))
 }
 
 type CreateRoleOption struct {
@@ -55,8 +54,8 @@ type CreateRoleOption struct {
 
 func (c CreateRoleOption) Validate(lang string) error {
 	return vax.Struct(&c, lang,
-		vax.Field(&c.Name, rules.Required(rules.RoleName)...),
-		vax.Field(&c.Code, rules.Required(rules.RoleCode)...),
+		vax.Field(&c.Name, helper.RequiredRules(RuleRoleName)...),
+		vax.Field(&c.Code, helper.RequiredRules(RuleRoleCode)...),
 	)
 }
 
@@ -69,7 +68,7 @@ type UpdateRoleOption struct {
 func (u UpdateRoleOption) Validate(lang string) error {
 	return vax.Struct(&u, lang,
 		vax.Field(&u.Id, vax.Required),
-		vax.Field(&u.Name, rules.Required(rules.RoleName)...),
+		vax.Field(&u.Name, helper.RequiredRules(RuleRoleName)...),
 	)
 }
 
@@ -82,7 +81,7 @@ type GrantOption struct {
 func (g GrantOption) Validate(lang string) error {
 	return vax.Struct(&g, lang,
 		vax.Field(&g.RoleId, vax.Required),
-		vax.Field(&g.Tag, rules.Required(rules.PermTag)...),
+		vax.Field(&g.Tag, helper.RequiredRules(RulePermTag)...),
 		vax.Field(&g.PermIds, vax.Required),
 	)
 }
@@ -95,6 +94,6 @@ type QueryRolePermsOption struct {
 func (q QueryRolePermsOption) Validate(lang string) error {
 	return vax.Struct(&q, lang,
 		vax.Field(&q.Id),
-		vax.Field(q.Tag, rules.Required(rules.PermTag)...),
+		vax.Field(q.Tag, helper.RequiredRules(RulePermTag)...),
 	)
 }
