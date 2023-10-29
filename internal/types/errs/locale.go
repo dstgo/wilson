@@ -1,5 +1,10 @@
 package errs
 
+func IsLocaleError(err error) bool {
+	_, ok := err.(LocaleError)
+	return ok
+}
+
 func NewError() LocaleError {
 	return LocaleError{}
 }
