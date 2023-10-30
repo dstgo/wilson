@@ -15,7 +15,7 @@ type User struct {
 
 func (u User) Validate(lang string) error {
 	return vax.Struct(&u, lang,
-		vax.Field(&u.Name, vax.Required, vax.RangeLength(1, 10, false)),
+		vax.Field(&u.Name, vax.Required, vax.RangeLength(1, 10, true)),
 		vax.Field(&u.Email, vax.Required, is.Email),
 		vax.Field(&u.Age, vax.Required, vax.Gte(18), vax.Lte(100)),
 	)
