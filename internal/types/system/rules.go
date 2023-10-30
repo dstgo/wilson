@@ -6,5 +6,5 @@ import (
 )
 
 var (
-	RulePing = helper.Rules(vax.RangeLength(1, 10, false), vax.In("wilson", "wendy"))
+	RulePing = helper.Rules(vax.RangeLenRune(1, 10), vax.In("wilson", "wendy"))
 )
