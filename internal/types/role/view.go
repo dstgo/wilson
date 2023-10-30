@@ -146,3 +146,11 @@ func MakeUserRoleRecordList(userId uint, roleIds []uint) []entity.UserRole {
 	}
 	return records
 }
+
+func MakeRolePerms(roleId uint, permIds []uint) []entity.RolePermission {
+	rolePermList := make([]entity.RolePermission, 0, len(permIds))
+	for _, permId := range permIds {
+		rolePermList = append(rolePermList, entity.RolePermission{RoleId: roleId, PermissionId: permId})
+	}
+	return rolePermList
+}

@@ -259,7 +259,11 @@ func UpdateDictType(ctx context.Context, db *gorm.DB, id uint, name string, code
 }
 
 func RemoveDictType(ctx context.Context, db *gorm.DB, id uint) error {
-	err := db.WithContext(ctx).Delete(&entity.Dict{}, "id = ?", id).Error
+	err := db.WithContext(ctx).Unscoped().Delete(&entity.DictData{}, "dict_id = ?", id).Error
+	if err != nil {
+		return system.ErrDatabase.Wrap(err)
+	}
+	err = db.WithContext(ctx).Delete(&entity.Dict{}, "id = ?", id).Error
 	if err != nil {
 		return system.ErrDatabase.Wrap(err)
 	}

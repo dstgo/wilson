@@ -50,7 +50,7 @@ func initFirstUser(source *data.DataSource, userRoles ...role.RoleInfo) (entity.
 		if err != nil {
 			return entity.User{}, err
 		}
-		userEn, err := user.GetUserByName(source.ORM(), usert.InitialUser.Username)
+		userEn, _, err := user.GetUserByName(source.ORM(), usert.InitialUser.Username)
 		if err != nil {
 			return entity.User{}, err
 		}

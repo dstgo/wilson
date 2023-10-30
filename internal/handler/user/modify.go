@@ -42,7 +42,7 @@ func (u UserModify) Create(createOpt user.CreateUserOption) error {
 
 	// create new user
 	if err := CreateUser(u.ds.ORM(), newUser); err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	}
 
 	// grant permission
@@ -69,7 +69,7 @@ func (u UserModify) Save(saveOpt user.SaveUserDetailOption) error {
 	// user user info
 	err := UpdateUserInfo(u.ds.ORM(), userEn)
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	}
 
 	// update roles
@@ -98,7 +98,7 @@ func (u UserModify) Update(updateOpt user.UpdateInfoOption) error {
 	}
 
 	if err := UpdateUserInfo(u.ds.ORM(), userTable); err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	}
 
 	return nil
@@ -106,38 +106,55 @@ func (u UserModify) Update(updateOpt user.UpdateInfoOption) error {
 
 func (u UserModify) Remove(uuid string) error {
 	db := u.ds.ORM()
-	findUser, err := GetUserByUUID(db, uuid)
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return system.ErrDatabase.Wrap(err)
-	} else if len(findUser.UUID) == 0 {
+	findUser, found, err := GetUserByUUID(db, uuid)
+	if err != nil {
+		return err
+	} else if !found {
 		return user.ErrUserNotFound
 	}
 
+	// TODO should remove all about user entities
 	err = u.ds.ORM().Model(&findUser).Association("Roles").Clear()
 	if err != nil {
 		return system.ErrDatabase.Wrap(err)
 	}
 
 	if err := RemoveByUUID(u.ds.ORM(), uuid); err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	}
 	return nil
 }
 
 func CreateUser(db *gorm.DB, user entity.User) error {
-	return db.Clauses(clause.OnConflict{
+	err := db.Clauses(clause.OnConflict{
 		DoNothing: true,
 	}).Create(&user).Error
+	if err != nil {
+		return system.ErrDatabase.Wrap(err)
+	}
+	return nil
 }
 
 func UpdateUserInfo(db *gorm.DB, user entity.User) error {
-	return db.Where("uuid = ?", user.UUID).Updates(&user).Error
+	err := db.Where("uuid = ?", user.UUID).Updates(&user).Error
+	if err != nil {
+		return system.ErrDatabase.Wrap(err)
+	}
+	return nil
 }
 
 func RemoveUser(db *gorm.DB, id uint) error {
-	return db.Delete(entity.User{}, "id = ?", id).Error
+	err := db.Delete(entity.User{}, "id = ?", id).Error
+	if err != nil {
+		return system.ErrDatabase.Wrap(err)
+	}
+	return nil
 }
 
 func RemoveByUUID(db *gorm.DB, uuid string) error {
-	return db.Delete(&entity.User{}, "uuid = ?", uuid).Error
+	err := db.Delete(&entity.User{}, "uuid = ?", uuid).Error
+	if err != nil {
+		return system.ErrDatabase.Wrap(err)
+	}
+	return nil
 }

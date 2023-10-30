@@ -7,7 +7,6 @@ import (
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/cache"
 	"github.com/dstgo/wilson/internal/types/auth"
-	"github.com/dstgo/wilson/internal/types/system"
 )
 
 func NewAPIKey(source *data.DataSource) ApiKey {
@@ -32,7 +31,7 @@ func (a ApiKey) CreateAPiKey(ctx context.Context, option auth.KeyCreateOption) e
 func (a ApiKey) RemoveApiKey(ctx context.Context, userId, KeyId string) error {
 	err := a.KeyCache.Del(ctx, userId, KeyId)
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	}
 	return nil
 }
@@ -42,7 +41,7 @@ func (a ApiKey) ListApiKey(ctx context.Context, userId string) ([]auth.APIKey, e
 
 	list, err := a.KeyCache.List(ctx, userId)
 	if err != nil {
-		return keys, system.ErrDatabase.Wrap(err)
+		return keys, err
 	}
 
 	for _, key := range list {

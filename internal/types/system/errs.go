@@ -26,5 +26,5 @@ var (
 
 	ErrProgram = errs.NewI18nError("err.program").FallBack("program error").Status(http.StatusInternalServerError).Code(code.ProgramError)
 
-	ErrUnknow = errs.NewI18nError("err.unknown").FallBack("unknown error").Status(http.StatusInternalServerError).Code(code.UnknownError)
+	ErrUnknown = errs.NewI18nError("err.unknown").FallBack("unknown error").Status(http.StatusInternalServerError).Code(code.UnknownError)
 )

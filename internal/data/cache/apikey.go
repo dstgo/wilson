@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/dstgo/wilson/internal/data/entity"
+	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/go-redis/redis/v8"
 	"time"
 )
@@ -43,7 +44,7 @@ func (r RedisApiKeyCache) unmarshal(b []byte) (entity.APIKey, error) {
 	var apikey entity.APIKey
 	err := json.Unmarshal(b, &apikey)
 	if err != nil {
-		return apikey, err
+		return apikey, system.ErrProgram.Wrap(err)
 	}
 	return apikey, nil
 }
@@ -51,7 +52,7 @@ func (r RedisApiKeyCache) unmarshal(b []byte) (entity.APIKey, error) {
 func (r RedisApiKeyCache) marshal(key entity.APIKey) ([]byte, error) {
 	marshal, err := json.Marshal(key)
 	if err != nil {
-		return []byte{}, err
+		return []byte{}, system.ErrProgram.Wrap(err)
 	}
 	return marshal, nil
 }
@@ -63,7 +64,10 @@ func (r RedisApiKeyCache) Key(userId, keyId string) string {
 func (r RedisApiKeyCache) TTL(ctx context.Context, userId, keyId string) (time.Duration, error) {
 	key := r.Key(userId, keyId)
 	ttl := r.cache.TTL(ctx, key)
-	return ttl.Val(), ttl.Err()
+	if ttl.Err() != nil {
+		return ttl.Val(), system.ErrDatabase.Wrap(ttl.Err())
+	}
+	return ttl.Val(), nil
 }
 
 func (r RedisApiKeyCache) get(ctx context.Context, key string) (entity.APIKey, bool, error) {
@@ -72,7 +76,7 @@ func (r RedisApiKeyCache) get(ctx context.Context, key string) (entity.APIKey, b
 	if errors.Is(err, redis.Nil) {
 		return apikey, false, nil
 	} else if err != nil {
-		return apikey, false, err
+		return apikey, false, system.ErrDatabase.Wrap(err)
 	}
 
 	unmarshal, err := r.unmarshal(bytes)
@@ -107,12 +111,20 @@ func (r RedisApiKeyCache) Set(ctx context.Context, apikey entity.APIKey, ttl tim
 	if err != nil {
 		return err
 	}
-	return r.cache.Set(ctx, key, marshal, ttl).Err()
+	err = r.cache.Set(ctx, key, marshal, ttl).Err()
+	if err != nil {
+		return system.ErrDatabase.Wrap(err)
+	}
+	return nil
 }
 
 func (r RedisApiKeyCache) Del(ctx context.Context, userId, keyId string) error {
 	key := r.Key(userId, keyId)
-	return r.cache.Del(ctx, key).Err()
+	err := r.cache.Del(ctx, key).Err()
+	if err != nil {
+		return system.ErrDatabase.Wrap(err)
+	}
+	return err
 }
 
 func (r RedisApiKeyCache) scan(ctx context.Context, pattern string) ([]entity.APIKey, error) {

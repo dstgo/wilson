@@ -69,7 +69,7 @@ func (a APIKeyCacheAuthor) Issue(ctx context.Context, userId string, name string
 
 	err = a.cache.Set(ctx, apikey, ttl)
 	if err != nil {
-		return apikey, system.ErrDatabase.Wrap(err)
+		return apikey, err
 	}
 
 	return apikey, nil
@@ -84,7 +84,7 @@ func (a APIKeyCacheAuthor) Authenticate(ctx context.Context, key, obj, act strin
 	if err == nil && !b || errors.Is(err, cache.ErrDuplicateKey) {
 		return apikey, auth.ErrInvalidKey
 	} else if err != nil {
-		return apikey, system.ErrDatabase.Wrap(err)
+		return apikey, err
 	}
 	perm, err := a.resolver.MatchPerm("", obj, act, "", system.OpenAPI)
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/types/role"
+	"github.com/dstgo/wilson/internal/types/system"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"slices"
@@ -92,36 +93,45 @@ func (g GormResolver) RemovePerm(permId uint) error {
 	return nil
 }
 
-func MakeRolePerms(roleId uint, permIds []uint) []entity.RolePermission {
-	rolePermList := make([]entity.RolePermission, 0, len(permIds))
-	for _, permId := range permIds {
-		rolePermList = append(rolePermList, entity.RolePermission{RoleId: roleId, PermissionId: permId})
-	}
-	return rolePermList
-}
-
 func getPermById(db *gorm.DB, id uint) (entity.Permission, error) {
 	var perm entity.Permission
-	err := db.Find(&perm, "id = ?", id).Error
+	found, err := data.HasRecordFound(db.Find(&perm, "id = ?", id))
+	if err != nil {
+		return perm, system.ErrDatabase.Wrap(err)
+	} else if !found {
+		return perm, nil
+	}
 	return perm, err
 }
 
 func getPermByName(db *gorm.DB, name string) (entity.Permission, error) {
 	var perm entity.Permission
-	err := db.Find(&perm, "name = ?", name).Error
-	return perm, err
+	result := db.Find(&perm, "name = ?", name)
+	found, err := data.HasRecordFound(result)
+	if err != nil {
+		return perm, system.ErrDatabase.Wrap(err)
+	} else if !found {
+		return perm, nil
+	}
+	return perm, nil
 }
 
 func listPermsByTag(db *gorm.DB, tag string) ([]entity.Permission, error) {
 	var perms []entity.Permission
 	err := db.Model(entity.Permission{}).Find(&perms, "tag = ?", tag).Error
-	return perms, err
+	if err != nil {
+		return perms, system.ErrDatabase.Wrap(err)
+	}
+	return perms, nil
 }
 
 func listAllPerms(db *gorm.DB) ([]entity.Permission, error) {
 	var perms []entity.Permission
 	err := db.Find(&perms).Error
-	return perms, err
+	if err != nil {
+		return perms, system.ErrDatabase.Wrap(err)
+	}
+	return perms, nil
 }
 
 func listAllPermsByPerms(db *gorm.DB, perms []entity.Permission) ([]entity.Permission, error) {
@@ -169,7 +179,10 @@ func listAllPermsByPerms(db *gorm.DB, perms []entity.Permission) ([]entity.Permi
 	}
 
 	err := db.Find(&ens).Error
-	return ens, err
+	if err != nil {
+		return ens, system.ErrDatabase.Wrap(err)
+	}
+	return ens, nil
 }
 
 func getPagePermList(db *gorm.DB, pageOpt role.PageOption) ([]entity.Permission, error) {
@@ -180,7 +193,10 @@ func getPagePermList(db *gorm.DB, pageOpt role.PageOption) ([]entity.Permission,
 	}
 	var perms []entity.Permission
 	err := pageDB.Find(&perms).Error
-	return perms, err
+	if err != nil {
+		return perms, system.ErrDatabase.Wrap(err)
+	}
+	return perms, nil
 }
 
 func findPerm(db *gorm.DB, obj, act, g, t string) (entity.Permission, error) {
@@ -188,7 +204,10 @@ func findPerm(db *gorm.DB, obj, act, g, t string) (entity.Permission, error) {
 	err := db.Model(entity.Permission{}).
 		Where("object = ? AND action = ? AND `group` = ? AND tag = ?", obj, act, g, t).
 		Find(&perm).Error
-	return perm, err
+	if err != nil {
+		return perm, system.ErrDatabase.Wrap(err)
+	}
+	return perm, nil
 }
 
 func createPerm(db *gorm.DB, roleInfo entity.Permission) (entity.Permission, error) {
@@ -196,6 +215,9 @@ func createPerm(db *gorm.DB, roleInfo entity.Permission) (entity.Permission, err
 		Columns:   []clause.Column{{Name: "object"}, {Name: "action"}, {Name: "group"}, {Name: "tag"}},
 		DoNothing: true,
 	}).Create(&roleInfo).Error
+	if err != nil {
+		return entity.Permission{}, system.ErrDatabase.Wrap(err)
+	}
 	return roleInfo, err
 }
 
