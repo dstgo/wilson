@@ -26,6 +26,9 @@ var tables = []Table{
 	// role
 	&Role{},
 	&Permission{},
+	// dict
+	&Dict{},
+	&DictData{},
 
 	// relation table
 	&RolePermission{},

@@ -22,6 +22,7 @@ type Handler struct {
 	Auth AuthHandler
 	Role RoleHandler
 	Key  APIKeyHandler
+	Dict DictHandler
 }
 
 func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
@@ -85,6 +86,22 @@ func SetupRouter(api *ginx.RouterGroup, handler Handler) HandlerRouter {
 		keyGroup.POST("/create", ginx.M(meta.Name("route.key.create")), keyHandler.CreateAPIKey)
 		// DELETE
 		keyGroup.DELETE("/remove", ginx.M(meta.Name("route.key.remove")), keyHandler.RemoveAPIKey)
+	}
+
+	dictGroup := api.Group("", ginx.M(meta.Group("route.dict.group"), meta.Roles(role.AdminRole)))
+	dictHandler := handler.Dict
+	{
+		dictGroup.GET("/dict/info", ginx.M(meta.Name("route.dict.info"), meta.Roles(role.UserRole)), dictHandler.GetDictInfo)
+
+		dictGroup.GET("/dict/list", ginx.M(meta.Name("route.dict.list")), dictHandler.ListDict)
+		dictGroup.POST("/dict/create", ginx.M(meta.Name("route.dict.create")), dictHandler.CreateDict)
+		dictGroup.POST("/dict/update", ginx.M(meta.Name("route.dict.update")), dictHandler.UpdateDict)
+		dictGroup.DELETE("/dict/remove", ginx.M(meta.Name("route.dict.delete")), dictHandler.RemoveDict)
+
+		dictGroup.GET("/dict/data/list", ginx.M(meta.Name("route.dict.data.list")), dictHandler.ListDictData)
+		dictGroup.POST("/dict/data/create", ginx.M(meta.Name("route.dict.data.create")), dictHandler.CreateDictData)
+		dictGroup.POST("/dict/data/update", ginx.M(meta.Name("route.dict.data.update")), dictHandler.UpdateDictData)
+		dictGroup.DELETE("/dict/data/remove", ginx.M(meta.Name("route.dict.data.delete")), dictHandler.RemoveDictData)
 	}
 	return types.NopObj
 }

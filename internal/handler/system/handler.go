@@ -3,8 +3,10 @@ package system
 import (
 	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/core/resp"
+	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/auth"
 	"github.com/dstgo/wilson/internal/types/code"
+	"github.com/dstgo/wilson/internal/types/dict"
 	"github.com/dstgo/wilson/internal/types/role"
 	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/dstgo/wilson/pkg/ginx/bind"
@@ -22,6 +24,8 @@ var SystemProviderSet = wire.NewSet(
 	NewRoleHandler,
 	NewAPIKey,
 	NewAPIKeyHandler,
+	NewDictResolver,
+	NewDictHandler,
 )
 
 func NewPingHandler(logic PingApp) PingHandler {
@@ -489,6 +493,7 @@ type APIKeyHandler struct {
 // @Produce      json
 // @Success      200  {object}  types.Response{data=[]auth.APIKey}
 // @Router       /key/list [GET]
+// @security BearerAuth
 func (a APIKeyHandler) ListAPIKeys(ctx *gin.Context) {
 	info := authen.GetContextTokenInfo(ctx)
 	uuid := info.UUID
@@ -509,6 +514,7 @@ func (a APIKeyHandler) ListAPIKeys(ctx *gin.Context) {
 // @Param        KeyCreateOption   body   auth.KeyCreateOption  true  "KeyCreateOption"
 // @Success      200  {object}  types.Response
 // @Router       /key/create [POST]
+// @security BearerAuth
 func (a APIKeyHandler) CreateAPIKey(ctx *gin.Context) {
 	var createOpt auth.KeyCreateOption
 	createOpt.Uid = authen.GetContextTokenInfo(ctx).UUID
@@ -534,6 +540,7 @@ func (a APIKeyHandler) CreateAPIKey(ctx *gin.Context) {
 // @Param        KeyRemoveOption   query     auth.KeyRemoveOption  true  "KeyRemoveOption"
 // @Success      200  {object}  types.Response
 // @Router       /key/remove [DELETE]
+// @security BearerAuth
 func (a APIKeyHandler) RemoveAPIKey(ctx *gin.Context) {
 	var removeOpt auth.KeyRemoveOption
 	removeOpt.UUID = authen.GetContextTokenInfo(ctx).UUID
@@ -547,4 +554,219 @@ func (a APIKeyHandler) RemoveAPIKey(ctx *gin.Context) {
 		return
 	}
 	resp.Ok(ctx).MsgI18n("op.delete.ok").Send()
+}
+
+func NewDictHandler(dt DictResolver) DictHandler {
+	return DictHandler{dt: dt}
+}
+
+type DictHandler struct {
+	dt DictResolver
+}
+
+// GetDictInfo
+// @Summary      GetDictInfo
+// @Description  get dict data info by code
+// @Tags         dict
+// @Accept       json
+// @Produce      json
+// @Param        code   query     dict.CodeOption  true  "dict id"
+// @Success      200  {object}  types.Response{data=[]dict.DictDataInfo}
+// @Router       /dict/info [GET]
+// @security BearerAuth
+func (d DictHandler) GetDictInfo(ctx *gin.Context) {
+	var codeOpt dict.CodeOption
+	if err := bind.Binds(ctx, bind.Query(&codeOpt)); err != nil {
+		return
+	}
+	info, err := d.dt.GetDictInfo(ctx, codeOpt.Code)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n(types.QueryFail).Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n(types.QueryOk).Data(info).Send()
+}
+
+// ListDict
+// @Summary      ListDict
+// @Description  list dict pages
+// @Tags         dict
+// @Accept       json
+// @Produce      json
+// @Param        page  query    dict.DictPageOption  true  "DictPageOption"
+// @Success      200  {object}  types.Response{data=[]dict.DictDetail}
+// @Router       /dict/list [GET]
+// @security BearerAuth
+func (d DictHandler) ListDict(ctx *gin.Context) {
+	var pageOpt dict.DictPageOption
+	if err := bind.Binds(ctx, bind.Query(&pageOpt)); err != nil {
+		return
+	}
+	list, err := d.dt.ListPageDict(ctx, pageOpt)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n(types.QueryFail).Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n(types.QueryOk).Data(list).Send()
+}
+
+// CreateDict
+// @Summary      CreateDict
+// @Description  create dict
+// @Tags         dict
+// @Accept       json
+// @Produce      json
+// @Param        DictSaveOption   body  dict.DictSaveOption  true  "DictSaveOption"
+// @Success      200  {object}  types.Response
+// @Router       /dict/create [POST]
+// @security BearerAuth
+func (d DictHandler) CreateDict(ctx *gin.Context) {
+	var opt dict.DictSaveOption
+	if err := bind.Binds(ctx, bind.Json(&opt)); err != nil {
+		return
+	}
+	err := d.dt.CreateDict(ctx, opt)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n(types.CreateFail).Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n(types.CreateOk).Send()
+}
+
+// UpdateDict
+// @Summary      UpdateDict
+// @Description  update dict
+// @Tags         dict
+// @Accept       json
+// @Produce      json
+// @Param        DictUpdateOption   body  dict.DictUpdateOption  true  "DictUpdateOption"
+// @Success      200  {object}  types.Response
+// @Router       /dict/update [POST]
+// @security BearerAuth
+func (d DictHandler) UpdateDict(ctx *gin.Context) {
+	var opt dict.DictUpdateOption
+	if err := bind.Binds(ctx, bind.Json(&opt)); err != nil {
+		return
+	}
+	err := d.dt.UpdateDict(ctx, opt)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n(types.UpdateFail).Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n(types.UpdateOk).Send()
+}
+
+// RemoveDict
+// @Summary      RemoveDict
+// @Description  remove dict
+// @Tags         dict
+// @Accept       json
+// @Produce      json
+// @Param        id query     system.Id  true  "dict id"
+// @Success      200  {object}  types.Response
+// @Router       /dict/remove [DELETE]
+// @security BearerAuth
+func (d DictHandler) RemoveDict(ctx *gin.Context) {
+	var id system.Id
+	if err := bind.Binds(ctx, bind.Query(&id)); err != nil {
+		return
+	}
+	err := d.dt.RemoveDict(ctx, id.Uint())
+	if err != nil {
+		resp.Fail(ctx).MsgI18n(types.RemoveFail).Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n(types.RemoveOk).Send()
+}
+
+// ListDictData
+// @Summary      ListDictData
+// @Description  list dict data
+// @Tags         dict
+// @Accept       json
+// @Produce      json
+// @Param        code query     dict.DictDataPageOption  true  "dict code"
+// @Success      200  {object}  types.Response{data=[]dict.DictDataDetail}
+// @Router       /dict/data/list [GET]
+// @security BearerAuth
+func (d DictHandler) ListDictData(ctx *gin.Context) {
+	var pageOpt dict.DictDataPageOption
+	if err := bind.Binds(ctx, bind.Query(&pageOpt)); err != nil {
+		return
+	}
+	list, err := d.dt.ListPageDictData(ctx, pageOpt)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n(types.QueryFail).Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n(types.QueryOk).Data(list).Send()
+}
+
+// CreateDictData
+// @Summary      CreateDictData
+// @Description  get string by ID
+// @Tags         dict
+// @Accept       json
+// @Produce      json
+// @Param        DictDataSaveOption   body      dict.DictDataSaveOption  true  "DictDataSaveOption"
+// @Success      200  {object}  types.Response
+// @Router       /dict/data/create [POST]
+// @security BearerAuth
+func (d DictHandler) CreateDictData(ctx *gin.Context) {
+	var saveOpt dict.DictDataSaveOption
+	if err := bind.Binds(ctx, bind.Json(&saveOpt)); err != nil {
+		return
+	}
+	err := d.dt.CreateDictData(ctx, saveOpt)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n(types.CreateFail).Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n(types.CreateOk).Send()
+}
+
+// UpdateDictData
+// @Summary      UpdateDictData
+// @Description  get string by ID
+// @Tags         dict
+// @Accept       json
+// @Produce      json
+// @Param        DictDataUpdateOption   body      dict.DictDataUpdateOption  true  "DictDataUpdateOption"
+// @Success      200  {object}  types.Response
+// @Router       /dict/data/update [POST]
+// @security BearerAuth
+func (d DictHandler) UpdateDictData(ctx *gin.Context) {
+	var saveOpt dict.DictDataUpdateOption
+	if err := bind.Binds(ctx, bind.Json(&saveOpt)); err != nil {
+		return
+	}
+	err := d.dt.UpdateDictData(ctx, saveOpt)
+	if err != nil {
+		resp.Fail(ctx).MsgI18n(types.UpdateFail).Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n(types.UpdateOk).Send()
+}
+
+// RemoveDictData
+// @Summary      RemoveDictData
+// @Description  get string by ID
+// @Tags         dict
+// @Accept       json
+// @Produce      json
+// @Param        system.Id  query     system.Id  true  "id"
+// @Success      200  {object}  types.Response
+// @Router       /dict/data/remove [DELETE]
+// @security BearerAuth
+func (d DictHandler) RemoveDictData(ctx *gin.Context) {
+	var removeOpt system.Id
+	if err := bind.Binds(ctx, bind.Query(&removeOpt)); err != nil {
+		return
+	}
+	err := d.dt.RemoveDictData(ctx, removeOpt.Uint())
+	if err != nil {
+		resp.Fail(ctx).MsgI18n(types.RemoveFail).Error(err).Send()
+		return
+	}
+	resp.Ok(ctx).MsgI18n(types.RemoveOk).Send()
 }

@@ -77,6 +77,97 @@ definitions:
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InN0cmFuZ2VyIiwidXNlcklkIjoiMDA1YjQzOTctOTRjMi00YWZjLWIzNTEtNWIzY2VkNzI4MDkzIiwiaXNzIjoid2lsc29uIiwiZXhwIjoxNjk3MzI0ODY4LCJpYXQiOjE2OTcyODg4NjgsImp0aSI6IjdkZDI4NDZlLTFkZjEtNDBkMS04YmZlLTA3ZGI3ZmE4NmFhYiJ9.HnAaz-WOmugqfdz_oXphsJY_zQl3FCzrtYCm90WJgGU
         type: string
     type: object
+  dict.DictDataDetail:
+    properties:
+      createdAt:
+        type: integer
+      enable:
+        type: boolean
+      id:
+        type: integer
+      key:
+        type: string
+      label:
+        type: string
+      order:
+        type: integer
+      type:
+        type: integer
+      updatedAt:
+        type: integer
+      value: {}
+    type: object
+  dict.DictDataInfo:
+    properties:
+      key:
+        type: string
+      label:
+        type: string
+      type:
+        type: integer
+      value: {}
+    type: object
+  dict.DictDataSaveOption:
+    properties:
+      dictId:
+        type: integer
+      key:
+        type: string
+      name:
+        type: string
+      order:
+        type: integer
+      type:
+        type: integer
+      value:
+        type: string
+    type: object
+  dict.DictDataUpdateOption:
+    properties:
+      enable:
+        type: boolean
+      id:
+        type: integer
+      key:
+        type: string
+      name:
+        type: string
+      order:
+        type: integer
+      type:
+        type: integer
+      value:
+        type: string
+    type: object
+  dict.DictDetail:
+    properties:
+      code:
+        type: string
+      createdAt:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: integer
+    type: object
+  dict.DictSaveOption:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    type: object
+  dict.DictUpdateOption:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   role.CreatePermOption:
     properties:
       action:
@@ -534,6 +625,261 @@ paths:
       summary: Update
       tags:
       - container
+  /dict/create:
+    post:
+      consumes:
+      - application/json
+      description: create dict
+      parameters:
+      - description: DictSaveOption
+        in: body
+        name: DictSaveOption
+        required: true
+        schema:
+          $ref: '#/definitions/dict.DictSaveOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Response'
+      security:
+      - BearerAuth: []
+      summary: CreateDict
+      tags:
+      - dict
+  /dict/data/create:
+    post:
+      consumes:
+      - application/json
+      description: get string by ID
+      parameters:
+      - description: DictDataSaveOption
+        in: body
+        name: DictDataSaveOption
+        required: true
+        schema:
+          $ref: '#/definitions/dict.DictDataSaveOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Response'
+      security:
+      - BearerAuth: []
+      summary: CreateDictData
+      tags:
+      - dict
+  /dict/data/list:
+    get:
+      consumes:
+      - application/json
+      description: list dict data
+      parameters:
+      - in: query
+        name: code
+        type: string
+      - description: if is reverse order
+        example: true
+        in: query
+        name: desc
+        type: boolean
+      - description: page
+        example: 1
+        in: query
+        name: page
+        type: integer
+      - in: query
+        name: search
+        type: string
+      - description: size of page
+        example: 10
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dict.DictDataDetail'
+                  type: array
+              type: object
+      security:
+      - BearerAuth: []
+      summary: ListDictData
+      tags:
+      - dict
+  /dict/data/remove:
+    delete:
+      consumes:
+      - application/json
+      description: get string by ID
+      parameters:
+      - in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Response'
+      security:
+      - BearerAuth: []
+      summary: RemoveDictData
+      tags:
+      - dict
+  /dict/data/update:
+    post:
+      consumes:
+      - application/json
+      description: get string by ID
+      parameters:
+      - description: DictDataUpdateOption
+        in: body
+        name: DictDataUpdateOption
+        required: true
+        schema:
+          $ref: '#/definitions/dict.DictDataUpdateOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Response'
+      security:
+      - BearerAuth: []
+      summary: UpdateDictData
+      tags:
+      - dict
+  /dict/info:
+    get:
+      consumes:
+      - application/json
+      description: get dict data info by code
+      parameters:
+      - in: query
+        name: code
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dict.DictDataInfo'
+                  type: array
+              type: object
+      security:
+      - BearerAuth: []
+      summary: GetDictInfo
+      tags:
+      - dict
+  /dict/list:
+    get:
+      consumes:
+      - application/json
+      description: list dict pages
+      parameters:
+      - description: if is reverse order
+        example: true
+        in: query
+        name: desc
+        type: boolean
+      - description: page
+        example: 1
+        in: query
+        name: page
+        type: integer
+      - in: query
+        name: search
+        type: string
+      - description: size of page
+        example: 10
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dict.DictDetail'
+                  type: array
+              type: object
+      security:
+      - BearerAuth: []
+      summary: ListDict
+      tags:
+      - dict
+  /dict/remove:
+    delete:
+      consumes:
+      - application/json
+      description: remove dict
+      parameters:
+      - in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Response'
+      security:
+      - BearerAuth: []
+      summary: RemoveDict
+      tags:
+      - dict
+  /dict/update:
+    post:
+      consumes:
+      - application/json
+      description: update dict
+      parameters:
+      - description: DictUpdateOption
+        in: body
+        name: DictUpdateOption
+        required: true
+        schema:
+          $ref: '#/definitions/dict.DictUpdateOption'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Response'
+      security:
+      - BearerAuth: []
+      summary: UpdateDict
+      tags:
+      - dict
   /email/code:
     get:
       consumes:
@@ -642,6 +988,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/types.Response'
+      security:
+      - BearerAuth: []
       summary: CreateAPIKey
       tags:
       - key
@@ -664,6 +1012,8 @@ paths:
                     $ref: '#/definitions/auth.APIKey'
                   type: array
               type: object
+      security:
+      - BearerAuth: []
       summary: ListAPIKeys
       tags:
       - key
@@ -683,6 +1033,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/types.Response'
+      security:
+      - BearerAuth: []
       summary: RemoveAPIKey
       tags:
       - key
