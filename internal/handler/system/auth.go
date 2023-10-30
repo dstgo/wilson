@@ -18,7 +18,6 @@ import (
 	"github.com/dstgo/wilson/pkg/vax/is"
 	"github.com/duke-git/lancet/v2/cryptor"
 	"github.com/go-redis/redis/v8"
-	"gorm.io/gorm"
 )
 
 func NewAuthenticator(cfg *conf.AppConf, ds *data.DataSource, codeCache cache.RedisEmailCodeCache) Authenticator {
@@ -58,21 +57,21 @@ func (a Authenticator) TryLogin(ctx context.Context, userName string, password s
 
 	var (
 		userEntity entity.User
+		found      bool
 		userErr    error
 	)
 
 	// try to find the user
 	if err := is.EmailFormat.Validate(locale.L().Default(), userName); err != nil {
-		userEntity, userErr = user.GetUserByName(a.ds.ORM(), userName)
+		userEntity, found, userErr = user.GetUserByName(a.ds.ORM(), userName)
 	} else {
-		userEntity, userErr = user.GetUserByEmail(a.ds.ORM(), userName)
+		userEntity, found, userErr = user.GetUserByEmail(a.ds.ORM(), userName)
 	}
 
-	// if user not found, return error
-	if errors.Is(userErr, gorm.ErrRecordNotFound) {
+	if userErr != nil {
+		return token, userErr
+	} else if !found { // if user not found, return error
 		return token, usert.ErrUserNotFound
-	} else if userErr != nil {
-		return token, system.ErrDatabase.Wrap(userErr)
 	}
 
 	// compare the password
@@ -162,11 +161,11 @@ func (a Authenticator) ChangePassword(ctx context.Context, newPassword string, c
 	}
 
 	// find user by email
-	userInfo, err := user.GetUserByEmail(a.ds.ORM(), emailCache)
-	if errors.Is(err, gorm.ErrRecordNotFound) || err == nil && userInfo.Id == 0 {
+	userInfo, found, err := user.GetUserByEmail(a.ds.ORM(), emailCache)
+	if err != nil {
+		return err
+	} else if !found {
 		return usert.ErrUserNotFound
-	} else if err != nil {
-		return system.ErrDatabase.Wrap(err)
 	}
 
 	// change the password
@@ -174,7 +173,7 @@ func (a Authenticator) ChangePassword(ctx context.Context, newPassword string, c
 
 	// save
 	if err := user.UpdateUserInfo(a.ds.ORM(), userInfo); err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	}
 
 	return nil

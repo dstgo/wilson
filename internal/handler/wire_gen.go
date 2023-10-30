@@ -42,11 +42,14 @@ func setupHandlerRouter(appConf *conf.AppConf, router *ginx.RouterGroup, datasou
 	roleHandler := system.NewRoleHandler(roleEnforcer)
 	apiKey := system.NewAPIKey(datasource)
 	apiKeyHandler := system.NewAPIKeyHandler(apiKey)
+	dictResolver := system.NewDictResolver(datasource)
+	dictHandler := system.NewDictHandler(dictResolver)
 	systemHandler := system.Handler{
 		Ping: pingHandler,
 		Auth: authHandler,
 		Role: roleHandler,
 		Key:  apiKeyHandler,
+		Dict: dictHandler,
 	}
 	systemHandlerRouter := system.SetupRouter(router, systemHandler)
 	userInfo := user.NewUserInfo(datasource)

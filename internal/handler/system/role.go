@@ -19,7 +19,7 @@ type RoleEnforcer struct {
 func (r RoleEnforcer) ListRole(page roleType.PageOption) ([]roleType.RoleInfo, error) {
 	listRole, err := r.resolver.ListRole(page)
 	if err != nil {
-		return []roleType.RoleInfo{}, system.ErrDatabase.Wrap(err)
+		return []roleType.RoleInfo{}, err
 	}
 	return listRole, nil
 }
@@ -27,14 +27,16 @@ func (r RoleEnforcer) ListRole(page roleType.PageOption) ([]roleType.RoleInfo, e
 func (r RoleEnforcer) ListRolePerms(roleId uint) ([]roleType.PermGroup, error) {
 	perms, err := r.resolver.ListRolePerms(roleId)
 	if err != nil {
-		return []roleType.PermGroup{}, system.ErrDatabase.Wrap(err)
+		return []roleType.PermGroup{}, err
 	}
 	return perms, nil
 }
 
 func (r RoleEnforcer) CreateRole(option roleType.CreateRoleOption) error {
 	roleInfo, err := r.resolver.GetRoleByCode(option.Code)
-	if err == nil && len(roleInfo.Code) > 0 {
+	if err != nil {
+		return err
+	} else if len(roleInfo.Code) > 0 {
 		return roleType.ErrRoleConflict
 	}
 
@@ -45,7 +47,7 @@ func (r RoleEnforcer) CreateRole(option roleType.CreateRoleOption) error {
 
 	err = r.resolver.CreateRole(info)
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	}
 	return nil
 }
@@ -54,7 +56,7 @@ func (r RoleEnforcer) UpdateRole(option roleType.UpdateRoleOption) error {
 
 	roleInfo, err := r.resolver.GetRole(option.Id)
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	} else if roleInfo.Id == 0 {
 		return roleType.ErrRoleNotFound
 	}
@@ -66,7 +68,7 @@ func (r RoleEnforcer) UpdateRole(option roleType.UpdateRoleOption) error {
 
 	err = r.resolver.UpdateRole(info)
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	}
 	return nil
 }
@@ -75,7 +77,7 @@ func (r RoleEnforcer) UpdateRolePerms(option roleType.GrantOption) error {
 
 	roleInfo, err := r.resolver.GetRole(option.RoleId)
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	} else if roleInfo.Id == 0 {
 		return roleType.ErrRoleNotFound
 	}
@@ -92,14 +94,14 @@ func (r RoleEnforcer) RemoveRole(roleId uint) error {
 
 	roleInfo, err := r.resolver.GetRole(roleId)
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	} else if roleInfo.Id == 0 {
 		return roleType.ErrRoleNotFound
 	}
 
 	err = r.resolver.RemoveRole(roleId)
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	}
 	return nil
 }
@@ -107,7 +109,7 @@ func (r RoleEnforcer) RemoveRole(roleId uint) error {
 func (r RoleEnforcer) ListPerms(option roleType.PageOption) ([]roleType.PermInfo, error) {
 	perms, err := r.resolver.ListPerms(option)
 	if err != nil {
-		return []roleType.PermInfo{}, system.ErrDatabase.Wrap(err)
+		return []roleType.PermInfo{}, err
 	}
 	return perms, nil
 }
@@ -130,7 +132,7 @@ func (r RoleEnforcer) CreatePerm(option roleType.CreatePermOption) error {
 	})
 
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	}
 	return nil
 }
@@ -138,7 +140,7 @@ func (r RoleEnforcer) CreatePerm(option roleType.CreatePermOption) error {
 func (r RoleEnforcer) UpdatePerm(option roleType.UpdatePermOption) error {
 	perm, err := r.resolver.GetPerm(option.Id)
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	} else if perm.Id == 0 {
 		return roleType.ErrPermNotFound
 	}
@@ -149,7 +151,7 @@ func (r RoleEnforcer) UpdatePerm(option roleType.UpdatePermOption) error {
 	})
 
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	}
 	return nil
 }
@@ -157,14 +159,14 @@ func (r RoleEnforcer) UpdatePerm(option roleType.UpdatePermOption) error {
 func (r RoleEnforcer) RemovePerm(permId uint) error {
 	perm, err := r.resolver.GetPerm(permId)
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	} else if perm.Id == 0 {
 		return roleType.ErrPermNotFound
 	}
 
 	err = r.resolver.RemovePerm(permId)
 	if err != nil {
-		return system.ErrDatabase.Wrap(err)
+		return err
 	}
 	return nil
 }

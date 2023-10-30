@@ -1,7 +1,6 @@
 package user
 
 import (
-	"errors"
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/pkg/utils/cp"
@@ -39,41 +38,42 @@ type UserInfo struct {
 }
 
 func (u UserInfo) GetUserInfoByEmail(email string) (user.Info, error) {
-	userEntity, err := GetUserByEmail(u.ds.ORM(), email)
-	if errors.Is(err, gorm.ErrRecordNotFound) || (err != nil && userEntity.Id == 0) {
+	userEntity, found, err := GetUserByEmail(u.ds.ORM(), email)
+	if err != nil {
+		return user.Info{}, err
+	} else if !found {
 		return user.Info{}, user.ErrUserNotFound
-	} else if err != nil {
-		return user.Info{}, system.ErrDatabase.Wrap(err)
 	}
-
 	return u.GetUserInfoById(userEntity.Id)
 }
 
 func (u UserInfo) GetUserInfoByUUID(uuid string) (user.Info, error) {
-	userEntity, err := GetUserByUUID(u.ds.ORM(), uuid)
-	if errors.Is(err, gorm.ErrRecordNotFound) || (err != nil && userEntity.Id == 0) {
+	userEntity, found, err := GetUserByUUID(u.ds.ORM(), uuid)
+	if err != nil {
+		return user.Info{}, err
+	} else if !found {
 		return user.Info{}, user.ErrUserNotFound
-	} else if err != nil {
-		return user.Info{}, system.ErrDatabase.Wrap(err)
 	}
 
 	return u.GetUserInfoById(userEntity.Id)
 }
 
 func (u UserInfo) GetUserInfoByName(name string) (user.Info, error) {
-	userEntity, err := GetUserByName(u.ds.ORM(), name)
-	if errors.Is(err, gorm.ErrRecordNotFound) || (err != nil && userEntity.Id == 0) {
+	userEntity, found, err := GetUserByName(u.ds.ORM(), name)
+	if err != nil {
+		return user.Info{}, err
+	} else if !found {
 		return user.Info{}, user.ErrUserNotFound
-	} else if err != nil {
-		return user.Info{}, system.ErrDatabase.Wrap(err)
 	}
 
 	return u.GetUserInfoById(userEntity.Id)
 }
 
 func (u UserInfo) GetUserInfoById(userId uint) (user.Info, error) {
-	userEntity, err := GetUserById(u.ds.ORM(), userId)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
+	userEntity, b, err := GetUserById(u.ds.ORM(), userId)
+	if err != nil {
+		return user.Info{}, err
+	} else if !b {
 		return user.Info{}, user.ErrUserNotFound
 	}
 
@@ -96,7 +96,7 @@ func (u UserInfo) GetUserInfoById(userId uint) (user.Info, error) {
 func (u UserInfo) GetUserInfoList(opt user.PageOption) ([]user.Info, error) {
 	pageUser, err := ListByPage(u.ds.ORM(), opt)
 	if err != nil {
-		return []user.Info{}, system.ErrDatabase.Wrap(err)
+		return []user.Info{}, err
 	}
 
 	userInfoList := make([]user.Info, 0, len(pageUser))
@@ -108,28 +108,53 @@ func (u UserInfo) GetUserInfoList(opt user.PageOption) ([]user.Info, error) {
 	return userInfoList, err
 }
 
-func GetUserById(db *gorm.DB, id uint) (entity.User, error) {
+func GetUserById(db *gorm.DB, id uint) (entity.User, bool, error) {
 	findUser := entity.User{}
-	err := db.Where("id = ?", id).Find(&findUser).Error
-	return findUser, err
+	result := db.Where("id = ?", id).Find(&findUser)
+
+	found, err := data.HasRecordFound(result)
+	if err != nil {
+		return findUser, false, system.ErrDatabase.Wrap(err)
+	} else if !found {
+		return findUser, false, nil
+	}
+	return findUser, true, nil
 }
 
-func GetUserByName(db *gorm.DB, username string) (entity.User, error) {
+func GetUserByName(db *gorm.DB, username string) (entity.User, bool, error) {
 	findUser := entity.User{}
-	err := db.Where("username = ?", username).First(&findUser).Error
-	return findUser, err
+	result := db.Where("username = ?", username).First(&findUser)
+	found, err := data.HasRecordFound(result)
+	if err != nil {
+		return findUser, false, system.ErrDatabase.Wrap(err)
+	} else if !found {
+		return findUser, false, nil
+	}
+	return findUser, true, nil
 }
 
-func GetUserByUUID(db *gorm.DB, uuid string) (entity.User, error) {
+func GetUserByUUID(db *gorm.DB, uuid string) (entity.User, bool, error) {
 	findUser := entity.User{}
-	err := db.Where("uuid =?", uuid).First(&findUser).Error
-	return findUser, err
+	result := db.Where("uuid =?", uuid).First(&findUser)
+	found, err := data.HasRecordFound(result)
+	if err != nil {
+		return findUser, false, system.ErrDatabase.Wrap(err)
+	} else if !found {
+		return findUser, false, nil
+	}
+	return findUser, true, nil
 }
 
-func GetUserByEmail(db *gorm.DB, email string) (entity.User, error) {
+func GetUserByEmail(db *gorm.DB, email string) (entity.User, bool, error) {
 	findUser := entity.User{}
-	err := db.Model(findUser).Where("email =?", email).First(&findUser).Error
-	return findUser, err
+	result := db.Model(findUser).Where("email =?", email).First(&findUser)
+	found, err := data.HasRecordFound(result)
+	if err != nil {
+		return findUser, false, system.ErrDatabase.Wrap(err)
+	} else if !found {
+		return findUser, false, nil
+	}
+	return findUser, true, nil
 }
 
 func ListByPage(db *gorm.DB, pageOpt user.PageOption) ([]entity.User, error) {
@@ -149,7 +174,10 @@ func ListByPage(db *gorm.DB, pageOpt user.PageOption) ([]entity.User, error) {
 	}
 
 	err := pageDB.Preload("Roles").Find(&users).Error
-	return users, err
+	if err != nil {
+		return users, system.ErrDatabase.Wrap(err)
+	}
+	return users, nil
 }
 
 // ListAllUsers
@@ -157,11 +185,17 @@ func ListByPage(db *gorm.DB, pageOpt user.PageOption) ([]entity.User, error) {
 func ListAllUsers(db *gorm.DB) ([]entity.User, error) {
 	var users []entity.User
 	err := db.Find(&users).Error
+	if err != nil {
+		return users, system.ErrDatabase.Wrap(err)
+	}
 	return users, err
 }
 
 func Count(db *gorm.DB) (int64, error) {
 	var count int64
 	err := db.Model(entity.User{}).Count(&count).Error
+	if err != nil {
+		return count, system.ErrDatabase.Wrap(err)
+	}
 	return count, err
 }

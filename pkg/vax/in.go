@@ -45,7 +45,7 @@ func (r InRule) Validate(lang string, value interface{}) error {
 	}
 
 	for _, e := range r.elements {
-		if reflect.DeepEqual(e, value) {
+		if value == e || reflect.DeepEqual(e, value) {
 			return nil
 		}
 	}

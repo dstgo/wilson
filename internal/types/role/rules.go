@@ -12,10 +12,10 @@ var (
 )
 
 var (
-	RulePermObj   = helper.Rules(vax.Match(PermObjectRule.Regx).Code(PermObjectRule.I18n), vax.RangeLength(1, 200, false))
-	RulePermAct   = helper.Rules(vax.RangeLength(1, 60, false), is.Alpha)
-	RulePermTag   = helper.Rules(vax.RangeLength(1, 20, false), is.Alphanumeric)
-	RulePermGroup = helper.Rules(vax.RangeLength(1, 60, false))
-	RuleRoleName  = helper.Rules(vax.RangeLength(1, 60, false))
-	RuleRoleCode  = helper.Rules(vax.RangeLength(1, 30, false), is.Alphanumeric)
+	RulePermObj   = helper.Rules(vax.Match(PermObjectRule.Regx).Code(PermObjectRule.I18n), vax.RangeLenRune(1, 200))
+	RulePermAct   = helper.Rules(vax.RangeLenRune(1, 60), is.Alpha)
+	RulePermTag   = helper.Rules(vax.RangeLenRune(1, 20), is.Alphanumeric)
+	RulePermGroup = helper.Rules(vax.RangeLenRune(1, 60))
+	RuleRoleName  = helper.Rules(vax.RangeLenRune(1, 60))
+	RuleRoleCode  = helper.Rules(vax.RangeLenRune(1, 30), is.Alphanumeric)
 )

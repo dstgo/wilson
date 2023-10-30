@@ -4,6 +4,7 @@ import (
 	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/core/resp"
 	"github.com/dstgo/wilson/internal/handler/user"
+	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -38,7 +39,7 @@ type InfoApi struct {
 // @Security    ApiKeyAuth
 func (i InfoApi) KeyInfo(ctx *gin.Context) {
 	info := authen.GetContextKeyInfo(ctx)
-	resp.Ok(ctx).MsgI18n("op.query.ok").Data(auth.APIKey{
+	resp.Ok(ctx).MsgI18n(types.QueryOk).Data(auth.APIKey{
 		Key:       info.Key,
 		Name:      info.Name,
 		ExpiredAt: info.ExpiredAt,

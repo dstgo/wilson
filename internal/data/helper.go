@@ -58,6 +58,6 @@ func HasRecordFound(db *gorm.DB) (bool, error) {
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return false, err
 	} else {
-		return rows != 0, nil
+		return rows > 0, nil
 	}
 }

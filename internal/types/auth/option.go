@@ -72,7 +72,7 @@ type KeyCreateOption struct {
 
 func (c KeyCreateOption) Validate(lang string) error {
 	return vax.Struct(&c, lang,
-		vax.Field(&c.Name, vax.Required, vax.RangeLength(1, 50, false)),
+		vax.Field(&c.Name, vax.Required, vax.RangeLenRune(1, 50)),
 		vax.Field(&c.Perms, vax.Required),
 		vax.Field(&c.ExpiredAt, vax.Required, vax.Gt(0)),
 	)

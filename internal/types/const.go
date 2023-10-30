@@ -26,3 +26,14 @@ const (
 	DateFormat     = "2006-01-02"
 	TimeFormat     = "15:04:05.999"
 )
+
+const (
+	QueryOk    = "op.query.ok"
+	QueryFail  = "op.query.fail"
+	CreateOk   = "op.create.ok"
+	CreateFail = "op.create.fail"
+	UpdateOk   = "op.update.ok"
+	UpdateFail = "op.update.fail"
+	DeleteOk   = "op.delete.ok"
+	DeleteFail = "op.delete.fail"
+)

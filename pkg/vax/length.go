@@ -15,6 +15,18 @@ var (
 	ErrLengthOutOfRange = NewError("validate.length.range", "the length must be between %v and %v")
 )
 
+func RangeLenRune(min, max int) RangeLengthRule {
+	return RangeLength(min, max, true)
+}
+
+func MaxLenRune(max int) MaxLengthRule {
+	return MaxLength(max, true)
+}
+
+func MinLenRune(min int) MinLengthRule {
+	return MinLength(min, true)
+}
+
 func RangeLength(min, max int, rune bool) RangeLengthRule {
 	if min < 0 || max < 0 {
 		panic("min and max length must be non-negative")

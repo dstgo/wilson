@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	RuleUsername = helper.Rules(is.Alphanumeric, vax.RangeLength(6, 20, false))
+	RuleUsername = helper.Rules(is.Alphanumeric, vax.RangeLenRune(6, 20))
 
-	RulePassword = helper.Rules(vax.RangeLength(10, 30, false))
+	RulePassword = helper.Rules(vax.RangeLenRune(10, 30))
 )

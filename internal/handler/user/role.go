@@ -1,28 +1,27 @@
 package user
 
 import (
-	"errors"
+	"github.com/dstgo/wilson/internal/data"
 	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/types/role"
 	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/dstgo/wilson/internal/types/user"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 func (u UserInfo) GetUserRoles(uuid string) ([]role.RoleInfo, error) {
 	db := u.ds.ORM()
 	roleInfos := make([]role.RoleInfo, 0)
-	queryUser, err := GetUserByUUID(db, uuid)
+	queryUser, found, err := GetUserByUUID(db, uuid)
 	if err != nil {
-		return roleInfos, system.ErrDatabase.Wrap(err)
-	} else if queryUser.Id == 0 {
+		return roleInfos, err
+	} else if !found {
 		return roleInfos, user.ErrUserNotFound
 	}
 
 	roles, err := ListAllUserRoles(u.ds.ORM(), queryUser.Id)
 	if err != nil {
-		return roleInfos, system.ErrDatabase.Wrap(err)
+		return roleInfos, err
 	}
 
 	roleInfos = role.MakeRoleInfoList(roles)
@@ -64,19 +63,20 @@ func (u UserModify) SaveRolesByCode(uuid string, codes []string) error {
 func (u UserModify) SaveRoles(uuid string, saveRoleIds []uint) error {
 	db := u.ds.ORM()
 
-	queryUser, err := GetUserByUUID(db, uuid)
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return system.ErrDatabase.Wrap(err)
-	} else if queryUser.Id == 0 {
+	queryUser, found, err := GetUserByUUID(db, uuid)
+	if err != nil {
+		return err
+	} else if !found {
 		return user.ErrUserNotFound
 	}
 
 	// confirm roles had been exists in db
 	var findRoles []entity.Role
-	err = db.Model(entity.Role{}).Where("id IN ?", saveRoleIds).Find(&findRoles).Error
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return system.ErrDatabase.Wrap(err)
-	} else if len(findRoles) != len(saveRoleIds) {
+	result := db.Model(entity.Role{}).Where("id IN ?", saveRoleIds).Find(&findRoles)
+	recordFound, err := data.HasRecordFound(result)
+	if err != nil {
+		return err
+	} else if !recordFound {
 		return role.ErrInvalidRoles
 	}
 
@@ -88,32 +88,18 @@ func (u UserModify) SaveRoles(uuid string, saveRoleIds []uint) error {
 	return nil
 }
 
-func CreateUserRoleInBatch(db *gorm.DB, userRoles []entity.UserRole) error {
-	if len(userRoles) == 0 {
-		return nil
-	}
-	return db.Clauses(clause.OnConflict{DoNothing: true}).Create(&userRoles).Error
-}
-
-func RemoveUserRoleInBatch(db *gorm.DB, userId uint, roleIds []uint) error {
-	if len(roleIds) == 0 {
-		return nil
-	}
-	return db.Where("user_id = ? AND role_id IN ?", userId, roleIds).Error
-}
-
 func ListAllUserRoles(db *gorm.DB, userId uint) ([]entity.Role, error) {
 	var userRoles []entity.UserRole
 	var roles []entity.Role
 
 	err := db.Where("user_id = ?", userId).Find(&userRoles).Error
 	if err != nil {
-		return roles, err
+		return roles, system.ErrDatabase.Wrap(err)
 	}
 
 	err = db.Model(userRoles).Association("Role").Find(&roles)
 	if err != nil {
-		return roles, err
+		return roles, system.ErrDatabase.Wrap(err)
 	}
 
 	return roles, nil
