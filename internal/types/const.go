@@ -34,6 +34,6 @@ const (
 	CreateFail = "op.create.fail"
 	UpdateOk   = "op.update.ok"
 	UpdateFail = "op.update.fail"
-	RemoveOk   = "op.delete.ok"
-	RemoveFail = "op.delete.fail"
+	DeleteOk   = "op.delete.ok"
+	DeleteFail = "op.delete.fail"
 )

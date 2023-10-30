@@ -3,6 +3,7 @@ package user
 import (
 	"github.com/dstgo/wilson/internal/core/authen"
 	"github.com/dstgo/wilson/internal/core/resp"
+	"github.com/dstgo/wilson/internal/types"
 	"github.com/dstgo/wilson/internal/types/system"
 	"github.com/dstgo/wilson/internal/types/user"
 	"github.com/dstgo/wilson/pkg/ginx/bind"
@@ -42,10 +43,10 @@ func (i InfoHandler) GetUserInfo(ctx *gin.Context) {
 
 	info, err := i.info.GetUserInfoByUUID(contextTokenInfo.UUID)
 	if err != nil {
-		resp.Fail(ctx).Error(err).MsgI18n("op.query.fail").Send()
+		resp.Fail(ctx).Error(err).MsgI18n(types.QueryFail).Send()
 		return
 	}
-	resp.Ok(ctx).Data(info).MsgI18n("op.query.ok").Send()
+	resp.Ok(ctx).Data(info).MsgI18n(types.QueryOk).Send()
 }
 
 // UpdateUserInfo
@@ -74,10 +75,10 @@ func (i InfoHandler) UpdateUserInfo(ctx *gin.Context) {
 	updateUserOpt.UUID = info.UUID
 
 	if err := i.modify.Update(updateUserOpt); err != nil {
-		resp.Fail(ctx).Error(err).MsgI18n("op.update.fail").Send()
+		resp.Fail(ctx).Error(err).MsgI18n(types.UpdateFail).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.update.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.UpdateOk).Send()
 }
 
 func NewAdminHandler(info UserInfo, modify UserModify) AdminHandler {
@@ -108,10 +109,10 @@ func (a AdminHandler) GetSpecUserInfo(ctx *gin.Context) {
 
 	info, err := a.info.GetUserInfoByUUID(uuid.UUID)
 	if err != nil {
-		resp.Fail(ctx).Error(err).MsgI18n("op.query.fail").Send()
+		resp.Fail(ctx).Error(err).MsgI18n(types.QueryFail).Send()
 		return
 	}
-	resp.Ok(ctx).Data(info).MsgI18n("op.query.ok").Send()
+	resp.Ok(ctx).Data(info).MsgI18n(types.QueryOk).Send()
 }
 
 // GetUserInfoList
@@ -133,10 +134,10 @@ func (a AdminHandler) GetUserInfoList(ctx *gin.Context) {
 
 	list, err := a.info.GetUserInfoList(page)
 	if err != nil {
-		resp.Fail(ctx).Error(err).MsgI18n("op.query.fail").Send()
+		resp.Fail(ctx).Error(err).MsgI18n(types.QueryFail).Send()
 		return
 	}
-	resp.Ok(ctx).Data(list).MsgI18n("op.query.ok").Send()
+	resp.Ok(ctx).Data(list).MsgI18n(types.QueryOk).Send()
 }
 
 // CreateUser
@@ -157,10 +158,10 @@ func (a AdminHandler) CreateUser(ctx *gin.Context) {
 	}
 
 	if err := a.modify.Create(createOpt); err != nil {
-		resp.Fail(ctx).Error(err).MsgI18n("op.create.fail").Send()
+		resp.Fail(ctx).Error(err).MsgI18n(types.CreateFail).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.create.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.CreateOk).Send()
 }
 
 // SaveUser
@@ -182,10 +183,10 @@ func (a AdminHandler) SaveUser(ctx *gin.Context) {
 
 	err := a.modify.Save(saveOption)
 	if err != nil {
-		resp.Fail(ctx).Error(err).MsgI18n("op.update.fail").Send()
+		resp.Fail(ctx).Error(err).MsgI18n(types.UpdateFail).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.update.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.UpdateOk).Send()
 }
 
 // RemoveUser
@@ -205,8 +206,8 @@ func (a AdminHandler) RemoveUser(ctx *gin.Context) {
 		return
 	}
 	if err := a.modify.Remove(uuid.UUID); err != nil {
-		resp.Fail(ctx).Error(err).MsgI18n("op.delete.fail").Send()
+		resp.Fail(ctx).Error(err).MsgI18n(types.DeleteFail).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.delete.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.DeleteOk).Send()
 }

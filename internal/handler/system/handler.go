@@ -249,10 +249,10 @@ func (r RoleHandler) GetRoleList(ctx *gin.Context) {
 
 	roleInfos, err := r.enforcer.ListRole(pageOpt)
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.query.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.QueryFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.query.ok").Data(roleInfos).Send()
+	resp.Ok(ctx).MsgI18n(types.QueryOk).Data(roleInfos).Send()
 }
 
 // GetRolePerms
@@ -274,10 +274,10 @@ func (r RoleHandler) GetRolePerms(ctx *gin.Context) {
 
 	perms, err := r.enforcer.ListRolePerms(queryOpt.Uint())
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.query.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.QueryFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.query.ok").Data(perms).Send()
+	resp.Ok(ctx).MsgI18n(types.QueryOk).Data(perms).Send()
 }
 
 // CreateRole
@@ -298,10 +298,10 @@ func (r RoleHandler) CreateRole(ctx *gin.Context) {
 	}
 	err := r.enforcer.CreateRole(createOpt)
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.create.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.CreateFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.create.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.CreateOk).Send()
 }
 
 // UpdateRole
@@ -322,10 +322,10 @@ func (r RoleHandler) UpdateRole(ctx *gin.Context) {
 	}
 	err := r.enforcer.UpdateRole(updateOpt)
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.update.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.UpdateFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.update.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.UpdateOk).Send()
 }
 
 // GrantRolePerms
@@ -347,10 +347,10 @@ func (r RoleHandler) GrantRolePerms(ctx *gin.Context) {
 
 	err := r.enforcer.UpdateRolePerms(grantOption)
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.update.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.UpdateFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.update.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.UpdateOk).Send()
 }
 
 // RemoveRole
@@ -372,10 +372,10 @@ func (r RoleHandler) RemoveRole(ctx *gin.Context) {
 
 	err := r.enforcer.RemoveRole(roleId.Uint())
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.delete.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.DeleteFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.delete.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.DeleteOk).Send()
 }
 
 // GetPermList
@@ -397,10 +397,10 @@ func (r RoleHandler) GetPermList(ctx *gin.Context) {
 
 	roleInfos, err := r.enforcer.ListPerms(pageOpt)
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.query.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.QueryFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.query.ok").Data(roleInfos).Send()
+	resp.Ok(ctx).MsgI18n(types.QueryOk).Data(roleInfos).Send()
 }
 
 // CreatePermission
@@ -422,10 +422,10 @@ func (r RoleHandler) CreatePermission(ctx *gin.Context) {
 
 	err := r.enforcer.CreatePerm(createOpt)
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.create.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.CreateFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.create.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.CreateOk).Send()
 }
 
 // UpdatePermission
@@ -446,10 +446,10 @@ func (r RoleHandler) UpdatePermission(ctx *gin.Context) {
 	}
 	err := r.enforcer.UpdatePerm(updateOpt)
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.update.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.UpdateFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.update.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.UpdateOk).Send()
 }
 
 // RemovePermission
@@ -471,10 +471,10 @@ func (r RoleHandler) RemovePermission(ctx *gin.Context) {
 
 	err := r.enforcer.RemovePerm(permId.Uint())
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.delete.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.DeleteFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.delete.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.DeleteOk).Send()
 }
 
 func NewAPIKeyHandler(apikey ApiKey) APIKeyHandler {
@@ -499,10 +499,10 @@ func (a APIKeyHandler) ListAPIKeys(ctx *gin.Context) {
 	uuid := info.UUID
 	keys, err := a.apikey.ListApiKey(ctx, uuid)
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.query.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.QueryFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.query.ok").Data(keys).Send()
+	resp.Ok(ctx).MsgI18n(types.QueryOk).Data(keys).Send()
 }
 
 // CreateAPIKey
@@ -525,10 +525,10 @@ func (a APIKeyHandler) CreateAPIKey(ctx *gin.Context) {
 
 	err := a.apikey.CreateAPiKey(ctx, createOpt)
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.create.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.CreateFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.create.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.CreateOk).Send()
 }
 
 // RemoveAPIKey
@@ -550,10 +550,10 @@ func (a APIKeyHandler) RemoveAPIKey(ctx *gin.Context) {
 
 	err := a.apikey.RemoveApiKey(ctx, removeOpt.UUID, removeOpt.Key)
 	if err != nil {
-		resp.Fail(ctx).MsgI18n("op.delete.fail").Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.DeleteFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n("op.delete.ok").Send()
+	resp.Ok(ctx).MsgI18n(types.DeleteOk).Send()
 }
 
 func NewDictHandler(dt DictResolver) DictHandler {
@@ -673,10 +673,10 @@ func (d DictHandler) RemoveDict(ctx *gin.Context) {
 	}
 	err := d.dt.RemoveDict(ctx, id.Uint())
 	if err != nil {
-		resp.Fail(ctx).MsgI18n(types.RemoveFail).Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.DeleteFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n(types.RemoveOk).Send()
+	resp.Ok(ctx).MsgI18n(types.DeleteOk).Send()
 }
 
 // ListDictData
@@ -765,8 +765,8 @@ func (d DictHandler) RemoveDictData(ctx *gin.Context) {
 	}
 	err := d.dt.RemoveDictData(ctx, removeOpt.Uint())
 	if err != nil {
-		resp.Fail(ctx).MsgI18n(types.RemoveFail).Error(err).Send()
+		resp.Fail(ctx).MsgI18n(types.DeleteFail).Error(err).Send()
 		return
 	}
-	resp.Ok(ctx).MsgI18n(types.RemoveOk).Send()
+	resp.Ok(ctx).MsgI18n(types.DeleteOk).Send()
 }
