@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"github.com/spf13/cobra"
@@ -32,6 +32,6 @@ func init() {
 	rootCmd.AddCommand(serverCmd)
 }
 
-func Execute() error {
-	return rootCmd.Execute()
+func main() {
+	rootCmd.Execute()
 }

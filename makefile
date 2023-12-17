@@ -1,4 +1,4 @@
-pkg=$(shell go list)
+pkg="github.com/dstgo/wilson/cmd/wilson"
 user=$(shell git config user.name)
 version=$(shell git describe --tags --always)
 
@@ -18,8 +18,8 @@ gen:
 
 .PHONY: build
 build:
-	go vet
-	go build -trimpath -ldflags "-X $(pkg)/cmd.Author=$(user) -X $(pkg)/cmd.Version=$(version)" -o ./bin/ $(pkg)
+	go vet ./...
+	go build -a -trimpath -ldflags "-X $(pkg).Author=$(user) -X $(pkg).Version=$(version)" -o ./bin/ $(pkg)
 
 .PHONY: gen_build
 gen_build:
