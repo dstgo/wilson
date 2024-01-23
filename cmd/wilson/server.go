@@ -5,7 +5,7 @@ import (
 	"github.com/dstgo/task"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/core/log"
-	"github.com/dstgo/wilson/internal/core/wilson"
+	"github.com/dstgo/wilson/internal/core/server"
 	"github.com/dstgo/wilson/pkg/config"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -37,7 +37,7 @@ func init() {
 	serverCmd.Flags().BoolVar(&initial, "i", false, "only initial server data, not run web server")
 }
 
-func newServer(ctx context.Context, configFile string, author string, version string) (*wilson.App, error) {
+func newServer(ctx context.Context, configFile string, author string, version string) (*server.HttpServer, error) {
 
 	// read configuration
 	appConfig := config.NewConfigFile(configFile)
@@ -52,7 +52,7 @@ func newServer(ctx context.Context, configFile string, author string, version st
 	}
 
 	// ini logger
-	logger, err := wilson.NewLogger(appConf.LogConf)
+	logger, err := server.NewLogger(appConf.LogConf)
 	if err != nil {
 		return nil, err
 	}
@@ -62,10 +62,10 @@ func newServer(ctx context.Context, configFile string, author string, version st
 	gin.SetMode(appConf.ServerConf.Mode)
 
 	// initialize app server
-	app, err := wilson.NewApp(
-		wilson.WithCtx(ctx),
-		wilson.WithConf(appConf),
-		wilson.WithLogger(logger),
+	app, err := server.NewHttpApp(
+		server.WithCtx(ctx),
+		server.WithConf(appConf),
+		server.WithLogger(logger),
 	)
 
 	if err != nil {

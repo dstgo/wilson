@@ -1,46 +1,46 @@
-package wilson
+package server
 
 import (
 	"context"
 	"github.com/dstgo/wilson/internal/api"
+	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/data"
+	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/handler"
 	"github.com/dstgo/wilson/internal/pkg/locale"
 	"github.com/dstgo/wilson/pkg/vax"
+	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"net/http"
 	"sync"
-
-	"github.com/dstgo/wilson/internal/conf"
-	"github.com/gin-gonic/gin"
 )
 
-type Options func(app *App)
+type Options func(app *HttpServer)
 
-func (o Options) Apply(app *App) {
+func (o Options) Apply(app *HttpServer) {
 	o(app)
 }
 
 func WithCtx(ctx context.Context) Options {
-	return func(app *App) {
+	return func(app *HttpServer) {
 		app.ctx = ctx
 	}
 }
 
 func WithConf(appConf *conf.AppConf) Options {
-	return func(app *App) {
+	return func(app *HttpServer) {
 		app.cfg = appConf
 	}
 }
 
 func WithLogger(logger *log.Logger) Options {
-	return func(app *App) {
+	return func(app *HttpServer) {
 		app.Logger = logger
 	}
 }
 
-type App struct {
+type HttpServer struct {
 	ctx context.Context
 
 	cfg    *conf.AppConf
@@ -52,7 +52,7 @@ type App struct {
 	shutddownFn func()
 }
 
-func (a *App) run() error {
+func (a *HttpServer) run() error {
 	appConf := a.cfg.ServerConf
 	a.Logger.L().Infof("wilson app boot successfully, http server is listenning at %s, tls enable %t", a.server.Addr, appConf.HttpConf.TlsConf.Enable)
 	tlsConf := a.cfg.ServerConf.HttpConf.TlsConf
@@ -62,7 +62,7 @@ func (a *App) run() error {
 	return a.server.ListenAndServe()
 }
 
-func (a *App) Run() error {
+func (a *HttpServer) Run() error {
 	err := a.run()
 	if errors.Is(err, http.ErrServerClosed) {
 		a.Logger.L().Infoln("http server closed successfully")
@@ -71,7 +71,7 @@ func (a *App) Run() error {
 	return err
 }
 
-func (a *App) Shutdown() {
+func (a *HttpServer) Shutdown() {
 	a.once.Do(func() {
 		a.Logger.L().Infof("wilson app ready to shutdown")
 		a.server.Shutdown(context.Background())
@@ -79,9 +79,9 @@ func (a *App) Shutdown() {
 	})
 }
 
-func NewApp(options ...Options) (*App, error) {
+func NewHttpApp(options ...Options) (*HttpServer, error) {
 
-	app := new(App)
+	app := new(HttpServer)
 
 	// apply options
 	for _, option := range options {
@@ -113,13 +113,18 @@ func NewApp(options ...Options) (*App, error) {
 		vax.SetTranslator(locale.L())
 	}
 
-	if err = LogBanner(app.cfg, app.Logger.L()); err != nil {
+	if err = LogBanner(app.cfg, app.Logger.L(), "wilson.txt"); err != nil {
 		return nil, err
 	}
 
 	// datasource
 	datasource, err = LoadDataSource(app.ctx, app.cfg.DataConf)
 	if err != nil {
+		return nil, err
+	}
+
+	// migrate tables
+	if err := entity.Migrate(datasource.ORM()); err != nil {
 		return nil, err
 	}
 
