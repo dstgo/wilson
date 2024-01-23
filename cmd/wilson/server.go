@@ -26,7 +26,8 @@ var serverCmd = &cobra.Command{
 	Short:   "Run wilson backend server",
 	Example: "wilson server -f /etc/wilson/config.yaml",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := serve(configFile, Author, Version); err != nil && !errors.Is(err, context.Canceled) {
+		err := serve(configFile, Author, Version, BuildTime)
+		if err != nil && !errors.Is(err, context.Canceled) {
 			slog.Error(errors.Wrap(err, "wilson server running failed").Error())
 		}
 	},
@@ -37,7 +38,7 @@ func init() {
 	serverCmd.Flags().BoolVar(&initial, "i", false, "only initial server data, not run web server")
 }
 
-func newServer(ctx context.Context, configFile string, author string, version string) (*server.HttpServer, error) {
+func newServer(ctx context.Context, configFile string, author string, version string, buildTime string) (*server.HttpServer, error) {
 
 	// read configuration
 	appConfig := config.NewConfigFile(configFile)
@@ -46,7 +47,11 @@ func newServer(ctx context.Context, configFile string, author string, version st
 	}
 
 	// map configuration struct
-	appConf, err := conf.NewAppConf(appConfig, author, version)
+	appConf, err := conf.NewWilsonConf(appConfig, conf.BuildInfo{
+		Author:    author,
+		Version:   version,
+		BuildTime: buildTime,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +64,7 @@ func newServer(ctx context.Context, configFile string, author string, version st
 	log.Setup(logger.L())
 
 	// set app mode
-	gin.SetMode(appConf.ServerConf.Mode)
+	gin.SetMode(gin.ReleaseMode)
 
 	// initialize app server
 	app, err := server.NewHttpApp(
@@ -75,14 +80,14 @@ func newServer(ctx context.Context, configFile string, author string, version st
 	return app, nil
 }
 
-func serve(configFile string, author string, version string) error {
+func serve(configFile string, author string, version string, buildTime string) error {
 
 	// listen signal
 	signalCtx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGKILL, syscall.SIGABRT, syscall.SIGTERM)
 	defer cancel()
 
 	// create app
-	app, err := newServer(signalCtx, configFile, author, version)
+	app, err := newServer(signalCtx, configFile, author, version, buildTime)
 	if err != nil {
 		return err
 	}

@@ -7,17 +7,18 @@ import (
 	"time"
 )
 
+type BuildInfo struct {
+	Author    string
+	Version   string
+	BuildTime string
+}
+
 // ServerConf app config
 type ServerConf struct {
-	Mode      string `mapstructure:"mode"`
-	Author    string
-	GoVersion string
-	Swagger   bool     `mapstructure:"swagger"`
-	OpenAPI   bool     `mapstructure:"openapi"`
-	Version   string   `mapstructure:"version"`
-	Name      string   `mapstructure:"name"`
-	HttpConf  HttpConf `mapstructure:"http"`
-	Rpc       RpcConf  `mapstructure:"rpc"`
+	Name     string   `mapstructure:"name"`
+	Swagger  bool     `mapstructure:"swagger"`
+	OpenAPI  bool     `mapstructure:"openapi"`
+	HttpConf HttpConf `mapstructure:"http"`
 }
 
 // HttpConf http server config
@@ -40,10 +41,6 @@ type TlsConf struct {
 	Enable bool   `mapstructure:"enable"`
 	Cert   string `mapstructure:"cert"`
 	Pem    string `mapstructure:"pem"`
-}
-
-// RpcConf Rpc client config
-type RpcConf struct {
 }
 
 // JwtConf jwt config

@@ -27,7 +27,7 @@ func init() {
 }
 
 func generateResourceDir(dir string) error {
-	err := filebox.CopyFs(assets.Fs, "config", dir)
+	err := filebox.CopyFs(assets.Fs, "wilson", dir)
 	if err != nil {
 		return errors.Wrap(err, "generate config failed")
 	}

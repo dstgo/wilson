@@ -28,7 +28,7 @@ func WithCtx(ctx context.Context) Options {
 	}
 }
 
-func WithConf(appConf *conf.AppConf) Options {
+func WithConf(appConf *conf.WilsonConf) Options {
 	return func(app *HttpServer) {
 		app.cfg = appConf
 	}
@@ -43,7 +43,7 @@ func WithLogger(logger *log.Logger) Options {
 type HttpServer struct {
 	ctx context.Context
 
-	cfg    *conf.AppConf
+	cfg    *conf.WilsonConf
 	Logger *log.Logger
 	Locale *locale.Locale
 	server *http.Server

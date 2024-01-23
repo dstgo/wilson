@@ -21,9 +21,9 @@ Access https://github.com/dstgo/wilson for more information.`,
 }
 
 var (
-	Author string
-
-	Version string
+	Author    string
+	Version   string
+	BuildTime string
 )
 
 func init() {

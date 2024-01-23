@@ -11,6 +11,6 @@ import (
 )
 
 //go:generate wire gen
-func setupHandlerRouter(appConf *conf.AppConf, router *ginx.RouterGroup, datasource *data.DataSource) (Router, func(), error) {
+func setupHandlerRouter(appConf *conf.WilsonConf, router *ginx.RouterGroup, datasource *data.DataSource) (Router, func(), error) {
 	panic(wire.Build(HandlerProviderSet))
 }

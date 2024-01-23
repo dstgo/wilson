@@ -41,7 +41,7 @@ type Router struct {
 }
 
 // SetupHandler wilson http handlers
-func SetupHandler(cfg *conf.AppConf, httpserver *gin.Engine, datasource *data.DataSource) (Router, func(), error) {
+func SetupHandler(cfg *conf.WilsonConf, httpserver *gin.Engine, datasource *data.DataSource) (Router, func(), error) {
 	var (
 		serverConf     = cfg.ServerConf
 		swaggerEnabled = serverConf.Swagger

@@ -1,6 +1,11 @@
-pkg="github.com/dstgo/wilson/cmd/wilson"
-user=$(shell git config user.name)
-version=$(shell git describe --tags --always)
+wilson_app := "github.com/dstgo/wilson/cmd/wilson"
+wigfird_app := "github.com/dstgo/wilson/cmd/wigfrid"
+author := github.com/dstgo
+version := $(shell git describe --tags --always)
+git_version := $(shell git describe --tags --always)
+build_time := $(shell date +"%Y%m%d%H%M%S")
+host_os := $(shell go env GOHOSTOS)
+host_arch := $(shell go env GOHOSTARCH)
 
 .PHONY: init
 init:
@@ -17,9 +22,17 @@ gen:
 	go generate ./...
 
 .PHONY: build
-build:
+build_wilson:
 	go vet ./...
-	go build -a -trimpath -ldflags "-X $(pkg).Author=$(user) -X $(pkg).Version=$(version)" -o ./bin/ $(pkg)
+	go build -trimpath \
+				-ldflags="-X main.Author=$(author) -X main.Version=$(version) -X main.BuildTime=$(build_time)" \
+				-o ./bin/wilson/ $(wilson_app)
+
+build_wigfrid:
+	go vet ./..
+	go build -trimpath \
+					-ldflags="-X main.Author=$(author) -X main.Version=$(version) -X main.BuildTime=$(build_time)" \
+					-o ./bin/wilson/ $(wigfird_app)
 
 .PHONY: gen_build
 gen_build:

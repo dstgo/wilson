@@ -5,32 +5,67 @@ import (
 	"github.com/dstgo/wilson/pkg/config"
 )
 
-// AppConf wilson config contains all needed configurations
-type AppConf struct {
+// WilsonConf wilson config contains all needed configurations
+type WilsonConf struct {
 	ServerConf *ServerConf  `mapstructure:"app"`
 	DataConf   *DataConf    `mapstructure:"data"`
 	LogConf    *LogConf     `mapstructure:"log"`
 	JwtConf    *JwtConf     `mapstructure:"jwt"`
 	LocaleConf *locale.Conf `mapstructure:"locale"`
 	EmailConf  *EmailConf   `mapstructure:"email"`
+	BuildMeta  BuildInfo
 }
 
-func NewAppConf(config *config.Config, author string, version string) (*AppConf, error) {
-	cfg := new(AppConf)
+func NewWilsonConf(config *config.Config, buildInfo BuildInfo) (*WilsonConf, error) {
+	cfg := new(WilsonConf)
 	if err := config.Viper().Unmarshal(cfg); err != nil {
 		return nil, err
 	}
 
-	if len(author) == 0 {
-		author = "none"
+	if len(buildInfo.Version) == 0 {
+		buildInfo.Version = "none"
 	}
 
-	if len(version) == 0 {
-		version = "none"
+	if len(buildInfo.Author) == 0 {
+		buildInfo.Author = "none"
 	}
 
-	cfg.ServerConf.Author = author
-	cfg.ServerConf.Version = version
+	if len(buildInfo.BuildTime) == 0 {
+		buildInfo.BuildTime = "none"
+	}
+
+	cfg.BuildMeta = buildInfo
+
+	return cfg, nil
+}
+
+// WigfridConf wigfrid configuration
+type WigfridConf struct {
+	BuildMeta BuildInfo
+	DataConf  *DataConf `mapstructure:"data"`
+	LogConf   *LogConf  `mapstructure:"log"`
+	DstConf   *DstConf  `mapstructure:"dst"`
+}
+
+func NewWigfridConf(config *config.Config, buildInfo BuildInfo) (*WigfridConf, error) {
+	cfg := new(WigfridConf)
+	if err := config.Viper().Unmarshal(cfg); err != nil {
+		return nil, err
+	}
+
+	if len(buildInfo.Version) == 0 {
+		buildInfo.Version = "none"
+	}
+
+	if len(buildInfo.Author) == 0 {
+		buildInfo.Author = "none"
+	}
+
+	if len(buildInfo.BuildTime) == 0 {
+		buildInfo.BuildTime = "none"
+	}
+
+	cfg.BuildMeta = buildInfo
 
 	return cfg, nil
 }

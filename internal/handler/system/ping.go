@@ -9,10 +9,10 @@ import (
 )
 
 type PingApp struct {
-	conf *conf.AppConf
+	conf *conf.WilsonConf
 }
 
-func NewPingLogic(conf *conf.AppConf) PingApp {
+func NewPingLogic(conf *conf.WilsonConf) PingApp {
 	return PingApp{
 		conf: conf,
 	}

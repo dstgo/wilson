@@ -33,7 +33,7 @@ type Router struct {
 }
 
 // SetupOpenAPI initializes app open api router configuration
-func SetupOpenAPI(cfg *conf.AppConf, engine *gin.Engine, datasource *data.DataSource) (Router, error) {
+func SetupOpenAPI(cfg *conf.WilsonConf, engine *gin.Engine, datasource *data.DataSource) (Router, error) {
 	if !cfg.ServerConf.OpenAPI {
 		return Router{}, nil
 	}

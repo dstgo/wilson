@@ -23,7 +23,7 @@ var EmailProviderSet = wire.NewSet(
 	NewEmailHandler,
 )
 
-func NewEmailHandler(cfg *conf.AppConf, emailLogic Sender, codeCache cache.RedisEmailCodeCache) EmailHandler {
+func NewEmailHandler(cfg *conf.WilsonConf, emailLogic Sender, codeCache cache.RedisEmailCodeCache) EmailHandler {
 	return EmailHandler{
 		EmailLogic:   emailLogic,
 		cfg:          cfg.EmailConf,

@@ -23,7 +23,7 @@ import (
 // Injectors from wire.go:
 
 //go:generate wire gen
-func setupHandlerRouter(appConf *conf.AppConf, router *ginx.RouterGroup, datasource *data.DataSource) (Router, func(), error) {
+func setupHandlerRouter(appConf *conf.WilsonConf, router *ginx.RouterGroup, datasource *data.DataSource) (Router, func(), error) {
 	sender, cleanup, err := email.NewSender(appConf)
 	if err != nil {
 		return Router{}, nil, err

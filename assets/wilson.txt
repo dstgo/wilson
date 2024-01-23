@@ -8,5 +8,5 @@
  ███░ ░░░██░██ ███ ██████ ░░██████  ███  ░██   ██████ ░░██████░███     ░░██   ░░██████░███
 ░░░    ░░░ ░░ ░░░ ░░░░░░   ░░░░░░  ░░░   ░░   ░░░░░░   ░░░░░░ ░░░       ░░     ░░░░░░ ░░░
 
-Author={{ .author }} AppName={{ .appName}} AppMode={{ .appMode }} LogMode= {{ .logMode}} BuildVersion={{ .version }} GoVersion={{ .goVersion }}
+AppName={{ .appName}} Author={{ .author }} BuildAt={{ .buildTime }} Version={{ .version }} GoVersion={{ .goVersion }} LogMode={{ .logMode}}
 Os={{ .osInfo }} Cpu={{ .cpuInfo }} Arch={{ .archInfo }} Timezone={{ .timezone }}

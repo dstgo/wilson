@@ -9,7 +9,7 @@ import (
 	"text/template"
 )
 
-func NewSender(cfg *conf.AppConf) (Sender, func(), error) {
+func NewSender(cfg *conf.WilsonConf) (Sender, func(), error) {
 	emailConf := cfg.EmailConf
 	// initialize email pool
 	pool, err := email.NewPool(emailConf.Address(), emailConf.MaxPoolSize, emailConf.SmtpAuth())

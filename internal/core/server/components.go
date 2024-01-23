@@ -29,7 +29,7 @@ import (
 
 // on server boot hooks
 
-func LogBanner(cfg *conf.AppConf, logger *logrus.Logger, bannerPath string) error {
+func LogBanner(cfg *conf.WilsonConf, logger *logrus.Logger, bannerPath string) error {
 	bannerTemplate := bytes.NewBuffer(nil)
 
 	banner, err := template.ParseFS(assets.Fs, bannerPath)
@@ -41,12 +41,12 @@ func LogBanner(cfg *conf.AppConf, logger *logrus.Logger, bannerPath string) erro
 	cpuInfo := sysinfo.GetCpuInfo()
 
 	bannerData := map[string]any{
-		"author":    cfg.ServerConf.Author,
 		"appName":   cfg.ServerConf.Name,
-		"appMode":   strings.ToUpper(cfg.ServerConf.Mode),
+		"author":    cfg.BuildMeta.Author,
+		"version":   cfg.BuildMeta.Version,
+		"buildTime": cfg.BuildMeta.BuildTime,
 		"logMode":   strings.ToUpper(cfg.LogConf.Level),
 		"goVersion": runtime.Version(),
-		"version":   cfg.ServerConf.Version,
 		"osInfo":    fmt.Sprintf("%s %s", hostInfo.Os, hostInfo.Version),
 		"timezone":  time.Now().Format("MST -07"),
 		"archInfo":  runtime.GOARCH,
@@ -114,7 +114,7 @@ func NewLogger(logConf *conf.LogConf) (*log.Logger, error) {
 }
 
 // NewHttpServer initializes http server configuration
-func NewHttpServer(cfg *conf.AppConf, lang *locale.Locale, logger *logrus.Logger) (*gin.Engine, *http.Server) {
+func NewHttpServer(cfg *conf.WilsonConf, lang *locale.Locale, logger *logrus.Logger) (*gin.Engine, *http.Server) {
 
 	serverConf := cfg.ServerConf
 

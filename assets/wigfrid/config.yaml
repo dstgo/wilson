@@ -1,0 +1,57 @@
+# log configuration
+log:
+  # logger entry format: text | json
+  format: text
+  # min level should be one of [fatal panic error warn info debug trace]
+  level: debug
+  # a log entry whose level below or equal info will be output specified dir path
+  infoLog: D:\WorkSpace\Code\GitHubProject\dstgo\wilson\bin\wig\info.log
+  # a log entry whose level above info will be output specified dir path
+  errorLog: D:\WorkSpace\Code\GitHubProject\dstgo\wilson\bin\wig\error.log
+
+# data source
+data:
+  # database configuration
+  database:
+    # driver type which should be supported by gorm
+    driver: mysql
+    # db network
+    network: tcp
+    # db address
+    addr: 192.168.48.138:3306
+    # db user
+    user: root
+    # db auth
+    pswd: 123456
+    # db connect params
+    params: wilson?charset=utf8mb4&parseTime=True&loc=Local
+    # max open connections
+    maxOpenCons: 200
+    # max idle connections
+    maxIdleCons: 20
+    # conns max idle time
+    maxIdleTime: 600s
+    # conns max lifetime
+    maxLifeTime: 3600s
+
+
+  # redis configuration
+  redis:
+    # redis server address host:port
+    addr: 192.168.48.138:6379
+    # redis server auth password
+    auth: 123456
+    # times of max retry
+    retry: 5
+    # min idle connections
+    minIdleConns: 10
+    # limit read timeout by ms
+    readTimeout: 5000ms
+    # limit write timeout by ms
+    writeTimeout: 5000ms
+
+dst:
+  # keli dedicated-server token
+  kleiToken: xxxxxxxx
+  # steam web api key
+  steamKey: xxxxxxxxx

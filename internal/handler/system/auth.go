@@ -20,7 +20,7 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-func NewAuthenticator(cfg *conf.AppConf, ds *data.DataSource, codeCache cache.RedisEmailCodeCache) Authenticator {
+func NewAuthenticator(cfg *conf.WilsonConf, ds *data.DataSource, codeCache cache.RedisEmailCodeCache) Authenticator {
 	info := user.NewUserInfo(ds)
 	modify := user.NewUserModify(ds, info)
 	tokenCache := cache.NewAccessTokenCache(ds)
