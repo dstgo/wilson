@@ -7,7 +7,6 @@ import (
 	"github.com/dstgo/task"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/core/log"
-	"github.com/dstgo/wilson/internal/data/entity"
 	"github.com/dstgo/wilson/internal/pkg/utils"
 	"github.com/dstgo/wilson/internal/types/errs"
 	"github.com/go-redis/redis/v8"
@@ -73,11 +72,6 @@ func NewDBClient(ctx context.Context, conf *conf.DatabaseConf) (*gorm.DB, error)
 	// ping server
 	if err := db.PingContext(ctx); err != nil {
 		return nil, err
-	}
-
-	// migrate table
-	if err := entity.Migrate(ormDB); err != nil {
-		return ormDB, err
 	}
 
 	return ormDB, nil
