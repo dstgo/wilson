@@ -10,10 +10,10 @@ import (
 
 var genDir string
 var genCmd = &cobra.Command{
-	Use:     "gen [--d dir]",
+	Use:     "gen [-d dir]",
 	Short:   "Generate the default wilson config directory",
-	Long:    "Generate the default wilson config directory. if already exists, all files will be overwritten.",
-	Example: "wilson gen --d /etc/wilson",
+	Long:    "Generate the default wilson config directory, if already exists, all files will be overwritten.",
+	Example: "wilson gen -d /etc/wilson",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := generateResourceDir(genDir)
 		if err != nil {
@@ -23,11 +23,11 @@ var genCmd = &cobra.Command{
 }
 
 func init() {
-	genCmd.Flags().StringVar(&genDir, "d", DefaultDir, "default wilson resource directory")
+	genCmd.Flags().StringVarP(&genDir, "dest", "d", DefaultDir, "default wilson resource directory")
 }
 
 func generateResourceDir(dir string) error {
-	err := filebox.CopyFsDir(assets.Fs, filebox.Os, "config", dir, filebox.DefaultBuffer)
+	err := filebox.CopyFs(assets.Fs, "config", dir)
 	if err != nil {
 		return errors.Wrap(err, "generate config failed")
 	}
