@@ -3,6 +3,9 @@ package log
 import (
 	"errors"
 	"github.com/dstgo/wilson/internal/conf"
+	"github.com/dstgo/wilson/internal/types"
+	"github.com/dstgo/wilson/pkg/ginx/httpx"
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"os"
 )
@@ -16,6 +19,12 @@ func L() *logrus.Logger {
 		panic("logger is not initialized")
 	}
 	return logger
+}
+
+func Trace(ctx *gin.Context) *logrus.Entry {
+	l := L()
+	id := httpx.GetRequestId(ctx)
+	return l.WithField(types.LogRequestIdKey, id)
 }
 
 func Setup(l *logrus.Logger) {
