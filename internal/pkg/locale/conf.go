@@ -1,10 +1,10 @@
 package locale
 
 import (
-	"github.com/dstgo/filebox"
 	"github.com/pkg/errors"
 	"github.com/spf13/cast"
 	"github.com/spf13/viper"
+	"os"
 	"path"
 	"path/filepath"
 	"strings"
@@ -18,13 +18,17 @@ type Conf struct {
 // Load read lang file from specified lang dir
 // locale name is the language file name without ext
 // eg: zh_CN.toml -> zh_CN
-// return Group
-// return error
 func (c Conf) Load() (Group, error) {
-	names := filebox.ReadDirFullNames(c.Dir)
+
 	group := make(Group, 5)
-	for _, name := range names {
-		if !filebox.IsDir(name) {
+	entries, err := os.ReadDir(c.Dir)
+	if err != nil {
+		return group, err
+	}
+	// collect all available language-files from lang dir
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			name := filepath.Join(c.Dir, entry.Name())
 			v := viper.New()
 			v.SetConfigFile(name)
 			if err := v.ReadInConfig(); err != nil {
