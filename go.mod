@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2
-	github.com/dstgo/filebox v1.0.1
+	github.com/dstgo/filebox v1.1.0
 	github.com/dstgo/size v1.0.3
 	github.com/dstgo/task v1.2.0
 	github.com/duke-git/lancet/v2 v2.2.4
