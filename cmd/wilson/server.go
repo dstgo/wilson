@@ -22,9 +22,9 @@ var (
 )
 
 var serverCmd = &cobra.Command{
-	Use:     "server [--f filename]",
+	Use:     "server [-f filename]",
 	Short:   "Run wilson backend server",
-	Example: "wilson server --f /etc/wilson/config.yaml",
+	Example: "wilson server -f /etc/wilson/config.yaml",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := serve(configFile, Author, Version); err != nil && !errors.Is(err, context.Canceled) {
 			slog.Error(errors.Wrap(err, "wilson server running failed").Error())
@@ -33,7 +33,7 @@ var serverCmd = &cobra.Command{
 }
 
 func init() {
-	serverCmd.Flags().StringVar(&configFile, "f", path.Join(DefaultDir, "config.yaml"), "specified wilson server config file")
+	serverCmd.Flags().StringVarP(&configFile, "conf", "f", path.Join(DefaultDir, "config.yaml"), "specified wilson server config file")
 	serverCmd.Flags().BoolVar(&initial, "i", false, "only initial server data, not run web server")
 }
 
