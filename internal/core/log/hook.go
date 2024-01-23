@@ -4,6 +4,7 @@ import (
 	"github.com/dstgo/filebox"
 	"github.com/sirupsen/logrus"
 	"io"
+	"os"
 	"sync"
 )
 
@@ -21,7 +22,7 @@ type levelFileHook struct {
 
 func newLevelFileHook(path string, levels ...logrus.Level) (*levelFileHook, error) {
 	var writer io.WriteCloser
-	file, err := filebox.OpenFile(path, filebox.AppendFlag, 0666)
+	file, err := filebox.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
 	if err != nil {
 		return nil, err
 	}
