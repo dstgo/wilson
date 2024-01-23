@@ -18,7 +18,7 @@ func PrintRouters(root *ginx.RouterGroup, printGroup bool) error {
 		if !printGroup && info.IsGroup {
 			return nil
 		}
-		log.L().Debugf("Method:%s\tPath:%-20s\tMeta:%s", info.Method, info.FullPath, info.Meta)
+		log.L().Debugf("Method:%s\tPath:%-20s\tMeta:%+v", info.Method, info.FullPath, info.Meta)
 		return nil
 	})
 }
