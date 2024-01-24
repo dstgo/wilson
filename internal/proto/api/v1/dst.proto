@@ -1,13 +1,19 @@
 syntax = "proto3";
 
+package v1.dst;
+
 option go_package = "api/v1;v1";
 
 // player klei id
-message Kid {
-  string kid = 1;
+message KleiId {
+  string id = 1;
 }
 
 // docker instance id
 message InstanceId {
   string instanceId = 1;
+}
+
+service ControlService {
+
 }

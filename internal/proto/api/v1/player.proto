@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package v1.player;
+
 option go_package = "api/v1;v1";
 
 import "v1/dst.proto";
@@ -37,6 +39,24 @@ message LogMessage {
   string msg = 3;
 }
 
+message PlayerChatInfo {
+  repeated LogMessage messages = 1;
+}
+
+// Player operation
+enum Operation {
+  // kill a specific online player
+  Kill = 0;
+  // kick a specific online player from the server
+  Kick = 1;
+  // make the specific online player change his role
+  ReRole = 2;
+  /// make the specific dead player reborn
+  ReBorn = 3;
+}
+
+// Dst server player service
 service PlayerService {
-  rpc GetPlayerInfo(InstanceId) returns(PlayerStatisticInfo);
+  rpc GetPlayerInfo(v1.dst.InstanceId) returns(PlayerStatisticInfo);
+  rpc GetPlayerChat(v1.dst.InstanceId) returns(PlayerChatInfo);
 }

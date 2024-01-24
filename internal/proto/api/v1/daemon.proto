@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package v1.daemon;
+
+option go_package = "api/v1;v1";
+
+
+message HealthInfo {
+  int64 cpuCount = 1;
+  int64 memorySize = 2;
+  double cpuPercent = 3;
+}
+
+service DaemonService {
+
+}

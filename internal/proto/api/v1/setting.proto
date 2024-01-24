@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package v1.setting;
+
+option go_package = "api/v1;v1";
+
+service SettingService {
+
+}
+
