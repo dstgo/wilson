@@ -15,7 +15,6 @@ type BuildInfo struct {
 
 // ServerConf app config
 type ServerConf struct {
-	Name     string   `mapstructure:"name"`
 	Swagger  bool     `mapstructure:"swagger"`
 	OpenAPI  bool     `mapstructure:"openapi"`
 	HttpConf HttpConf `mapstructure:"http"`
@@ -34,6 +33,15 @@ type HttpConf struct {
 	IdleTimeout     time.Duration `mapstructure:"idleTimeout"`
 	MultipartMax    int64         `mapstructure:"multipartMax"`
 	MaxHeader       int           `mapstructure:"maxHeader"`
+}
+
+type GrpcConf struct {
+	Address       string `mapstructure:"address"`
+	MaxRecv       int    `mapstructure:"maxRecv"`
+	MaxSend       int    `mapstructure:"maxSend"`
+	ReadBuffer    int    `mapstructure:"readBuffer"`
+	WriteBuffer   int    `mapstructure:"writeBuffer"`
+	MaxHeaderSize uint32 `mapstructure:"maxHeaderSize"`
 }
 
 // TlsConf tls config

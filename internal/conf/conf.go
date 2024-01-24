@@ -42,6 +42,7 @@ func NewWilsonConf(config *config.Config, buildInfo BuildInfo) (*WilsonConf, err
 // WigfridConf wigfrid configuration
 type WigfridConf struct {
 	BuildMeta BuildInfo
+	GrpcConf  *GrpcConf `mapstructure:"grpc"`
 	DataConf  *DataConf `mapstructure:"data"`
 	LogConf   *LogConf  `mapstructure:"log"`
 	DstConf   *DstConf  `mapstructure:"dst"`

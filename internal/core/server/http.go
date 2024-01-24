@@ -79,7 +79,7 @@ func (a *HttpServer) Shutdown() {
 	})
 }
 
-func NewHttpApp(options ...Options) (*HttpServer, error) {
+func NewHTTPApp(options ...Options) (*HttpServer, error) {
 
 	app := new(HttpServer)
 
@@ -91,6 +91,8 @@ func NewHttpApp(options ...Options) (*HttpServer, error) {
 	if app.cfg == nil {
 		return app, errors.New("empty app configuration")
 	}
+
+	log.Setup(app.Logger.L())
 
 	var (
 		engine     *gin.Engine
@@ -113,7 +115,7 @@ func NewHttpApp(options ...Options) (*HttpServer, error) {
 		vax.SetTranslator(locale.L())
 	}
 
-	if err = LogBanner(app.cfg, app.Logger.L(), "wilson.txt"); err != nil {
+	if err = LogBanner(app.cfg.BuildMeta, app.cfg.LogConf, app.Logger.L(), "wilson.txt"); err != nil {
 		return nil, err
 	}
 

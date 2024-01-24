@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -12,16 +11,17 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use: "wig [command]",
-	Long: `wigfrid is the daemon of the wendy panel, use wig command to build a local dst containers manager, 
-go https://github.com/dstgo/wigfrid to see more information.`,
+	Use:  "wig [command]",
+	Long: `wigfrid is the daemon of the wendy panel, use wigfrid command to build a local dst containers manager.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return nil
 	},
 }
 
+func init() {
+	rootCmd.AddCommand(serverCmd)
+}
+
 func main() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-	}
+	rootCmd.Execute()
 }

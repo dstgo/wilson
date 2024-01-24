@@ -1,5 +1,5 @@
 wilson_app := "github.com/dstgo/wilson/cmd/wilson"
-wigfird_app := "github.com/dstgo/wilson/cmd/wigfrid"
+wigfrid_app := "github.com/dstgo/wilson/cmd/wigfrid"
 author := github.com/dstgo
 version := $(shell git describe --tags --always)
 git_version := $(shell git describe --tags --always)
@@ -21,18 +21,19 @@ gen:
 	go get github.com/google/wire/cmd/wire@latest
 	go generate ./...
 
-.PHONY: build
+.PHONY: build_wilson
 build_wilson:
 	go vet ./...
 	go build -trimpath \
 				-ldflags="-X main.Author=$(author) -X main.Version=$(version) -X main.BuildTime=$(build_time)" \
 				-o ./bin/wilson/ $(wilson_app)
 
+.PHONY: build_wigfrid
 build_wigfrid:
-	go vet ./..
+	go vet ./...
 	go build -trimpath \
 					-ldflags="-X main.Author=$(author) -X main.Version=$(version) -X main.BuildTime=$(build_time)" \
-					-o ./bin/wilson/ $(wigfird_app)
+					-o ./bin/wigfrid/ $(wigfrid_app)
 
 .PHONY: gen_build
 gen_build:

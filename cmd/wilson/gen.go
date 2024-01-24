@@ -10,10 +10,11 @@ import (
 
 var genDir string
 var genCmd = &cobra.Command{
-	Use:     "gen [-d dir]",
-	Short:   "Generate the default wilson config directory",
-	Long:    "Generate the default wilson config directory, if already exists, all files will be overwritten.",
-	Example: "wilson gen -d /etc/wilson",
+	Use:          "gen [-d dir]",
+	Short:        "Generate the default wilson config directory",
+	Long:         "Generate the default wilson config directory, if already exists, all files will be overwritten.",
+	SilenceUsage: true,
+	Example:      "wilson gen -d /etc/wilson",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := generateResourceDir(genDir)
 		if err != nil {

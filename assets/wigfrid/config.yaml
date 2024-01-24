@@ -1,3 +1,18 @@
+# grpc configuration
+grpc:
+  # grpc address
+  address: 127.0.0.1:9090
+  # set the max message size in bytes the server can receive
+  maxRecv: 32768
+  # set the max message size in bytes the server can send.
+  maxSend: 2147483647
+  # determines how much data can be read at most for one read syscall
+  readBuffer: 32768
+  # determines how much data can be batched before doing a writing on the wire
+  writeBuffer: 32768
+  # max header list size
+  maxHeaderSize: 10240
+
 # log configuration
 log:
   # logger entry format: text | json
@@ -5,9 +20,9 @@ log:
   # min level should be one of [fatal panic error warn info debug trace]
   level: debug
   # a log entry whose level below or equal info will be output specified dir path
-  infoLog: D:\WorkSpace\Code\GitHubProject\dstgo\wilson\bin\wig\info.log
+  infoLog: D:\WorkSpace\Code\GitHubProject\dstgo\wilson\bin\wigfrid\info.log
   # a log entry whose level above info will be output specified dir path
-  errorLog: D:\WorkSpace\Code\GitHubProject\dstgo\wilson\bin\wig\error.log
+  errorLog: D:\WorkSpace\Code\GitHubProject\dstgo\wilson\bin\wigfrid\error.log
 
 # data source
 data:

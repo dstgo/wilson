@@ -1,9 +1,5 @@
 # app configuration
 app:
-  # mode should be one of [debug release test]
-  mode: release
-  # app name
-  name: wilson
   # if swagger api doc enable, the apidoc can visit on http://http.address/swagger/index.html
   swagger: true
   # If openapi is enabled, the outside world can use the key to interact with the app through openapi

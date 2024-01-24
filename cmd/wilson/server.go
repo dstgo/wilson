@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/dstgo/task"
 	"github.com/dstgo/wilson/internal/conf"
-	"github.com/dstgo/wilson/internal/core/log"
 	"github.com/dstgo/wilson/internal/core/server"
 	"github.com/dstgo/wilson/pkg/config"
 	"github.com/gin-gonic/gin"
@@ -22,9 +21,10 @@ var (
 )
 
 var serverCmd = &cobra.Command{
-	Use:     "server [-f filename]",
-	Short:   "Run wilson backend server",
-	Example: "wilson server -f /etc/wilson/config.yaml",
+	Use:          "server [-f filename]",
+	Short:        "Run wilson backend server",
+	Example:      "wilson server -f /etc/wilson/config.yaml",
+	SilenceUsage: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := serve(configFile, Author, Version, BuildTime)
 		if err != nil && !errors.Is(err, context.Canceled) {
@@ -61,13 +61,12 @@ func newServer(ctx context.Context, configFile string, author string, version st
 	if err != nil {
 		return nil, err
 	}
-	log.Setup(logger.L())
 
 	// set app mode
 	gin.SetMode(gin.ReleaseMode)
 
 	// initialize app server
-	app, err := server.NewHttpApp(
+	app, err := server.NewHTTPApp(
 		server.WithCtx(ctx),
 		server.WithConf(appConf),
 		server.WithLogger(logger),

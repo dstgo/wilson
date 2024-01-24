@@ -16,8 +16,14 @@ import (
 	"github.com/dstgo/wilson/pkg/ginx/bind"
 	"github.com/dstgo/wilson/pkg/sysinfo"
 	"github.com/gin-gonic/gin"
+	kratoslog "github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/logging"
+	"github.com/go-kratos/kratos/v2/middleware/ratelimit"
+	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	googlerpc "google.golang.org/grpc"
 	"io"
 	"net/http"
 	"path"
@@ -29,7 +35,7 @@ import (
 
 // on server boot hooks
 
-func LogBanner(cfg *conf.WilsonConf, logger *logrus.Logger, bannerPath string) error {
+func LogBanner(buildInfo conf.BuildInfo, logConf *conf.LogConf, logger *logrus.Logger, bannerPath string) error {
 	bannerTemplate := bytes.NewBuffer(nil)
 
 	banner, err := template.ParseFS(assets.Fs, bannerPath)
@@ -41,11 +47,10 @@ func LogBanner(cfg *conf.WilsonConf, logger *logrus.Logger, bannerPath string) e
 	cpuInfo := sysinfo.GetCpuInfo()
 
 	bannerData := map[string]any{
-		"appName":   cfg.ServerConf.Name,
-		"author":    cfg.BuildMeta.Author,
-		"version":   cfg.BuildMeta.Version,
-		"buildTime": cfg.BuildMeta.BuildTime,
-		"logMode":   strings.ToUpper(cfg.LogConf.Level),
+		"author":    buildInfo.Author,
+		"version":   buildInfo.Version,
+		"buildTime": buildInfo.BuildTime,
+		"logMode":   strings.ToUpper(logConf.Level),
 		"goVersion": runtime.Version(),
 		"osInfo":    fmt.Sprintf("%s %s", hostInfo.Os, hostInfo.Version),
 		"timezone":  time.Now().Format("MST -07"),
@@ -151,4 +156,33 @@ func NewHttpServer(cfg *conf.WilsonConf, lang *locale.Locale, logger *logrus.Log
 	server.Handler = engine
 
 	return engine, server
+}
+
+// NewGRPCServer initializes a new grpc server with kratos framework
+func NewGRPCServer(grpcConf *conf.GrpcConf, logger kratoslog.Logger) *grpc.Server {
+
+	// transport config
+	confOptions := grpc.Options(
+		googlerpc.MaxRecvMsgSize(grpcConf.MaxRecv),
+		googlerpc.MaxSendMsgSize(grpcConf.MaxSend),
+		googlerpc.WriteBufferSize(grpcConf.WriteBuffer),
+		googlerpc.ReadBufferSize(grpcConf.ReadBuffer),
+		googlerpc.MaxHeaderListSize(grpcConf.MaxHeaderSize),
+	)
+
+	// grpc middleware
+	middlewareOptions := grpc.Middleware(
+		recovery.Recovery(),
+		logging.Server(logger),
+		ratelimit.Server(),
+	)
+
+	grpcServer := grpc.NewServer(
+		grpc.Network("tcp"),
+		grpc.Address(grpcConf.Address),
+		confOptions,
+		middlewareOptions,
+	)
+
+	return grpcServer
 }
