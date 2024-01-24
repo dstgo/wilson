@@ -6,6 +6,8 @@ git_version := $(shell git describe --tags --always)
 build_time := $(shell date +"%Y%m%d%H%M%S")
 host_os := $(shell go env GOHOSTOS)
 host_arch := $(shell go env GOHOSTARCH)
+# target protobuf files will be generated at api directory
+target_proto_files := $(shell find ./internal/service/proto/api/ -name *.proto)
 
 .PHONY: init
 init:
@@ -21,6 +23,23 @@ gen:
 	go get github.com/google/wire/cmd/wire@latest
 	go generate ./...
 
+.PHONY: gen_build
+gen_build:
+	make gen
+	make build
+
+gen_pb:
+	protoc --proto_path=./internal/service/proto/api/ \
+		   --proto_path=./internal/service/proto/third_party/ \
+		   --go_out=paths=source_relative:./internal/service \
+		   --go-grpc_out=paths=source_relative:./internal/service \
+		   $(target_proto_files)
+
+.PHONY: install
+install:
+	make init
+	make gen_build
+
 .PHONY: build_wilson
 build_wilson:
 	go vet ./...
@@ -34,13 +53,3 @@ build_wigfrid:
 	go build -trimpath \
 					-ldflags="-X main.Author=$(author) -X main.Version=$(version) -X main.BuildTime=$(build_time)" \
 					-o ./bin/wigfrid/ $(wigfrid_app)
-
-.PHONY: gen_build
-gen_build:
-	make gen
-	make build
-
-.PHONY: install
-install:
-	make init
-	make gen_build
