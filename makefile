@@ -7,7 +7,7 @@ build_time := $(shell date +"%Y%m%d%H%M%S")
 host_os := $(shell go env GOHOSTOS)
 host_arch := $(shell go env GOHOSTARCH)
 # target protobuf files will be generated at api directory
-target_proto_files := $(shell find ./internal/service/proto/api/ -name *.proto)
+target_proto_files := $(shell find ./internal/proto/api/ -name *.proto)
 
 .PHONY: init
 init:
@@ -29,10 +29,10 @@ gen_build:
 	make build
 
 gen_pb:
-	protoc --proto_path=./internal/service/proto/api/ \
-		   --proto_path=./internal/service/proto/third_party/ \
-		   --go_out=paths=source_relative:./internal/service \
-		   --go-grpc_out=paths=source_relative:./internal/service \
+	protoc --proto_path=./internal/proto/api/ \
+		   --proto_path=./internal/proto/third_party/ \
+		   --go_out=paths=source_relative:./internal/proto/api/ \
+		   --go-grpc_out=paths=source_relative:./internal/proto/api/ \
 		   $(target_proto_files)
 
 .PHONY: install
