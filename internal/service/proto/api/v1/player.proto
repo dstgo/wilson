@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option go_package = "api/v1;v1";
+
+import "v1/dst.proto";
+
+message Player {
+  // steam user id
+  uint64 steamId = 1;
+  // klei user id
+  string kid = 2;
+  // dst player name, same as steam user name normally
+  string name = 3;
+  // dst role the player played, like wilson, wendy
+  string role = 4;
+  // if is server admin
+  bool admin = 5;
+}
+
+// server player information
+message PlayerStatisticInfo {
+  int64 total = 1;
+  int64 totalOnline = 2;
+  int64 masterOnline = 3;
+  int64 caveOnline = 4;
+
+  repeated Player totalPlayer = 5;
+  repeated Player masterOnlinePlayer = 6;
+  repeated Player caveOnlinePlayer = 7;
+}
+
+// server shard log player message
+message LogMessage {
+  string time = 1;
+  // message event, eg. say, whisper, announcement
+  string event = 2;
+  string msg = 3;
+}
+
+service PlayerService {
+  rpc GetPlayerInfo(InstanceId) returns(PlayerStatisticInfo);
+}
