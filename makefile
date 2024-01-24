@@ -33,6 +33,7 @@ gen_pb:
 		   --proto_path=./internal/proto/third_party/ \
 		   --go_out=paths=source_relative:./internal/proto/api/ \
 		   --go-grpc_out=paths=source_relative:./internal/proto/api/ \
+		   --validate_out=paths=source_relative,lang=go:./internal/proto/api/ \
 		   $(target_proto_files)
 
 .PHONY: install
