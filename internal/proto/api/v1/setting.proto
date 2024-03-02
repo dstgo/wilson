@@ -4,7 +4,40 @@ package v1.setting;
 
 option go_package = "api/v1;v1";
 
-service SettingService {
+import "v1/common.proto";
 
+message RoomSetting {
+  string name = 1;
+  string password = 2;
+  string Description = 3;
+  int64 slots = 4;
+  bool pvp = 5;
+  string mode = 6;
+  bool paused = 7;
+  bool vote = 8;
+  bool kick = 9;
+}
+
+message RawWorldSetting {
+  string rawLuaString = 1;
+}
+
+message SettingPair {
+  string key = 1;
+  string value = 2;
+}
+
+message WorldSetting {
+  repeated SettingPair master = 1;
+  repeated SettingPair cave = 2;
+}
+
+service SettingService {
+  rpc GetRoomSetting(v1.common.InstanceId) returns(RoomSetting);
+  rpc SaveRoomSetting(RoomSetting) returns(v1.common.NotifyResult);
+  rpc GetWorldSetting(v1.common.InstanceId) returns(WorldSetting);
+  rpc SaveWorldSetting(WorldSetting) returns(v1.common.NotifyResult);
+  rpc GetRawWorldSetting(v1.common.InstanceId) returns(RawWorldSetting);
+  rpc SaveRawWorldSetting(RawWorldSetting) returns(v1.common.NotifyResult);
 }
 

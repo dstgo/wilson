@@ -34,3 +34,2129 @@ var (
 	_ = anypb.Any{}
 	_ = sort.Sort
 )
+
+// Validate checks the field values on ModInfo with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ModInfo) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModInfo with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ModInfoMultiError, or nil if none found.
+func (m *ModInfo) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModInfo) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Name
+
+	// no validation rules for Preview
+
+	// no validation rules for Subscribe
+
+	// no validation rules for Size
+
+	// no validation rules for Updated
+
+	// no validation rules for Created
+
+	for idx, item := range m.GetTags() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ModInfoValidationError{
+						field:  fmt.Sprintf("Tags[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ModInfoValidationError{
+						field:  fmt.Sprintf("Tags[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ModInfoValidationError{
+					field:  fmt.Sprintf("Tags[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ModInfoMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModInfoMultiError is an error wrapping multiple validation errors returned
+// by ModInfo.ValidateAll() if the designated constraints aren't met.
+type ModInfoMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModInfoMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModInfoMultiError) AllErrors() []error { return m }
+
+// ModInfoValidationError is the validation error returned by ModInfo.Validate
+// if the designated constraints aren't met.
+type ModInfoValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModInfoValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModInfoValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModInfoValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModInfoValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModInfoValidationError) ErrorName() string { return "ModInfoValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ModInfoValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModInfo.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModInfoValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModInfoValidationError{}
+
+// Validate checks the field values on ModDetails with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ModDetails) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModDetails with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ModDetailsMultiError, or
+// nil if none found.
+func (m *ModDetails) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModDetails) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for Author
+
+	// no validation rules for Version
+
+	// no validation rules for Description
+
+	if all {
+		switch v := interface{}(m.GetCompatible()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ModDetailsValidationError{
+					field:  "Compatible",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ModDetailsValidationError{
+					field:  "Compatible",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCompatible()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ModDetailsValidationError{
+				field:  "Compatible",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetConfigurations() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ModDetailsValidationError{
+						field:  fmt.Sprintf("Configurations[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ModDetailsValidationError{
+						field:  fmt.Sprintf("Configurations[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ModDetailsValidationError{
+					field:  fmt.Sprintf("Configurations[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ModDetailsMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModDetailsMultiError is an error wrapping multiple validation errors
+// returned by ModDetails.ValidateAll() if the designated constraints aren't met.
+type ModDetailsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModDetailsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModDetailsMultiError) AllErrors() []error { return m }
+
+// ModDetailsValidationError is the validation error returned by
+// ModDetails.Validate if the designated constraints aren't met.
+type ModDetailsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModDetailsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModDetailsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModDetailsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModDetailsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModDetailsValidationError) ErrorName() string { return "ModDetailsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ModDetailsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModDetails.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModDetailsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModDetailsValidationError{}
+
+// Validate checks the field values on ModCompatible with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ModCompatible) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModCompatible with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ModCompatibleMultiError, or
+// nil if none found.
+func (m *ModCompatible) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModCompatible) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Dst
+
+	// no validation rules for DontStarve
+
+	// no validation rules for Giant
+
+	// no validation rules for ClientOnly
+
+	// no validation rules for AllClient
+
+	if len(errors) > 0 {
+		return ModCompatibleMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModCompatibleMultiError is an error wrapping multiple validation errors
+// returned by ModCompatible.ValidateAll() if the designated constraints
+// aren't met.
+type ModCompatibleMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModCompatibleMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModCompatibleMultiError) AllErrors() []error { return m }
+
+// ModCompatibleValidationError is the validation error returned by
+// ModCompatible.Validate if the designated constraints aren't met.
+type ModCompatibleValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModCompatibleValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModCompatibleValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModCompatibleValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModCompatibleValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModCompatibleValidationError) ErrorName() string { return "ModCompatibleValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ModCompatibleValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModCompatible.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModCompatibleValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModCompatibleValidationError{}
+
+// Validate checks the field values on ModConfiguration with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *ModConfiguration) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModConfiguration with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ModConfigurationMultiError, or nil if none found.
+func (m *ModConfiguration) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModConfiguration) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	if all {
+		switch v := interface{}(m.GetDefaultValue()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ModConfigurationValidationError{
+					field:  "DefaultValue",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ModConfigurationValidationError{
+					field:  "DefaultValue",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDefaultValue()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ModConfigurationValidationError{
+				field:  "DefaultValue",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetOptions() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ModConfigurationValidationError{
+						field:  fmt.Sprintf("Options[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ModConfigurationValidationError{
+						field:  fmt.Sprintf("Options[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ModConfigurationValidationError{
+					field:  fmt.Sprintf("Options[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ModConfigurationMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModConfigurationMultiError is an error wrapping multiple validation errors
+// returned by ModConfiguration.ValidateAll() if the designated constraints
+// aren't met.
+type ModConfigurationMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModConfigurationMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModConfigurationMultiError) AllErrors() []error { return m }
+
+// ModConfigurationValidationError is the validation error returned by
+// ModConfiguration.Validate if the designated constraints aren't met.
+type ModConfigurationValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModConfigurationValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModConfigurationValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModConfigurationValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModConfigurationValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModConfigurationValidationError) ErrorName() string { return "ModConfigurationValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ModConfigurationValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModConfiguration.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModConfigurationValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModConfigurationValidationError{}
+
+// Validate checks the field values on ModConfigurationItem with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ModConfigurationItem) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModConfigurationItem with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ModConfigurationItemMultiError, or nil if none found.
+func (m *ModConfigurationItem) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModConfigurationItem) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ModConfigurationItemValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ModConfigurationItemValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ModConfigurationItemValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Label
+
+	// no validation rules for Description
+
+	if len(errors) > 0 {
+		return ModConfigurationItemMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModConfigurationItemMultiError is an error wrapping multiple validation
+// errors returned by ModConfigurationItem.ValidateAll() if the designated
+// constraints aren't met.
+type ModConfigurationItemMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModConfigurationItemMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModConfigurationItemMultiError) AllErrors() []error { return m }
+
+// ModConfigurationItemValidationError is the validation error returned by
+// ModConfigurationItem.Validate if the designated constraints aren't met.
+type ModConfigurationItemValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModConfigurationItemValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModConfigurationItemValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModConfigurationItemValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModConfigurationItemValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModConfigurationItemValidationError) ErrorName() string {
+	return "ModConfigurationItemValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ModConfigurationItemValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModConfigurationItem.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModConfigurationItemValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModConfigurationItemValidationError{}
+
+// Validate checks the field values on ModTag with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ModTag) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModTag with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ModTagMultiError, or nil if none found.
+func (m *ModTag) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModTag) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Tag
+
+	// no validation rules for Name
+
+	if len(errors) > 0 {
+		return ModTagMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModTagMultiError is an error wrapping multiple validation errors returned by
+// ModTag.ValidateAll() if the designated constraints aren't met.
+type ModTagMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModTagMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModTagMultiError) AllErrors() []error { return m }
+
+// ModTagValidationError is the validation error returned by ModTag.Validate if
+// the designated constraints aren't met.
+type ModTagValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModTagValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModTagValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModTagValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModTagValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModTagValidationError) ErrorName() string { return "ModTagValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ModTagValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModTag.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModTagValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModTagValidationError{}
+
+// Validate checks the field values on ModListReq with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ModListReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModListReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ModListReqMultiError, or
+// nil if none found.
+func (m *ModListReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModListReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Text
+
+	// no validation rules for Page
+
+	// no validation rules for Size
+
+	if len(errors) > 0 {
+		return ModListReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModListReqMultiError is an error wrapping multiple validation errors
+// returned by ModListReq.ValidateAll() if the designated constraints aren't met.
+type ModListReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModListReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModListReqMultiError) AllErrors() []error { return m }
+
+// ModListReqValidationError is the validation error returned by
+// ModListReq.Validate if the designated constraints aren't met.
+type ModListReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModListReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModListReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModListReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModListReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModListReqValidationError) ErrorName() string { return "ModListReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ModListReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModListReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModListReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModListReqValidationError{}
+
+// Validate checks the field values on ModListResp with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ModListResp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModListResp with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ModListRespMultiError, or
+// nil if none found.
+func (m *ModListResp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModListResp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Total
+
+	for idx, item := range m.GetList() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ModListRespValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ModListRespValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ModListRespValidationError{
+					field:  fmt.Sprintf("List[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ModListRespMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModListRespMultiError is an error wrapping multiple validation errors
+// returned by ModListResp.ValidateAll() if the designated constraints aren't met.
+type ModListRespMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModListRespMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModListRespMultiError) AllErrors() []error { return m }
+
+// ModListRespValidationError is the validation error returned by
+// ModListResp.Validate if the designated constraints aren't met.
+type ModListRespValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModListRespValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModListRespValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModListRespValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModListRespValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModListRespValidationError) ErrorName() string { return "ModListRespValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ModListRespValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModListResp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModListRespValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModListRespValidationError{}
+
+// Validate checks the field values on ModId with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ModId) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModId with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ModIdMultiError, or nil if none found.
+func (m *ModId) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModId) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for ModId
+
+	if all {
+		switch v := interface{}(m.GetInstanceId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ModIdValidationError{
+					field:  "InstanceId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ModIdValidationError{
+					field:  "InstanceId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetInstanceId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ModIdValidationError{
+				field:  "InstanceId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return ModIdMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModIdMultiError is an error wrapping multiple validation errors returned by
+// ModId.ValidateAll() if the designated constraints aren't met.
+type ModIdMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModIdMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModIdMultiError) AllErrors() []error { return m }
+
+// ModIdValidationError is the validation error returned by ModId.Validate if
+// the designated constraints aren't met.
+type ModIdValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModIdValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModIdValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModIdValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModIdValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModIdValidationError) ErrorName() string { return "ModIdValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ModIdValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModId.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModIdValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModIdValidationError{}
+
+// Validate checks the field values on RawModSettings with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *RawModSettings) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RawModSettings with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in RawModSettingsMultiError,
+// or nil if none found.
+func (m *RawModSettings) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RawModSettings) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Config
+
+	if len(errors) > 0 {
+		return RawModSettingsMultiError(errors)
+	}
+
+	return nil
+}
+
+// RawModSettingsMultiError is an error wrapping multiple validation errors
+// returned by RawModSettings.ValidateAll() if the designated constraints
+// aren't met.
+type RawModSettingsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RawModSettingsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RawModSettingsMultiError) AllErrors() []error { return m }
+
+// RawModSettingsValidationError is the validation error returned by
+// RawModSettings.Validate if the designated constraints aren't met.
+type RawModSettingsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RawModSettingsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RawModSettingsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RawModSettingsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RawModSettingsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RawModSettingsValidationError) ErrorName() string { return "RawModSettingsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RawModSettingsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRawModSettings.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RawModSettingsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RawModSettingsValidationError{}
+
+// Validate checks the field values on SaveRawModSettingsReq with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SaveRawModSettingsReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SaveRawModSettingsReq with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SaveRawModSettingsReqMultiError, or nil if none found.
+func (m *SaveRawModSettingsReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SaveRawModSettingsReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetInstanceId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SaveRawModSettingsReqValidationError{
+					field:  "InstanceId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SaveRawModSettingsReqValidationError{
+					field:  "InstanceId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetInstanceId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SaveRawModSettingsReqValidationError{
+				field:  "InstanceId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Settings
+
+	if len(errors) > 0 {
+		return SaveRawModSettingsReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// SaveRawModSettingsReqMultiError is an error wrapping multiple validation
+// errors returned by SaveRawModSettingsReq.ValidateAll() if the designated
+// constraints aren't met.
+type SaveRawModSettingsReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SaveRawModSettingsReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SaveRawModSettingsReqMultiError) AllErrors() []error { return m }
+
+// SaveRawModSettingsReqValidationError is the validation error returned by
+// SaveRawModSettingsReq.Validate if the designated constraints aren't met.
+type SaveRawModSettingsReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SaveRawModSettingsReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SaveRawModSettingsReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SaveRawModSettingsReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SaveRawModSettingsReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SaveRawModSettingsReqValidationError) ErrorName() string {
+	return "SaveRawModSettingsReqValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SaveRawModSettingsReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSaveRawModSettingsReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SaveRawModSettingsReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SaveRawModSettingsReqValidationError{}
+
+// Validate checks the field values on ModSettings with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ModSettings) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModSettings with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ModSettingsMultiError, or
+// nil if none found.
+func (m *ModSettings) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModSettings) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetList() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ModSettingsValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ModSettingsValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ModSettingsValidationError{
+					field:  fmt.Sprintf("List[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ModSettingsMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModSettingsMultiError is an error wrapping multiple validation errors
+// returned by ModSettings.ValidateAll() if the designated constraints aren't met.
+type ModSettingsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModSettingsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModSettingsMultiError) AllErrors() []error { return m }
+
+// ModSettingsValidationError is the validation error returned by
+// ModSettings.Validate if the designated constraints aren't met.
+type ModSettingsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModSettingsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModSettingsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModSettingsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModSettingsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModSettingsValidationError) ErrorName() string { return "ModSettingsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ModSettingsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModSettings.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModSettingsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModSettingsValidationError{}
+
+// Validate checks the field values on SaveModSettingsReq with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SaveModSettingsReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SaveModSettingsReq with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SaveModSettingsReqMultiError, or nil if none found.
+func (m *SaveModSettingsReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SaveModSettingsReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetInstanceId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SaveModSettingsReqValidationError{
+					field:  "InstanceId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SaveModSettingsReqValidationError{
+					field:  "InstanceId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetInstanceId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SaveModSettingsReqValidationError{
+				field:  "InstanceId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetSettings()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SaveModSettingsReqValidationError{
+					field:  "Settings",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SaveModSettingsReqValidationError{
+					field:  "Settings",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSettings()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SaveModSettingsReqValidationError{
+				field:  "Settings",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return SaveModSettingsReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// SaveModSettingsReqMultiError is an error wrapping multiple validation errors
+// returned by SaveModSettingsReq.ValidateAll() if the designated constraints
+// aren't met.
+type SaveModSettingsReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SaveModSettingsReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SaveModSettingsReqMultiError) AllErrors() []error { return m }
+
+// SaveModSettingsReqValidationError is the validation error returned by
+// SaveModSettingsReq.Validate if the designated constraints aren't met.
+type SaveModSettingsReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SaveModSettingsReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SaveModSettingsReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SaveModSettingsReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SaveModSettingsReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SaveModSettingsReqValidationError) ErrorName() string {
+	return "SaveModSettingsReqValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SaveModSettingsReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSaveModSettingsReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SaveModSettingsReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SaveModSettingsReqValidationError{}
+
+// Validate checks the field values on CheckUpdateResult with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *CheckUpdateResult) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CheckUpdateResult with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CheckUpdateResultMultiError, or nil if none found.
+func (m *CheckUpdateResult) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CheckUpdateResult) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Total
+
+	for idx, item := range m.GetList() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CheckUpdateResultValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CheckUpdateResultValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return CheckUpdateResultValidationError{
+					field:  fmt.Sprintf("List[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return CheckUpdateResultMultiError(errors)
+	}
+
+	return nil
+}
+
+// CheckUpdateResultMultiError is an error wrapping multiple validation errors
+// returned by CheckUpdateResult.ValidateAll() if the designated constraints
+// aren't met.
+type CheckUpdateResultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CheckUpdateResultMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CheckUpdateResultMultiError) AllErrors() []error { return m }
+
+// CheckUpdateResultValidationError is the validation error returned by
+// CheckUpdateResult.Validate if the designated constraints aren't met.
+type CheckUpdateResultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CheckUpdateResultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CheckUpdateResultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CheckUpdateResultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CheckUpdateResultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CheckUpdateResultValidationError) ErrorName() string {
+	return "CheckUpdateResultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CheckUpdateResultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCheckUpdateResult.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CheckUpdateResultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CheckUpdateResultValidationError{}
+
+// Validate checks the field values on ModSettings_ModSettingItem with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ModSettings_ModSettingItem) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModSettings_ModSettingItem with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ModSettings_ModSettingItemMultiError, or nil if none found.
+func (m *ModSettings_ModSettingItem) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModSettings_ModSettingItem) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	{
+		sorted_keys := make([]string, len(m.GetOptions()))
+		i := 0
+		for key := range m.GetOptions() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetOptions()[key]
+			_ = val
+
+			// no validation rules for Options[key]
+
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, ModSettings_ModSettingItemValidationError{
+							field:  fmt.Sprintf("Options[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, ModSettings_ModSettingItemValidationError{
+							field:  fmt.Sprintf("Options[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return ModSettings_ModSettingItemValidationError{
+						field:  fmt.Sprintf("Options[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		}
+	}
+
+	// no validation rules for Enabled
+
+	if len(errors) > 0 {
+		return ModSettings_ModSettingItemMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModSettings_ModSettingItemMultiError is an error wrapping multiple
+// validation errors returned by ModSettings_ModSettingItem.ValidateAll() if
+// the designated constraints aren't met.
+type ModSettings_ModSettingItemMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModSettings_ModSettingItemMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModSettings_ModSettingItemMultiError) AllErrors() []error { return m }
+
+// ModSettings_ModSettingItemValidationError is the validation error returned
+// by ModSettings_ModSettingItem.Validate if the designated constraints aren't met.
+type ModSettings_ModSettingItemValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModSettings_ModSettingItemValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModSettings_ModSettingItemValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModSettings_ModSettingItemValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModSettings_ModSettingItemValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModSettings_ModSettingItemValidationError) ErrorName() string {
+	return "ModSettings_ModSettingItemValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ModSettings_ModSettingItemValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModSettings_ModSettingItem.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModSettings_ModSettingItemValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModSettings_ModSettingItemValidationError{}
+
+// Validate checks the field values on CheckUpdateResult_CheckUpdateModItem
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
+func (m *CheckUpdateResult_CheckUpdateModItem) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CheckUpdateResult_CheckUpdateModItem
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// CheckUpdateResult_CheckUpdateModItemMultiError, or nil if none found.
+func (m *CheckUpdateResult_CheckUpdateModItem) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CheckUpdateResult_CheckUpdateModItem) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for ModId
+
+	// no validation rules for Name
+
+	// no validation rules for Version
+
+	// no validation rules for Date
+
+	if len(errors) > 0 {
+		return CheckUpdateResult_CheckUpdateModItemMultiError(errors)
+	}
+
+	return nil
+}
+
+// CheckUpdateResult_CheckUpdateModItemMultiError is an error wrapping multiple
+// validation errors returned by
+// CheckUpdateResult_CheckUpdateModItem.ValidateAll() if the designated
+// constraints aren't met.
+type CheckUpdateResult_CheckUpdateModItemMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CheckUpdateResult_CheckUpdateModItemMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CheckUpdateResult_CheckUpdateModItemMultiError) AllErrors() []error { return m }
+
+// CheckUpdateResult_CheckUpdateModItemValidationError is the validation error
+// returned by CheckUpdateResult_CheckUpdateModItem.Validate if the designated
+// constraints aren't met.
+type CheckUpdateResult_CheckUpdateModItemValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CheckUpdateResult_CheckUpdateModItemValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CheckUpdateResult_CheckUpdateModItemValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CheckUpdateResult_CheckUpdateModItemValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CheckUpdateResult_CheckUpdateModItemValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CheckUpdateResult_CheckUpdateModItemValidationError) ErrorName() string {
+	return "CheckUpdateResult_CheckUpdateModItemValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CheckUpdateResult_CheckUpdateModItemValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCheckUpdateResult_CheckUpdateModItem.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CheckUpdateResult_CheckUpdateModItemValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CheckUpdateResult_CheckUpdateModItemValidationError{}

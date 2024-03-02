@@ -34,3 +34,587 @@ var (
 	_ = anypb.Any{}
 	_ = sort.Sort
 )
+
+// Validate checks the field values on ArchiveInfo with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ArchiveInfo) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ArchiveInfo with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ArchiveInfoMultiError, or
+// nil if none found.
+func (m *ArchiveInfo) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ArchiveInfo) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for Days
+
+	// no validation rules for Season
+
+	// no validation rules for Phase
+
+	// no validation rules for Elapse
+
+	// no validation rules for Size
+
+	// no validation rules for Mods
+
+	if len(errors) > 0 {
+		return ArchiveInfoMultiError(errors)
+	}
+
+	return nil
+}
+
+// ArchiveInfoMultiError is an error wrapping multiple validation errors
+// returned by ArchiveInfo.ValidateAll() if the designated constraints aren't met.
+type ArchiveInfoMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ArchiveInfoMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ArchiveInfoMultiError) AllErrors() []error { return m }
+
+// ArchiveInfoValidationError is the validation error returned by
+// ArchiveInfo.Validate if the designated constraints aren't met.
+type ArchiveInfoValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ArchiveInfoValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ArchiveInfoValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ArchiveInfoValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ArchiveInfoValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ArchiveInfoValidationError) ErrorName() string { return "ArchiveInfoValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ArchiveInfoValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sArchiveInfo.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ArchiveInfoValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ArchiveInfoValidationError{}
+
+// Validate checks the field values on BackUpInfo with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *BackUpInfo) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BackUpInfo with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in BackUpInfoMultiError, or
+// nil if none found.
+func (m *BackUpInfo) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BackUpInfo) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for MTime
+
+	// no validation rules for Size
+
+	if len(errors) > 0 {
+		return BackUpInfoMultiError(errors)
+	}
+
+	return nil
+}
+
+// BackUpInfoMultiError is an error wrapping multiple validation errors
+// returned by BackUpInfo.ValidateAll() if the designated constraints aren't met.
+type BackUpInfoMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BackUpInfoMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BackUpInfoMultiError) AllErrors() []error { return m }
+
+// BackUpInfoValidationError is the validation error returned by
+// BackUpInfo.Validate if the designated constraints aren't met.
+type BackUpInfoValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BackUpInfoValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BackUpInfoValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BackUpInfoValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BackUpInfoValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BackUpInfoValidationError) ErrorName() string { return "BackUpInfoValidationError" }
+
+// Error satisfies the builtin error interface
+func (e BackUpInfoValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBackUpInfo.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BackUpInfoValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BackUpInfoValidationError{}
+
+// Validate checks the field values on BackupFile with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *BackupFile) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BackupFile with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in BackupFileMultiError, or
+// nil if none found.
+func (m *BackupFile) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BackupFile) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for Content
+
+	if len(errors) > 0 {
+		return BackupFileMultiError(errors)
+	}
+
+	return nil
+}
+
+// BackupFileMultiError is an error wrapping multiple validation errors
+// returned by BackupFile.ValidateAll() if the designated constraints aren't met.
+type BackupFileMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BackupFileMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BackupFileMultiError) AllErrors() []error { return m }
+
+// BackupFileValidationError is the validation error returned by
+// BackupFile.Validate if the designated constraints aren't met.
+type BackupFileValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BackupFileValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BackupFileValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BackupFileValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BackupFileValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BackupFileValidationError) ErrorName() string { return "BackupFileValidationError" }
+
+// Error satisfies the builtin error interface
+func (e BackupFileValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBackupFile.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BackupFileValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BackupFileValidationError{}
+
+// Validate checks the field values on BackUpList with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *BackUpList) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BackUpList with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in BackUpListMultiError, or
+// nil if none found.
+func (m *BackUpList) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BackUpList) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetList() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, BackUpListValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, BackUpListValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return BackUpListValidationError{
+					field:  fmt.Sprintf("List[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return BackUpListMultiError(errors)
+	}
+
+	return nil
+}
+
+// BackUpListMultiError is an error wrapping multiple validation errors
+// returned by BackUpList.ValidateAll() if the designated constraints aren't met.
+type BackUpListMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BackUpListMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BackUpListMultiError) AllErrors() []error { return m }
+
+// BackUpListValidationError is the validation error returned by
+// BackUpList.Validate if the designated constraints aren't met.
+type BackUpListValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BackUpListValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BackUpListValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BackUpListValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BackUpListValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BackUpListValidationError) ErrorName() string { return "BackUpListValidationError" }
+
+// Error satisfies the builtin error interface
+func (e BackUpListValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBackUpList.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BackUpListValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BackUpListValidationError{}
+
+// Validate checks the field values on BackupOpt with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *BackupOpt) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BackupOpt with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in BackupOptMultiError, or nil
+// if none found.
+func (m *BackupOpt) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BackupOpt) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, BackupOptValidationError{
+					field:  "Id",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, BackupOptValidationError{
+					field:  "Id",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return BackupOptValidationError{
+				field:  "Id",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for BackupName
+
+	if len(errors) > 0 {
+		return BackupOptMultiError(errors)
+	}
+
+	return nil
+}
+
+// BackupOptMultiError is an error wrapping multiple validation errors returned
+// by BackupOpt.ValidateAll() if the designated constraints aren't met.
+type BackupOptMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BackupOptMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BackupOptMultiError) AllErrors() []error { return m }
+
+// BackupOptValidationError is the validation error returned by
+// BackupOpt.Validate if the designated constraints aren't met.
+type BackupOptValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BackupOptValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BackupOptValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BackupOptValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BackupOptValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BackupOptValidationError) ErrorName() string { return "BackupOptValidationError" }
+
+// Error satisfies the builtin error interface
+func (e BackupOptValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBackupOpt.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BackupOptValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BackupOptValidationError{}

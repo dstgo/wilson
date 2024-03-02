@@ -4,6 +4,6 @@ import (
 	"github.com/dstgo/wilson/internal/proto/api/v1"
 )
 
-type PlayerService struct {
+type Service struct {
 	v1.UnimplementedPlayerServiceServer
 }

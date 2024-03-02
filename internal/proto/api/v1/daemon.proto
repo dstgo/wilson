@@ -4,13 +4,116 @@ package v1.daemon;
 
 option go_package = "api/v1;v1";
 
+import "google/protobuf/empty.proto";
+import "v1/common.proto";
 
-message HealthInfo {
-  int64 cpuCount = 1;
-  int64 memorySize = 2;
-  double cpuPercent = 3;
-}
 
 service DaemonService {
+  rpc HealthCheck(google.protobuf.Empty) returns(HealthInfo);
+}
 
+message CpuHealth {
+  int64 count = 1;
+  double usage = 2;
+}
+
+message MemoryHealth {
+  int64 total = 1;
+  int64 used = 2;
+  int64 free = 3;
+  double usage = 4;
+}
+
+message DiskHealth{
+  int64 total = 1;
+  int64 used = 2;
+  int64 free = 3;
+  double usage = 4;
+}
+
+message HealthInfo {
+  CpuHealth cpu = 1;
+  MemoryHealth mem = 2;
+  DiskHealth disk = 3;
+}
+
+
+service ContainerService {
+  rpc List(ListContainerReq) returns(ListContainerResp);
+  rpc Create(CreateContainerReq) returns(CreateContainerResp);
+  rpc UpdateQuota(Resource) returns(v1.common.NotifyResult);
+  rpc Log(v1.common.InstanceId) returns(ContainerLog);
+  rpc Stats(v1.common.InstanceId) returns(HealthInfo);
+  rpc Start(v1.common.InstanceId) returns(v1.common.NotifyResult);
+  rpc Stop(v1.common.InstanceId) returns(v1.common.NotifyResult);
+  rpc Restart(v1.common.InstanceId) returns(v1.common.NotifyResult);
+  rpc Delete(v1.common.InstanceId) returns(v1.common.NotifyResult);
+  rpc ForceDelete(v1.common.InstanceId) returns(v1.common.NotifyResult);
+}
+
+message Resource {
+  int64 cpu = 1;
+  int64 memory = 2;
+  int64 disk = 3;
+}
+
+message PortBind {
+  string protocol = 1;
+  int64 host = 2;
+  int64 bind = 3;
+  // if auto is true, host will be same as bind
+  bool auto = 4;
+}
+
+message Volume {
+  string vType = 1;
+  string host = 2;
+  string bind = 3;
+}
+
+message CreateContainerReq {
+  string name = 1;
+  string image = 2;
+  string userId = 3;
+  Resource resource = 4;
+  repeated PortBind ports = 5;
+  repeated Volume volumes = 6;
+}
+
+message CreateContainerResp {
+  int64 createdAt = 1;
+  string containerId = 2;
+}
+
+enum ContainerState {
+  running = 0;
+  starting = 1;
+  stopping = 2;
+  stopped = 3;
+}
+
+message ContainerInfo {
+  string id = 1;
+  ContainerState state = 2;
+  string name = 3;
+  string userId = 4;
+  Resource resource = 5;
+  int64 createdAt = 6;
+  int64 expiredAt = 7;
+}
+
+message ListContainerReq {
+  string search = 1;
+  int64  page = 2;
+  int64 size = 3;
+}
+
+message ListContainerResp {
+  repeated ContainerInfo list = 1;
+  int64 total = 2;
+}
+
+message ContainerLog {
+  string logContent = 1;
+  int64 lines = 2;
 }

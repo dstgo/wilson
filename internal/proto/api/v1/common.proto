@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option go_package = "api/v1;v1";
+
+package v1.common;
+
+// notify result used to represent an operation if is successful
+message NotifyResult {
+  bool ok = 1;
+  string msg = 2;
+  int64 code = 3;
+}
+
+// container instance id
+message InstanceId {
+  string id = 1;
+}
+
+// player klei id
+message KleiId {
+  string id = 1;
+}

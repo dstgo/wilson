@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/246859/steamapi"
+	"github.com/docker/docker/client"
 	"github.com/dstgo/wilson/assets"
 	"github.com/dstgo/wilson/internal/api"
 	"github.com/dstgo/wilson/internal/conf"
@@ -20,6 +22,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/ratelimit"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -172,9 +175,14 @@ func NewGRPCServer(grpcConf *conf.GrpcConf, logger kratoslog.Logger) *grpc.Serve
 
 	// grpc middleware
 	middlewareOptions := grpc.Middleware(
+		// panic recovery
 		recovery.Recovery(),
+		// request logger
 		logging.Server(logger),
+		// bbr rate limiting
 		ratelimit.Server(),
+		// params validator
+		validate.Validator(),
 	)
 
 	grpcServer := grpc.NewServer(
@@ -185,4 +193,29 @@ func NewGRPCServer(grpcConf *conf.GrpcConf, logger kratoslog.Logger) *grpc.Serve
 	)
 
 	return grpcServer
+}
+
+// NewDockerClient returns a DockerClient from local environment
+func NewDockerClient(ctx context.Context) (*client.Client, error) {
+	dockerClient, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
+	if err != nil {
+		return nil, err
+	}
+	// ping docker daemon to test availability
+	if _, err := dockerClient.Ping(ctx); err != nil {
+		return nil, err
+	}
+	return dockerClient, nil
+}
+
+func NewSteamClient(cfg *conf.DstConf) (*steamapi.Client, error) {
+	steamClient, err := steamapi.New(cfg.SteamKey)
+	if err != nil {
+		return nil, err
+	}
+	// test steam web api availability
+	if _, err := steamClient.ISteamWebAPIUtil().GetServerInfo(); err != nil {
+		return nil, err
+	}
+	return steamClient, nil
 }

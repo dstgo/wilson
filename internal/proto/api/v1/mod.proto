@@ -4,6 +4,116 @@ package v1.mod;
 
 option go_package = "api/v1;v1";
 
-service ModService {
+import "google/protobuf/any.proto";
+import "v1/common.proto";
 
+message ModInfo {
+  string id = 1;
+  string name = 2;
+  string preview = 3;
+  int64 subscribe = 5;
+  int64 size = 6;
+  int64 updated = 7;
+  int64 created = 8;
+  repeated ModTag tags = 9;
+}
+
+message ModDetails {
+  string name = 1;
+  string author = 2;
+  string version = 3;
+  string description = 4;
+  ModCompatible compatible = 5;
+  repeated ModConfiguration configurations = 6;
+}
+
+message ModCompatible {
+  bool dst = 1;
+  bool dontStarve = 2;
+  bool giant = 3;
+  bool clientOnly = 4;
+  bool allClient = 5;
+}
+
+message ModConfiguration {
+  string name = 1;
+  google.protobuf.Any defaultValue = 2;
+  repeated ModConfigurationItem options = 3;
+}
+
+message ModConfigurationItem {
+  google.protobuf.Any data = 1;
+  string label = 2;
+  string description = 3;
+}
+
+message ModTag {
+  string tag = 1;
+  string name = 2;
+}
+
+
+message ModListReq {
+  string text = 1;
+  string page = 2;
+  string size = 3;
+}
+
+message ModListResp {
+  int64 total = 1;
+  repeated ModInfo list = 2;
+}
+
+message ModId {
+  string ModId = 1;
+  v1.common.InstanceId instanceId = 2;
+}
+
+message RawModSettings {
+  string config = 1;
+}
+
+message SaveRawModSettingsReq {
+  v1.common.InstanceId instanceId = 1;
+  string settings = 2;
+}
+
+message ModSettings {
+  message ModSettingItem {
+    map<string, google.protobuf.Any> options = 1;
+    bool enabled = 2;
+  }
+
+  repeated ModSettingItem list = 1;
+}
+
+message SaveModSettingsReq {
+  v1.common.InstanceId instanceId = 1;
+  ModSettings settings = 2;
+}
+
+message CheckUpdateResult {
+  message CheckUpdateModItem {
+    string modId = 1;
+    string name = 2;
+    string version = 3;
+    int64 date = 4;
+  }
+
+  int64 total = 1;
+  repeated CheckUpdateModItem list = 2;
+}
+
+
+service ModService {
+  rpc GetWorkShopModList(ModListReq) returns (ModListResp);
+  rpc Subscribe(ModId) returns(common.NotifyResult);
+  rpc Unsubscribe(ModId) returns(common.NotifyResult);
+  rpc UpdateMod(ModId) returns(common.NotifyResult);
+  rpc CheckUpdate(v1.common.InstanceId) returns(CheckUpdateResult);
+
+  rpc GetModSettings(v1.common.InstanceId) returns(ModSettings);
+  rpc SaveModSettings(SaveModSettingsReq) returns(common.NotifyResult);
+  rpc GetRawModSettings(v1.common.InstanceId) returns(RawModSettings);
+  rpc SaveRawModSettings(SaveRawModSettingsReq) returns(common.NotifyResult);
 }

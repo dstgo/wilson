@@ -23,6 +23,7 @@ func NewGrpcApp(ctx context.Context, cfg *conf.WigfridConf, logger *log.Logger) 
 	}
 	// use the kratos logrus logger adaptor
 	kratosLogger := logrus.NewLogger(logger.L())
+
 	// create the grpc server
 	grpcServer := NewGRPCServer(cfg.GrpcConf, kratosLogger)
 	// app cleanup func

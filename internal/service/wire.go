@@ -10,6 +10,6 @@ import (
 	"github.com/google/wire"
 )
 
-func setupService(cfg *conf.WigfridConf, datasource *data.DataSource, logger log.Logger) RegisteredService {
+func setupService(cfg *conf.WigfridConf, datasource *data.DataSource, dockerClient *client.Client, steamClient *steamapi.Client, logger log.Logger) RegisteredService {
 	panic(wire.Build())
 }

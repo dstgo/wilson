@@ -7,7 +7,10 @@
 package v1
 
 import (
+	context "context"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -15,12 +18,31 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-const ()
+const (
+	ModService_GetWorkShopModList_FullMethodName = "/v1.mod.ModService/GetWorkShopModList"
+	ModService_Subscribe_FullMethodName          = "/v1.mod.ModService/Subscribe"
+	ModService_Unsubscribe_FullMethodName        = "/v1.mod.ModService/Unsubscribe"
+	ModService_UpdateMod_FullMethodName          = "/v1.mod.ModService/UpdateMod"
+	ModService_CheckUpdate_FullMethodName        = "/v1.mod.ModService/CheckUpdate"
+	ModService_GetModSettings_FullMethodName     = "/v1.mod.ModService/GetModSettings"
+	ModService_SaveModSettings_FullMethodName    = "/v1.mod.ModService/SaveModSettings"
+	ModService_GetRawModSettings_FullMethodName  = "/v1.mod.ModService/GetRawModSettings"
+	ModService_SaveRawModSettings_FullMethodName = "/v1.mod.ModService/SaveRawModSettings"
+)
 
 // ModServiceClient is the client API for ModService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ModServiceClient interface {
+	GetWorkShopModList(ctx context.Context, in *ModListReq, opts ...grpc.CallOption) (*ModListResp, error)
+	Subscribe(ctx context.Context, in *ModId, opts ...grpc.CallOption) (*NotifyResult, error)
+	Unsubscribe(ctx context.Context, in *ModId, opts ...grpc.CallOption) (*NotifyResult, error)
+	UpdateMod(ctx context.Context, in *ModId, opts ...grpc.CallOption) (*NotifyResult, error)
+	CheckUpdate(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*CheckUpdateResult, error)
+	GetModSettings(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*ModSettings, error)
+	SaveModSettings(ctx context.Context, in *SaveModSettingsReq, opts ...grpc.CallOption) (*NotifyResult, error)
+	GetRawModSettings(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*RawModSettings, error)
+	SaveRawModSettings(ctx context.Context, in *SaveRawModSettingsReq, opts ...grpc.CallOption) (*NotifyResult, error)
 }
 
 type modServiceClient struct {
@@ -31,10 +53,100 @@ func NewModServiceClient(cc grpc.ClientConnInterface) ModServiceClient {
 	return &modServiceClient{cc}
 }
 
+func (c *modServiceClient) GetWorkShopModList(ctx context.Context, in *ModListReq, opts ...grpc.CallOption) (*ModListResp, error) {
+	out := new(ModListResp)
+	err := c.cc.Invoke(ctx, ModService_GetWorkShopModList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *modServiceClient) Subscribe(ctx context.Context, in *ModId, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, ModService_Subscribe_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *modServiceClient) Unsubscribe(ctx context.Context, in *ModId, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, ModService_Unsubscribe_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *modServiceClient) UpdateMod(ctx context.Context, in *ModId, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, ModService_UpdateMod_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *modServiceClient) CheckUpdate(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*CheckUpdateResult, error) {
+	out := new(CheckUpdateResult)
+	err := c.cc.Invoke(ctx, ModService_CheckUpdate_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *modServiceClient) GetModSettings(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*ModSettings, error) {
+	out := new(ModSettings)
+	err := c.cc.Invoke(ctx, ModService_GetModSettings_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *modServiceClient) SaveModSettings(ctx context.Context, in *SaveModSettingsReq, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, ModService_SaveModSettings_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *modServiceClient) GetRawModSettings(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*RawModSettings, error) {
+	out := new(RawModSettings)
+	err := c.cc.Invoke(ctx, ModService_GetRawModSettings_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *modServiceClient) SaveRawModSettings(ctx context.Context, in *SaveRawModSettingsReq, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, ModService_SaveRawModSettings_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ModServiceServer is the server API for ModService service.
 // All implementations must embed UnimplementedModServiceServer
 // for forward compatibility
 type ModServiceServer interface {
+	GetWorkShopModList(context.Context, *ModListReq) (*ModListResp, error)
+	Subscribe(context.Context, *ModId) (*NotifyResult, error)
+	Unsubscribe(context.Context, *ModId) (*NotifyResult, error)
+	UpdateMod(context.Context, *ModId) (*NotifyResult, error)
+	CheckUpdate(context.Context, *InstanceId) (*CheckUpdateResult, error)
+	GetModSettings(context.Context, *InstanceId) (*ModSettings, error)
+	SaveModSettings(context.Context, *SaveModSettingsReq) (*NotifyResult, error)
+	GetRawModSettings(context.Context, *InstanceId) (*RawModSettings, error)
+	SaveRawModSettings(context.Context, *SaveRawModSettingsReq) (*NotifyResult, error)
 	mustEmbedUnimplementedModServiceServer()
 }
 
@@ -42,6 +154,33 @@ type ModServiceServer interface {
 type UnimplementedModServiceServer struct {
 }
 
+func (UnimplementedModServiceServer) GetWorkShopModList(context.Context, *ModListReq) (*ModListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWorkShopModList not implemented")
+}
+func (UnimplementedModServiceServer) Subscribe(context.Context, *ModId) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Subscribe not implemented")
+}
+func (UnimplementedModServiceServer) Unsubscribe(context.Context, *ModId) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Unsubscribe not implemented")
+}
+func (UnimplementedModServiceServer) UpdateMod(context.Context, *ModId) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateMod not implemented")
+}
+func (UnimplementedModServiceServer) CheckUpdate(context.Context, *InstanceId) (*CheckUpdateResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckUpdate not implemented")
+}
+func (UnimplementedModServiceServer) GetModSettings(context.Context, *InstanceId) (*ModSettings, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetModSettings not implemented")
+}
+func (UnimplementedModServiceServer) SaveModSettings(context.Context, *SaveModSettingsReq) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveModSettings not implemented")
+}
+func (UnimplementedModServiceServer) GetRawModSettings(context.Context, *InstanceId) (*RawModSettings, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRawModSettings not implemented")
+}
+func (UnimplementedModServiceServer) SaveRawModSettings(context.Context, *SaveRawModSettingsReq) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveRawModSettings not implemented")
+}
 func (UnimplementedModServiceServer) mustEmbedUnimplementedModServiceServer() {}
 
 // UnsafeModServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -55,13 +194,212 @@ func RegisterModServiceServer(s grpc.ServiceRegistrar, srv ModServiceServer) {
 	s.RegisterService(&ModService_ServiceDesc, srv)
 }
 
+func _ModService_GetWorkShopModList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ModListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ModServiceServer).GetWorkShopModList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ModService_GetWorkShopModList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ModServiceServer).GetWorkShopModList(ctx, req.(*ModListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ModService_Subscribe_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ModId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ModServiceServer).Subscribe(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ModService_Subscribe_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ModServiceServer).Subscribe(ctx, req.(*ModId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ModService_Unsubscribe_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ModId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ModServiceServer).Unsubscribe(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ModService_Unsubscribe_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ModServiceServer).Unsubscribe(ctx, req.(*ModId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ModService_UpdateMod_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ModId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ModServiceServer).UpdateMod(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ModService_UpdateMod_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ModServiceServer).UpdateMod(ctx, req.(*ModId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ModService_CheckUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ModServiceServer).CheckUpdate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ModService_CheckUpdate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ModServiceServer).CheckUpdate(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ModService_GetModSettings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ModServiceServer).GetModSettings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ModService_GetModSettings_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ModServiceServer).GetModSettings(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ModService_SaveModSettings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveModSettingsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ModServiceServer).SaveModSettings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ModService_SaveModSettings_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ModServiceServer).SaveModSettings(ctx, req.(*SaveModSettingsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ModService_GetRawModSettings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ModServiceServer).GetRawModSettings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ModService_GetRawModSettings_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ModServiceServer).GetRawModSettings(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ModService_SaveRawModSettings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveRawModSettingsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ModServiceServer).SaveRawModSettings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ModService_SaveRawModSettings_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ModServiceServer).SaveRawModSettings(ctx, req.(*SaveRawModSettingsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ModService_ServiceDesc is the grpc.ServiceDesc for ModService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ModService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "v1.mod.ModService",
 	HandlerType: (*ModServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "v1/mod.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetWorkShopModList",
+			Handler:    _ModService_GetWorkShopModList_Handler,
+		},
+		{
+			MethodName: "Subscribe",
+			Handler:    _ModService_Subscribe_Handler,
+		},
+		{
+			MethodName: "Unsubscribe",
+			Handler:    _ModService_Unsubscribe_Handler,
+		},
+		{
+			MethodName: "UpdateMod",
+			Handler:    _ModService_UpdateMod_Handler,
+		},
+		{
+			MethodName: "CheckUpdate",
+			Handler:    _ModService_CheckUpdate_Handler,
+		},
+		{
+			MethodName: "GetModSettings",
+			Handler:    _ModService_GetModSettings_Handler,
+		},
+		{
+			MethodName: "SaveModSettings",
+			Handler:    _ModService_SaveModSettings_Handler,
+		},
+		{
+			MethodName: "GetRawModSettings",
+			Handler:    _ModService_GetRawModSettings_Handler,
+		},
+		{
+			MethodName: "SaveRawModSettings",
+			Handler:    _ModService_SaveRawModSettings_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "v1/mod.proto",
 }

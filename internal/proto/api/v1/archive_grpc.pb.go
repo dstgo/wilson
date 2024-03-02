@@ -7,7 +7,10 @@
 package v1
 
 import (
+	context "context"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -15,12 +18,27 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-const ()
+const (
+	ArchiveService_Info_FullMethodName           = "/v1.archive.ArchiveService/Info"
+	ArchiveService_ListBackups_FullMethodName    = "/v1.archive.ArchiveService/ListBackups"
+	ArchiveService_CreateBackup_FullMethodName   = "/v1.archive.ArchiveService/CreateBackup"
+	ArchiveService_DeleteBackUp_FullMethodName   = "/v1.archive.ArchiveService/DeleteBackUp"
+	ArchiveService_RestoreBackUp_FullMethodName  = "/v1.archive.ArchiveService/RestoreBackUp"
+	ArchiveService_UploadBackup_FullMethodName   = "/v1.archive.ArchiveService/UploadBackup"
+	ArchiveService_DownloadBackup_FullMethodName = "/v1.archive.ArchiveService/DownloadBackup"
+)
 
 // ArchiveServiceClient is the client API for ArchiveService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ArchiveServiceClient interface {
+	Info(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*ArchiveInfo, error)
+	ListBackups(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*BackUpList, error)
+	CreateBackup(ctx context.Context, in *BackupOpt, opts ...grpc.CallOption) (*NotifyResult, error)
+	DeleteBackUp(ctx context.Context, in *BackupOpt, opts ...grpc.CallOption) (*NotifyResult, error)
+	RestoreBackUp(ctx context.Context, in *BackupOpt, opts ...grpc.CallOption) (*NotifyResult, error)
+	UploadBackup(ctx context.Context, in *BackupFile, opts ...grpc.CallOption) (*NotifyResult, error)
+	DownloadBackup(ctx context.Context, in *BackupOpt, opts ...grpc.CallOption) (*BackupFile, error)
 }
 
 type archiveServiceClient struct {
@@ -31,10 +49,80 @@ func NewArchiveServiceClient(cc grpc.ClientConnInterface) ArchiveServiceClient {
 	return &archiveServiceClient{cc}
 }
 
+func (c *archiveServiceClient) Info(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*ArchiveInfo, error) {
+	out := new(ArchiveInfo)
+	err := c.cc.Invoke(ctx, ArchiveService_Info_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *archiveServiceClient) ListBackups(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*BackUpList, error) {
+	out := new(BackUpList)
+	err := c.cc.Invoke(ctx, ArchiveService_ListBackups_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *archiveServiceClient) CreateBackup(ctx context.Context, in *BackupOpt, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, ArchiveService_CreateBackup_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *archiveServiceClient) DeleteBackUp(ctx context.Context, in *BackupOpt, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, ArchiveService_DeleteBackUp_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *archiveServiceClient) RestoreBackUp(ctx context.Context, in *BackupOpt, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, ArchiveService_RestoreBackUp_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *archiveServiceClient) UploadBackup(ctx context.Context, in *BackupFile, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, ArchiveService_UploadBackup_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *archiveServiceClient) DownloadBackup(ctx context.Context, in *BackupOpt, opts ...grpc.CallOption) (*BackupFile, error) {
+	out := new(BackupFile)
+	err := c.cc.Invoke(ctx, ArchiveService_DownloadBackup_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ArchiveServiceServer is the server API for ArchiveService service.
 // All implementations must embed UnimplementedArchiveServiceServer
 // for forward compatibility
 type ArchiveServiceServer interface {
+	Info(context.Context, *InstanceId) (*ArchiveInfo, error)
+	ListBackups(context.Context, *InstanceId) (*BackUpList, error)
+	CreateBackup(context.Context, *BackupOpt) (*NotifyResult, error)
+	DeleteBackUp(context.Context, *BackupOpt) (*NotifyResult, error)
+	RestoreBackUp(context.Context, *BackupOpt) (*NotifyResult, error)
+	UploadBackup(context.Context, *BackupFile) (*NotifyResult, error)
+	DownloadBackup(context.Context, *BackupOpt) (*BackupFile, error)
 	mustEmbedUnimplementedArchiveServiceServer()
 }
 
@@ -42,6 +130,27 @@ type ArchiveServiceServer interface {
 type UnimplementedArchiveServiceServer struct {
 }
 
+func (UnimplementedArchiveServiceServer) Info(context.Context, *InstanceId) (*ArchiveInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Info not implemented")
+}
+func (UnimplementedArchiveServiceServer) ListBackups(context.Context, *InstanceId) (*BackUpList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListBackups not implemented")
+}
+func (UnimplementedArchiveServiceServer) CreateBackup(context.Context, *BackupOpt) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBackup not implemented")
+}
+func (UnimplementedArchiveServiceServer) DeleteBackUp(context.Context, *BackupOpt) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteBackUp not implemented")
+}
+func (UnimplementedArchiveServiceServer) RestoreBackUp(context.Context, *BackupOpt) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RestoreBackUp not implemented")
+}
+func (UnimplementedArchiveServiceServer) UploadBackup(context.Context, *BackupFile) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UploadBackup not implemented")
+}
+func (UnimplementedArchiveServiceServer) DownloadBackup(context.Context, *BackupOpt) (*BackupFile, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DownloadBackup not implemented")
+}
 func (UnimplementedArchiveServiceServer) mustEmbedUnimplementedArchiveServiceServer() {}
 
 // UnsafeArchiveServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -55,13 +164,168 @@ func RegisterArchiveServiceServer(s grpc.ServiceRegistrar, srv ArchiveServiceSer
 	s.RegisterService(&ArchiveService_ServiceDesc, srv)
 }
 
+func _ArchiveService_Info_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArchiveServiceServer).Info(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ArchiveService_Info_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArchiveServiceServer).Info(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArchiveService_ListBackups_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArchiveServiceServer).ListBackups(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ArchiveService_ListBackups_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArchiveServiceServer).ListBackups(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArchiveService_CreateBackup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BackupOpt)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArchiveServiceServer).CreateBackup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ArchiveService_CreateBackup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArchiveServiceServer).CreateBackup(ctx, req.(*BackupOpt))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArchiveService_DeleteBackUp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BackupOpt)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArchiveServiceServer).DeleteBackUp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ArchiveService_DeleteBackUp_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArchiveServiceServer).DeleteBackUp(ctx, req.(*BackupOpt))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArchiveService_RestoreBackUp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BackupOpt)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArchiveServiceServer).RestoreBackUp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ArchiveService_RestoreBackUp_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArchiveServiceServer).RestoreBackUp(ctx, req.(*BackupOpt))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArchiveService_UploadBackup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BackupFile)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArchiveServiceServer).UploadBackup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ArchiveService_UploadBackup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArchiveServiceServer).UploadBackup(ctx, req.(*BackupFile))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArchiveService_DownloadBackup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BackupOpt)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArchiveServiceServer).DownloadBackup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ArchiveService_DownloadBackup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArchiveServiceServer).DownloadBackup(ctx, req.(*BackupOpt))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ArchiveService_ServiceDesc is the grpc.ServiceDesc for ArchiveService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ArchiveService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "v1.archive.ArchiveService",
 	HandlerType: (*ArchiveServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "v1/archive.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Info",
+			Handler:    _ArchiveService_Info_Handler,
+		},
+		{
+			MethodName: "ListBackups",
+			Handler:    _ArchiveService_ListBackups_Handler,
+		},
+		{
+			MethodName: "CreateBackup",
+			Handler:    _ArchiveService_CreateBackup_Handler,
+		},
+		{
+			MethodName: "DeleteBackUp",
+			Handler:    _ArchiveService_DeleteBackUp_Handler,
+		},
+		{
+			MethodName: "RestoreBackUp",
+			Handler:    _ArchiveService_RestoreBackUp_Handler,
+		},
+		{
+			MethodName: "UploadBackup",
+			Handler:    _ArchiveService_UploadBackup_Handler,
+		},
+		{
+			MethodName: "DownloadBackup",
+			Handler:    _ArchiveService_DownloadBackup_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "v1/archive.proto",
 }

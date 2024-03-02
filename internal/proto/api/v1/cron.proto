@@ -4,6 +4,37 @@ package v1.cron;
 
 option go_package = "api/v1;v1";
 
-service CronService {
+import "v1/common.proto";
 
+enum JobType {
+  Boot = 0;
+  Stop = 1;
+  Update = 2;
+  Reboot = 3;
+  Backup = 4;
+}
+
+message JobInfo {
+  v1.common.InstanceId instance = 1;
+  int64 jobId = 2;
+  string name = 3;
+  int64 last = 4;
+  int64 next = 5;
+  JobType jobType = 6;
+}
+
+message JobList {
+  repeated JobInfo list = 1;
+}
+
+message CreateJobReq {
+  string name = 1;
+  string cronExpr = 2;
+  JobType jobType = 3;
+}
+
+service CronJobService {
+  rpc Create(CreateJobReq) returns(v1.common.NotifyResult);
+  rpc Delete(CreateJobReq) returns(v1.common.NotifyResult);
+  rpc List(CreateJobReq) returns(JobList);
 }

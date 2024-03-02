@@ -35,21 +35,22 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on Player with the rules defined in the
+// Validate checks the field values on PlayerInfo with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *Player) Validate() error {
+func (m *PlayerInfo) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Player with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in PlayerMultiError, or nil if none found.
-func (m *Player) ValidateAll() error {
+// ValidateAll checks the field values on PlayerInfo with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PlayerInfoMultiError, or
+// nil if none found.
+func (m *PlayerInfo) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Player) validate(all bool) error {
+func (m *PlayerInfo) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -67,18 +68,18 @@ func (m *Player) validate(all bool) error {
 	// no validation rules for Admin
 
 	if len(errors) > 0 {
-		return PlayerMultiError(errors)
+		return PlayerInfoMultiError(errors)
 	}
 
 	return nil
 }
 
-// PlayerMultiError is an error wrapping multiple validation errors returned by
-// Player.ValidateAll() if the designated constraints aren't met.
-type PlayerMultiError []error
+// PlayerInfoMultiError is an error wrapping multiple validation errors
+// returned by PlayerInfo.ValidateAll() if the designated constraints aren't met.
+type PlayerInfoMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m PlayerMultiError) Error() string {
+func (m PlayerInfoMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -87,11 +88,11 @@ func (m PlayerMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m PlayerMultiError) AllErrors() []error { return m }
+func (m PlayerInfoMultiError) AllErrors() []error { return m }
 
-// PlayerValidationError is the validation error returned by Player.Validate if
-// the designated constraints aren't met.
-type PlayerValidationError struct {
+// PlayerInfoValidationError is the validation error returned by
+// PlayerInfo.Validate if the designated constraints aren't met.
+type PlayerInfoValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -99,22 +100,22 @@ type PlayerValidationError struct {
 }
 
 // Field function returns field value.
-func (e PlayerValidationError) Field() string { return e.field }
+func (e PlayerInfoValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e PlayerValidationError) Reason() string { return e.reason }
+func (e PlayerInfoValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e PlayerValidationError) Cause() error { return e.cause }
+func (e PlayerInfoValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e PlayerValidationError) Key() bool { return e.key }
+func (e PlayerInfoValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e PlayerValidationError) ErrorName() string { return "PlayerValidationError" }
+func (e PlayerInfoValidationError) ErrorName() string { return "PlayerInfoValidationError" }
 
 // Error satisfies the builtin error interface
-func (e PlayerValidationError) Error() string {
+func (e PlayerInfoValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -126,14 +127,14 @@ func (e PlayerValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sPlayer.%s: %s%s",
+		"invalid %sPlayerInfo.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = PlayerValidationError{}
+var _ error = PlayerInfoValidationError{}
 
 var _ interface {
 	Field() string
@@ -141,7 +142,111 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = PlayerValidationError{}
+} = PlayerInfoValidationError{}
+
+// Validate checks the field values on BasicPlayerInfo with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *BasicPlayerInfo) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BasicPlayerInfo with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// BasicPlayerInfoMultiError, or nil if none found.
+func (m *BasicPlayerInfo) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BasicPlayerInfo) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Kid
+
+	// no validation rules for Name
+
+	if len(errors) > 0 {
+		return BasicPlayerInfoMultiError(errors)
+	}
+
+	return nil
+}
+
+// BasicPlayerInfoMultiError is an error wrapping multiple validation errors
+// returned by BasicPlayerInfo.ValidateAll() if the designated constraints
+// aren't met.
+type BasicPlayerInfoMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BasicPlayerInfoMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BasicPlayerInfoMultiError) AllErrors() []error { return m }
+
+// BasicPlayerInfoValidationError is the validation error returned by
+// BasicPlayerInfo.Validate if the designated constraints aren't met.
+type BasicPlayerInfoValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BasicPlayerInfoValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BasicPlayerInfoValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BasicPlayerInfoValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BasicPlayerInfoValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BasicPlayerInfoValidationError) ErrorName() string { return "BasicPlayerInfoValidationError" }
+
+// Error satisfies the builtin error interface
+func (e BasicPlayerInfoValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBasicPlayerInfo.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BasicPlayerInfoValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BasicPlayerInfoValidationError{}
 
 // Validate checks the field values on PlayerStatisticInfo with the rules
 // defined in the proto definition for this message. If any rules are
@@ -167,45 +272,11 @@ func (m *PlayerStatisticInfo) validate(all bool) error {
 
 	// no validation rules for Total
 
-	// no validation rules for TotalOnline
+	// no validation rules for Online
 
 	// no validation rules for MasterOnline
 
 	// no validation rules for CaveOnline
-
-	for idx, item := range m.GetTotalPlayer() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, PlayerStatisticInfoValidationError{
-						field:  fmt.Sprintf("TotalPlayer[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, PlayerStatisticInfoValidationError{
-						field:  fmt.Sprintf("TotalPlayer[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return PlayerStatisticInfoValidationError{
-					field:  fmt.Sprintf("TotalPlayer[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
 
 	for idx, item := range m.GetMasterOnlinePlayer() {
 		_, _ = idx, item
@@ -460,22 +531,22 @@ var _ interface {
 	ErrorName() string
 } = LogMessageValidationError{}
 
-// Validate checks the field values on PlayerChatInfo with the rules defined in
+// Validate checks the field values on PlayerChatLog with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *PlayerChatInfo) Validate() error {
+func (m *PlayerChatLog) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on PlayerChatInfo with the rules defined
+// ValidateAll checks the field values on PlayerChatLog with the rules defined
 // in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in PlayerChatInfoMultiError,
-// or nil if none found.
-func (m *PlayerChatInfo) ValidateAll() error {
+// result is a list of violation errors wrapped in PlayerChatLogMultiError, or
+// nil if none found.
+func (m *PlayerChatLog) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *PlayerChatInfo) validate(all bool) error {
+func (m *PlayerChatLog) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -489,7 +560,7 @@ func (m *PlayerChatInfo) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, PlayerChatInfoValidationError{
+					errors = append(errors, PlayerChatLogValidationError{
 						field:  fmt.Sprintf("Messages[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -497,7 +568,7 @@ func (m *PlayerChatInfo) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, PlayerChatInfoValidationError{
+					errors = append(errors, PlayerChatLogValidationError{
 						field:  fmt.Sprintf("Messages[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -506,7 +577,7 @@ func (m *PlayerChatInfo) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return PlayerChatInfoValidationError{
+				return PlayerChatLogValidationError{
 					field:  fmt.Sprintf("Messages[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -517,19 +588,19 @@ func (m *PlayerChatInfo) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return PlayerChatInfoMultiError(errors)
+		return PlayerChatLogMultiError(errors)
 	}
 
 	return nil
 }
 
-// PlayerChatInfoMultiError is an error wrapping multiple validation errors
-// returned by PlayerChatInfo.ValidateAll() if the designated constraints
+// PlayerChatLogMultiError is an error wrapping multiple validation errors
+// returned by PlayerChatLog.ValidateAll() if the designated constraints
 // aren't met.
-type PlayerChatInfoMultiError []error
+type PlayerChatLogMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m PlayerChatInfoMultiError) Error() string {
+func (m PlayerChatLogMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -538,11 +609,11 @@ func (m PlayerChatInfoMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m PlayerChatInfoMultiError) AllErrors() []error { return m }
+func (m PlayerChatLogMultiError) AllErrors() []error { return m }
 
-// PlayerChatInfoValidationError is the validation error returned by
-// PlayerChatInfo.Validate if the designated constraints aren't met.
-type PlayerChatInfoValidationError struct {
+// PlayerChatLogValidationError is the validation error returned by
+// PlayerChatLog.Validate if the designated constraints aren't met.
+type PlayerChatLogValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -550,22 +621,22 @@ type PlayerChatInfoValidationError struct {
 }
 
 // Field function returns field value.
-func (e PlayerChatInfoValidationError) Field() string { return e.field }
+func (e PlayerChatLogValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e PlayerChatInfoValidationError) Reason() string { return e.reason }
+func (e PlayerChatLogValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e PlayerChatInfoValidationError) Cause() error { return e.cause }
+func (e PlayerChatLogValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e PlayerChatInfoValidationError) Key() bool { return e.key }
+func (e PlayerChatLogValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e PlayerChatInfoValidationError) ErrorName() string { return "PlayerChatInfoValidationError" }
+func (e PlayerChatLogValidationError) ErrorName() string { return "PlayerChatLogValidationError" }
 
 // Error satisfies the builtin error interface
-func (e PlayerChatInfoValidationError) Error() string {
+func (e PlayerChatLogValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -577,14 +648,14 @@ func (e PlayerChatInfoValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sPlayerChatInfo.%s: %s%s",
+		"invalid %sPlayerChatLog.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = PlayerChatInfoValidationError{}
+var _ error = PlayerChatLogValidationError{}
 
 var _ interface {
 	Field() string
@@ -592,4 +663,456 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = PlayerChatInfoValidationError{}
+} = PlayerChatLogValidationError{}
+
+// Validate checks the field values on ExecutePlayerReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *ExecutePlayerReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ExecutePlayerReq with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ExecutePlayerReqMultiError, or nil if none found.
+func (m *ExecutePlayerReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ExecutePlayerReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetInstanceId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ExecutePlayerReqValidationError{
+					field:  "InstanceId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ExecutePlayerReqValidationError{
+					field:  "InstanceId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetInstanceId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ExecutePlayerReqValidationError{
+				field:  "InstanceId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetKid()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ExecutePlayerReqValidationError{
+					field:  "Kid",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ExecutePlayerReqValidationError{
+					field:  "Kid",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetKid()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ExecutePlayerReqValidationError{
+				field:  "Kid",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Op
+
+	if len(errors) > 0 {
+		return ExecutePlayerReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// ExecutePlayerReqMultiError is an error wrapping multiple validation errors
+// returned by ExecutePlayerReq.ValidateAll() if the designated constraints
+// aren't met.
+type ExecutePlayerReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ExecutePlayerReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ExecutePlayerReqMultiError) AllErrors() []error { return m }
+
+// ExecutePlayerReqValidationError is the validation error returned by
+// ExecutePlayerReq.Validate if the designated constraints aren't met.
+type ExecutePlayerReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ExecutePlayerReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ExecutePlayerReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ExecutePlayerReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ExecutePlayerReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ExecutePlayerReqValidationError) ErrorName() string { return "ExecutePlayerReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ExecutePlayerReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sExecutePlayerReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ExecutePlayerReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ExecutePlayerReqValidationError{}
+
+// Validate checks the field values on PlayerListReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PlayerListReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PlayerListReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PlayerListReqMultiError, or
+// nil if none found.
+func (m *PlayerListReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PlayerListReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetInstanceId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PlayerListReqValidationError{
+					field:  "InstanceId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PlayerListReqValidationError{
+					field:  "InstanceId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetInstanceId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PlayerListReqValidationError{
+				field:  "InstanceId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetKid()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PlayerListReqValidationError{
+					field:  "Kid",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PlayerListReqValidationError{
+					field:  "Kid",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetKid()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PlayerListReqValidationError{
+				field:  "Kid",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return PlayerListReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// PlayerListReqMultiError is an error wrapping multiple validation errors
+// returned by PlayerListReq.ValidateAll() if the designated constraints
+// aren't met.
+type PlayerListReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PlayerListReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PlayerListReqMultiError) AllErrors() []error { return m }
+
+// PlayerListReqValidationError is the validation error returned by
+// PlayerListReq.Validate if the designated constraints aren't met.
+type PlayerListReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PlayerListReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PlayerListReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PlayerListReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PlayerListReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PlayerListReqValidationError) ErrorName() string { return "PlayerListReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PlayerListReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPlayerListReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PlayerListReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PlayerListReqValidationError{}
+
+// Validate checks the field values on PlayerListResp with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PlayerListResp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PlayerListResp with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PlayerListRespMultiError,
+// or nil if none found.
+func (m *PlayerListResp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PlayerListResp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetList() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PlayerListRespValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PlayerListRespValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PlayerListRespValidationError{
+					field:  fmt.Sprintf("List[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return PlayerListRespMultiError(errors)
+	}
+
+	return nil
+}
+
+// PlayerListRespMultiError is an error wrapping multiple validation errors
+// returned by PlayerListResp.ValidateAll() if the designated constraints
+// aren't met.
+type PlayerListRespMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PlayerListRespMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PlayerListRespMultiError) AllErrors() []error { return m }
+
+// PlayerListRespValidationError is the validation error returned by
+// PlayerListResp.Validate if the designated constraints aren't met.
+type PlayerListRespValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PlayerListRespValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PlayerListRespValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PlayerListRespValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PlayerListRespValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PlayerListRespValidationError) ErrorName() string { return "PlayerListRespValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PlayerListRespValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPlayerListResp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PlayerListRespValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PlayerListRespValidationError{}

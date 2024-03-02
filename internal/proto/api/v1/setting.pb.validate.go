@@ -34,3 +34,492 @@ var (
 	_ = anypb.Any{}
 	_ = sort.Sort
 )
+
+// Validate checks the field values on RoomSetting with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *RoomSetting) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RoomSetting with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in RoomSettingMultiError, or
+// nil if none found.
+func (m *RoomSetting) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RoomSetting) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for Password
+
+	// no validation rules for Description
+
+	// no validation rules for Slots
+
+	// no validation rules for Pvp
+
+	// no validation rules for Mode
+
+	// no validation rules for Paused
+
+	// no validation rules for Vote
+
+	// no validation rules for Kick
+
+	if len(errors) > 0 {
+		return RoomSettingMultiError(errors)
+	}
+
+	return nil
+}
+
+// RoomSettingMultiError is an error wrapping multiple validation errors
+// returned by RoomSetting.ValidateAll() if the designated constraints aren't met.
+type RoomSettingMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RoomSettingMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RoomSettingMultiError) AllErrors() []error { return m }
+
+// RoomSettingValidationError is the validation error returned by
+// RoomSetting.Validate if the designated constraints aren't met.
+type RoomSettingValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RoomSettingValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RoomSettingValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RoomSettingValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RoomSettingValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RoomSettingValidationError) ErrorName() string { return "RoomSettingValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RoomSettingValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRoomSetting.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RoomSettingValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RoomSettingValidationError{}
+
+// Validate checks the field values on RawWorldSetting with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *RawWorldSetting) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RawWorldSetting with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RawWorldSettingMultiError, or nil if none found.
+func (m *RawWorldSetting) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RawWorldSetting) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for RawLuaString
+
+	if len(errors) > 0 {
+		return RawWorldSettingMultiError(errors)
+	}
+
+	return nil
+}
+
+// RawWorldSettingMultiError is an error wrapping multiple validation errors
+// returned by RawWorldSetting.ValidateAll() if the designated constraints
+// aren't met.
+type RawWorldSettingMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RawWorldSettingMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RawWorldSettingMultiError) AllErrors() []error { return m }
+
+// RawWorldSettingValidationError is the validation error returned by
+// RawWorldSetting.Validate if the designated constraints aren't met.
+type RawWorldSettingValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RawWorldSettingValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RawWorldSettingValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RawWorldSettingValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RawWorldSettingValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RawWorldSettingValidationError) ErrorName() string { return "RawWorldSettingValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RawWorldSettingValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRawWorldSetting.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RawWorldSettingValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RawWorldSettingValidationError{}
+
+// Validate checks the field values on SettingPair with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *SettingPair) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SettingPair with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SettingPairMultiError, or
+// nil if none found.
+func (m *SettingPair) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SettingPair) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Key
+
+	// no validation rules for Value
+
+	if len(errors) > 0 {
+		return SettingPairMultiError(errors)
+	}
+
+	return nil
+}
+
+// SettingPairMultiError is an error wrapping multiple validation errors
+// returned by SettingPair.ValidateAll() if the designated constraints aren't met.
+type SettingPairMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SettingPairMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SettingPairMultiError) AllErrors() []error { return m }
+
+// SettingPairValidationError is the validation error returned by
+// SettingPair.Validate if the designated constraints aren't met.
+type SettingPairValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SettingPairValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SettingPairValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SettingPairValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SettingPairValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SettingPairValidationError) ErrorName() string { return "SettingPairValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SettingPairValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSettingPair.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SettingPairValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SettingPairValidationError{}
+
+// Validate checks the field values on WorldSetting with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *WorldSetting) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on WorldSetting with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in WorldSettingMultiError, or
+// nil if none found.
+func (m *WorldSetting) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *WorldSetting) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetMaster() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, WorldSettingValidationError{
+						field:  fmt.Sprintf("Master[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, WorldSettingValidationError{
+						field:  fmt.Sprintf("Master[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return WorldSettingValidationError{
+					field:  fmt.Sprintf("Master[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	for idx, item := range m.GetCave() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, WorldSettingValidationError{
+						field:  fmt.Sprintf("Cave[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, WorldSettingValidationError{
+						field:  fmt.Sprintf("Cave[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return WorldSettingValidationError{
+					field:  fmt.Sprintf("Cave[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return WorldSettingMultiError(errors)
+	}
+
+	return nil
+}
+
+// WorldSettingMultiError is an error wrapping multiple validation errors
+// returned by WorldSetting.ValidateAll() if the designated constraints aren't met.
+type WorldSettingMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m WorldSettingMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m WorldSettingMultiError) AllErrors() []error { return m }
+
+// WorldSettingValidationError is the validation error returned by
+// WorldSetting.Validate if the designated constraints aren't met.
+type WorldSettingValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e WorldSettingValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e WorldSettingValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e WorldSettingValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e WorldSettingValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e WorldSettingValidationError) ErrorName() string { return "WorldSettingValidationError" }
+
+// Error satisfies the builtin error interface
+func (e WorldSettingValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sWorldSetting.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = WorldSettingValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = WorldSettingValidationError{}

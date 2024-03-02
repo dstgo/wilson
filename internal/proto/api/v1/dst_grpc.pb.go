@@ -7,7 +7,10 @@
 package v1
 
 import (
+	context "context"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -15,53 +18,462 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-const ()
+const (
+	DstServerService_Boot_FullMethodName           = "/v1.dst.DstServerService/Boot"
+	DstServerService_ReBoot_FullMethodName         = "/v1.dst.DstServerService/ReBoot"
+	DstServerService_Stop_FullMethodName           = "/v1.dst.DstServerService/Stop"
+	DstServerService_State_FullMethodName          = "/v1.dst.DstServerService/State"
+	DstServerService_Logs_FullMethodName           = "/v1.dst.DstServerService/Logs"
+	DstServerService_ExecuteCommand_FullMethodName = "/v1.dst.DstServerService/ExecuteCommand"
+	DstServerService_Version_FullMethodName        = "/v1.dst.DstServerService/Version"
+	DstServerService_Update_FullMethodName         = "/v1.dst.DstServerService/Update"
+	DstServerService_RollBack_FullMethodName       = "/v1.dst.DstServerService/RollBack"
+	DstServerService_Reset_FullMethodName          = "/v1.dst.DstServerService/Reset"
+	DstServerService_Clear_FullMethodName          = "/v1.dst.DstServerService/Clear"
+)
 
-// ControlServiceClient is the client API for ControlService service.
+// DstServerServiceClient is the client API for DstServerService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ControlServiceClient interface {
+type DstServerServiceClient interface {
+	Boot(ctx context.Context, in *ControlRequest, opts ...grpc.CallOption) (*NotifyResult, error)
+	ReBoot(ctx context.Context, in *ControlRequest, opts ...grpc.CallOption) (*NotifyResult, error)
+	Stop(ctx context.Context, in *ControlRequest, opts ...grpc.CallOption) (*NotifyResult, error)
+	State(ctx context.Context, in *ControlRequest, opts ...grpc.CallOption) (*StateResp, error)
+	Logs(ctx context.Context, in *LogsRequest, opts ...grpc.CallOption) (*LogsResponse, error)
+	ExecuteCommand(ctx context.Context, in *CommandRequest, opts ...grpc.CallOption) (*NotifyResult, error)
+	Version(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*VersionResp, error)
+	Update(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
+	RollBack(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
+	Reset(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
+	Clear(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
 }
 
-type controlServiceClient struct {
+type dstServerServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewControlServiceClient(cc grpc.ClientConnInterface) ControlServiceClient {
-	return &controlServiceClient{cc}
+func NewDstServerServiceClient(cc grpc.ClientConnInterface) DstServerServiceClient {
+	return &dstServerServiceClient{cc}
 }
 
-// ControlServiceServer is the server API for ControlService service.
-// All implementations must embed UnimplementedControlServiceServer
+func (c *dstServerServiceClient) Boot(ctx context.Context, in *ControlRequest, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DstServerService_Boot_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dstServerServiceClient) ReBoot(ctx context.Context, in *ControlRequest, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DstServerService_ReBoot_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dstServerServiceClient) Stop(ctx context.Context, in *ControlRequest, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DstServerService_Stop_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dstServerServiceClient) State(ctx context.Context, in *ControlRequest, opts ...grpc.CallOption) (*StateResp, error) {
+	out := new(StateResp)
+	err := c.cc.Invoke(ctx, DstServerService_State_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dstServerServiceClient) Logs(ctx context.Context, in *LogsRequest, opts ...grpc.CallOption) (*LogsResponse, error) {
+	out := new(LogsResponse)
+	err := c.cc.Invoke(ctx, DstServerService_Logs_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dstServerServiceClient) ExecuteCommand(ctx context.Context, in *CommandRequest, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DstServerService_ExecuteCommand_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dstServerServiceClient) Version(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*VersionResp, error) {
+	out := new(VersionResp)
+	err := c.cc.Invoke(ctx, DstServerService_Version_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dstServerServiceClient) Update(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DstServerService_Update_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dstServerServiceClient) RollBack(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DstServerService_RollBack_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dstServerServiceClient) Reset(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DstServerService_Reset_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dstServerServiceClient) Clear(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DstServerService_Clear_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// DstServerServiceServer is the server API for DstServerService service.
+// All implementations must embed UnimplementedDstServerServiceServer
 // for forward compatibility
-type ControlServiceServer interface {
-	mustEmbedUnimplementedControlServiceServer()
+type DstServerServiceServer interface {
+	Boot(context.Context, *ControlRequest) (*NotifyResult, error)
+	ReBoot(context.Context, *ControlRequest) (*NotifyResult, error)
+	Stop(context.Context, *ControlRequest) (*NotifyResult, error)
+	State(context.Context, *ControlRequest) (*StateResp, error)
+	Logs(context.Context, *LogsRequest) (*LogsResponse, error)
+	ExecuteCommand(context.Context, *CommandRequest) (*NotifyResult, error)
+	Version(context.Context, *InstanceId) (*VersionResp, error)
+	Update(context.Context, *InstanceId) (*NotifyResult, error)
+	RollBack(context.Context, *InstanceId) (*NotifyResult, error)
+	Reset(context.Context, *InstanceId) (*NotifyResult, error)
+	Clear(context.Context, *InstanceId) (*NotifyResult, error)
+	mustEmbedUnimplementedDstServerServiceServer()
 }
 
-// UnimplementedControlServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedControlServiceServer struct {
+// UnimplementedDstServerServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedDstServerServiceServer struct {
 }
 
-func (UnimplementedControlServiceServer) mustEmbedUnimplementedControlServiceServer() {}
+func (UnimplementedDstServerServiceServer) Boot(context.Context, *ControlRequest) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Boot not implemented")
+}
+func (UnimplementedDstServerServiceServer) ReBoot(context.Context, *ControlRequest) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReBoot not implemented")
+}
+func (UnimplementedDstServerServiceServer) Stop(context.Context, *ControlRequest) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Stop not implemented")
+}
+func (UnimplementedDstServerServiceServer) State(context.Context, *ControlRequest) (*StateResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method State not implemented")
+}
+func (UnimplementedDstServerServiceServer) Logs(context.Context, *LogsRequest) (*LogsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Logs not implemented")
+}
+func (UnimplementedDstServerServiceServer) ExecuteCommand(context.Context, *CommandRequest) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExecuteCommand not implemented")
+}
+func (UnimplementedDstServerServiceServer) Version(context.Context, *InstanceId) (*VersionResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Version not implemented")
+}
+func (UnimplementedDstServerServiceServer) Update(context.Context, *InstanceId) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedDstServerServiceServer) RollBack(context.Context, *InstanceId) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RollBack not implemented")
+}
+func (UnimplementedDstServerServiceServer) Reset(context.Context, *InstanceId) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Reset not implemented")
+}
+func (UnimplementedDstServerServiceServer) Clear(context.Context, *InstanceId) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Clear not implemented")
+}
+func (UnimplementedDstServerServiceServer) mustEmbedUnimplementedDstServerServiceServer() {}
 
-// UnsafeControlServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ControlServiceServer will
+// UnsafeDstServerServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to DstServerServiceServer will
 // result in compilation errors.
-type UnsafeControlServiceServer interface {
-	mustEmbedUnimplementedControlServiceServer()
+type UnsafeDstServerServiceServer interface {
+	mustEmbedUnimplementedDstServerServiceServer()
 }
 
-func RegisterControlServiceServer(s grpc.ServiceRegistrar, srv ControlServiceServer) {
-	s.RegisterService(&ControlService_ServiceDesc, srv)
+func RegisterDstServerServiceServer(s grpc.ServiceRegistrar, srv DstServerServiceServer) {
+	s.RegisterService(&DstServerService_ServiceDesc, srv)
 }
 
-// ControlService_ServiceDesc is the grpc.ServiceDesc for ControlService service.
+func _DstServerService_Boot_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ControlRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DstServerServiceServer).Boot(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DstServerService_Boot_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DstServerServiceServer).Boot(ctx, req.(*ControlRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DstServerService_ReBoot_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ControlRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DstServerServiceServer).ReBoot(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DstServerService_ReBoot_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DstServerServiceServer).ReBoot(ctx, req.(*ControlRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DstServerService_Stop_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ControlRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DstServerServiceServer).Stop(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DstServerService_Stop_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DstServerServiceServer).Stop(ctx, req.(*ControlRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DstServerService_State_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ControlRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DstServerServiceServer).State(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DstServerService_State_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DstServerServiceServer).State(ctx, req.(*ControlRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DstServerService_Logs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DstServerServiceServer).Logs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DstServerService_Logs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DstServerServiceServer).Logs(ctx, req.(*LogsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DstServerService_ExecuteCommand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CommandRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DstServerServiceServer).ExecuteCommand(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DstServerService_ExecuteCommand_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DstServerServiceServer).ExecuteCommand(ctx, req.(*CommandRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DstServerService_Version_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DstServerServiceServer).Version(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DstServerService_Version_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DstServerServiceServer).Version(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DstServerService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DstServerServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DstServerService_Update_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DstServerServiceServer).Update(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DstServerService_RollBack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DstServerServiceServer).RollBack(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DstServerService_RollBack_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DstServerServiceServer).RollBack(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DstServerService_Reset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DstServerServiceServer).Reset(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DstServerService_Reset_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DstServerServiceServer).Reset(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DstServerService_Clear_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DstServerServiceServer).Clear(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DstServerService_Clear_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DstServerServiceServer).Clear(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// DstServerService_ServiceDesc is the grpc.ServiceDesc for DstServerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var ControlService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "v1.dst.ControlService",
-	HandlerType: (*ControlServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "v1/dst.proto",
+var DstServerService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "v1.dst.DstServerService",
+	HandlerType: (*DstServerServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Boot",
+			Handler:    _DstServerService_Boot_Handler,
+		},
+		{
+			MethodName: "ReBoot",
+			Handler:    _DstServerService_ReBoot_Handler,
+		},
+		{
+			MethodName: "Stop",
+			Handler:    _DstServerService_Stop_Handler,
+		},
+		{
+			MethodName: "State",
+			Handler:    _DstServerService_State_Handler,
+		},
+		{
+			MethodName: "Logs",
+			Handler:    _DstServerService_Logs_Handler,
+		},
+		{
+			MethodName: "ExecuteCommand",
+			Handler:    _DstServerService_ExecuteCommand_Handler,
+		},
+		{
+			MethodName: "Version",
+			Handler:    _DstServerService_Version_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _DstServerService_Update_Handler,
+		},
+		{
+			MethodName: "RollBack",
+			Handler:    _DstServerService_RollBack_Handler,
+		},
+		{
+			MethodName: "Reset",
+			Handler:    _DstServerService_Reset_Handler,
+		},
+		{
+			MethodName: "Clear",
+			Handler:    _DstServerService_Clear_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "v1/dst.proto",
 }

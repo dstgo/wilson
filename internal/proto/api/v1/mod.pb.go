@@ -9,7 +9,9 @@ package v1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	anypb "google.golang.org/protobuf/types/known/anypb"
 	reflect "reflect"
+	sync "sync"
 )
 
 const (
@@ -19,22 +21,1256 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type ModInfo struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id        string    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name      string    `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Preview   string    `protobuf:"bytes,3,opt,name=preview,proto3" json:"preview,omitempty"`
+	Subscribe int64     `protobuf:"varint,5,opt,name=subscribe,proto3" json:"subscribe,omitempty"`
+	Size      int64     `protobuf:"varint,6,opt,name=size,proto3" json:"size,omitempty"`
+	Updated   int64     `protobuf:"varint,7,opt,name=updated,proto3" json:"updated,omitempty"`
+	Created   int64     `protobuf:"varint,8,opt,name=created,proto3" json:"created,omitempty"`
+	Tags      []*ModTag `protobuf:"bytes,9,rep,name=tags,proto3" json:"tags,omitempty"`
+}
+
+func (x *ModInfo) Reset() {
+	*x = ModInfo{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ModInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModInfo) ProtoMessage() {}
+
+func (x *ModInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModInfo.ProtoReflect.Descriptor instead.
+func (*ModInfo) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *ModInfo) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *ModInfo) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ModInfo) GetPreview() string {
+	if x != nil {
+		return x.Preview
+	}
+	return ""
+}
+
+func (x *ModInfo) GetSubscribe() int64 {
+	if x != nil {
+		return x.Subscribe
+	}
+	return 0
+}
+
+func (x *ModInfo) GetSize() int64 {
+	if x != nil {
+		return x.Size
+	}
+	return 0
+}
+
+func (x *ModInfo) GetUpdated() int64 {
+	if x != nil {
+		return x.Updated
+	}
+	return 0
+}
+
+func (x *ModInfo) GetCreated() int64 {
+	if x != nil {
+		return x.Created
+	}
+	return 0
+}
+
+func (x *ModInfo) GetTags() []*ModTag {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
+}
+
+type ModDetails struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name           string              `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Author         string              `protobuf:"bytes,2,opt,name=author,proto3" json:"author,omitempty"`
+	Version        string              `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`
+	Description    string              `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	Compatible     *ModCompatible      `protobuf:"bytes,5,opt,name=compatible,proto3" json:"compatible,omitempty"`
+	Configurations []*ModConfiguration `protobuf:"bytes,6,rep,name=configurations,proto3" json:"configurations,omitempty"`
+}
+
+func (x *ModDetails) Reset() {
+	*x = ModDetails{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ModDetails) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModDetails) ProtoMessage() {}
+
+func (x *ModDetails) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModDetails.ProtoReflect.Descriptor instead.
+func (*ModDetails) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ModDetails) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ModDetails) GetAuthor() string {
+	if x != nil {
+		return x.Author
+	}
+	return ""
+}
+
+func (x *ModDetails) GetVersion() string {
+	if x != nil {
+		return x.Version
+	}
+	return ""
+}
+
+func (x *ModDetails) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *ModDetails) GetCompatible() *ModCompatible {
+	if x != nil {
+		return x.Compatible
+	}
+	return nil
+}
+
+func (x *ModDetails) GetConfigurations() []*ModConfiguration {
+	if x != nil {
+		return x.Configurations
+	}
+	return nil
+}
+
+type ModCompatible struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Dst        bool `protobuf:"varint,1,opt,name=dst,proto3" json:"dst,omitempty"`
+	DontStarve bool `protobuf:"varint,2,opt,name=dontStarve,proto3" json:"dontStarve,omitempty"`
+	Giant      bool `protobuf:"varint,3,opt,name=giant,proto3" json:"giant,omitempty"`
+	ClientOnly bool `protobuf:"varint,4,opt,name=clientOnly,proto3" json:"clientOnly,omitempty"`
+	AllClient  bool `protobuf:"varint,5,opt,name=allClient,proto3" json:"allClient,omitempty"`
+}
+
+func (x *ModCompatible) Reset() {
+	*x = ModCompatible{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ModCompatible) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModCompatible) ProtoMessage() {}
+
+func (x *ModCompatible) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModCompatible.ProtoReflect.Descriptor instead.
+func (*ModCompatible) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ModCompatible) GetDst() bool {
+	if x != nil {
+		return x.Dst
+	}
+	return false
+}
+
+func (x *ModCompatible) GetDontStarve() bool {
+	if x != nil {
+		return x.DontStarve
+	}
+	return false
+}
+
+func (x *ModCompatible) GetGiant() bool {
+	if x != nil {
+		return x.Giant
+	}
+	return false
+}
+
+func (x *ModCompatible) GetClientOnly() bool {
+	if x != nil {
+		return x.ClientOnly
+	}
+	return false
+}
+
+func (x *ModCompatible) GetAllClient() bool {
+	if x != nil {
+		return x.AllClient
+	}
+	return false
+}
+
+type ModConfiguration struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name         string                  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	DefaultValue *anypb.Any              `protobuf:"bytes,2,opt,name=defaultValue,proto3" json:"defaultValue,omitempty"`
+	Options      []*ModConfigurationItem `protobuf:"bytes,3,rep,name=options,proto3" json:"options,omitempty"`
+}
+
+func (x *ModConfiguration) Reset() {
+	*x = ModConfiguration{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ModConfiguration) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModConfiguration) ProtoMessage() {}
+
+func (x *ModConfiguration) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModConfiguration.ProtoReflect.Descriptor instead.
+func (*ModConfiguration) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ModConfiguration) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ModConfiguration) GetDefaultValue() *anypb.Any {
+	if x != nil {
+		return x.DefaultValue
+	}
+	return nil
+}
+
+func (x *ModConfiguration) GetOptions() []*ModConfigurationItem {
+	if x != nil {
+		return x.Options
+	}
+	return nil
+}
+
+type ModConfigurationItem struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data        *anypb.Any `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	Label       string     `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`
+	Description string     `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+}
+
+func (x *ModConfigurationItem) Reset() {
+	*x = ModConfigurationItem{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ModConfigurationItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModConfigurationItem) ProtoMessage() {}
+
+func (x *ModConfigurationItem) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModConfigurationItem.ProtoReflect.Descriptor instead.
+func (*ModConfigurationItem) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ModConfigurationItem) GetData() *anypb.Any {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *ModConfigurationItem) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *ModConfigurationItem) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type ModTag struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Tag  string `protobuf:"bytes,1,opt,name=tag,proto3" json:"tag,omitempty"`
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (x *ModTag) Reset() {
+	*x = ModTag{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ModTag) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModTag) ProtoMessage() {}
+
+func (x *ModTag) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModTag.ProtoReflect.Descriptor instead.
+func (*ModTag) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ModTag) GetTag() string {
+	if x != nil {
+		return x.Tag
+	}
+	return ""
+}
+
+func (x *ModTag) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type ModListReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Text string `protobuf:"bytes,1,opt,name=text,proto3" json:"text,omitempty"`
+	Page string `protobuf:"bytes,2,opt,name=page,proto3" json:"page,omitempty"`
+	Size string `protobuf:"bytes,3,opt,name=size,proto3" json:"size,omitempty"`
+}
+
+func (x *ModListReq) Reset() {
+	*x = ModListReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ModListReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModListReq) ProtoMessage() {}
+
+func (x *ModListReq) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModListReq.ProtoReflect.Descriptor instead.
+func (*ModListReq) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ModListReq) GetText() string {
+	if x != nil {
+		return x.Text
+	}
+	return ""
+}
+
+func (x *ModListReq) GetPage() string {
+	if x != nil {
+		return x.Page
+	}
+	return ""
+}
+
+func (x *ModListReq) GetSize() string {
+	if x != nil {
+		return x.Size
+	}
+	return ""
+}
+
+type ModListResp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Total int64      `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
+	List  []*ModInfo `protobuf:"bytes,2,rep,name=list,proto3" json:"list,omitempty"`
+}
+
+func (x *ModListResp) Reset() {
+	*x = ModListResp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ModListResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModListResp) ProtoMessage() {}
+
+func (x *ModListResp) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModListResp.ProtoReflect.Descriptor instead.
+func (*ModListResp) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *ModListResp) GetTotal() int64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *ModListResp) GetList() []*ModInfo {
+	if x != nil {
+		return x.List
+	}
+	return nil
+}
+
+type ModId struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ModId      string      `protobuf:"bytes,1,opt,name=ModId,proto3" json:"ModId,omitempty"`
+	InstanceId *InstanceId `protobuf:"bytes,2,opt,name=instanceId,proto3" json:"instanceId,omitempty"`
+}
+
+func (x *ModId) Reset() {
+	*x = ModId{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ModId) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModId) ProtoMessage() {}
+
+func (x *ModId) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModId.ProtoReflect.Descriptor instead.
+func (*ModId) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ModId) GetModId() string {
+	if x != nil {
+		return x.ModId
+	}
+	return ""
+}
+
+func (x *ModId) GetInstanceId() *InstanceId {
+	if x != nil {
+		return x.InstanceId
+	}
+	return nil
+}
+
+type RawModSettings struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Config string `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
+}
+
+func (x *RawModSettings) Reset() {
+	*x = RawModSettings{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RawModSettings) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RawModSettings) ProtoMessage() {}
+
+func (x *RawModSettings) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RawModSettings.ProtoReflect.Descriptor instead.
+func (*RawModSettings) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *RawModSettings) GetConfig() string {
+	if x != nil {
+		return x.Config
+	}
+	return ""
+}
+
+type SaveRawModSettingsReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	InstanceId *InstanceId `protobuf:"bytes,1,opt,name=instanceId,proto3" json:"instanceId,omitempty"`
+	Settings   string      `protobuf:"bytes,2,opt,name=settings,proto3" json:"settings,omitempty"`
+}
+
+func (x *SaveRawModSettingsReq) Reset() {
+	*x = SaveRawModSettingsReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SaveRawModSettingsReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveRawModSettingsReq) ProtoMessage() {}
+
+func (x *SaveRawModSettingsReq) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveRawModSettingsReq.ProtoReflect.Descriptor instead.
+func (*SaveRawModSettingsReq) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *SaveRawModSettingsReq) GetInstanceId() *InstanceId {
+	if x != nil {
+		return x.InstanceId
+	}
+	return nil
+}
+
+func (x *SaveRawModSettingsReq) GetSettings() string {
+	if x != nil {
+		return x.Settings
+	}
+	return ""
+}
+
+type ModSettings struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	List []*ModSettings_ModSettingItem `protobuf:"bytes,1,rep,name=list,proto3" json:"list,omitempty"`
+}
+
+func (x *ModSettings) Reset() {
+	*x = ModSettings{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ModSettings) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModSettings) ProtoMessage() {}
+
+func (x *ModSettings) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModSettings.ProtoReflect.Descriptor instead.
+func (*ModSettings) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *ModSettings) GetList() []*ModSettings_ModSettingItem {
+	if x != nil {
+		return x.List
+	}
+	return nil
+}
+
+type SaveModSettingsReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	InstanceId *InstanceId  `protobuf:"bytes,1,opt,name=instanceId,proto3" json:"instanceId,omitempty"`
+	Settings   *ModSettings `protobuf:"bytes,2,opt,name=settings,proto3" json:"settings,omitempty"`
+}
+
+func (x *SaveModSettingsReq) Reset() {
+	*x = SaveModSettingsReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SaveModSettingsReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveModSettingsReq) ProtoMessage() {}
+
+func (x *SaveModSettingsReq) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveModSettingsReq.ProtoReflect.Descriptor instead.
+func (*SaveModSettingsReq) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *SaveModSettingsReq) GetInstanceId() *InstanceId {
+	if x != nil {
+		return x.InstanceId
+	}
+	return nil
+}
+
+func (x *SaveModSettingsReq) GetSettings() *ModSettings {
+	if x != nil {
+		return x.Settings
+	}
+	return nil
+}
+
+type CheckUpdateResult struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Total int64                                   `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
+	List  []*CheckUpdateResult_CheckUpdateModItem `protobuf:"bytes,2,rep,name=list,proto3" json:"list,omitempty"`
+}
+
+func (x *CheckUpdateResult) Reset() {
+	*x = CheckUpdateResult{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CheckUpdateResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CheckUpdateResult) ProtoMessage() {}
+
+func (x *CheckUpdateResult) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CheckUpdateResult.ProtoReflect.Descriptor instead.
+func (*CheckUpdateResult) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *CheckUpdateResult) GetTotal() int64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *CheckUpdateResult) GetList() []*CheckUpdateResult_CheckUpdateModItem {
+	if x != nil {
+		return x.List
+	}
+	return nil
+}
+
+type ModSettings_ModSettingItem struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Options map[string]*anypb.Any `protobuf:"bytes,1,rep,name=options,proto3" json:"options,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Enabled bool                  `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"`
+}
+
+func (x *ModSettings_ModSettingItem) Reset() {
+	*x = ModSettings_ModSettingItem{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ModSettings_ModSettingItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModSettings_ModSettingItem) ProtoMessage() {}
+
+func (x *ModSettings_ModSettingItem) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModSettings_ModSettingItem.ProtoReflect.Descriptor instead.
+func (*ModSettings_ModSettingItem) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{11, 0}
+}
+
+func (x *ModSettings_ModSettingItem) GetOptions() map[string]*anypb.Any {
+	if x != nil {
+		return x.Options
+	}
+	return nil
+}
+
+func (x *ModSettings_ModSettingItem) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+type CheckUpdateResult_CheckUpdateModItem struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ModId   string `protobuf:"bytes,1,opt,name=modId,proto3" json:"modId,omitempty"`
+	Name    string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Version string `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`
+	Date    int64  `protobuf:"varint,4,opt,name=date,proto3" json:"date,omitempty"`
+}
+
+func (x *CheckUpdateResult_CheckUpdateModItem) Reset() {
+	*x = CheckUpdateResult_CheckUpdateModItem{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_mod_proto_msgTypes[16]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CheckUpdateResult_CheckUpdateModItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CheckUpdateResult_CheckUpdateModItem) ProtoMessage() {}
+
+func (x *CheckUpdateResult_CheckUpdateModItem) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_mod_proto_msgTypes[16]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CheckUpdateResult_CheckUpdateModItem.ProtoReflect.Descriptor instead.
+func (*CheckUpdateResult_CheckUpdateModItem) Descriptor() ([]byte, []int) {
+	return file_v1_mod_proto_rawDescGZIP(), []int{13, 0}
+}
+
+func (x *CheckUpdateResult_CheckUpdateModItem) GetModId() string {
+	if x != nil {
+		return x.ModId
+	}
+	return ""
+}
+
+func (x *CheckUpdateResult_CheckUpdateModItem) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CheckUpdateResult_CheckUpdateModItem) GetVersion() string {
+	if x != nil {
+		return x.Version
+	}
+	return ""
+}
+
+func (x *CheckUpdateResult_CheckUpdateModItem) GetDate() int64 {
+	if x != nil {
+		return x.Date
+	}
+	return 0
+}
+
 var File_v1_mod_proto protoreflect.FileDescriptor
 
 var file_v1_mod_proto_rawDesc = []byte{
 	0x0a, 0x0c, 0x76, 0x31, 0x2f, 0x6d, 0x6f, 0x64, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x06,
-	0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x32, 0x0c, 0x0a, 0x0a, 0x4d, 0x6f, 0x64, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x42, 0x0b, 0x5a, 0x09, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x3b, 0x76,
-	0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x1a, 0x19, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x61, 0x6e, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x1a, 0x0f, 0x76, 0x31, 0x2f, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x22, 0xd1, 0x01, 0x0a, 0x07, 0x4d, 0x6f, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x0e,
+	0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12,
+	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
+	0x6d, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x70, 0x72, 0x65, 0x76, 0x69, 0x65, 0x77, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x70, 0x72, 0x65, 0x76, 0x69, 0x65, 0x77, 0x12, 0x1c, 0x0a, 0x09,
+	0x73, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x09, 0x73, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x73, 0x69,
+	0x7a, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x73, 0x69, 0x7a, 0x65, 0x12, 0x18,
+	0x0a, 0x07, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x07, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x03, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x64, 0x12, 0x22, 0x0a, 0x04, 0x74, 0x61, 0x67, 0x73, 0x18, 0x09, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x0e, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x4d, 0x6f, 0x64, 0x54, 0x61, 0x67,
+	0x52, 0x04, 0x74, 0x61, 0x67, 0x73, 0x22, 0xed, 0x01, 0x0a, 0x0a, 0x4d, 0x6f, 0x64, 0x44, 0x65,
+	0x74, 0x61, 0x69, 0x6c, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x75, 0x74,
+	0x68, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x75, 0x74, 0x68, 0x6f,
+	0x72, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x20, 0x0a, 0x0b, 0x64,
+	0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x35, 0x0a,
+	0x0a, 0x63, 0x6f, 0x6d, 0x70, 0x61, 0x74, 0x69, 0x62, 0x6c, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x15, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x4d, 0x6f, 0x64, 0x43, 0x6f,
+	0x6d, 0x70, 0x61, 0x74, 0x69, 0x62, 0x6c, 0x65, 0x52, 0x0a, 0x63, 0x6f, 0x6d, 0x70, 0x61, 0x74,
+	0x69, 0x62, 0x6c, 0x65, 0x12, 0x40, 0x0a, 0x0e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x75, 0x72,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x76,
+	0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x4d, 0x6f, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x75,
+	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x75, 0x72,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x95, 0x01, 0x0a, 0x0d, 0x4d, 0x6f, 0x64, 0x43, 0x6f,
+	0x6d, 0x70, 0x61, 0x74, 0x69, 0x62, 0x6c, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x73, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x03, 0x64, 0x73, 0x74, 0x12, 0x1e, 0x0a, 0x0a, 0x64, 0x6f,
+	0x6e, 0x74, 0x53, 0x74, 0x61, 0x72, 0x76, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0a,
+	0x64, 0x6f, 0x6e, 0x74, 0x53, 0x74, 0x61, 0x72, 0x76, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x67, 0x69,
+	0x61, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x08, 0x52, 0x05, 0x67, 0x69, 0x61, 0x6e, 0x74,
+	0x12, 0x1e, 0x0a, 0x0a, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x4f, 0x6e, 0x6c, 0x79, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x08, 0x52, 0x0a, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x4f, 0x6e, 0x6c, 0x79,
+	0x12, 0x1c, 0x0a, 0x09, 0x61, 0x6c, 0x6c, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x08, 0x52, 0x09, 0x61, 0x6c, 0x6c, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x22, 0x98,
+	0x01, 0x0a, 0x10, 0x4d, 0x6f, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x75, 0x72, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x38, 0x0a, 0x0c, 0x64, 0x65, 0x66, 0x61, 0x75,
+	0x6c, 0x74, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e,
+	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
+	0x41, 0x6e, 0x79, 0x52, 0x0c, 0x64, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x56, 0x61, 0x6c, 0x75,
+	0x65, 0x12, 0x36, 0x0a, 0x07, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x03, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x4d, 0x6f, 0x64, 0x43,
+	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x74, 0x65, 0x6d,
+	0x52, 0x07, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x78, 0x0a, 0x14, 0x4d, 0x6f, 0x64,
+	0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x74, 0x65,
+	0x6d, 0x12, 0x28, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x14, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
+	0x66, 0x2e, 0x41, 0x6e, 0x79, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x12, 0x14, 0x0a, 0x05, 0x6c,
+	0x61, 0x62, 0x65, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6c, 0x61, 0x62, 0x65,
+	0x6c, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74,
+	0x69, 0x6f, 0x6e, 0x22, 0x2e, 0x0a, 0x06, 0x4d, 0x6f, 0x64, 0x54, 0x61, 0x67, 0x12, 0x10, 0x0a,
+	0x03, 0x74, 0x61, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x74, 0x61, 0x67, 0x12,
+	0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e,
+	0x61, 0x6d, 0x65, 0x22, 0x48, 0x0a, 0x0a, 0x4d, 0x6f, 0x64, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65,
+	0x71, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x65, 0x78, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x04, 0x74, 0x65, 0x78, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x67, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x73, 0x69, 0x7a,
+	0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x73, 0x69, 0x7a, 0x65, 0x22, 0x48, 0x0a,
+	0x0b, 0x4d, 0x6f, 0x64, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x12, 0x14, 0x0a, 0x05,
+	0x74, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x74, 0x6f, 0x74,
+	0x61, 0x6c, 0x12, 0x23, 0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x0f, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x4d, 0x6f, 0x64, 0x49, 0x6e, 0x66,
+	0x6f, 0x52, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x22, 0x54, 0x0a, 0x05, 0x4d, 0x6f, 0x64, 0x49, 0x64,
+	0x12, 0x14, 0x0a, 0x05, 0x4d, 0x6f, 0x64, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x05, 0x4d, 0x6f, 0x64, 0x49, 0x64, 0x12, 0x35, 0x0a, 0x0a, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e,
+	0x63, 0x65, 0x49, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x15, 0x2e, 0x76, 0x31, 0x2e,
+	0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x49,
+	0x64, 0x52, 0x0a, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x49, 0x64, 0x22, 0x28, 0x0a,
+	0x0e, 0x52, 0x61, 0x77, 0x4d, 0x6f, 0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x12,
+	0x16, 0x0a, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x6a, 0x0a, 0x15, 0x53, 0x61, 0x76, 0x65, 0x52,
+	0x61, 0x77, 0x4d, 0x6f, 0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x71,
+	0x12, 0x35, 0x0a, 0x0a, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x49, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x15, 0x2e, 0x76, 0x31, 0x2e, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e,
+	0x2e, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x49, 0x64, 0x52, 0x0a, 0x69, 0x6e, 0x73,
+	0x74, 0x61, 0x6e, 0x63, 0x65, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x73, 0x65, 0x74, 0x74, 0x69,
+	0x6e, 0x67, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x73, 0x65, 0x74, 0x74, 0x69,
+	0x6e, 0x67, 0x73, 0x22, 0x8f, 0x02, 0x0a, 0x0b, 0x4d, 0x6f, 0x64, 0x53, 0x65, 0x74, 0x74, 0x69,
+	0x6e, 0x67, 0x73, 0x12, 0x36, 0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x01, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x22, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x4d, 0x6f, 0x64, 0x53, 0x65,
+	0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x2e, 0x4d, 0x6f, 0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e,
+	0x67, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x1a, 0xc7, 0x01, 0x0a, 0x0e,
+	0x4d, 0x6f, 0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x74, 0x65, 0x6d, 0x12, 0x49,
+	0x0a, 0x07, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x2f, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x4d, 0x6f, 0x64, 0x53, 0x65, 0x74, 0x74,
+	0x69, 0x6e, 0x67, 0x73, 0x2e, 0x4d, 0x6f, 0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x49,
+	0x74, 0x65, 0x6d, 0x2e, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79,
+	0x52, 0x07, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61,
+	0x62, 0x6c, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62,
+	0x6c, 0x65, 0x64, 0x1a, 0x50, 0x0a, 0x0c, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x45, 0x6e,
+	0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x2a, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e, 0x79, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75,
+	0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x7c, 0x0a, 0x12, 0x53, 0x61, 0x76, 0x65, 0x4d, 0x6f, 0x64,
+	0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x71, 0x12, 0x35, 0x0a, 0x0a, 0x69,
+	0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x15, 0x2e, 0x76, 0x31, 0x2e, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x49, 0x6e, 0x73, 0x74,
+	0x61, 0x6e, 0x63, 0x65, 0x49, 0x64, 0x52, 0x0a, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65,
+	0x49, 0x64, 0x12, 0x2f, 0x0a, 0x08, 0x73, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x4d, 0x6f,
+	0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x08, 0x73, 0x65, 0x74, 0x74, 0x69,
+	0x6e, 0x67, 0x73, 0x22, 0xd9, 0x01, 0x0a, 0x11, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x74,
+	0x61, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x12,
+	0x40, 0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2c, 0x2e,
+	0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x4d, 0x6f, 0x64, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x04, 0x6c, 0x69, 0x73,
+	0x74, 0x1a, 0x6c, 0x0a, 0x12, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x4d, 0x6f, 0x64, 0x49, 0x74, 0x65, 0x6d, 0x12, 0x14, 0x0a, 0x05, 0x6d, 0x6f, 0x64, 0x49, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6d, 0x6f, 0x64, 0x49, 0x64, 0x12, 0x12, 0x0a,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x64,
+	0x61, 0x74, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x64, 0x61, 0x74, 0x65, 0x32,
+	0xc5, 0x04, 0x0a, 0x0a, 0x4d, 0x6f, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3d,
+	0x0a, 0x12, 0x47, 0x65, 0x74, 0x57, 0x6f, 0x72, 0x6b, 0x53, 0x68, 0x6f, 0x70, 0x4d, 0x6f, 0x64,
+	0x4c, 0x69, 0x73, 0x74, 0x12, 0x12, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x4d, 0x6f,
+	0x64, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x13, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f,
+	0x64, 0x2e, 0x4d, 0x6f, 0x64, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x12, 0x33, 0x0a,
+	0x09, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x12, 0x0d, 0x2e, 0x76, 0x31, 0x2e,
+	0x6d, 0x6f, 0x64, 0x2e, 0x4d, 0x6f, 0x64, 0x49, 0x64, 0x1a, 0x17, 0x2e, 0x76, 0x31, 0x2e, 0x63,
+	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x66, 0x79, 0x52, 0x65, 0x73, 0x75,
+	0x6c, 0x74, 0x12, 0x35, 0x0a, 0x0b, 0x55, 0x6e, 0x73, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62,
+	0x65, 0x12, 0x0d, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x4d, 0x6f, 0x64, 0x49, 0x64,
+	0x1a, 0x17, 0x2e, 0x76, 0x31, 0x2e, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x4e, 0x6f, 0x74,
+	0x69, 0x66, 0x79, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x33, 0x0a, 0x09, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x4d, 0x6f, 0x64, 0x12, 0x0d, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e,
+	0x4d, 0x6f, 0x64, 0x49, 0x64, 0x1a, 0x17, 0x2e, 0x76, 0x31, 0x2e, 0x63, 0x6f, 0x6d, 0x6d, 0x6f,
+	0x6e, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x66, 0x79, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x3f,
+	0x0a, 0x0b, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x12, 0x15, 0x2e,
+	0x76, 0x31, 0x2e, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e,
+	0x63, 0x65, 0x49, 0x64, 0x1a, 0x19, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x43, 0x68,
+	0x65, 0x63, 0x6b, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12,
+	0x3c, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x4d, 0x6f, 0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67,
+	0x73, 0x12, 0x15, 0x2e, 0x76, 0x31, 0x2e, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x49, 0x6e,
+	0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x49, 0x64, 0x1a, 0x13, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f,
+	0x64, 0x2e, 0x4d, 0x6f, 0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x12, 0x46, 0x0a,
+	0x0f, 0x53, 0x61, 0x76, 0x65, 0x4d, 0x6f, 0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73,
+	0x12, 0x1a, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x53, 0x61, 0x76, 0x65, 0x4d, 0x6f,
+	0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x71, 0x1a, 0x17, 0x2e, 0x76,
+	0x31, 0x2e, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x66, 0x79, 0x52,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x42, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x52, 0x61, 0x77, 0x4d,
+	0x6f, 0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x12, 0x15, 0x2e, 0x76, 0x31, 0x2e,
+	0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x49,
+	0x64, 0x1a, 0x16, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x52, 0x61, 0x77, 0x4d, 0x6f,
+	0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x12, 0x4c, 0x0a, 0x12, 0x53, 0x61, 0x76,
+	0x65, 0x52, 0x61, 0x77, 0x4d, 0x6f, 0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x12,
+	0x1d, 0x2e, 0x76, 0x31, 0x2e, 0x6d, 0x6f, 0x64, 0x2e, 0x53, 0x61, 0x76, 0x65, 0x52, 0x61, 0x77,
+	0x4d, 0x6f, 0x64, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x71, 0x1a, 0x17,
+	0x2e, 0x76, 0x31, 0x2e, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x66,
+	0x79, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x42, 0x0b, 0x5a, 0x09, 0x61, 0x70, 0x69, 0x2f, 0x76,
+	0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
-var file_v1_mod_proto_goTypes = []interface{}{}
+var (
+	file_v1_mod_proto_rawDescOnce sync.Once
+	file_v1_mod_proto_rawDescData = file_v1_mod_proto_rawDesc
+)
+
+func file_v1_mod_proto_rawDescGZIP() []byte {
+	file_v1_mod_proto_rawDescOnce.Do(func() {
+		file_v1_mod_proto_rawDescData = protoimpl.X.CompressGZIP(file_v1_mod_proto_rawDescData)
+	})
+	return file_v1_mod_proto_rawDescData
+}
+
+var file_v1_mod_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_v1_mod_proto_goTypes = []interface{}{
+	(*ModInfo)(nil),                              // 0: v1.mod.ModInfo
+	(*ModDetails)(nil),                           // 1: v1.mod.ModDetails
+	(*ModCompatible)(nil),                        // 2: v1.mod.ModCompatible
+	(*ModConfiguration)(nil),                     // 3: v1.mod.ModConfiguration
+	(*ModConfigurationItem)(nil),                 // 4: v1.mod.ModConfigurationItem
+	(*ModTag)(nil),                               // 5: v1.mod.ModTag
+	(*ModListReq)(nil),                           // 6: v1.mod.ModListReq
+	(*ModListResp)(nil),                          // 7: v1.mod.ModListResp
+	(*ModId)(nil),                                // 8: v1.mod.ModId
+	(*RawModSettings)(nil),                       // 9: v1.mod.RawModSettings
+	(*SaveRawModSettingsReq)(nil),                // 10: v1.mod.SaveRawModSettingsReq
+	(*ModSettings)(nil),                          // 11: v1.mod.ModSettings
+	(*SaveModSettingsReq)(nil),                   // 12: v1.mod.SaveModSettingsReq
+	(*CheckUpdateResult)(nil),                    // 13: v1.mod.CheckUpdateResult
+	(*ModSettings_ModSettingItem)(nil),           // 14: v1.mod.ModSettings.ModSettingItem
+	nil,                                          // 15: v1.mod.ModSettings.ModSettingItem.OptionsEntry
+	(*CheckUpdateResult_CheckUpdateModItem)(nil), // 16: v1.mod.CheckUpdateResult.CheckUpdateModItem
+	(*anypb.Any)(nil),                            // 17: google.protobuf.Any
+	(*InstanceId)(nil),                           // 18: v1.common.InstanceId
+	(*NotifyResult)(nil),                         // 19: v1.common.NotifyResult
+}
 var file_v1_mod_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	5,  // 0: v1.mod.ModInfo.tags:type_name -> v1.mod.ModTag
+	2,  // 1: v1.mod.ModDetails.compatible:type_name -> v1.mod.ModCompatible
+	3,  // 2: v1.mod.ModDetails.configurations:type_name -> v1.mod.ModConfiguration
+	17, // 3: v1.mod.ModConfiguration.defaultValue:type_name -> google.protobuf.Any
+	4,  // 4: v1.mod.ModConfiguration.options:type_name -> v1.mod.ModConfigurationItem
+	17, // 5: v1.mod.ModConfigurationItem.data:type_name -> google.protobuf.Any
+	0,  // 6: v1.mod.ModListResp.list:type_name -> v1.mod.ModInfo
+	18, // 7: v1.mod.ModId.instanceId:type_name -> v1.common.InstanceId
+	18, // 8: v1.mod.SaveRawModSettingsReq.instanceId:type_name -> v1.common.InstanceId
+	14, // 9: v1.mod.ModSettings.list:type_name -> v1.mod.ModSettings.ModSettingItem
+	18, // 10: v1.mod.SaveModSettingsReq.instanceId:type_name -> v1.common.InstanceId
+	11, // 11: v1.mod.SaveModSettingsReq.settings:type_name -> v1.mod.ModSettings
+	16, // 12: v1.mod.CheckUpdateResult.list:type_name -> v1.mod.CheckUpdateResult.CheckUpdateModItem
+	15, // 13: v1.mod.ModSettings.ModSettingItem.options:type_name -> v1.mod.ModSettings.ModSettingItem.OptionsEntry
+	17, // 14: v1.mod.ModSettings.ModSettingItem.OptionsEntry.value:type_name -> google.protobuf.Any
+	6,  // 15: v1.mod.ModService.GetWorkShopModList:input_type -> v1.mod.ModListReq
+	8,  // 16: v1.mod.ModService.Subscribe:input_type -> v1.mod.ModId
+	8,  // 17: v1.mod.ModService.Unsubscribe:input_type -> v1.mod.ModId
+	8,  // 18: v1.mod.ModService.UpdateMod:input_type -> v1.mod.ModId
+	18, // 19: v1.mod.ModService.CheckUpdate:input_type -> v1.common.InstanceId
+	18, // 20: v1.mod.ModService.GetModSettings:input_type -> v1.common.InstanceId
+	12, // 21: v1.mod.ModService.SaveModSettings:input_type -> v1.mod.SaveModSettingsReq
+	18, // 22: v1.mod.ModService.GetRawModSettings:input_type -> v1.common.InstanceId
+	10, // 23: v1.mod.ModService.SaveRawModSettings:input_type -> v1.mod.SaveRawModSettingsReq
+	7,  // 24: v1.mod.ModService.GetWorkShopModList:output_type -> v1.mod.ModListResp
+	19, // 25: v1.mod.ModService.Subscribe:output_type -> v1.common.NotifyResult
+	19, // 26: v1.mod.ModService.Unsubscribe:output_type -> v1.common.NotifyResult
+	19, // 27: v1.mod.ModService.UpdateMod:output_type -> v1.common.NotifyResult
+	13, // 28: v1.mod.ModService.CheckUpdate:output_type -> v1.mod.CheckUpdateResult
+	11, // 29: v1.mod.ModService.GetModSettings:output_type -> v1.mod.ModSettings
+	19, // 30: v1.mod.ModService.SaveModSettings:output_type -> v1.common.NotifyResult
+	9,  // 31: v1.mod.ModService.GetRawModSettings:output_type -> v1.mod.RawModSettings
+	19, // 32: v1.mod.ModService.SaveRawModSettings:output_type -> v1.common.NotifyResult
+	24, // [24:33] is the sub-list for method output_type
+	15, // [15:24] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_v1_mod_proto_init() }
@@ -42,18 +1278,214 @@ func file_v1_mod_proto_init() {
 	if File_v1_mod_proto != nil {
 		return
 	}
+	file_v1_common_proto_init()
+	if !protoimpl.UnsafeEnabled {
+		file_v1_mod_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ModInfo); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ModDetails); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ModCompatible); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ModConfiguration); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ModConfigurationItem); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ModTag); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ModListReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ModListResp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ModId); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RawModSettings); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SaveRawModSettingsReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ModSettings); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SaveModSettingsReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CheckUpdateResult); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ModSettings_ModSettingItem); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_mod_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CheckUpdateResult_CheckUpdateModItem); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_v1_mod_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   0,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_v1_mod_proto_goTypes,
 		DependencyIndexes: file_v1_mod_proto_depIdxs,
+		MessageInfos:      file_v1_mod_proto_msgTypes,
 	}.Build()
 	File_v1_mod_proto = out.File
 	file_v1_mod_proto_rawDesc = nil

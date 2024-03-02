@@ -2,8 +2,62 @@ syntax = "proto3";
 
 package v1.archive;
 
+import "v1/common.proto";
+
 option go_package = "api/v1;v1";
+
+// dst archive basic info
+message ArchiveInfo {
+  // archive name
+  string name = 1;
+  // how many days has been elapsed
+  int64  days = 2;
+  // archive season: spring, summer, autumn, winter
+  string season = 3;
+  // day or night
+  string phase = 4;
+  int64 elapse = 5;
+  // size in bytes of the archive
+  int64 size = 6;
+  // how many mods has loaded
+  int64 mods = 7;
+}
+
+message BackUpInfo {
+  string name = 1;
+  int64 mTime = 2;
+  int64 size = 3;
+}
+
+message BackupFile{
+  // file name
+  string name = 1;
+  // file content in bytes
+  bytes content = 2;
+}
+
+message BackUpList {
+  repeated BackUpInfo list = 1;
+}
+
+message BackupOpt {
+  v1.common.InstanceId id = 1;
+  string backupName = 2;
+}
 
 service ArchiveService {
 
+  rpc Info(v1.common.InstanceId) returns(ArchiveInfo);
+
+  rpc ListBackups(v1.common.InstanceId) returns(BackUpList);
+
+  rpc CreateBackup(BackupOpt) returns(v1.common.NotifyResult);
+
+  rpc DeleteBackUp(BackupOpt) returns(v1.common.NotifyResult);
+
+  rpc RestoreBackUp(BackupOpt) returns(v1.common.NotifyResult);
+
+  rpc UploadBackup(BackupFile) returns(v1.common.NotifyResult);
+
+  rpc DownloadBackup(BackupOpt) returns(BackupFile);
 }

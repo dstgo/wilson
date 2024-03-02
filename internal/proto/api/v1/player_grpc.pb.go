@@ -19,16 +19,36 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PlayerService_GetPlayerInfo_FullMethodName = "/v1.player.PlayerService/GetPlayerInfo"
-	PlayerService_GetPlayerChat_FullMethodName = "/v1.player.PlayerService/GetPlayerChat"
+	PlayerService_GetPlayerStats_FullMethodName   = "/v1.player.PlayerService/GetPlayerStats"
+	PlayerService_GetPlayerChatLog_FullMethodName = "/v1.player.PlayerService/GetPlayerChatLog"
+	PlayerService_ExecutePlayer_FullMethodName    = "/v1.player.PlayerService/ExecutePlayer"
+	PlayerService_GetWhiteList_FullMethodName     = "/v1.player.PlayerService/GetWhiteList"
+	PlayerService_GetBlackList_FullMethodName     = "/v1.player.PlayerService/GetBlackList"
+	PlayerService_GetAdminList_FullMethodName     = "/v1.player.PlayerService/GetAdminList"
+	PlayerService_AddWhiteList_FullMethodName     = "/v1.player.PlayerService/AddWhiteList"
+	PlayerService_AddBlackList_FullMethodName     = "/v1.player.PlayerService/AddBlackList"
+	PlayerService_AddAdminList_FullMethodName     = "/v1.player.PlayerService/AddAdminList"
+	PlayerService_RemoveWhiteList_FullMethodName  = "/v1.player.PlayerService/RemoveWhiteList"
+	PlayerService_RemoveBlackList_FullMethodName  = "/v1.player.PlayerService/RemoveBlackList"
+	PlayerService_RemoveAdminList_FullMethodName  = "/v1.player.PlayerService/RemoveAdminList"
 )
 
 // PlayerServiceClient is the client API for PlayerService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PlayerServiceClient interface {
-	GetPlayerInfo(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerStatisticInfo, error)
-	GetPlayerChat(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerChatInfo, error)
+	GetPlayerStats(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerStatisticInfo, error)
+	GetPlayerChatLog(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerChatLog, error)
+	ExecutePlayer(ctx context.Context, in *ExecutePlayerReq, opts ...grpc.CallOption) (*NotifyResult, error)
+	GetWhiteList(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerListResp, error)
+	GetBlackList(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerListResp, error)
+	GetAdminList(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerListResp, error)
+	AddWhiteList(ctx context.Context, in *PlayerListReq, opts ...grpc.CallOption) (*NotifyResult, error)
+	AddBlackList(ctx context.Context, in *PlayerListReq, opts ...grpc.CallOption) (*NotifyResult, error)
+	AddAdminList(ctx context.Context, in *PlayerListReq, opts ...grpc.CallOption) (*NotifyResult, error)
+	RemoveWhiteList(ctx context.Context, in *PlayerListReq, opts ...grpc.CallOption) (*NotifyResult, error)
+	RemoveBlackList(ctx context.Context, in *PlayerListReq, opts ...grpc.CallOption) (*NotifyResult, error)
+	RemoveAdminList(ctx context.Context, in *PlayerListReq, opts ...grpc.CallOption) (*NotifyResult, error)
 }
 
 type playerServiceClient struct {
@@ -39,18 +59,108 @@ func NewPlayerServiceClient(cc grpc.ClientConnInterface) PlayerServiceClient {
 	return &playerServiceClient{cc}
 }
 
-func (c *playerServiceClient) GetPlayerInfo(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerStatisticInfo, error) {
+func (c *playerServiceClient) GetPlayerStats(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerStatisticInfo, error) {
 	out := new(PlayerStatisticInfo)
-	err := c.cc.Invoke(ctx, PlayerService_GetPlayerInfo_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, PlayerService_GetPlayerStats_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *playerServiceClient) GetPlayerChat(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerChatInfo, error) {
-	out := new(PlayerChatInfo)
-	err := c.cc.Invoke(ctx, PlayerService_GetPlayerChat_FullMethodName, in, out, opts...)
+func (c *playerServiceClient) GetPlayerChatLog(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerChatLog, error) {
+	out := new(PlayerChatLog)
+	err := c.cc.Invoke(ctx, PlayerService_GetPlayerChatLog_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playerServiceClient) ExecutePlayer(ctx context.Context, in *ExecutePlayerReq, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, PlayerService_ExecutePlayer_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playerServiceClient) GetWhiteList(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerListResp, error) {
+	out := new(PlayerListResp)
+	err := c.cc.Invoke(ctx, PlayerService_GetWhiteList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playerServiceClient) GetBlackList(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerListResp, error) {
+	out := new(PlayerListResp)
+	err := c.cc.Invoke(ctx, PlayerService_GetBlackList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playerServiceClient) GetAdminList(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*PlayerListResp, error) {
+	out := new(PlayerListResp)
+	err := c.cc.Invoke(ctx, PlayerService_GetAdminList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playerServiceClient) AddWhiteList(ctx context.Context, in *PlayerListReq, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, PlayerService_AddWhiteList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playerServiceClient) AddBlackList(ctx context.Context, in *PlayerListReq, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, PlayerService_AddBlackList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playerServiceClient) AddAdminList(ctx context.Context, in *PlayerListReq, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, PlayerService_AddAdminList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playerServiceClient) RemoveWhiteList(ctx context.Context, in *PlayerListReq, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, PlayerService_RemoveWhiteList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playerServiceClient) RemoveBlackList(ctx context.Context, in *PlayerListReq, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, PlayerService_RemoveBlackList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *playerServiceClient) RemoveAdminList(ctx context.Context, in *PlayerListReq, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, PlayerService_RemoveAdminList_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,8 +171,18 @@ func (c *playerServiceClient) GetPlayerChat(ctx context.Context, in *InstanceId,
 // All implementations must embed UnimplementedPlayerServiceServer
 // for forward compatibility
 type PlayerServiceServer interface {
-	GetPlayerInfo(context.Context, *InstanceId) (*PlayerStatisticInfo, error)
-	GetPlayerChat(context.Context, *InstanceId) (*PlayerChatInfo, error)
+	GetPlayerStats(context.Context, *InstanceId) (*PlayerStatisticInfo, error)
+	GetPlayerChatLog(context.Context, *InstanceId) (*PlayerChatLog, error)
+	ExecutePlayer(context.Context, *ExecutePlayerReq) (*NotifyResult, error)
+	GetWhiteList(context.Context, *InstanceId) (*PlayerListResp, error)
+	GetBlackList(context.Context, *InstanceId) (*PlayerListResp, error)
+	GetAdminList(context.Context, *InstanceId) (*PlayerListResp, error)
+	AddWhiteList(context.Context, *PlayerListReq) (*NotifyResult, error)
+	AddBlackList(context.Context, *PlayerListReq) (*NotifyResult, error)
+	AddAdminList(context.Context, *PlayerListReq) (*NotifyResult, error)
+	RemoveWhiteList(context.Context, *PlayerListReq) (*NotifyResult, error)
+	RemoveBlackList(context.Context, *PlayerListReq) (*NotifyResult, error)
+	RemoveAdminList(context.Context, *PlayerListReq) (*NotifyResult, error)
 	mustEmbedUnimplementedPlayerServiceServer()
 }
 
@@ -70,11 +190,41 @@ type PlayerServiceServer interface {
 type UnimplementedPlayerServiceServer struct {
 }
 
-func (UnimplementedPlayerServiceServer) GetPlayerInfo(context.Context, *InstanceId) (*PlayerStatisticInfo, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPlayerInfo not implemented")
+func (UnimplementedPlayerServiceServer) GetPlayerStats(context.Context, *InstanceId) (*PlayerStatisticInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPlayerStats not implemented")
 }
-func (UnimplementedPlayerServiceServer) GetPlayerChat(context.Context, *InstanceId) (*PlayerChatInfo, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPlayerChat not implemented")
+func (UnimplementedPlayerServiceServer) GetPlayerChatLog(context.Context, *InstanceId) (*PlayerChatLog, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPlayerChatLog not implemented")
+}
+func (UnimplementedPlayerServiceServer) ExecutePlayer(context.Context, *ExecutePlayerReq) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExecutePlayer not implemented")
+}
+func (UnimplementedPlayerServiceServer) GetWhiteList(context.Context, *InstanceId) (*PlayerListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWhiteList not implemented")
+}
+func (UnimplementedPlayerServiceServer) GetBlackList(context.Context, *InstanceId) (*PlayerListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBlackList not implemented")
+}
+func (UnimplementedPlayerServiceServer) GetAdminList(context.Context, *InstanceId) (*PlayerListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAdminList not implemented")
+}
+func (UnimplementedPlayerServiceServer) AddWhiteList(context.Context, *PlayerListReq) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddWhiteList not implemented")
+}
+func (UnimplementedPlayerServiceServer) AddBlackList(context.Context, *PlayerListReq) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddBlackList not implemented")
+}
+func (UnimplementedPlayerServiceServer) AddAdminList(context.Context, *PlayerListReq) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddAdminList not implemented")
+}
+func (UnimplementedPlayerServiceServer) RemoveWhiteList(context.Context, *PlayerListReq) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveWhiteList not implemented")
+}
+func (UnimplementedPlayerServiceServer) RemoveBlackList(context.Context, *PlayerListReq) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveBlackList not implemented")
+}
+func (UnimplementedPlayerServiceServer) RemoveAdminList(context.Context, *PlayerListReq) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveAdminList not implemented")
 }
 func (UnimplementedPlayerServiceServer) mustEmbedUnimplementedPlayerServiceServer() {}
 
@@ -89,38 +239,218 @@ func RegisterPlayerServiceServer(s grpc.ServiceRegistrar, srv PlayerServiceServe
 	s.RegisterService(&PlayerService_ServiceDesc, srv)
 }
 
-func _PlayerService_GetPlayerInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _PlayerService_GetPlayerStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InstanceId)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PlayerServiceServer).GetPlayerInfo(ctx, in)
+		return srv.(PlayerServiceServer).GetPlayerStats(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PlayerService_GetPlayerInfo_FullMethodName,
+		FullMethod: PlayerService_GetPlayerStats_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PlayerServiceServer).GetPlayerInfo(ctx, req.(*InstanceId))
+		return srv.(PlayerServiceServer).GetPlayerStats(ctx, req.(*InstanceId))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PlayerService_GetPlayerChat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _PlayerService_GetPlayerChatLog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(InstanceId)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PlayerServiceServer).GetPlayerChat(ctx, in)
+		return srv.(PlayerServiceServer).GetPlayerChatLog(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PlayerService_GetPlayerChat_FullMethodName,
+		FullMethod: PlayerService_GetPlayerChatLog_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PlayerServiceServer).GetPlayerChat(ctx, req.(*InstanceId))
+		return srv.(PlayerServiceServer).GetPlayerChatLog(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlayerService_ExecutePlayer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExecutePlayerReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlayerServiceServer).ExecutePlayer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlayerService_ExecutePlayer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlayerServiceServer).ExecutePlayer(ctx, req.(*ExecutePlayerReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlayerService_GetWhiteList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlayerServiceServer).GetWhiteList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlayerService_GetWhiteList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlayerServiceServer).GetWhiteList(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlayerService_GetBlackList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlayerServiceServer).GetBlackList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlayerService_GetBlackList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlayerServiceServer).GetBlackList(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlayerService_GetAdminList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlayerServiceServer).GetAdminList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlayerService_GetAdminList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlayerServiceServer).GetAdminList(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlayerService_AddWhiteList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PlayerListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlayerServiceServer).AddWhiteList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlayerService_AddWhiteList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlayerServiceServer).AddWhiteList(ctx, req.(*PlayerListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlayerService_AddBlackList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PlayerListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlayerServiceServer).AddBlackList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlayerService_AddBlackList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlayerServiceServer).AddBlackList(ctx, req.(*PlayerListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlayerService_AddAdminList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PlayerListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlayerServiceServer).AddAdminList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlayerService_AddAdminList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlayerServiceServer).AddAdminList(ctx, req.(*PlayerListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlayerService_RemoveWhiteList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PlayerListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlayerServiceServer).RemoveWhiteList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlayerService_RemoveWhiteList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlayerServiceServer).RemoveWhiteList(ctx, req.(*PlayerListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlayerService_RemoveBlackList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PlayerListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlayerServiceServer).RemoveBlackList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlayerService_RemoveBlackList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlayerServiceServer).RemoveBlackList(ctx, req.(*PlayerListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlayerService_RemoveAdminList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PlayerListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlayerServiceServer).RemoveAdminList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlayerService_RemoveAdminList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlayerServiceServer).RemoveAdminList(ctx, req.(*PlayerListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -133,12 +463,52 @@ var PlayerService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*PlayerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetPlayerInfo",
-			Handler:    _PlayerService_GetPlayerInfo_Handler,
+			MethodName: "GetPlayerStats",
+			Handler:    _PlayerService_GetPlayerStats_Handler,
 		},
 		{
-			MethodName: "GetPlayerChat",
-			Handler:    _PlayerService_GetPlayerChat_Handler,
+			MethodName: "GetPlayerChatLog",
+			Handler:    _PlayerService_GetPlayerChatLog_Handler,
+		},
+		{
+			MethodName: "ExecutePlayer",
+			Handler:    _PlayerService_ExecutePlayer_Handler,
+		},
+		{
+			MethodName: "GetWhiteList",
+			Handler:    _PlayerService_GetWhiteList_Handler,
+		},
+		{
+			MethodName: "GetBlackList",
+			Handler:    _PlayerService_GetBlackList_Handler,
+		},
+		{
+			MethodName: "GetAdminList",
+			Handler:    _PlayerService_GetAdminList_Handler,
+		},
+		{
+			MethodName: "AddWhiteList",
+			Handler:    _PlayerService_AddWhiteList_Handler,
+		},
+		{
+			MethodName: "AddBlackList",
+			Handler:    _PlayerService_AddBlackList_Handler,
+		},
+		{
+			MethodName: "AddAdminList",
+			Handler:    _PlayerService_AddAdminList_Handler,
+		},
+		{
+			MethodName: "RemoveWhiteList",
+			Handler:    _PlayerService_RemoveWhiteList_Handler,
+		},
+		{
+			MethodName: "RemoveBlackList",
+			Handler:    _PlayerService_RemoveBlackList_Handler,
+		},
+		{
+			MethodName: "RemoveAdminList",
+			Handler:    _PlayerService_RemoveAdminList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

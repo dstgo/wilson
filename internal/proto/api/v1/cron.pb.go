@@ -10,6 +10,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
+	sync "sync"
 )
 
 const (
@@ -19,22 +20,343 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type JobType int32
+
+const (
+	JobType_Boot   JobType = 0
+	JobType_Stop   JobType = 1
+	JobType_Update JobType = 2
+	JobType_Reboot JobType = 3
+	JobType_Backup JobType = 4
+)
+
+// Enum value maps for JobType.
+var (
+	JobType_name = map[int32]string{
+		0: "Boot",
+		1: "Stop",
+		2: "Update",
+		3: "Reboot",
+		4: "Backup",
+	}
+	JobType_value = map[string]int32{
+		"Boot":   0,
+		"Stop":   1,
+		"Update": 2,
+		"Reboot": 3,
+		"Backup": 4,
+	}
+)
+
+func (x JobType) Enum() *JobType {
+	p := new(JobType)
+	*p = x
+	return p
+}
+
+func (x JobType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (JobType) Descriptor() protoreflect.EnumDescriptor {
+	return file_v1_cron_proto_enumTypes[0].Descriptor()
+}
+
+func (JobType) Type() protoreflect.EnumType {
+	return &file_v1_cron_proto_enumTypes[0]
+}
+
+func (x JobType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use JobType.Descriptor instead.
+func (JobType) EnumDescriptor() ([]byte, []int) {
+	return file_v1_cron_proto_rawDescGZIP(), []int{0}
+}
+
+type JobInfo struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Instance *InstanceId `protobuf:"bytes,1,opt,name=instance,proto3" json:"instance,omitempty"`
+	JobId    int64       `protobuf:"varint,2,opt,name=jobId,proto3" json:"jobId,omitempty"`
+	Name     string      `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Last     int64       `protobuf:"varint,4,opt,name=last,proto3" json:"last,omitempty"`
+	Next     int64       `protobuf:"varint,5,opt,name=next,proto3" json:"next,omitempty"`
+	JobType  JobType     `protobuf:"varint,6,opt,name=jobType,proto3,enum=v1.cron.JobType" json:"jobType,omitempty"`
+}
+
+func (x *JobInfo) Reset() {
+	*x = JobInfo{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_cron_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *JobInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*JobInfo) ProtoMessage() {}
+
+func (x *JobInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_cron_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use JobInfo.ProtoReflect.Descriptor instead.
+func (*JobInfo) Descriptor() ([]byte, []int) {
+	return file_v1_cron_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *JobInfo) GetInstance() *InstanceId {
+	if x != nil {
+		return x.Instance
+	}
+	return nil
+}
+
+func (x *JobInfo) GetJobId() int64 {
+	if x != nil {
+		return x.JobId
+	}
+	return 0
+}
+
+func (x *JobInfo) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *JobInfo) GetLast() int64 {
+	if x != nil {
+		return x.Last
+	}
+	return 0
+}
+
+func (x *JobInfo) GetNext() int64 {
+	if x != nil {
+		return x.Next
+	}
+	return 0
+}
+
+func (x *JobInfo) GetJobType() JobType {
+	if x != nil {
+		return x.JobType
+	}
+	return JobType_Boot
+}
+
+type JobList struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	List []*JobInfo `protobuf:"bytes,1,rep,name=list,proto3" json:"list,omitempty"`
+}
+
+func (x *JobList) Reset() {
+	*x = JobList{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_cron_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *JobList) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*JobList) ProtoMessage() {}
+
+func (x *JobList) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_cron_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use JobList.ProtoReflect.Descriptor instead.
+func (*JobList) Descriptor() ([]byte, []int) {
+	return file_v1_cron_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *JobList) GetList() []*JobInfo {
+	if x != nil {
+		return x.List
+	}
+	return nil
+}
+
+type CreateJobReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name     string  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	CronExpr string  `protobuf:"bytes,2,opt,name=cronExpr,proto3" json:"cronExpr,omitempty"`
+	JobType  JobType `protobuf:"varint,3,opt,name=jobType,proto3,enum=v1.cron.JobType" json:"jobType,omitempty"`
+}
+
+func (x *CreateJobReq) Reset() {
+	*x = CreateJobReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_cron_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateJobReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateJobReq) ProtoMessage() {}
+
+func (x *CreateJobReq) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_cron_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateJobReq.ProtoReflect.Descriptor instead.
+func (*CreateJobReq) Descriptor() ([]byte, []int) {
+	return file_v1_cron_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *CreateJobReq) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CreateJobReq) GetCronExpr() string {
+	if x != nil {
+		return x.CronExpr
+	}
+	return ""
+}
+
+func (x *CreateJobReq) GetJobType() JobType {
+	if x != nil {
+		return x.JobType
+	}
+	return JobType_Boot
+}
+
 var File_v1_cron_proto protoreflect.FileDescriptor
 
 var file_v1_cron_proto_rawDesc = []byte{
 	0x0a, 0x0d, 0x76, 0x31, 0x2f, 0x63, 0x72, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
-	0x07, 0x76, 0x31, 0x2e, 0x63, 0x72, 0x6f, 0x6e, 0x32, 0x0d, 0x0a, 0x0b, 0x43, 0x72, 0x6f, 0x6e,
-	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x42, 0x0b, 0x5a, 0x09, 0x61, 0x70, 0x69, 0x2f, 0x76,
-	0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x07, 0x76, 0x31, 0x2e, 0x63, 0x72, 0x6f, 0x6e, 0x1a, 0x0f, 0x76, 0x31, 0x2f, 0x63, 0x6f, 0x6d,
+	0x6d, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xba, 0x01, 0x0a, 0x07, 0x4a, 0x6f,
+	0x62, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x31, 0x0a, 0x08, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x15, 0x2e, 0x76, 0x31, 0x2e, 0x63, 0x6f, 0x6d,
+	0x6d, 0x6f, 0x6e, 0x2e, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x49, 0x64, 0x52, 0x08,
+	0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x6a, 0x6f, 0x62, 0x49,
+	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x6a, 0x6f, 0x62, 0x49, 0x64, 0x12, 0x12,
+	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
+	0x6d, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x6c, 0x61, 0x73, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03,
+	0x52, 0x04, 0x6c, 0x61, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x65, 0x78, 0x74, 0x18, 0x05,
+	0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x6e, 0x65, 0x78, 0x74, 0x12, 0x2a, 0x0a, 0x07, 0x6a, 0x6f,
+	0x62, 0x54, 0x79, 0x70, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x10, 0x2e, 0x76, 0x31,
+	0x2e, 0x63, 0x72, 0x6f, 0x6e, 0x2e, 0x4a, 0x6f, 0x62, 0x54, 0x79, 0x70, 0x65, 0x52, 0x07, 0x6a,
+	0x6f, 0x62, 0x54, 0x79, 0x70, 0x65, 0x22, 0x2f, 0x0a, 0x07, 0x4a, 0x6f, 0x62, 0x4c, 0x69, 0x73,
+	0x74, 0x12, 0x24, 0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x10, 0x2e, 0x76, 0x31, 0x2e, 0x63, 0x72, 0x6f, 0x6e, 0x2e, 0x4a, 0x6f, 0x62, 0x49, 0x6e, 0x66,
+	0x6f, 0x52, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x22, 0x6a, 0x0a, 0x0c, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x4a, 0x6f, 0x62, 0x52, 0x65, 0x71, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x63,
+	0x72, 0x6f, 0x6e, 0x45, 0x78, 0x70, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x63,
+	0x72, 0x6f, 0x6e, 0x45, 0x78, 0x70, 0x72, 0x12, 0x2a, 0x0a, 0x07, 0x6a, 0x6f, 0x62, 0x54, 0x79,
+	0x70, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x10, 0x2e, 0x76, 0x31, 0x2e, 0x63, 0x72,
+	0x6f, 0x6e, 0x2e, 0x4a, 0x6f, 0x62, 0x54, 0x79, 0x70, 0x65, 0x52, 0x07, 0x6a, 0x6f, 0x62, 0x54,
+	0x79, 0x70, 0x65, 0x2a, 0x41, 0x0a, 0x07, 0x4a, 0x6f, 0x62, 0x54, 0x79, 0x70, 0x65, 0x12, 0x08,
+	0x0a, 0x04, 0x42, 0x6f, 0x6f, 0x74, 0x10, 0x00, 0x12, 0x08, 0x0a, 0x04, 0x53, 0x74, 0x6f, 0x70,
+	0x10, 0x01, 0x12, 0x0a, 0x0a, 0x06, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x10, 0x02, 0x12, 0x0a,
+	0x0a, 0x06, 0x52, 0x65, 0x62, 0x6f, 0x6f, 0x74, 0x10, 0x03, 0x12, 0x0a, 0x0a, 0x06, 0x42, 0x61,
+	0x63, 0x6b, 0x75, 0x70, 0x10, 0x04, 0x32, 0xb5, 0x01, 0x0a, 0x0e, 0x43, 0x72, 0x6f, 0x6e, 0x4a,
+	0x6f, 0x62, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x38, 0x0a, 0x06, 0x43, 0x72, 0x65,
+	0x61, 0x74, 0x65, 0x12, 0x15, 0x2e, 0x76, 0x31, 0x2e, 0x63, 0x72, 0x6f, 0x6e, 0x2e, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x4a, 0x6f, 0x62, 0x52, 0x65, 0x71, 0x1a, 0x17, 0x2e, 0x76, 0x31, 0x2e,
+	0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x66, 0x79, 0x52, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x12, 0x38, 0x0a, 0x06, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x12, 0x15, 0x2e,
+	0x76, 0x31, 0x2e, 0x63, 0x72, 0x6f, 0x6e, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4a, 0x6f,
+	0x62, 0x52, 0x65, 0x71, 0x1a, 0x17, 0x2e, 0x76, 0x31, 0x2e, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e,
+	0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x66, 0x79, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x2f, 0x0a,
+	0x04, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x15, 0x2e, 0x76, 0x31, 0x2e, 0x63, 0x72, 0x6f, 0x6e, 0x2e,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4a, 0x6f, 0x62, 0x52, 0x65, 0x71, 0x1a, 0x10, 0x2e, 0x76,
+	0x31, 0x2e, 0x63, 0x72, 0x6f, 0x6e, 0x2e, 0x4a, 0x6f, 0x62, 0x4c, 0x69, 0x73, 0x74, 0x42, 0x0b,
+	0x5a, 0x09, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
-var file_v1_cron_proto_goTypes = []interface{}{}
+var (
+	file_v1_cron_proto_rawDescOnce sync.Once
+	file_v1_cron_proto_rawDescData = file_v1_cron_proto_rawDesc
+)
+
+func file_v1_cron_proto_rawDescGZIP() []byte {
+	file_v1_cron_proto_rawDescOnce.Do(func() {
+		file_v1_cron_proto_rawDescData = protoimpl.X.CompressGZIP(file_v1_cron_proto_rawDescData)
+	})
+	return file_v1_cron_proto_rawDescData
+}
+
+var file_v1_cron_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_v1_cron_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_v1_cron_proto_goTypes = []interface{}{
+	(JobType)(0),         // 0: v1.cron.JobType
+	(*JobInfo)(nil),      // 1: v1.cron.JobInfo
+	(*JobList)(nil),      // 2: v1.cron.JobList
+	(*CreateJobReq)(nil), // 3: v1.cron.CreateJobReq
+	(*InstanceId)(nil),   // 4: v1.common.InstanceId
+	(*NotifyResult)(nil), // 5: v1.common.NotifyResult
+}
 var file_v1_cron_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	4, // 0: v1.cron.JobInfo.instance:type_name -> v1.common.InstanceId
+	0, // 1: v1.cron.JobInfo.jobType:type_name -> v1.cron.JobType
+	1, // 2: v1.cron.JobList.list:type_name -> v1.cron.JobInfo
+	0, // 3: v1.cron.CreateJobReq.jobType:type_name -> v1.cron.JobType
+	3, // 4: v1.cron.CronJobService.Create:input_type -> v1.cron.CreateJobReq
+	3, // 5: v1.cron.CronJobService.Delete:input_type -> v1.cron.CreateJobReq
+	3, // 6: v1.cron.CronJobService.List:input_type -> v1.cron.CreateJobReq
+	5, // 7: v1.cron.CronJobService.Create:output_type -> v1.common.NotifyResult
+	5, // 8: v1.cron.CronJobService.Delete:output_type -> v1.common.NotifyResult
+	2, // 9: v1.cron.CronJobService.List:output_type -> v1.cron.JobList
+	7, // [7:10] is the sub-list for method output_type
+	4, // [4:7] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_v1_cron_proto_init() }
@@ -42,18 +364,59 @@ func file_v1_cron_proto_init() {
 	if File_v1_cron_proto != nil {
 		return
 	}
+	file_v1_common_proto_init()
+	if !protoimpl.UnsafeEnabled {
+		file_v1_cron_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*JobInfo); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_cron_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*JobList); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_cron_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateJobReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_v1_cron_proto_rawDesc,
-			NumEnums:      0,
-			NumMessages:   0,
+			NumEnums:      1,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_v1_cron_proto_goTypes,
 		DependencyIndexes: file_v1_cron_proto_depIdxs,
+		EnumInfos:         file_v1_cron_proto_enumTypes,
+		MessageInfos:      file_v1_cron_proto_msgTypes,
 	}.Build()
 	File_v1_cron_proto = out.File
 	file_v1_cron_proto_rawDesc = nil

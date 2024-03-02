@@ -34,3 +34,377 @@ var (
 	_ = anypb.Any{}
 	_ = sort.Sort
 )
+
+// Validate checks the field values on JobInfo with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *JobInfo) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on JobInfo with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in JobInfoMultiError, or nil if none found.
+func (m *JobInfo) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *JobInfo) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetInstance()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, JobInfoValidationError{
+					field:  "Instance",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, JobInfoValidationError{
+					field:  "Instance",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetInstance()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return JobInfoValidationError{
+				field:  "Instance",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for JobId
+
+	// no validation rules for Name
+
+	// no validation rules for Last
+
+	// no validation rules for Next
+
+	// no validation rules for JobType
+
+	if len(errors) > 0 {
+		return JobInfoMultiError(errors)
+	}
+
+	return nil
+}
+
+// JobInfoMultiError is an error wrapping multiple validation errors returned
+// by JobInfo.ValidateAll() if the designated constraints aren't met.
+type JobInfoMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m JobInfoMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m JobInfoMultiError) AllErrors() []error { return m }
+
+// JobInfoValidationError is the validation error returned by JobInfo.Validate
+// if the designated constraints aren't met.
+type JobInfoValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e JobInfoValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e JobInfoValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e JobInfoValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e JobInfoValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e JobInfoValidationError) ErrorName() string { return "JobInfoValidationError" }
+
+// Error satisfies the builtin error interface
+func (e JobInfoValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sJobInfo.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = JobInfoValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = JobInfoValidationError{}
+
+// Validate checks the field values on JobList with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *JobList) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on JobList with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in JobListMultiError, or nil if none found.
+func (m *JobList) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *JobList) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetList() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, JobListValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, JobListValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return JobListValidationError{
+					field:  fmt.Sprintf("List[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return JobListMultiError(errors)
+	}
+
+	return nil
+}
+
+// JobListMultiError is an error wrapping multiple validation errors returned
+// by JobList.ValidateAll() if the designated constraints aren't met.
+type JobListMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m JobListMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m JobListMultiError) AllErrors() []error { return m }
+
+// JobListValidationError is the validation error returned by JobList.Validate
+// if the designated constraints aren't met.
+type JobListValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e JobListValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e JobListValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e JobListValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e JobListValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e JobListValidationError) ErrorName() string { return "JobListValidationError" }
+
+// Error satisfies the builtin error interface
+func (e JobListValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sJobList.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = JobListValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = JobListValidationError{}
+
+// Validate checks the field values on CreateJobReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *CreateJobReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateJobReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in CreateJobReqMultiError, or
+// nil if none found.
+func (m *CreateJobReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateJobReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for CronExpr
+
+	// no validation rules for JobType
+
+	if len(errors) > 0 {
+		return CreateJobReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateJobReqMultiError is an error wrapping multiple validation errors
+// returned by CreateJobReq.ValidateAll() if the designated constraints aren't met.
+type CreateJobReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateJobReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateJobReqMultiError) AllErrors() []error { return m }
+
+// CreateJobReqValidationError is the validation error returned by
+// CreateJobReq.Validate if the designated constraints aren't met.
+type CreateJobReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateJobReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateJobReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateJobReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateJobReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateJobReqValidationError) ErrorName() string { return "CreateJobReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CreateJobReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateJobReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateJobReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateJobReqValidationError{}

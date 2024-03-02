@@ -7,7 +7,10 @@
 package v1
 
 import (
+	context "context"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -15,12 +18,25 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-const ()
+const (
+	SettingService_GetRoomSetting_FullMethodName      = "/v1.setting.SettingService/GetRoomSetting"
+	SettingService_SaveRoomSetting_FullMethodName     = "/v1.setting.SettingService/SaveRoomSetting"
+	SettingService_GetWorldSetting_FullMethodName     = "/v1.setting.SettingService/GetWorldSetting"
+	SettingService_SaveWorldSetting_FullMethodName    = "/v1.setting.SettingService/SaveWorldSetting"
+	SettingService_GetRawWorldSetting_FullMethodName  = "/v1.setting.SettingService/GetRawWorldSetting"
+	SettingService_SaveRawWorldSetting_FullMethodName = "/v1.setting.SettingService/SaveRawWorldSetting"
+)
 
 // SettingServiceClient is the client API for SettingService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SettingServiceClient interface {
+	GetRoomSetting(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*RoomSetting, error)
+	SaveRoomSetting(ctx context.Context, in *RoomSetting, opts ...grpc.CallOption) (*NotifyResult, error)
+	GetWorldSetting(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*WorldSetting, error)
+	SaveWorldSetting(ctx context.Context, in *WorldSetting, opts ...grpc.CallOption) (*NotifyResult, error)
+	GetRawWorldSetting(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*RawWorldSetting, error)
+	SaveRawWorldSetting(ctx context.Context, in *RawWorldSetting, opts ...grpc.CallOption) (*NotifyResult, error)
 }
 
 type settingServiceClient struct {
@@ -31,10 +47,70 @@ func NewSettingServiceClient(cc grpc.ClientConnInterface) SettingServiceClient {
 	return &settingServiceClient{cc}
 }
 
+func (c *settingServiceClient) GetRoomSetting(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*RoomSetting, error) {
+	out := new(RoomSetting)
+	err := c.cc.Invoke(ctx, SettingService_GetRoomSetting_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *settingServiceClient) SaveRoomSetting(ctx context.Context, in *RoomSetting, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, SettingService_SaveRoomSetting_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *settingServiceClient) GetWorldSetting(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*WorldSetting, error) {
+	out := new(WorldSetting)
+	err := c.cc.Invoke(ctx, SettingService_GetWorldSetting_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *settingServiceClient) SaveWorldSetting(ctx context.Context, in *WorldSetting, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, SettingService_SaveWorldSetting_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *settingServiceClient) GetRawWorldSetting(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*RawWorldSetting, error) {
+	out := new(RawWorldSetting)
+	err := c.cc.Invoke(ctx, SettingService_GetRawWorldSetting_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *settingServiceClient) SaveRawWorldSetting(ctx context.Context, in *RawWorldSetting, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, SettingService_SaveRawWorldSetting_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SettingServiceServer is the server API for SettingService service.
 // All implementations must embed UnimplementedSettingServiceServer
 // for forward compatibility
 type SettingServiceServer interface {
+	GetRoomSetting(context.Context, *InstanceId) (*RoomSetting, error)
+	SaveRoomSetting(context.Context, *RoomSetting) (*NotifyResult, error)
+	GetWorldSetting(context.Context, *InstanceId) (*WorldSetting, error)
+	SaveWorldSetting(context.Context, *WorldSetting) (*NotifyResult, error)
+	GetRawWorldSetting(context.Context, *InstanceId) (*RawWorldSetting, error)
+	SaveRawWorldSetting(context.Context, *RawWorldSetting) (*NotifyResult, error)
 	mustEmbedUnimplementedSettingServiceServer()
 }
 
@@ -42,6 +118,24 @@ type SettingServiceServer interface {
 type UnimplementedSettingServiceServer struct {
 }
 
+func (UnimplementedSettingServiceServer) GetRoomSetting(context.Context, *InstanceId) (*RoomSetting, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRoomSetting not implemented")
+}
+func (UnimplementedSettingServiceServer) SaveRoomSetting(context.Context, *RoomSetting) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveRoomSetting not implemented")
+}
+func (UnimplementedSettingServiceServer) GetWorldSetting(context.Context, *InstanceId) (*WorldSetting, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWorldSetting not implemented")
+}
+func (UnimplementedSettingServiceServer) SaveWorldSetting(context.Context, *WorldSetting) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveWorldSetting not implemented")
+}
+func (UnimplementedSettingServiceServer) GetRawWorldSetting(context.Context, *InstanceId) (*RawWorldSetting, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRawWorldSetting not implemented")
+}
+func (UnimplementedSettingServiceServer) SaveRawWorldSetting(context.Context, *RawWorldSetting) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveRawWorldSetting not implemented")
+}
 func (UnimplementedSettingServiceServer) mustEmbedUnimplementedSettingServiceServer() {}
 
 // UnsafeSettingServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -55,13 +149,146 @@ func RegisterSettingServiceServer(s grpc.ServiceRegistrar, srv SettingServiceSer
 	s.RegisterService(&SettingService_ServiceDesc, srv)
 }
 
+func _SettingService_GetRoomSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingServiceServer).GetRoomSetting(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SettingService_GetRoomSetting_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingServiceServer).GetRoomSetting(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SettingService_SaveRoomSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RoomSetting)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingServiceServer).SaveRoomSetting(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SettingService_SaveRoomSetting_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingServiceServer).SaveRoomSetting(ctx, req.(*RoomSetting))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SettingService_GetWorldSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingServiceServer).GetWorldSetting(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SettingService_GetWorldSetting_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingServiceServer).GetWorldSetting(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SettingService_SaveWorldSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WorldSetting)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingServiceServer).SaveWorldSetting(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SettingService_SaveWorldSetting_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingServiceServer).SaveWorldSetting(ctx, req.(*WorldSetting))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SettingService_GetRawWorldSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingServiceServer).GetRawWorldSetting(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SettingService_GetRawWorldSetting_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingServiceServer).GetRawWorldSetting(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SettingService_SaveRawWorldSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RawWorldSetting)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingServiceServer).SaveRawWorldSetting(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SettingService_SaveRawWorldSetting_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingServiceServer).SaveRawWorldSetting(ctx, req.(*RawWorldSetting))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SettingService_ServiceDesc is the grpc.ServiceDesc for SettingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SettingService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "v1.setting.SettingService",
 	HandlerType: (*SettingServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "v1/setting.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetRoomSetting",
+			Handler:    _SettingService_GetRoomSetting_Handler,
+		},
+		{
+			MethodName: "SaveRoomSetting",
+			Handler:    _SettingService_SaveRoomSetting_Handler,
+		},
+		{
+			MethodName: "GetWorldSetting",
+			Handler:    _SettingService_GetWorldSetting_Handler,
+		},
+		{
+			MethodName: "SaveWorldSetting",
+			Handler:    _SettingService_SaveWorldSetting_Handler,
+		},
+		{
+			MethodName: "GetRawWorldSetting",
+			Handler:    _SettingService_GetRawWorldSetting_Handler,
+		},
+		{
+			MethodName: "SaveRawWorldSetting",
+			Handler:    _SettingService_SaveRawWorldSetting_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "v1/setting.proto",
 }

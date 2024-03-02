@@ -4,9 +4,9 @@ package v1.player;
 
 option go_package = "api/v1;v1";
 
-import "v1/dst.proto";
+import "v1/common.proto";
 
-message Player {
+message PlayerInfo {
   // steam user id
   uint64 steamId = 1;
   // klei user id
@@ -19,16 +19,22 @@ message Player {
   bool admin = 5;
 }
 
+message BasicPlayerInfo {
+  // klei user id
+  string kid = 2;
+  // dst player name, same as steam user name normally
+  string name = 3;
+}
+
 // server player information
 message PlayerStatisticInfo {
   int64 total = 1;
-  int64 totalOnline = 2;
+  int64 online = 2;
   int64 masterOnline = 3;
   int64 caveOnline = 4;
 
-  repeated Player totalPlayer = 5;
-  repeated Player masterOnlinePlayer = 6;
-  repeated Player caveOnlinePlayer = 7;
+  repeated PlayerInfo masterOnlinePlayer = 6;
+  repeated PlayerInfo caveOnlinePlayer = 7;
 }
 
 // server shard log player message
@@ -39,12 +45,12 @@ message LogMessage {
   string msg = 3;
 }
 
-message PlayerChatInfo {
+message PlayerChatLog {
   repeated LogMessage messages = 1;
 }
 
 // Player operation
-enum Operation {
+enum PlayerOperation {
   // kill a specific online player
   Kill = 0;
   // kick a specific online player from the server
@@ -55,8 +61,36 @@ enum Operation {
   ReBorn = 3;
 }
 
+message ExecutePlayerReq {
+  v1.common.InstanceId instanceId = 1;
+  v1.common.KleiId kid = 2;
+  PlayerOperation op = 3;
+}
+
+message PlayerListReq {
+  v1.common.InstanceId instanceId = 1;
+  v1.common.KleiId kid = 2;
+}
+
+message PlayerListResp {
+  repeated BasicPlayerInfo list = 1;
+}
+
 // Dst server player service
 service PlayerService {
-  rpc GetPlayerInfo(v1.dst.InstanceId) returns(PlayerStatisticInfo);
-  rpc GetPlayerChat(v1.dst.InstanceId) returns(PlayerChatInfo);
+  rpc GetPlayerStats(v1.common.InstanceId) returns(PlayerStatisticInfo);
+  rpc GetPlayerChatLog(v1.common.InstanceId) returns(PlayerChatLog);
+  rpc ExecutePlayer(ExecutePlayerReq) returns(v1.common.NotifyResult);
+
+  rpc GetWhiteList(v1.common.InstanceId) returns(PlayerListResp);
+  rpc GetBlackList(v1.common.InstanceId) returns(PlayerListResp);
+  rpc GetAdminList(v1.common.InstanceId) returns(PlayerListResp);
+
+  rpc AddWhiteList(PlayerListReq) returns(v1.common.NotifyResult);
+  rpc AddBlackList(PlayerListReq) returns(v1.common.NotifyResult);
+  rpc AddAdminList(PlayerListReq) returns(v1.common.NotifyResult);
+
+  rpc RemoveWhiteList(PlayerListReq) returns(v1.common.NotifyResult);
+  rpc RemoveBlackList(PlayerListReq) returns(v1.common.NotifyResult);
+  rpc RemoveAdminList(PlayerListReq) returns(v1.common.NotifyResult);
 }
