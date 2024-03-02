@@ -20,14 +20,36 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
+	DaemonService_HostInfo_FullMethodName    = "/v1.daemon.DaemonService/HostInfo"
 	DaemonService_HealthCheck_FullMethodName = "/v1.daemon.DaemonService/HealthCheck"
+	DaemonService_List_FullMethodName        = "/v1.daemon.DaemonService/List"
+	DaemonService_Create_FullMethodName      = "/v1.daemon.DaemonService/Create"
+	DaemonService_UpdateQuota_FullMethodName = "/v1.daemon.DaemonService/UpdateQuota"
+	DaemonService_Log_FullMethodName         = "/v1.daemon.DaemonService/Log"
+	DaemonService_Stats_FullMethodName       = "/v1.daemon.DaemonService/Stats"
+	DaemonService_Start_FullMethodName       = "/v1.daemon.DaemonService/Start"
+	DaemonService_Stop_FullMethodName        = "/v1.daemon.DaemonService/Stop"
+	DaemonService_Restart_FullMethodName     = "/v1.daemon.DaemonService/Restart"
+	DaemonService_Delete_FullMethodName      = "/v1.daemon.DaemonService/Delete"
+	DaemonService_ForceDelete_FullMethodName = "/v1.daemon.DaemonService/ForceDelete"
 )
 
 // DaemonServiceClient is the client API for DaemonService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DaemonServiceClient interface {
+	HostInfo(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*SystemInfo, error)
 	HealthCheck(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*HealthInfo, error)
+	List(ctx context.Context, in *ListContainerReq, opts ...grpc.CallOption) (*ListContainerResp, error)
+	Create(ctx context.Context, in *CreateContainerReq, opts ...grpc.CallOption) (*CreateContainerResp, error)
+	UpdateQuota(ctx context.Context, in *Resource, opts ...grpc.CallOption) (*NotifyResult, error)
+	Log(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*ContainerLog, error)
+	Stats(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*HealthInfo, error)
+	Start(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
+	Stop(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
+	Restart(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
+	Delete(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
+	ForceDelete(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
 }
 
 type daemonServiceClient struct {
@@ -36,6 +58,15 @@ type daemonServiceClient struct {
 
 func NewDaemonServiceClient(cc grpc.ClientConnInterface) DaemonServiceClient {
 	return &daemonServiceClient{cc}
+}
+
+func (c *daemonServiceClient) HostInfo(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*SystemInfo, error) {
+	out := new(SystemInfo)
+	err := c.cc.Invoke(ctx, DaemonService_HostInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *daemonServiceClient) HealthCheck(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*HealthInfo, error) {
@@ -47,11 +78,112 @@ func (c *daemonServiceClient) HealthCheck(ctx context.Context, in *emptypb.Empty
 	return out, nil
 }
 
+func (c *daemonServiceClient) List(ctx context.Context, in *ListContainerReq, opts ...grpc.CallOption) (*ListContainerResp, error) {
+	out := new(ListContainerResp)
+	err := c.cc.Invoke(ctx, DaemonService_List_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) Create(ctx context.Context, in *CreateContainerReq, opts ...grpc.CallOption) (*CreateContainerResp, error) {
+	out := new(CreateContainerResp)
+	err := c.cc.Invoke(ctx, DaemonService_Create_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) UpdateQuota(ctx context.Context, in *Resource, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DaemonService_UpdateQuota_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) Log(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*ContainerLog, error) {
+	out := new(ContainerLog)
+	err := c.cc.Invoke(ctx, DaemonService_Log_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) Stats(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*HealthInfo, error) {
+	out := new(HealthInfo)
+	err := c.cc.Invoke(ctx, DaemonService_Stats_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) Start(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DaemonService_Start_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) Stop(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DaemonService_Stop_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) Restart(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DaemonService_Restart_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) Delete(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DaemonService_Delete_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *daemonServiceClient) ForceDelete(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
+	out := new(NotifyResult)
+	err := c.cc.Invoke(ctx, DaemonService_ForceDelete_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DaemonServiceServer is the server API for DaemonService service.
 // All implementations must embed UnimplementedDaemonServiceServer
 // for forward compatibility
 type DaemonServiceServer interface {
+	HostInfo(context.Context, *emptypb.Empty) (*SystemInfo, error)
 	HealthCheck(context.Context, *emptypb.Empty) (*HealthInfo, error)
+	List(context.Context, *ListContainerReq) (*ListContainerResp, error)
+	Create(context.Context, *CreateContainerReq) (*CreateContainerResp, error)
+	UpdateQuota(context.Context, *Resource) (*NotifyResult, error)
+	Log(context.Context, *InstanceId) (*ContainerLog, error)
+	Stats(context.Context, *InstanceId) (*HealthInfo, error)
+	Start(context.Context, *InstanceId) (*NotifyResult, error)
+	Stop(context.Context, *InstanceId) (*NotifyResult, error)
+	Restart(context.Context, *InstanceId) (*NotifyResult, error)
+	Delete(context.Context, *InstanceId) (*NotifyResult, error)
+	ForceDelete(context.Context, *InstanceId) (*NotifyResult, error)
 	mustEmbedUnimplementedDaemonServiceServer()
 }
 
@@ -59,8 +191,41 @@ type DaemonServiceServer interface {
 type UnimplementedDaemonServiceServer struct {
 }
 
+func (UnimplementedDaemonServiceServer) HostInfo(context.Context, *emptypb.Empty) (*SystemInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HostInfo not implemented")
+}
 func (UnimplementedDaemonServiceServer) HealthCheck(context.Context, *emptypb.Empty) (*HealthInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
+}
+func (UnimplementedDaemonServiceServer) List(context.Context, *ListContainerReq) (*ListContainerResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedDaemonServiceServer) Create(context.Context, *CreateContainerReq) (*CreateContainerResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedDaemonServiceServer) UpdateQuota(context.Context, *Resource) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateQuota not implemented")
+}
+func (UnimplementedDaemonServiceServer) Log(context.Context, *InstanceId) (*ContainerLog, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Log not implemented")
+}
+func (UnimplementedDaemonServiceServer) Stats(context.Context, *InstanceId) (*HealthInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Stats not implemented")
+}
+func (UnimplementedDaemonServiceServer) Start(context.Context, *InstanceId) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Start not implemented")
+}
+func (UnimplementedDaemonServiceServer) Stop(context.Context, *InstanceId) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Stop not implemented")
+}
+func (UnimplementedDaemonServiceServer) Restart(context.Context, *InstanceId) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Restart not implemented")
+}
+func (UnimplementedDaemonServiceServer) Delete(context.Context, *InstanceId) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedDaemonServiceServer) ForceDelete(context.Context, *InstanceId) (*NotifyResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ForceDelete not implemented")
 }
 func (UnimplementedDaemonServiceServer) mustEmbedUnimplementedDaemonServiceServer() {}
 
@@ -73,6 +238,24 @@ type UnsafeDaemonServiceServer interface {
 
 func RegisterDaemonServiceServer(s grpc.ServiceRegistrar, srv DaemonServiceServer) {
 	s.RegisterService(&DaemonService_ServiceDesc, srv)
+}
+
+func _DaemonService_HostInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).HostInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_HostInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).HostInfo(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _DaemonService_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -93,6 +276,186 @@ func _DaemonService_HealthCheck_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DaemonService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListContainerReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_List_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).List(ctx, req.(*ListContainerReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateContainerReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_Create_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).Create(ctx, req.(*CreateContainerReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_UpdateQuota_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Resource)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).UpdateQuota(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_UpdateQuota_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).UpdateQuota(ctx, req.(*Resource))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_Log_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).Log(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_Log_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).Log(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_Stats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).Stats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_Stats_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).Stats(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_Start_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).Start(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_Start_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).Start(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_Stop_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).Stop(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_Stop_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).Stop(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_Restart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).Restart(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_Restart_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).Restart(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_Delete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).Delete(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DaemonService_ForceDelete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InstanceId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DaemonServiceServer).ForceDelete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DaemonService_ForceDelete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DaemonServiceServer).ForceDelete(ctx, req.(*InstanceId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DaemonService_ServiceDesc is the grpc.ServiceDesc for DaemonService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -101,431 +464,52 @@ var DaemonService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*DaemonServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "HostInfo",
+			Handler:    _DaemonService_HostInfo_Handler,
+		},
+		{
 			MethodName: "HealthCheck",
 			Handler:    _DaemonService_HealthCheck_Handler,
 		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "v1/daemon.proto",
-}
-
-const (
-	ContainerService_List_FullMethodName        = "/v1.daemon.ContainerService/List"
-	ContainerService_Create_FullMethodName      = "/v1.daemon.ContainerService/Create"
-	ContainerService_UpdateQuota_FullMethodName = "/v1.daemon.ContainerService/UpdateQuota"
-	ContainerService_Log_FullMethodName         = "/v1.daemon.ContainerService/Log"
-	ContainerService_Stats_FullMethodName       = "/v1.daemon.ContainerService/Stats"
-	ContainerService_Start_FullMethodName       = "/v1.daemon.ContainerService/Start"
-	ContainerService_Stop_FullMethodName        = "/v1.daemon.ContainerService/Stop"
-	ContainerService_Restart_FullMethodName     = "/v1.daemon.ContainerService/Restart"
-	ContainerService_Delete_FullMethodName      = "/v1.daemon.ContainerService/Delete"
-	ContainerService_ForceDelete_FullMethodName = "/v1.daemon.ContainerService/ForceDelete"
-)
-
-// ContainerServiceClient is the client API for ContainerService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ContainerServiceClient interface {
-	List(ctx context.Context, in *ListContainerReq, opts ...grpc.CallOption) (*ListContainerResp, error)
-	Create(ctx context.Context, in *CreateContainerReq, opts ...grpc.CallOption) (*CreateContainerResp, error)
-	UpdateQuota(ctx context.Context, in *Resource, opts ...grpc.CallOption) (*NotifyResult, error)
-	Log(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*ContainerLog, error)
-	Stats(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*HealthInfo, error)
-	Start(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
-	Stop(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
-	Restart(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
-	Delete(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
-	ForceDelete(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
-}
-
-type containerServiceClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewContainerServiceClient(cc grpc.ClientConnInterface) ContainerServiceClient {
-	return &containerServiceClient{cc}
-}
-
-func (c *containerServiceClient) List(ctx context.Context, in *ListContainerReq, opts ...grpc.CallOption) (*ListContainerResp, error) {
-	out := new(ListContainerResp)
-	err := c.cc.Invoke(ctx, ContainerService_List_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *containerServiceClient) Create(ctx context.Context, in *CreateContainerReq, opts ...grpc.CallOption) (*CreateContainerResp, error) {
-	out := new(CreateContainerResp)
-	err := c.cc.Invoke(ctx, ContainerService_Create_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *containerServiceClient) UpdateQuota(ctx context.Context, in *Resource, opts ...grpc.CallOption) (*NotifyResult, error) {
-	out := new(NotifyResult)
-	err := c.cc.Invoke(ctx, ContainerService_UpdateQuota_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *containerServiceClient) Log(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*ContainerLog, error) {
-	out := new(ContainerLog)
-	err := c.cc.Invoke(ctx, ContainerService_Log_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *containerServiceClient) Stats(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*HealthInfo, error) {
-	out := new(HealthInfo)
-	err := c.cc.Invoke(ctx, ContainerService_Stats_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *containerServiceClient) Start(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
-	out := new(NotifyResult)
-	err := c.cc.Invoke(ctx, ContainerService_Start_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *containerServiceClient) Stop(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
-	out := new(NotifyResult)
-	err := c.cc.Invoke(ctx, ContainerService_Stop_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *containerServiceClient) Restart(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
-	out := new(NotifyResult)
-	err := c.cc.Invoke(ctx, ContainerService_Restart_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *containerServiceClient) Delete(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
-	out := new(NotifyResult)
-	err := c.cc.Invoke(ctx, ContainerService_Delete_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *containerServiceClient) ForceDelete(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error) {
-	out := new(NotifyResult)
-	err := c.cc.Invoke(ctx, ContainerService_ForceDelete_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// ContainerServiceServer is the server API for ContainerService service.
-// All implementations must embed UnimplementedContainerServiceServer
-// for forward compatibility
-type ContainerServiceServer interface {
-	List(context.Context, *ListContainerReq) (*ListContainerResp, error)
-	Create(context.Context, *CreateContainerReq) (*CreateContainerResp, error)
-	UpdateQuota(context.Context, *Resource) (*NotifyResult, error)
-	Log(context.Context, *InstanceId) (*ContainerLog, error)
-	Stats(context.Context, *InstanceId) (*HealthInfo, error)
-	Start(context.Context, *InstanceId) (*NotifyResult, error)
-	Stop(context.Context, *InstanceId) (*NotifyResult, error)
-	Restart(context.Context, *InstanceId) (*NotifyResult, error)
-	Delete(context.Context, *InstanceId) (*NotifyResult, error)
-	ForceDelete(context.Context, *InstanceId) (*NotifyResult, error)
-	mustEmbedUnimplementedContainerServiceServer()
-}
-
-// UnimplementedContainerServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedContainerServiceServer struct {
-}
-
-func (UnimplementedContainerServiceServer) List(context.Context, *ListContainerReq) (*ListContainerResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
-}
-func (UnimplementedContainerServiceServer) Create(context.Context, *CreateContainerReq) (*CreateContainerResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
-}
-func (UnimplementedContainerServiceServer) UpdateQuota(context.Context, *Resource) (*NotifyResult, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateQuota not implemented")
-}
-func (UnimplementedContainerServiceServer) Log(context.Context, *InstanceId) (*ContainerLog, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Log not implemented")
-}
-func (UnimplementedContainerServiceServer) Stats(context.Context, *InstanceId) (*HealthInfo, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Stats not implemented")
-}
-func (UnimplementedContainerServiceServer) Start(context.Context, *InstanceId) (*NotifyResult, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Start not implemented")
-}
-func (UnimplementedContainerServiceServer) Stop(context.Context, *InstanceId) (*NotifyResult, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Stop not implemented")
-}
-func (UnimplementedContainerServiceServer) Restart(context.Context, *InstanceId) (*NotifyResult, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Restart not implemented")
-}
-func (UnimplementedContainerServiceServer) Delete(context.Context, *InstanceId) (*NotifyResult, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
-}
-func (UnimplementedContainerServiceServer) ForceDelete(context.Context, *InstanceId) (*NotifyResult, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ForceDelete not implemented")
-}
-func (UnimplementedContainerServiceServer) mustEmbedUnimplementedContainerServiceServer() {}
-
-// UnsafeContainerServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ContainerServiceServer will
-// result in compilation errors.
-type UnsafeContainerServiceServer interface {
-	mustEmbedUnimplementedContainerServiceServer()
-}
-
-func RegisterContainerServiceServer(s grpc.ServiceRegistrar, srv ContainerServiceServer) {
-	s.RegisterService(&ContainerService_ServiceDesc, srv)
-}
-
-func _ContainerService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListContainerReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContainerServiceServer).List(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ContainerService_List_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContainerServiceServer).List(ctx, req.(*ListContainerReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ContainerService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateContainerReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContainerServiceServer).Create(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ContainerService_Create_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContainerServiceServer).Create(ctx, req.(*CreateContainerReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ContainerService_UpdateQuota_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Resource)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContainerServiceServer).UpdateQuota(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ContainerService_UpdateQuota_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContainerServiceServer).UpdateQuota(ctx, req.(*Resource))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ContainerService_Log_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstanceId)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContainerServiceServer).Log(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ContainerService_Log_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContainerServiceServer).Log(ctx, req.(*InstanceId))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ContainerService_Stats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstanceId)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContainerServiceServer).Stats(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ContainerService_Stats_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContainerServiceServer).Stats(ctx, req.(*InstanceId))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ContainerService_Start_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstanceId)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContainerServiceServer).Start(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ContainerService_Start_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContainerServiceServer).Start(ctx, req.(*InstanceId))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ContainerService_Stop_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstanceId)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContainerServiceServer).Stop(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ContainerService_Stop_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContainerServiceServer).Stop(ctx, req.(*InstanceId))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ContainerService_Restart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstanceId)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContainerServiceServer).Restart(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ContainerService_Restart_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContainerServiceServer).Restart(ctx, req.(*InstanceId))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ContainerService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstanceId)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContainerServiceServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ContainerService_Delete_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContainerServiceServer).Delete(ctx, req.(*InstanceId))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ContainerService_ForceDelete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstanceId)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContainerServiceServer).ForceDelete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ContainerService_ForceDelete_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContainerServiceServer).ForceDelete(ctx, req.(*InstanceId))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-// ContainerService_ServiceDesc is the grpc.ServiceDesc for ContainerService service.
-// It's only intended for direct use with grpc.RegisterService,
-// and not to be introspected or modified (even as a copy)
-var ContainerService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "v1.daemon.ContainerService",
-	HandlerType: (*ContainerServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "List",
-			Handler:    _ContainerService_List_Handler,
+			Handler:    _DaemonService_List_Handler,
 		},
 		{
 			MethodName: "Create",
-			Handler:    _ContainerService_Create_Handler,
+			Handler:    _DaemonService_Create_Handler,
 		},
 		{
 			MethodName: "UpdateQuota",
-			Handler:    _ContainerService_UpdateQuota_Handler,
+			Handler:    _DaemonService_UpdateQuota_Handler,
 		},
 		{
 			MethodName: "Log",
-			Handler:    _ContainerService_Log_Handler,
+			Handler:    _DaemonService_Log_Handler,
 		},
 		{
 			MethodName: "Stats",
-			Handler:    _ContainerService_Stats_Handler,
+			Handler:    _DaemonService_Stats_Handler,
 		},
 		{
 			MethodName: "Start",
-			Handler:    _ContainerService_Start_Handler,
+			Handler:    _DaemonService_Start_Handler,
 		},
 		{
 			MethodName: "Stop",
-			Handler:    _ContainerService_Stop_Handler,
+			Handler:    _DaemonService_Stop_Handler,
 		},
 		{
 			MethodName: "Restart",
-			Handler:    _ContainerService_Restart_Handler,
+			Handler:    _DaemonService_Restart_Handler,
 		},
 		{
 			MethodName: "Delete",
-			Handler:    _ContainerService_Delete_Handler,
+			Handler:    _DaemonService_Delete_Handler,
 		},
 		{
 			MethodName: "ForceDelete",
-			Handler:    _ContainerService_ForceDelete_Handler,
+			Handler:    _DaemonService_ForceDelete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

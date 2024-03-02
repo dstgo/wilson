@@ -245,113 +245,6 @@ var _ interface {
 	ErrorName() string
 } = MemoryHealthValidationError{}
 
-// Validate checks the field values on DiskHealth with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *DiskHealth) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on DiskHealth with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in DiskHealthMultiError, or
-// nil if none found.
-func (m *DiskHealth) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *DiskHealth) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Total
-
-	// no validation rules for Used
-
-	// no validation rules for Free
-
-	// no validation rules for Usage
-
-	if len(errors) > 0 {
-		return DiskHealthMultiError(errors)
-	}
-
-	return nil
-}
-
-// DiskHealthMultiError is an error wrapping multiple validation errors
-// returned by DiskHealth.ValidateAll() if the designated constraints aren't met.
-type DiskHealthMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m DiskHealthMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m DiskHealthMultiError) AllErrors() []error { return m }
-
-// DiskHealthValidationError is the validation error returned by
-// DiskHealth.Validate if the designated constraints aren't met.
-type DiskHealthValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e DiskHealthValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e DiskHealthValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e DiskHealthValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e DiskHealthValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e DiskHealthValidationError) ErrorName() string { return "DiskHealthValidationError" }
-
-// Error satisfies the builtin error interface
-func (e DiskHealthValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDiskHealth.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = DiskHealthValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = DiskHealthValidationError{}
-
 // Validate checks the field values on HealthInfo with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -426,35 +319,6 @@ func (m *HealthInfo) validate(all bool) error {
 		if err := v.Validate(); err != nil {
 			return HealthInfoValidationError{
 				field:  "Mem",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetDisk()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, HealthInfoValidationError{
-					field:  "Disk",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, HealthInfoValidationError{
-					field:  "Disk",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDisk()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return HealthInfoValidationError{
-				field:  "Disk",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -642,6 +506,290 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ResourceValidationError{}
+
+// Validate checks the field values on SystemInfo with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *SystemInfo) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SystemInfo with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SystemInfoMultiError, or
+// nil if none found.
+func (m *SystemInfo) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SystemInfo) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Os
+
+	// no validation rules for OsVersion
+
+	// no validation rules for Arch
+
+	// no validation rules for GoVersion
+
+	// no validation rules for BuildVersion
+
+	if all {
+		switch v := interface{}(m.GetDocker()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SystemInfoValidationError{
+					field:  "Docker",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SystemInfoValidationError{
+					field:  "Docker",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDocker()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SystemInfoValidationError{
+				field:  "Docker",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetResource()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SystemInfoValidationError{
+					field:  "Resource",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SystemInfoValidationError{
+					field:  "Resource",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetResource()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SystemInfoValidationError{
+				field:  "Resource",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for CpuModel
+
+	if len(errors) > 0 {
+		return SystemInfoMultiError(errors)
+	}
+
+	return nil
+}
+
+// SystemInfoMultiError is an error wrapping multiple validation errors
+// returned by SystemInfo.ValidateAll() if the designated constraints aren't met.
+type SystemInfoMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SystemInfoMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SystemInfoMultiError) AllErrors() []error { return m }
+
+// SystemInfoValidationError is the validation error returned by
+// SystemInfo.Validate if the designated constraints aren't met.
+type SystemInfoValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SystemInfoValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SystemInfoValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SystemInfoValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SystemInfoValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SystemInfoValidationError) ErrorName() string { return "SystemInfoValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SystemInfoValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSystemInfo.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SystemInfoValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SystemInfoValidationError{}
+
+// Validate checks the field values on DockerInfo with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *DockerInfo) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DockerInfo with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in DockerInfoMultiError, or
+// nil if none found.
+func (m *DockerInfo) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DockerInfo) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Containers
+
+	// no validation rules for Running
+
+	// no validation rules for Pause
+
+	// no validation rules for Stopped
+
+	// no validation rules for Images
+
+	// no validation rules for Driver
+
+	// no validation rules for Version
+
+	// no validation rules for KernelVersion
+
+	if len(errors) > 0 {
+		return DockerInfoMultiError(errors)
+	}
+
+	return nil
+}
+
+// DockerInfoMultiError is an error wrapping multiple validation errors
+// returned by DockerInfo.ValidateAll() if the designated constraints aren't met.
+type DockerInfoMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DockerInfoMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DockerInfoMultiError) AllErrors() []error { return m }
+
+// DockerInfoValidationError is the validation error returned by
+// DockerInfo.Validate if the designated constraints aren't met.
+type DockerInfoValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DockerInfoValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DockerInfoValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DockerInfoValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DockerInfoValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DockerInfoValidationError) ErrorName() string { return "DockerInfoValidationError" }
+
+// Error satisfies the builtin error interface
+func (e DockerInfoValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDockerInfo.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DockerInfoValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DockerInfoValidationError{}
 
 // Validate checks the field values on PortBind with the rules defined in the
 // proto definition for this message. If any rules are violated, the first

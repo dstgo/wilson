@@ -9,7 +9,18 @@ import "v1/common.proto";
 
 
 service DaemonService {
+  rpc HostInfo(google.protobuf.Empty) returns(SystemInfo);
   rpc HealthCheck(google.protobuf.Empty) returns(HealthInfo);
+  rpc List(ListContainerReq) returns(ListContainerResp);
+  rpc Create(CreateContainerReq) returns(CreateContainerResp);
+  rpc UpdateQuota(Resource) returns(v1.common.NotifyResult);
+  rpc Log(v1.common.InstanceId) returns(ContainerLog);
+  rpc Stats(v1.common.InstanceId) returns(HealthInfo);
+  rpc Start(v1.common.InstanceId) returns(v1.common.NotifyResult);
+  rpc Stop(v1.common.InstanceId) returns(v1.common.NotifyResult);
+  rpc Restart(v1.common.InstanceId) returns(v1.common.NotifyResult);
+  rpc Delete(v1.common.InstanceId) returns(v1.common.NotifyResult);
+  rpc ForceDelete(v1.common.InstanceId) returns(v1.common.NotifyResult);
 }
 
 message CpuHealth {
@@ -24,37 +35,37 @@ message MemoryHealth {
   double usage = 4;
 }
 
-message DiskHealth{
-  int64 total = 1;
-  int64 used = 2;
-  int64 free = 3;
-  double usage = 4;
-}
-
 message HealthInfo {
   CpuHealth cpu = 1;
   MemoryHealth mem = 2;
-  DiskHealth disk = 3;
-}
-
-
-service ContainerService {
-  rpc List(ListContainerReq) returns(ListContainerResp);
-  rpc Create(CreateContainerReq) returns(CreateContainerResp);
-  rpc UpdateQuota(Resource) returns(v1.common.NotifyResult);
-  rpc Log(v1.common.InstanceId) returns(ContainerLog);
-  rpc Stats(v1.common.InstanceId) returns(HealthInfo);
-  rpc Start(v1.common.InstanceId) returns(v1.common.NotifyResult);
-  rpc Stop(v1.common.InstanceId) returns(v1.common.NotifyResult);
-  rpc Restart(v1.common.InstanceId) returns(v1.common.NotifyResult);
-  rpc Delete(v1.common.InstanceId) returns(v1.common.NotifyResult);
-  rpc ForceDelete(v1.common.InstanceId) returns(v1.common.NotifyResult);
 }
 
 message Resource {
   int64 cpu = 1;
   int64 memory = 2;
   int64 disk = 3;
+}
+
+message SystemInfo {
+  string os = 1;
+  string osVersion = 2;
+  string arch = 3;
+  string goVersion = 4;
+  string buildVersion = 5;
+  DockerInfo docker = 6;
+  Resource resource = 7;
+  string cpuModel = 8;
+}
+
+message DockerInfo {
+  int64 containers = 1;
+  int64 running = 2;
+  int64 pause = 3;
+  int64 stopped = 4;
+  int64 images = 5;
+  string driver = 6;
+  string version = 7;
+  string kernelVersion = 8;
 }
 
 message PortBind {
