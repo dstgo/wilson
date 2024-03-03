@@ -11,10 +11,10 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:  "wig [command]",
+	Use:  "wigfrid [command]",
 	Long: `wigfrid is the daemon of the wendy panel, use wigfrid command to build a local dst containers manager.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return nil
+		return cmd.Help()
 	},
 }
 
