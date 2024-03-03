@@ -3,6 +3,7 @@ package daemon
 import (
 	"context"
 	"github.com/docker/docker/client"
+	"github.com/dstgo/wilson/internal/conf"
 	v1 "github.com/dstgo/wilson/internal/proto/api/v1"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/mem"
@@ -12,14 +13,20 @@ import (
 	"time"
 )
 
-func NewHostHandler() *HostHandler {
-	return &HostHandler{}
+func NewHostHandler(dockerClient *client.Client, config *conf.WigfridConf) *HostHandler {
+	return &HostHandler{
+		dockerClient: dockerClient,
+		config:       config,
+	}
 }
 
+// HostHandler returns some information about host machine
 type HostHandler struct {
 	dockerClient *client.Client
+	config       *conf.WigfridConf
 }
 
+// HostInfo returns host basic information
 func (h *HostHandler) HostInfo(ctx context.Context) (*v1.SystemInfo, error) {
 
 	// docker and host info
@@ -38,7 +45,7 @@ func (h *HostHandler) HostInfo(ctx context.Context) (*v1.SystemInfo, error) {
 		OsVersion:    hostInfo.KernelVersion,
 		Arch:         hostInfo.KernelArch,
 		GoVersion:    runtime.Version(),
-		BuildVersion: "",
+		BuildVersion: h.config.BuildMeta.Version,
 		Docker: &v1.DockerInfo{
 			Containers:    int64(dockerInfo.Containers),
 			Running:       int64(dockerInfo.ContainersRunning),
@@ -88,7 +95,8 @@ func (h *HostHandler) HostInfo(ctx context.Context) (*v1.SystemInfo, error) {
 	return result, nil
 }
 
-func (h *HostHandler) HostHealth() (*v1.HealthInfo, error) {
+// HostHealth returns the health check information of the host machine
+func (h *HostHandler) HostHealth(ctx context.Context) (*v1.HealthInfo, error) {
 
 	// cpu usage
 	percent, err := cpu.Percent(time.Millisecond*500, false)

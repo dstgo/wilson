@@ -3,7 +3,16 @@ package player
 import (
 	"context"
 	v1 "github.com/dstgo/wilson/internal/proto/api/v1"
+	"github.com/google/wire"
 )
+
+var PlayerProvider = wire.NewSet(
+	NewService,
+)
+
+func NewService() *Service {
+	return &Service{}
+}
 
 type Service struct {
 	v1.UnimplementedPlayerServiceServer

@@ -3,7 +3,16 @@ package mod
 import (
 	"context"
 	v1 "github.com/dstgo/wilson/internal/proto/api/v1"
+	"github.com/google/wire"
 )
+
+var ModProvider = wire.NewSet(
+	NewService,
+)
+
+func NewService() *Service {
+	return &Service{}
+}
 
 type Service struct {
 	v1.UnimplementedModServiceServer

@@ -4,6 +4,8 @@
 package service
 
 import (
+	"github.com/246859/steamapi"
+	"github.com/docker/docker/client"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/data"
 	"github.com/go-kratos/kratos/v2/log"
@@ -11,5 +13,5 @@ import (
 )
 
 func setupService(cfg *conf.WigfridConf, datasource *data.DataSource, dockerClient *client.Client, steamClient *steamapi.Client, logger log.Logger) RegisteredService {
-	panic(wire.Build())
+	panic(wire.Build(serviceProviderSet))
 }

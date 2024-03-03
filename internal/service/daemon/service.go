@@ -7,20 +7,40 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-var DaemonServiceProvider = wire.NewSet()
+var DaemonProvider = wire.NewSet(
+	NewHostHandler,
+	NewContainerHandler,
+	NewService,
+)
+
+func NewService(host *HostHandler, container *ContainerHandler) *Service {
+	return &Service{
+		host:      host,
+		container: container,
+	}
+}
 
 type Service struct {
 	v1.UnimplementedDaemonServiceServer
+
+	host      *HostHandler
+	container *ContainerHandler
 }
 
 func (s *Service) HostInfo(ctx context.Context, empty *emptypb.Empty) (*v1.SystemInfo, error) {
-	//TODO implement me
-	panic("implement me")
+	info, err := s.host.HostInfo(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return info, nil
 }
 
 func (s *Service) HealthCheck(ctx context.Context, empty *emptypb.Empty) (*v1.HealthInfo, error) {
-	//TODO implement me
-	panic("implement me")
+	healthInfo, err := s.host.HostHealth(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return healthInfo, nil
 }
 
 func (s *Service) List(ctx context.Context, req *v1.ListContainerReq) (*v1.ListContainerResp, error) {
