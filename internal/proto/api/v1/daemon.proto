@@ -14,7 +14,7 @@ service DaemonService {
   rpc List(ListContainerReq) returns(ListContainerResp);
   rpc Create(CreateContainerReq) returns(CreateContainerResp);
   rpc UpdateQuota(Resource) returns(v1.common.NotifyResult);
-  rpc Log(v1.common.InstanceId) returns(ContainerLog);
+  rpc Log(LogContainerReq) returns(ContainerLog);
   rpc Stats(v1.common.InstanceId) returns(HealthInfo);
   rpc Start(v1.common.InstanceId) returns(v1.common.NotifyResult);
   rpc Stop(v1.common.InstanceId) returns(v1.common.NotifyResult);
@@ -117,6 +117,14 @@ message ListContainerReq {
   string search = 1;
   int64  page = 2;
   int64 size = 3;
+}
+
+message LogContainerReq {
+  v1.common.InstanceId instanceId = 1;
+  int64 since = 2;
+  int64 until = 3;
+  bool timestamp = 4;
+  int64 tail = 5;
 }
 
 message ListContainerResp {

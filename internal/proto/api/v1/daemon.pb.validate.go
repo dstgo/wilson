@@ -1560,6 +1560,143 @@ var _ interface {
 	ErrorName() string
 } = ListContainerReqValidationError{}
 
+// Validate checks the field values on LogContainerReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *LogContainerReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on LogContainerReq with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// LogContainerReqMultiError, or nil if none found.
+func (m *LogContainerReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *LogContainerReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetInstanceId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, LogContainerReqValidationError{
+					field:  "InstanceId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, LogContainerReqValidationError{
+					field:  "InstanceId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetInstanceId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LogContainerReqValidationError{
+				field:  "InstanceId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Since
+
+	// no validation rules for Until
+
+	// no validation rules for Timestamp
+
+	// no validation rules for Tail
+
+	if len(errors) > 0 {
+		return LogContainerReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// LogContainerReqMultiError is an error wrapping multiple validation errors
+// returned by LogContainerReq.ValidateAll() if the designated constraints
+// aren't met.
+type LogContainerReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m LogContainerReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m LogContainerReqMultiError) AllErrors() []error { return m }
+
+// LogContainerReqValidationError is the validation error returned by
+// LogContainerReq.Validate if the designated constraints aren't met.
+type LogContainerReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LogContainerReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LogContainerReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LogContainerReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LogContainerReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LogContainerReqValidationError) ErrorName() string { return "LogContainerReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e LogContainerReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLogContainerReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LogContainerReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LogContainerReqValidationError{}
+
 // Validate checks the field values on ListContainerResp with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.

@@ -58,9 +58,16 @@ func (s *Service) UpdateQuota(ctx context.Context, resource *v1.Resource) (*v1.N
 	panic("implement me")
 }
 
-func (s *Service) Log(ctx context.Context, id *v1.InstanceId) (*v1.ContainerLog, error) {
-	//TODO implement me
-	panic("implement me")
+func (s *Service) Log(ctx context.Context, logReq *v1.LogContainerReq) (*v1.ContainerLog, error) {
+	logs, err := s.container.GetContainerLogs(ctx, logReq.InstanceId.GetId(), logReq.Since, logReq.Until, logReq.Tail, logReq.Timestamp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &v1.ContainerLog{
+		LogContent: logs,
+		Lines:      logReq.Tail,
+	}, nil
 }
 
 func (s *Service) Stats(ctx context.Context, id *v1.InstanceId) (*v1.HealthInfo, error) {

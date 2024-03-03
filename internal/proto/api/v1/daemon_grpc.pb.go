@@ -43,7 +43,7 @@ type DaemonServiceClient interface {
 	List(ctx context.Context, in *ListContainerReq, opts ...grpc.CallOption) (*ListContainerResp, error)
 	Create(ctx context.Context, in *CreateContainerReq, opts ...grpc.CallOption) (*CreateContainerResp, error)
 	UpdateQuota(ctx context.Context, in *Resource, opts ...grpc.CallOption) (*NotifyResult, error)
-	Log(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*ContainerLog, error)
+	Log(ctx context.Context, in *LogContainerReq, opts ...grpc.CallOption) (*ContainerLog, error)
 	Stats(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*HealthInfo, error)
 	Start(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
 	Stop(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*NotifyResult, error)
@@ -105,7 +105,7 @@ func (c *daemonServiceClient) UpdateQuota(ctx context.Context, in *Resource, opt
 	return out, nil
 }
 
-func (c *daemonServiceClient) Log(ctx context.Context, in *InstanceId, opts ...grpc.CallOption) (*ContainerLog, error) {
+func (c *daemonServiceClient) Log(ctx context.Context, in *LogContainerReq, opts ...grpc.CallOption) (*ContainerLog, error) {
 	out := new(ContainerLog)
 	err := c.cc.Invoke(ctx, DaemonService_Log_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -177,7 +177,7 @@ type DaemonServiceServer interface {
 	List(context.Context, *ListContainerReq) (*ListContainerResp, error)
 	Create(context.Context, *CreateContainerReq) (*CreateContainerResp, error)
 	UpdateQuota(context.Context, *Resource) (*NotifyResult, error)
-	Log(context.Context, *InstanceId) (*ContainerLog, error)
+	Log(context.Context, *LogContainerReq) (*ContainerLog, error)
 	Stats(context.Context, *InstanceId) (*HealthInfo, error)
 	Start(context.Context, *InstanceId) (*NotifyResult, error)
 	Stop(context.Context, *InstanceId) (*NotifyResult, error)
@@ -206,7 +206,7 @@ func (UnimplementedDaemonServiceServer) Create(context.Context, *CreateContainer
 func (UnimplementedDaemonServiceServer) UpdateQuota(context.Context, *Resource) (*NotifyResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateQuota not implemented")
 }
-func (UnimplementedDaemonServiceServer) Log(context.Context, *InstanceId) (*ContainerLog, error) {
+func (UnimplementedDaemonServiceServer) Log(context.Context, *LogContainerReq) (*ContainerLog, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Log not implemented")
 }
 func (UnimplementedDaemonServiceServer) Stats(context.Context, *InstanceId) (*HealthInfo, error) {
@@ -331,7 +331,7 @@ func _DaemonService_UpdateQuota_Handler(srv interface{}, ctx context.Context, de
 }
 
 func _DaemonService_Log_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InstanceId)
+	in := new(LogContainerReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -343,7 +343,7 @@ func _DaemonService_Log_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: DaemonService_Log_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DaemonServiceServer).Log(ctx, req.(*InstanceId))
+		return srv.(DaemonServiceServer).Log(ctx, req.(*LogContainerReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
