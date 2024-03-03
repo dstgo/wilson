@@ -205,6 +205,7 @@ func NewDockerClient(ctx context.Context) (*client.Client, error) {
 	if _, err := dockerClient.Ping(ctx); err != nil {
 		return nil, err
 	}
+	log.L().Infoln("local docker client established successfully √")
 	return dockerClient, nil
 }
 
@@ -217,5 +218,6 @@ func NewSteamClient(cfg *conf.DstConf) (*steamapi.Client, error) {
 	if _, err := steamClient.ISteamWebAPIUtil().GetServerInfo(); err != nil {
 		return nil, err
 	}
+	log.L().Infoln("steam webapi client established successfully √")
 	return steamClient, nil
 }
