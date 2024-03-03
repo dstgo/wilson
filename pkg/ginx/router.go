@@ -87,7 +87,7 @@ func (r *RouterGroup) Group(path string, subMeta Meta, handlers ...gin.HandlerFu
 	subGroup.Meta = cloneGroupMeta
 	subGroup.root = subRoot
 	subGroup.FullPath = joinPaths(r.FullPath, path)
-	subGroup.middles = append(r.middles)
+	subGroup.middles = append(subGroup.middles, r.middles...)
 
 	r.groups = append(r.groups, subGroup)
 
