@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/dstgo/wilson/internal/conf"
 	"github.com/dstgo/wilson/internal/core/log"
+	"github.com/dstgo/wilson/internal/service"
 	"github.com/go-kratos/kratos/contrib/log/logrus/v2"
 	"github.com/go-kratos/kratos/v2"
 )
@@ -26,6 +27,24 @@ func NewGrpcApp(ctx context.Context, cfg *conf.WigfridConf, logger *log.Logger) 
 
 	// create the grpc server
 	grpcServer := NewGRPCServer(cfg.GrpcConf, kratosLogger)
+
+	// docker client
+	dockerClient, err := NewDockerClient(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// steam client
+	steamClient, err := NewSteamClient(cfg.DstConf)
+	if err != nil {
+		return nil, err
+	}
+
+	// register all the grpc services
+	if err := service.Register(grpcServer.Server, cfg, datasource, dockerClient, steamClient, kratosLogger); err != nil {
+		return nil, err
+	}
+
 	// app cleanup func
 	cleanup := func(ctx context.Context) error {
 		if err := datasource.Close(); err != nil {
