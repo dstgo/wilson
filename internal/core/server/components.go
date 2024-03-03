@@ -72,7 +72,7 @@ func LogBanner(buildInfo conf.BuildInfo, logConf *conf.LogConf, logger *logrus.L
 
 func LoadDataSource(ctx context.Context, dataConf *conf.DataConf) (*data.DataSource, error) {
 
-	log.L().Infoln("attempt to load wilson datasource...")
+	log.L().Infoln("attempt to load datasource...")
 	datasource, err := data.NewDataSource(ctx, dataConf)
 	if err != nil {
 		log.L().Errorf("load data datasource failed: %s", err.Error())
