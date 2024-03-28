@@ -19,3 +19,10 @@
 
 # Go workspace file
 go.work
+
+# binary dir
+.bin
+
+# ide dir
+.idea
+.vscode
