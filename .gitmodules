@@ -1,0 +1,30 @@
+[submodule "docs"]
+	path = docs
+	url = git@246859.github.com:dstgo/docs.git
+[submodule "web/panel"]
+	path = web/panel
+	url = git@246859.github.com:dstgo/panel.git
+[submodule "service/cron"]
+	path = service/cron
+	url = git@246859.github.com:dstgo/cron.git
+[submodule "service/container"]
+	path = service/container
+	url = git@246859.github.com:dstgo/container.git
+[submodule "service/configure"]
+	path = service/configure
+	url = git@246859.github.com:dstgo/configure.git
+[submodule "service/daemon"]
+	path = service/daemon
+	url = git@246859.github.com:dstgo/daemon.git
+[submodule "service/game"]
+	path = service/game
+	url = git@246859.github.com:dstgo/game.git
+[submodule "service/gateway"]
+	path = service/gateway
+	url = git@246859.github.com:dstgo/gateway.git
+[submodule "service/manager"]
+	path = service/manager
+	url = git@246859.github.com:dstgo/manager.git
+[submodule "service/resource"]
+	path = service/resource
+	url = git@246859.github.com:dstgo/manager.git
