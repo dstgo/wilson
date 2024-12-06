@@ -28,3 +28,9 @@
 [submodule "service/resource"]
 	path = service/resource
 	url = git@246859.github.com:dstgo/manager.git
+[submodule "framework/kratosx"]
+	path = framework/kratosx
+	url = git@246859.github.com:dstgo/kratosx.git
+[submodule "framework/kratos-layout"]
+	path = framework/kratos-layout
+	url = git@246859.github.com:dstgo/kratos-layout.git
