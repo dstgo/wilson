@@ -7,13 +7,12 @@
 <img src="https://img.shields.io/badge/kratos-2.7.2-orange" alt=""/>
 </div>
 
-[English](README.en.md)|**简体中文**
+**English**|[简体中文](README.md)
 
 # Wilson
 
-wilson是一个基于容器虚拟化实现的分布式多节点饥荒联机版游戏管理面板。
+Wilson is a distributed multi-node Don't Starve Together game management panel based on container virtualization.
 
-## 文档
+## Documentation
 
-如果你想获取更多详细的信息，前往[Wilson Doc](https://docs.dstgo.cn/)查看文档内容。
-
+If you want to get more detailed information, go to [Wilson Doc](https://docs.dstgo.cn/) to view the document content.
