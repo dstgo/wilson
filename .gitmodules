@@ -31,6 +31,6 @@
 [submodule "framework/kratosx"]
 	path = framework/kratosx
 	url = git@github.com:dstgo/kratosx.git
-[submodule "framework/kratos-layout"]
-	path = framework/kratos-layout
-	url = git@github.com:dstgo/kratos-layout.git
+[submodule "framework/layout"]
+	path = framework/layout
+	url = git@github.com:dstgo/layout.git
