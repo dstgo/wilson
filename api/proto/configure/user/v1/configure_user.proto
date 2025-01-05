@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package wilson.api.configure.user.v1;
+
+option go_package = "configure/user/v1;v1";
+option java_multiple_files = true;
+option java_package = "configure.api.configure.user.v1";
+option java_outer_classname = "UserV1";
+
+import "validate/validate.proto";
+
+message LoginRequest {
+  string username = 1[(validate.rules).string = {min_len:6}];
+  string password = 2[(validate.rules).string = {min_len:6}];
+}
+
+message LoginReply{
+  string token = 1;
+}
+
+message RefreshTokenRequest{
+}
+
+message RefreshTokenReply{
+  string token = 1;
+}

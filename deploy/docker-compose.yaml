@@ -1,0 +1,90 @@
+version: '3.5'
+services:
+  # 网关中心
+  gateway:
+    environment:
+      - APP_NAME=Gateway
+      - CONF_HOST=${CONF_HOST}
+      - CONF_TOKEN=${CONF_TOKEN}
+    image: registry.cn-qingdao.aliyuncs.com/limes-cloud/gateway
+    container_name: gateway
+    network_mode: host #服务需要访问数据库，这里设置成host可以更加方便一些
+    restart: always
+    volumes:
+      - ./gateway/tmp:/go/build/tmp
+  # 管理中心
+  manager:
+    environment:
+      - APP_NAME=Manager
+      - CONF_HOST=${CONF_HOST}
+      - CONF_TOKEN=${CONF_TOKEN}
+    image: registry.cn-qingdao.aliyuncs.com/limes-cloud/manager
+    container_name: manager
+    network_mode: host #服务需要访问数据库，这里设置成host可以更加方便一些
+    restart: always
+    volumes:
+      - ./manager/tmp:/go/build/tmp
+      - ./manager/static:/go/build/static
+  # 资源中心
+  resource:
+    environment:
+      - APP_NAME=Resource
+      - CONF_HOST=${CONF_HOST}
+      - CONF_TOKEN=${CONF_TOKEN}
+    image: registry.cn-qingdao.aliyuncs.com/limes-cloud/resource
+    container_name: resource
+    network_mode: host #服务需要访问数据库，这里设置成host可以更加方便一些
+    restart: always
+    volumes:
+      - ./resource/tmp:/go/build/tmp
+  # 用户中心
+  usercenter:
+    environment:
+      - APP_NAME=UserCenter
+      - CONF_HOST=${CONF_HOST}
+      - CONF_TOKEN=${CONF_TOKEN}
+    image: registry.cn-qingdao.aliyuncs.com/limes-cloud/usercenter
+    container_name: usercenter
+    network_mode: host #服务需要访问数据库，这里设置成host可以更加方便一些
+    restart: always
+    volumes:
+      - ./usercenter/tmp:/go/build/tmp
+      - ./usercenter/static:/go/build/static
+  cron:
+    environment:
+      - APP_NAME=Cron
+      - CONF_HOST=${CONF_HOST}
+      - CONF_TOKEN=${CONF_TOKEN}
+    image: registry.cn-qingdao.aliyuncs.com/limes-cloud/cron
+    container_name: cron
+    network_mode: host #服务需要访问数据库，这里设置成host可以更加方便一些
+    restart: always
+    volumes:
+      - ./cron/tmp:/go/build/tmp
+      - ./cron/static:/go/build/static
+  cronclient:
+    image: registry.cn-qingdao.aliyuncs.com/limes-cloud/cron-client
+    container_name: cronclient
+    network_mode: host #服务需要访问数据库，这里设置成host可以更加方便一些
+    restart: always
+    volumes:
+      - ./cron/tmp:/go/build/tmp
+      - ./cron/static:/go/build/static
+  partyaffairs:
+    environment:
+      - APP_NAME=PartyAffairs
+      - CONF_HOST=${CONF_HOST}
+      - CONF_TOKEN=${CONF_TOKEN}
+    image: registry.cn-qingdao.aliyuncs.com/limes-cloud/layout:partyaffairs
+    container_name: partyaffairs
+    network_mode: host #服务需要访问数据库，这里设置成host可以更加方便一些
+    restart: always
+    volumes:
+      - ./partyaffairs/tmp:/go/build/tmp
+  # web后台
+  adminweb:
+    image: registry.cn-qingdao.aliyuncs.com/limes-cloud/adminweb
+    container_name: adminweb
+    restart: always
+    ports:
+      - 7000:80

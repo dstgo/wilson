@@ -1,0 +1,138 @@
+env: TEST
+server:
+  http:
+    host: 127.0.0.1
+    port: 7030
+    timeout: 10s
+    marshal:
+      emitUnpopulated: true
+      useProtoNames: true
+  grpc:
+    host: 127.0.0.1
+    port: 8030
+    timeout: 10s
+client:
+  - server: Resource
+    type: direct
+    backends:
+      - target: 127.0.0.1:8020
+log:
+  level: 0
+  caller: true
+  output:
+    - stdout
+    - file
+  file:
+    name: ./tmp/runtime/output.log
+    maxSize: 1
+    maxBackup: 5
+    maxAge: 1
+    compress: false
+database:
+  system:
+    enable: true #是否启用数据库
+    drive: mysql #数据库类型
+    autoCreate: true #是否自动创建数据库
+    connect:
+      username: root
+      password: root
+      host: 127.0.0.1
+      port: 3306
+      dbName: usercenter
+      option: ?charset=utf8mb4&parseTime=True&loc=Local
+    config:
+      transformError:
+        enable: true
+      initializer:
+        enable: true
+        path: deploy/data.sql
+      maxLifetime: 2h #最大生存时间
+      maxOpenConn: 20 #最大连接数量
+      maxIdleConn: 10 #最大空闲数量
+      logLevel: 4 #日志等级
+      slowThreshold: 2s #慢sql阈值
+redis:
+  cache:
+    enable: true
+    host: 127.0.0.1:6379
+    username:
+    password:
+captcha:
+  loginImage:
+    type: image
+    length: 6
+    expire: 180s
+    redis: cache
+    height: 80
+    width: 200
+    skew: 0.7
+    dotCount: 80
+    refresh: true
+  bindImage:
+    type: image
+    length: 6
+    expire: 180s
+    redis: cache
+    height: 80
+    width: 200
+    skew: 0.7
+    dotCount: 80
+    refresh: true
+  registerImage:
+    type: image
+    length: 6
+    expire: 180s
+    redis: cache
+    height: 80
+    width: 200
+    skew: 0.7
+    dotCount: 80
+    refresh: true
+  loginEmail:
+    type: email
+    length: 6
+    expire: 180s
+    redis: cache
+    template: login
+  bindEmail:
+    type: email
+    length: 6
+    expire: 180s
+    redis: cache
+    template: bind
+  registerEmail:
+    type: email
+    length: 6
+    expire: 180s
+    redis: cache
+    template: register
+loader:
+  password: static/cert/password.pem
+email:
+  template:
+    login:
+      subject: 登录验证码发送通知
+      path: static/template/email/default.html
+      type: text/html
+    bind:
+      subject: 绑定验证码发送通知
+      path: static/template/email/default.html
+      type: text/html
+    register:
+      subject: 注册验证码发送通知
+      path: static/template/email/default.html
+      type: text/html
+  user: 860808187@qq.com
+  name: 青岑云
+  host: smtp.qq.com
+  port: 25
+  password: fyudafdzqmhwbfbd
+jwt:
+  redis: cache
+  secret: limes-cloud-client-test
+  expire: 2h
+  renewal: 600s
+  whitelist: { "POST:/application/client/v1/bind/*": true,"GET:/application/client/v1/app": true,"POST:/application/client/v1/auth": true,"POST:/application/client/v1/token/refresh": true,"POST:/application/client/v1/login/*": true,"POST:/application/client/v1/logout": true,"POST:/application/client/v1/register/*": true,"POST:/application/client/v1/auth/captcha": true,"*:/application/api/*": true }
+business:
+  defaultPasswordExpire: 10s
+  defaultNickName: 用户-

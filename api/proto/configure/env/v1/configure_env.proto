@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package wilson.api.configure.env.v1;
+
+option go_package = "configure/env/v1;v1";
+
+import "validate/validate.proto";
+
+message GetEnvRequest {
+  optional uint32 id = 1[(validate.rules).uint32 = {gt: 0}];
+  optional string keyword = 2[(validate.rules).string = {min_len: 1}];
+}
+
+message GetEnvReply {
+  uint32 id = 1;
+  string keyword = 2;
+  string name = 3;
+  optional bool status = 4;
+  optional string description = 5;
+  uint32 createdAt = 6;
+  uint32 updatedAt = 7;
+}
+
+message ListEnvRequest {
+  optional string keyword = 1;
+  optional string name = 2;
+  optional bool status = 3;
+}
+
+message ListEnvReply {
+  message Env {
+    uint32 id = 1;
+    string keyword = 2;
+    string name = 3;
+    optional bool status = 4;
+    optional string description = 5;
+    uint32 createdAt = 6;
+    uint32 updatedAt = 7;
+  }
+
+  uint32 total = 1;
+  repeated Env list = 2;
+}
+
+message CreateEnvRequest {
+  string keyword = 1[(validate.rules).string = {min_len: 1}];
+  string name = 2[(validate.rules).string = {min_len: 1}];
+  optional bool status = 3;
+  optional string description = 4;
+}
+
+message CreateEnvReply {
+  uint32 id = 1;
+}
+
+message UpdateEnvRequest {
+  uint32 id = 1[(validate.rules).uint32 = {gt: 0}];
+  string keyword = 2;
+  string name = 3;
+  optional bool status = 4;
+  optional string description = 5;
+}
+
+message UpdateEnvReply {
+}
+
+message DeleteEnvRequest {
+  uint32 id = 1[(validate.rules).uint32 = {gte:0}];
+}
+
+message DeleteEnvReply {
+}
+
+message GetEnvTokenRequest {
+  uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];
+}
+
+message GetEnvTokenReply {
+  string token = 1;
+}
+
+message ResetEnvTokenRequest {
+  uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];
+}
+
+message ResetEnvTokenReply{
+  string token = 1;
+}
+
+
+

@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package wilson.api.configure.template.v1;
+
+option go_package = "configure/template/v1;v1";
+
+import "validate/validate.proto";
+
+
+message ListTemplateRequest{
+  uint32 page = 1[(validate.rules).uint32 = {gt: 0}];
+  uint32 pageSize = 2[(validate.rules).uint32 = {gt: 0,lte:50}];
+  uint32 serverId = 3[(validate.rules).uint32 = {gt: 0}];
+}
+
+message ListTemplateReply {
+  message Template{
+    uint32 id = 1;
+    uint32 serverId = 2;
+    string description = 3;
+    string version = 4;
+    string format = 5;
+    bool isUse = 6;
+    string compare = 7;
+    uint32 createdAt = 8;
+  }
+  uint32 total = 1;
+  repeated Template list = 2;
+}
+
+// 查询指定模板
+message CurrentTemplateRequest{
+  uint32 serverId = 1[(validate.rules).uint32 = {gt: 0}];
+}
+
+message CurrentTemplateReply{
+  uint32 id = 1;
+  uint32 serverId = 2;
+  string description = 3;
+  string version = 4;
+  string format = 5;
+  bool isUse = 6;
+  string compare = 7;
+  string content = 8;
+  uint32 createdAt = 9;
+}
+
+// 查询指定模板
+message GetTemplateRequest{
+  uint32 id = 1[(validate.rules).uint32 = {gt: 0}];
+}
+
+message GetTemplateReply{
+  uint32 id = 1;
+  uint32 serverId = 2;
+  string description = 3;
+  string version = 4;
+  string format = 5;
+  bool isUse = 6;
+  string compare = 7;
+  string content = 8;
+  uint32 createdAt = 9;
+}
+
+// 新增模板
+message CreateTemplateRequest {
+  uint32 serverId = 1[(validate.rules).uint32 = {gt: 0}];
+  string content = 2[(validate.rules).string = {min_len: 3}];
+  string description = 3[(validate.rules).string = {min_len: 1, max_len: 64}];
+  string format = 4 [(validate.rules).string = {min_len: 1, max_len: 64, in: ["json", "yaml"]}];
+}
+
+message CreateTemplateReply{
+  uint32 id = 1;
+}
+
+// 切换模板
+message SwitchTemplateRequest {
+  uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];
+  uint32 serverId = 2[(validate.rules).uint32 = {gt: 0}];
+}
+
+message SwitchTemplateReply{}
+
+// 预览配置
+message PreviewTemplateRequest {
+  uint32 envId = 1[(validate.rules).uint32 = {gt: 0}];
+  uint32 serverId = 2[(validate.rules).uint32 = {gt: 0}];
+  string format = 3[(validate.rules).string = {min_len: 1, in: ["json", "yaml"]}];
+  string content = 4[(validate.rules).string = {min_len: 7}];
+}
+
+message PreviewTemplateReply {
+  string content = 1;
+}
+
+// 解析配置
+message ParseTemplateRequest {
+  uint32 serverId = 1[(validate.rules).uint32 = {gt: 0}];
+  uint32 envId = 2[(validate.rules).uint32 = {gt: 0}];
+}
+
+message ParseTemplateReply {
+  string content = 1;
+  string format = 2;
+}
+
+message CompareTemplateRequest {
+  uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];
+  string format = 2[(validate.rules).string = {min_len: 1, in: ["json", "yaml"]}];
+  string content = 3[(validate.rules).string = {min_len: 1}];
+}
+
+message CompareTemplateReply {
+  repeated CompareTemplateInfo list = 1;
+}
+
+message CompareTemplateInfo {
+  string type = 1;
+  string key = 2;
+  string old = 3;
+  string cur = 4;
+}

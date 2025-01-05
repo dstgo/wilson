@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package wilson.api.configure.env.v1;
+
+option go_package = "configure/env/v1;v1";
+
+import "configure/env/v1/configure_env.proto";
+import "google/api/annotations.proto";
+
+service Env{
+
+  // ListEnv 获取环境信息列表
+  rpc ListEnv (ListEnvRequest) returns (ListEnvReply) {
+    option (google.api.http) = {
+      get: "/configure/api/v1/envs",
+    };
+  }
+
+  // CreateEnv 创建环境信息
+  rpc CreateEnv (CreateEnvRequest) returns (CreateEnvReply) {
+    option (google.api.http) = {
+      post: "/configure/api/v1/env",
+      body: "*"
+    };
+  }
+
+  // UpdateEnv 更新环境信息
+  rpc UpdateEnv (UpdateEnvRequest) returns (UpdateEnvReply) {
+    option (google.api.http) = {
+      put: "/configure/api/v1/env",
+      body: "*"
+    };
+  }
+
+  // DeleteEnv 删除环境信息
+  rpc DeleteEnv (DeleteEnvRequest) returns (DeleteEnvReply) {
+    option (google.api.http) = {
+      delete: "/configure/api/v1/env",
+    };
+  }
+
+  // GetEnvToken 获取环境token
+  rpc GetEnvToken (GetEnvTokenRequest) returns (GetEnvTokenReply) {
+    option (google.api.http) = {
+      get: "/configure/api/v1/env/token"
+    };
+  }
+
+
+  // ResetEnvToken 重置环境token
+  rpc ResetEnvToken (ResetEnvTokenRequest) returns (ResetEnvTokenReply) {
+    option (google.api.http) = {
+      put: "/configure/api/v1/env/token",
+      body:"*"
+    };
+  }
+
+}

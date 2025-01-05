@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package wilson.api.manager.resource.v1;
+
+option go_package = "manager/resource/v1;v1";
+
+import "google/api/annotations.proto";
+import "manager/resource/v1/manager_resource.proto";
+
+
+service Resource {
+  // GetCurrentResourceScopes 获取指定用户的资源列表
+  rpc GetResourceScopes(GetResourceScopesRequest) returns(GetResourceScopesReply){}
+
+  // GetResource 获取资源权限
+  rpc GetResource(GetResourceRequest) returns(GetResourceReply){
+    option (google.api.http) = {
+      get: "/manager/api/v1/resource",
+    };
+  }
+
+  // UpdateResource 更新资源权限
+  rpc UpdateResource(UpdateResourceRequest) returns(UpdateResourceReply){
+    option (google.api.http) = {
+      put: "/manager/api/v1/resource/{keyword}",
+      body: "*"
+    };
+  }
+}

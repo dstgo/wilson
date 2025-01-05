@@ -1,0 +1,18 @@
+syntax = "proto3";
+package wilson.api.manager.system.v1;
+
+option go_package = "manager/system/v1;v1";
+
+import "manager/system/v1/manager_system.proto";
+import "google/api/annotations.proto";
+
+service System{
+
+  // GetSystemSetting 获取系统设置
+  rpc GetSystemSetting (GetSystemSettingRequest) returns (GetSystemSettingReply) {
+    option (google.api.http) = {
+      get: "/manager/api/v1/system/setting",
+    };
+  }
+
+}

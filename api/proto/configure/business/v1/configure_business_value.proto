@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package wilson.api.configure.business.v1;
+
+option go_package = "configure/business/v1;v1";
+
+import "validate/validate.proto";
+
+message ListBusinessValueRequest {
+  uint32 businessId = 3[(validate.rules).uint32 = {gt: 0}];
+}
+
+message ListBusinessValueReply {
+  message BusinessValue {
+    uint32 id = 1;
+    uint32 envId = 2;
+    uint32 businessId = 3;
+    string value = 4;
+    uint32 createdAt = 5;
+    uint32 updatedAt = 6;
+  }
+
+  uint32 total = 1;
+  repeated BusinessValue list = 2;
+}
+
+message UpdateBusinessValueRequest {
+  message Value{
+    uint32 envId = 2[(validate.rules).uint32 = {gt: 0}];
+    string value = 4[(validate.rules).string = {min_len: 1}];
+  }
+
+  repeated Value list = 1[(validate.rules).repeated = {min_items: 1}];
+  uint32 businessId = 2[(validate.rules).uint32 = {gt: 0}];
+}
+
+message UpdateBusinessValueReply {
+}
+

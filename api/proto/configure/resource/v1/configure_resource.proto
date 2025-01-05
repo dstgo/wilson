@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package wilson.api.configure.resource.v1;
+
+option go_package = "configure/resource/v1;v1";
+
+import "validate/validate.proto";
+
+message GetResourceRequest {
+  oneof params{
+    uint32 id = 1[(validate.rules).uint32 = {gt: 0}];
+    string keyword = 2[(validate.rules).string = {min_len: 1}];
+  }
+}
+
+message GetResourceReply {
+  message Server {
+    uint32 id = 1;
+    string name = 2;
+  }
+  uint32 id = 1;
+  string keyword = 2;
+  string fields = 3;
+  string tag = 4;
+  optional bool private = 5;
+  optional string description = 6;
+  uint32 createdAt = 7;
+  uint32 updatedAt = 8;
+  repeated Server servers = 9;
+}
+
+message ListResourceRequest {
+  uint32 page = 1[(validate.rules).uint32 = {gt: 0}];
+  uint32 pageSize = 2[(validate.rules).uint32 = {gt: 0,lte:50}];
+  optional string order = 3[(validate.rules).string = {in: ["asc", "desc"]}];
+  optional string orderBy = 4[(validate.rules).string = {in: ["id"]}];
+  optional string keyword = 5;
+  optional string tag = 6;
+  optional bool private = 7;
+  optional uint32 serverId = 8;
+}
+
+message ListResourceReply {
+  message Resource {
+    uint32 id = 1;
+    string keyword = 2;
+    string fields = 3;
+    string tag = 4;
+    optional bool private = 5;
+    optional string description = 6;
+    uint32 createdAt = 7;
+    uint32 updatedAt = 8;
+  }
+
+  uint32 total = 1;
+  repeated Resource list = 2;
+}
+
+message CreateResourceRequest {
+  string keyword = 1[(validate.rules).string = {min_len: 1}];
+  string fields = 2[(validate.rules).string = {min_len: 1}];
+  string tag = 3[(validate.rules).string = {min_len: 1}];
+  optional bool private = 4;
+  repeated uint32 serverIds = 5;
+  optional string description = 6;
+}
+
+message CreateResourceReply {
+  uint32 id = 1;
+}
+
+message UpdateResourceRequest {
+  uint32 id = 1[(validate.rules).uint32 = {gt: 0}];
+  string keyword = 2[(validate.rules).string = {min_len: 1}];
+  string fields = 3[(validate.rules).string = {min_len: 1}];
+  string tag = 4[(validate.rules).string = {min_len: 1}];
+  optional bool private = 5;
+  repeated uint32 serverIds = 6;
+  optional string description = 7;
+}
+
+message UpdateResourceReply {
+}
+
+message DeleteResourceRequest {
+  uint32 id = 1[(validate.rules).uint32 = {gte: 1}];
+}
+
+message DeleteResourceReply {
+}
+

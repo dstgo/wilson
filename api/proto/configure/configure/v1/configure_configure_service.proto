@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package wilson.api.configure.configure.v1;
+
+option go_package = "configure/configure/v1;v1";
+
+import "configure/configure/v1/configure_configure.proto";
+import "google/api/annotations.proto";
+
+
+service Configure {
+  rpc GetConfigure (GetConfigureRequest) returns (GetConfigureReply) {
+    option (google.api.http) = {
+      get: "/configure/api/v1/configure"
+    };
+  }
+
+  rpc UpdateConfigure (UpdateConfigureRequest) returns (UpdateConfigureReply) {
+    option (google.api.http) = {
+      put: "/configure/api/v1/configure",
+      body:"*"
+    };
+  }
+
+  rpc CompareConfigure (CompareConfigureRequest) returns (CompareConfigureReply) {
+    option (google.api.http) = {
+      post: "/configure/api/v1/configure/compare",
+      body:"*",
+    };
+  }
+
+  rpc WatchConfigure (WatchConfigureRequest) returns (stream WatchConfigureReply);
+
+}
