@@ -11,10 +11,10 @@ import (
 
 	"github.com/dstgo/wilson/framework/kratosx/library/md"
 	"github.com/dstgo/wilson/framework/pkg/crypto"
-	"github.com/dstgo/wilson/framework/pkg/ipaddr"
 	"github.com/dstgo/wilson/framework/pkg/slicex"
 	"github.com/dstgo/wilson/framework/pkg/ua"
 	valx2 "github.com/dstgo/wilson/framework/pkg/valx"
+	"github.com/dstgo/wilson/framework/pkg/whois"
 
 	"github.com/forgoer/openssl"
 	kerrors "github.com/go-kratos/kratos/v2/errors"
@@ -491,7 +491,6 @@ func (u *Use) UserLogin(ctx kratosx.Context, in *types.UserLoginRequest) (token 
 
 		var (
 			ip   = ctx.ClientIP()
-			ac   = ipaddr.New(ip)
 			ug   = ua.Parse(header.RequestHeader().Get("User-Agent"))
 			code = 200
 			desc = "登陆成功"
@@ -512,7 +511,7 @@ func (u *Use) UserLogin(ctx kratosx.Context, in *types.UserLoginRequest) (token 
 			Username:    in.Username,
 			Type:        utype,
 			IP:          ctx.ClientIP(),
-			Address:     ac.GetAddress(),
+			Address:     whois.WhoIs(ip),
 			Browser:     ug.Name + " " + ug.Version,
 			Device:      ug.OS + " " + ug.OSVersion,
 			Code:        code,
