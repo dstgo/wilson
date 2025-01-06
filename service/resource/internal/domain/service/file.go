@@ -20,7 +20,7 @@ import (
 	"github.com/dstgo/wilson/framework/kratosx"
 	"github.com/dstgo/wilson/framework/kratosx/library/db/gormtranserror"
 	ktypes "github.com/dstgo/wilson/framework/kratosx/types"
-	"github.com/dstgo/wilson/framework/pkg/image"
+	"github.com/dstgo/wilson/framework/pkg/imagex"
 
 	"github.com/dstgo/wilson/api/gen/errors"
 	pb "github.com/dstgo/wilson/api/gen/resource/file/v1"
