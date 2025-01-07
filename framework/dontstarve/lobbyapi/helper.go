@@ -6,7 +6,7 @@ import (
 	"strings"
 	"text/template"
 
-	lua "github.com/yuin/gopher-lua"
+	"github.com/dstgo/wilson/framework/dontstarve/luax"
 )
 
 // parse url from template
@@ -49,42 +49,48 @@ func parsedDaysInfo(luaScript string, details *ServerDetails) error {
 		return errors.New("nil details")
 	}
 
-	L := lua.NewState()
-	defer L.Close()
-	if err := L.DoString(luaScript); err != nil {
+	vm := luax.NewVM()
+	defer vm.Close()
+	if err := vm.DoString(luaScript); err != nil {
 		return err
 	}
 
-	table := L.Get(-1).(*lua.LTable)
-	L.Pop(1)
-	details.Details.Day = int(table.RawGetString("day").(lua.LNumber))
-	details.Details.DayElapsedInSeason = int(table.RawGetString("dayselapsedinseason").(lua.LNumber))
-	details.Details.DaysLeftInSeason = int(table.RawGetString("daysleftinseason").(lua.LNumber))
+	table := luax.LValue(vm.Get(-1)).ToTable()
+
+	vm.Pop(1)
+
+	details.Details.Day = table.GetInt("key")
+	details.Details.DayElapsedInSeason = table.GetInt("dayselapsedinseason")
+	details.Details.DaysLeftInSeason = table.GetInt("daysleftinseason")
 
 	return nil
 }
 
 // parse players info from lua script
 func parsePlayersInfo(luaScript string) ([]Player, error) {
-	L := lua.NewState()
-	defer L.Close()
-	if err := L.DoString(luaScript); err != nil {
+	vm := luax.NewVM()
+	defer vm.Close()
+	if err := vm.DoString(luaScript); err != nil {
 		return nil, err
 	}
 
 	var players []Player
 
-	table := L.Get(-1).(*lua.LTable)
-	table.ForEach(func(idx lua.LValue, value lua.LValue) {
-		playerTable := value.(*lua.LTable)
+	playerArray := luax.LValueToArray(vm.Get(-1))
+	for _, value := range playerArray {
+		playerTable := luax.LValue(value).ToTable()
+		if playerTable.MapLen() == 0 {
+			continue
+		}
+
 		players = append(players, Player{
-			Name:    playerTable.RawGetString("name").String(),
-			Prefab:  playerTable.RawGetString("prefab").String(),
-			SteamId: playerTable.RawGetString("netid").String(),
-			Colour:  playerTable.RawGetString("colour").String(),
-			Level:   int(playerTable.RawGetString("eventlevel").(lua.LNumber)),
+			Name:    playerTable.GetString("name"),
+			Prefab:  playerTable.GetString("prefab"),
+			SteamId: playerTable.GetString("netid"),
+			Colour:  playerTable.GetString("colour"),
+			Level:   playerTable.GetInt("eventlevel"),
 		})
-	})
+	}
 
 	return players, nil
 }

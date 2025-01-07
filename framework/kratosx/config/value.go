@@ -14,7 +14,7 @@ type value struct {
 	kratosConfig.Value
 }
 
-func (v *value) Scan(dst any) error {
+func (v Value) Scan(dst any) error {
 	if _, ok := dst.(proto.Message); ok {
 		return v.Value.Scan(&dst)
 	}

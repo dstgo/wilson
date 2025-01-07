@@ -2,10 +2,11 @@ package dstparser
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestParseModInfoLua(t *testing.T) {

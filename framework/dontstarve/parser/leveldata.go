@@ -6,7 +6,6 @@ import (
 	"unsafe"
 
 	"github.com/mitchellh/mapstructure"
-	lua "github.com/yuin/gopher-lua"
 
 	"github.com/dstgo/wilson/framework/dontstarve/luax"
 )
@@ -51,7 +50,7 @@ type LevelDataOverrides struct {
 
 // ParseLevelDataOverrides parses the leveldataoverrides.lua, returns LevelDataOverrides information
 func ParseLevelDataOverrides(luaScript []byte) (LevelDataOverrides, error) {
-	l := lua.NewState()
+	l := luax.NewVM()
 	defer l.Close()
 	if err := l.DoString(unsafe.String(unsafe.SliceData(luaScript), len(luaScript))); err != nil {
 		return LevelDataOverrides{}, err
@@ -86,49 +85,37 @@ func ParseLevelDataOverrides(luaScript []byte) (LevelDataOverrides, error) {
 	levelDataOverrides.WorldGenName = overrideTableL.GetString("worldgen_name")
 
 	// world override options
-	if overrideTableL.GetTable("overrides") != nil {
-		overrideTableL.GetTable("overrides").T().ForEach(func(name lua.LValue, value lua.LValue) {
-			levelDataOverrides.Overrides = append(levelDataOverrides.Overrides, LevelOverrideItem{
-				Name:  name.String(),
-				Value: luax.JudgeOptionValue(value),
-			})
+	overrideTableL.GetTable("overrides").MapForEach(func(k string, v luax.Value) {
+		levelDataOverrides.Overrides = append(levelDataOverrides.Overrides, LevelOverrideItem{
+			Name:  k,
+			Value: optionValue(v),
 		})
-	}
+	})
 
 	// random_set_pieces
-	if overrideTableL.GetTable("random_set_pieces") != nil {
-		overrideTableL.GetTable("random_set_pieces").T().ForEach(func(index lua.LValue, value lua.LValue) {
-			levelDataOverrides.RandomSetPieces = append(levelDataOverrides.RandomSetPieces, value.String())
-		})
-	}
+	overrideTableL.GetTable("random_set_pieces").ArrayForEach(func(index int, value luax.Value) {
+		levelDataOverrides.RandomSetPieces = append(levelDataOverrides.RandomSetPieces, value.ToString())
+	})
 
 	// random_set_pieces
-	if overrideTableL.GetTable("required_prefabs") != nil {
-		overrideTableL.GetTable("required_prefabs").T().ForEach(func(index lua.LValue, value lua.LValue) {
-			levelDataOverrides.RequiredPrefabs = append(levelDataOverrides.RequiredPrefabs, value.String())
-		})
-	}
+	overrideTableL.GetTable("required_prefabs").ArrayForEach(func(index int, value luax.Value) {
+		levelDataOverrides.RequiredPrefabs = append(levelDataOverrides.RequiredPrefabs, value.ToString())
+	})
 
 	// random_set_pieces
-	if overrideTableL.GetTable("required_setpieces") != nil {
-		overrideTableL.GetTable("required_setpieces").T().ForEach(func(index lua.LValue, value lua.LValue) {
-			levelDataOverrides.RequiredSetPieces = append(levelDataOverrides.RequiredSetPieces, value.String())
-		})
-	}
+	overrideTableL.GetTable("required_setpieces").ArrayForEach(func(index int, value luax.Value) {
+		levelDataOverrides.RequiredSetPieces = append(levelDataOverrides.RequiredSetPieces, value.ToString())
+	})
 
 	// substitutes
-	if overrideTableL.GetTable("substitutes") != nil {
-		overrideTableL.GetTable("substitutes").T().ForEach(func(index lua.LValue, value lua.LValue) {
-			levelDataOverrides.Substitutes = append(levelDataOverrides.Substitutes, value.String())
-		})
-	}
+	overrideTableL.GetTable("substitutes").ArrayForEach(func(index int, value luax.Value) {
+		levelDataOverrides.Substitutes = append(levelDataOverrides.Substitutes, value.ToString())
+	})
 
 	// background_node_range
-	if overrideTableL.GetTable("background_node_range") != nil {
-		overrideTableL.GetTable("background_node_range").T().ForEach(func(index lua.LValue, value lua.LValue) {
-			levelDataOverrides.BackGroundNodeRange = append(levelDataOverrides.BackGroundNodeRange, float64(lua.LVAsNumber(value)))
-		})
-	}
+	overrideTableL.GetTable("background_node_range").ArrayForEach(func(index int, value luax.Value) {
+		levelDataOverrides.BackGroundNodeRange = append(levelDataOverrides.BackGroundNodeRange, value.ToFloat64())
+	})
 
 	return levelDataOverrides, nil
 }

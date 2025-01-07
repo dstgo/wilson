@@ -2,7 +2,6 @@ package dstparser
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"strings"
 	"text/template"
@@ -86,7 +85,7 @@ func ParseModInfo(luaScript []byte) (ModInfo, error) {
 
 // ParseModInfoWithEnv parse mod info from lua script with mod environment variables.
 func ParseModInfoWithEnv(luaScript []byte, folderName, locale string) (ModInfo, error) {
-	l := lua.NewState()
+	l := luax.NewVM()
 	defer l.Close()
 
 	// prepare mod pre environment
@@ -105,17 +104,13 @@ func ParseModInfoWithEnv(luaScript []byte, folderName, locale string) (ModInfo, 
 	}
 
 	// parse simple info
-	modInfo, err := parseModSimpleInfo(l.G.Global)
+	modInfo, err := parseModSimpleInfo(luax.LTable(l.G.Global))
 	if err != nil {
 		return ModInfo{}, err
 	}
 
 	// parse options
-	modOptions, err := parseModOptions(luax.LTable(l.G.Global).GetTable("configuration_options").T())
-	if err != nil {
-		return ModInfo{}, err
-	}
-	modInfo.ConfigurationOptions = modOptions
+	modInfo.ConfigurationOptions = parseModOptions(luax.LTable(l.G.Global).GetTable("configuration_options"))
 
 	return modInfo, nil
 }
@@ -143,99 +138,82 @@ func ChooseTranslationTable(l *lua.LState, locale string) *lua.LFunction {
 }
 
 // parse simple info
-func parseModSimpleInfo(table *lua.LTable) (ModInfo, error) {
-	var modinfo ModInfo
-	if table == lua.LNil {
-		return modinfo, errors.New("nil lua global")
-	}
-	g := luax.LTable(table)
+func parseModSimpleInfo(modTable luax.Table) (ModInfo, error) {
+	var modInfo ModInfo
 
 	// basic info
-	modinfo.Id = g.GetString("id")
-	modinfo.Name = g.GetString("name")
-	modinfo.Description = g.GetString("description")
-	modinfo.Author = g.GetString("author")
-	modinfo.Version = g.GetString("version")
+	modInfo.Id = modTable.GetString("id")
+	modInfo.Name = modTable.GetString("name")
+	modInfo.Description = modTable.GetString("description")
+	modInfo.Author = modTable.GetString("author")
+	modInfo.Version = modTable.GetString("version")
 
-	// ds
-	modinfo.ApiVersion = int(g.GetInt64("api_version"))
-	modinfo.DontStarveCompatible = g.GetBool("dont_starve_compatible")
-	modinfo.ReignOfGiantsCompatible = g.GetBool("reign_of_giants_compatible")
-	modinfo.ShipWreckedCompatible = g.GetBool("shipwrecked_compatible")
-	modinfo.HamletCompatible = g.GetBool("hamlet_compatible")
+	// dont starve info
+	modInfo.ApiVersion = int(modTable.GetInt64("api_version"))
+	modInfo.DontStarveCompatible = modTable.GetBool("dont_starve_compatible")
+	modInfo.ReignOfGiantsCompatible = modTable.GetBool("reign_of_giants_compatible")
+	modInfo.ShipWreckedCompatible = modTable.GetBool("shipwrecked_compatible")
+	modInfo.HamletCompatible = modTable.GetBool("hamlet_compatible")
 
-	// dst
-	modinfo.ApiVersionDst = int(g.GetInt64("api_version_dst"))
-	modinfo.DstCompatible = g.GetBool("dst_compatible")
-	modinfo.AllClientRequired = g.GetBool("all_client_required")
-	modinfo.ClientOnly = g.GetBool("client_only_mod")
-	modinfo.ServerOnly = g.GetBool("server_only_mod")
-	modinfo.ForgeCompatible = g.GetBool("forge_compatible")
+	// dont starve together info
+	modInfo.ApiVersionDst = int(modTable.GetInt64("api_version_dst"))
+	modInfo.DstCompatible = modTable.GetBool("dst_compatible")
+	modInfo.AllClientRequired = modTable.GetBool("all_client_required")
+	modInfo.ClientOnly = modTable.GetBool("client_only_mod")
+	modInfo.ServerOnly = modTable.GetBool("server_only_mod")
+	modInfo.ForgeCompatible = modTable.GetBool("forge_compatible")
 
 	// meta info
-	if g.GetTable("server_filter_tags") != nil {
-		g.GetTable("server_filter_tags").T().ForEach(func(key lua.LValue, value lua.LValue) {
-			modinfo.FilterTags = append(modinfo.FilterTags, value.String())
-		})
-	}
-	modinfo.Priority = g.GetFloat64("priority")
-	modinfo.Icon = g.GetString("icon")
-	modinfo.IconAtlas = g.GetString("icon_atlas")
+	modTable.GetTable("server_filter_tags").ArrayForEach(func(index int, value luax.Value) {
+		modInfo.FilterTags = append(modInfo.FilterTags, value.ToString())
+	})
+	modInfo.Priority = modTable.GetFloat64("priority")
+	modInfo.Icon = modTable.GetString("icon")
+	modInfo.IconAtlas = modTable.GetString("icon_atlas")
 
-	return modinfo, nil
+	return modInfo, nil
 }
 
 // parse configuration_options from lua script
-func parseModOptions(options *lua.LTable) ([]ModOption, error) {
-	if options == nil || options == lua.LNil {
-		return nil, errors.New("nil configuration_options table")
-	}
-
+func parseModOptions(options luax.Table) []ModOption {
 	var modOptions []ModOption
 
 	// iterate configuration_options
-	options.ForEach(func(index lua.LValue, option lua.LValue) {
-		if option.Type() != lua.LTTable {
+	options.ArrayForEach(func(index int, value luax.Value) {
+		if value.Type() != lua.LTTable {
 			return
 		}
 		var modOption ModOption
 
-		optTable := option.(*lua.LTable)
-		loptTable := luax.LTable(optTable)
+		optTable := value.ToTable()
 
-		if t := loptTable.GetTable("options").T(); t != nil || t != lua.LNil {
-			modOption.Options = parseModOptionItems(t)
-		}
-		modOption.Name = loptTable.GetString("name")
-		modOption.Label = loptTable.GetString("label")
-		modOption.Hover = loptTable.GetString("hover")
-		modOption.Client = loptTable.GetBool("client")
+		// option info
+		modOption.Name = optTable.GetString("name")
+		modOption.Label = optTable.GetString("label")
+		modOption.Hover = optTable.GetString("hover")
+		modOption.Client = optTable.GetBool("client")
 
 		// default value
-		defaultValue := luax.LTable(optTable).Get("default")
-		modOption.Default = luax.JudgeOptionValue(defaultValue)
+		modOption.Default = optionValue(optTable.Get("default"))
 
-		if loptTable.GetTable("tags") != nil {
-			loptTable.GetTable("tags").T().ForEach(func(key lua.LValue, value lua.LValue) {
-				modOption.Tags = append(modOption.Tags, value.String())
-			})
-		}
+		// option items
+		modOption.Options = parseModOptionItems(optTable.GetTable("options"))
+
+		optTable.GetTable("tags").ArrayForEach(func(index int, value luax.Value) {
+			modOption.Tags = append(modOption.Tags, value.ToString())
+		})
 
 		modOptions = append(modOptions, modOption)
 	})
 
-	return modOptions, nil
+	return modOptions
 }
 
 // parse mod option items
-func parseModOptionItems(optTable *lua.LTable) []ModOptionItem {
-	if optTable == nil || optTable == lua.LNil {
-		return nil
-	}
-
+func parseModOptionItems(optTable luax.Table) []ModOptionItem {
 	var items []ModOptionItem
 	// iterate items
-	optTable.ForEach(func(index lua.LValue, item lua.LValue) {
+	optTable.ArrayForEach(func(index int, item luax.Value) {
 		if item.Type() != lua.LTTable {
 			return
 		}
@@ -243,11 +221,11 @@ func parseModOptionItems(optTable *lua.LTable) []ModOptionItem {
 		// build item
 		var modItem ModOptionItem
 
-		itemTable := luax.LTable(item.(*lua.LTable))
+		itemTable := item.ToTable()
 		modItem.Description = itemTable.GetString("description")
 
 		dataValue := itemTable.Get("data")
-		modItem.Data = luax.JudgeOptionValue(dataValue)
+		modItem.Data = optionValue(dataValue)
 
 		// if it has no description, use the string of data
 		if len(modItem.Description) == 0 {
@@ -262,7 +240,7 @@ func parseModOptionItems(optTable *lua.LTable) []ModOptionItem {
 
 // ParseModOverrides returns the mod override options from modoverrides.lua
 func ParseModOverrides(luaScript []byte) ([]ModOverRideOption, error) {
-	l := lua.NewState()
+	l := luax.NewVM()
 	defer l.Close()
 
 	if err := l.DoString(unsafe.String(unsafe.SliceData(luaScript), len(luaScript))); err != nil {
@@ -288,14 +266,12 @@ func ParseModOverrides(luaScript []byte) ([]ModOverRideOption, error) {
 
 		// items
 		var items []ModOverRideOptionItem
-		if table.GetTable("configuration_options") != nil {
-			table.GetTable("configuration_options").T().ForEach(func(name lua.LValue, data lua.LValue) {
-				var item ModOverRideOptionItem
-				item.Name = name.String()
-				item.Value = luax.JudgeOptionValue(data)
-				items = append(items, item)
-			})
-		}
+		table.GetTable("configuration_options").MapForEach(func(name string, data luax.Value) {
+			var item ModOverRideOptionItem
+			item.Name = name
+			item.Value = optionValue(data)
+			items = append(items, item)
+		})
 
 		modOverride.Items = items
 		options = append(options, modOverride)
@@ -338,4 +314,17 @@ func ToModOverrideLua(options []ModOverRideOption) ([]byte, error) {
 		return nil, err
 	}
 	return buffer.Bytes(), nil
+}
+
+func optionValue(value luax.Value) any {
+	switch value.Type() {
+	default:
+		return "unknown type"
+	case lua.LTString:
+		return value.ToString()
+	case lua.LTNumber:
+		return value.ToFloat64()
+	case lua.LTBool:
+		return value.ToBool()
+	}
 }
