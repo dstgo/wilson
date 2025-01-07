@@ -3,8 +3,8 @@ install:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-	go install ./cmd/protoc-gen-go-errorsx
-	go install ./cmd/protoc-gen-go-httpx
+	go install ./framework/kratosx/cmd/protoc-gen-go-errorsx
+	go install ./framework/kratosx/cmd/protoc-gen-go-httpx
 	go install github.com/envoyproxy/protoc-gen-validate@latest
 
 .PHONY: lint
