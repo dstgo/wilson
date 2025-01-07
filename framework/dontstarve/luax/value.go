@@ -271,13 +271,18 @@ func LValueToFloat64(v lua.LValue) float64 {
 	return LValue(v).ToFloat64()
 }
 
+// LValueToTable retrieves the map of value from a lua.LValue.
+func LValueToTable(v lua.LValue) Table {
+	return LValue(v).ToTable()
+}
+
 // LValueToArray retrieves the array of value from a lua.LValue
 func LValueToArray(v lua.LValue) []Value {
 	return LValue(v).ToTable().ToArray()
 }
 
-// LValueToTable retrieves the map of value from a lua.LValue.
-func LValueToTable(v lua.LValue) map[string]Value {
+// LValueToMap retrieves the map of value from a lua.LValue.
+func LValueToMap(v lua.LValue) map[string]Value {
 	return LValue(v).ToTable().ToMap()
 }
 

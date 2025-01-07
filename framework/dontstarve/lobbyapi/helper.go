@@ -122,12 +122,13 @@ func parseModsInfo(mods []any) []Mod {
 	var res []Mod
 
 	for i := 0; i < len(mods); i++ {
-		if strings.Contains(mods[i].(string), "workshop-") {
-			modId := strings.Split(mods[i].(string), "-")[1]
-			name := mods[i+1].(string)
-			v1 := mods[i+2].(string)
-			v2 := mods[i+3].(string)
-			enable := mods[i+4].(bool)
+		s, ok := mods[i].(string)
+		if strings.Contains(s, "workshop-") && ok {
+			modId := strings.Split(s, "-")[1]
+			name, _ := mods[i+1].(string)
+			v1, _ := mods[i+2].(string)
+			v2, _ := mods[i+3].(string)
+			enable, _ := mods[i+4].(bool)
 
 			i = i + 4
 

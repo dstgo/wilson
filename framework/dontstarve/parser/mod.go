@@ -256,7 +256,7 @@ func ParseModOverrides(luaScript []byte) ([]ModOverRideOption, error) {
 		}
 
 		var modOverride ModOverRideOption
-		table := luax.LTable(value.(*lua.LTable))
+		table := luax.LValueToTable(value)
 
 		names := strings.Split(key.String(), "-")
 		if len(names) > 1 {

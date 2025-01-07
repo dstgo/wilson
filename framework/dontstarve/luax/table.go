@@ -203,7 +203,7 @@ func (t Table) ToMap() map[string]Value {
 func (t Table) ToDict() map[Value]Value {
 	m := make(map[Value]Value)
 	t.LTable().ForEach(func(index lua.LValue, value lua.LValue) {
-		if index.Type() != lua.LTNumber && index.Type() != lua.LTNumber {
+		if index.Type() != lua.LTNumber && index.Type() != lua.LTString {
 			m[LValue(index)] = LValue(value)
 		}
 	})
