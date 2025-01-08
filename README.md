@@ -2,7 +2,7 @@
 <img src="https://raw.githubusercontent.com/dstgo/docs/0ad76ead8e8f7f5f5def51176a20cc1952608dfd/docs/src/public/wilson.png" width="500" height="350" alt="wilson"/>
 </div>
 <div align=center>
-<img src="https://img.shields.io/badge/MIT-red" alt=""/>
+<img src="https://img.shields.io/badge/MIT%20LICENSE-red" alt="MIT LICENSE"/>
 <img src="https://img.shields.io/badge/golang-1.23-blue" alt=""/>
 <img src="https://img.shields.io/badge/vue-3-bright" alt=""/>
 <img src="https://img.shields.io/badge/kratos-2.7.2-orange" alt=""/>
