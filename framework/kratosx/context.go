@@ -74,15 +74,6 @@ type cloneCtx struct {
 	parent context.Context
 }
 
-// MustContext returns the Transport value stored in ctx, if any.
-func MustContext(c context.Context) Context {
-	app, _ := kratos.FromContext(c)
-	return &ctx{
-		Context: c,
-		AppInfo: app,
-	}
-}
-
 // Ctx 获取行下文ctx
 func (c *ctx) Ctx() context.Context {
 	return c.Context
@@ -168,7 +159,9 @@ func (c *ctx) Http() http.Request {
 	if !c.Config().IsInit() || c.Config().App().Http == nil {
 		return http.NewDefault(c.Logger())
 	}
-	return http.New(c.Config().App().Http, c.Logger())
+	cfg := c.Config().App().Http
+	cfg.Server = c.Name()
+	return http.New(cfg, c.Logger())
 }
 
 // Token 获取令牌验证器
@@ -209,10 +202,7 @@ func (c *ctx) GrpcConn(srvName string) (*grpc.ClientConn, error) {
 }
 
 func (c *ctx) Clone() Context {
-	return MustContext(&cloneCtx{
-		child:  context.Background(),
-		parent: c.Context,
-	})
+	return MustContext(context.WithoutCancel(c.Context))
 }
 
 // Env 获取配置环境

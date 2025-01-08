@@ -37,8 +37,9 @@ type jwt struct {
 
 var (
 	instance *jwt
-	tokenKey = "user.jwt.token"
 )
+
+type tokenKey struct{}
 
 const (
 	blackPrefix  = "token_black"
@@ -147,12 +148,12 @@ func (j *jwt) ParseMapClaims(ctx context.Context) (map[string]any, error) {
 }
 
 func (j *jwt) GetToken(ctx context.Context) string {
-	token, _ := ctx.Value(tokenKey).(string)
+	token, _ := ctx.Value(tokenKey{}).(string)
 	return token
 }
 
 func (j *jwt) SetToken(ctx context.Context, token string) context.Context {
-	return context.WithValue(ctx, tokenKey, token)
+	return context.WithValue(ctx, tokenKey{}, token)
 }
 
 func (j *jwt) Renewal(ctx context.Context) (string, error) {
@@ -174,10 +175,8 @@ func (j *jwt) Renewal(ctx context.Context) (string, error) {
 	}
 
 	// 判断token失效是否超过10s
-	var exp int64
-	if assertExp, ok := claims["exp"].(float64); ok {
-		exp = int64(assertExp)
-	}
+	expF, _ := claims["exp"].(float64)
+	exp := int64(expF)
 	now := time.Now().Unix()
 	if exp > now {
 		return "", errors.New("token is alive")

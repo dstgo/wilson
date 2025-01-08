@@ -52,9 +52,14 @@ func New(conf *config.Http, logger *log.Helper) Request {
 	client.SetRetryMaxWaitTime(conf.MaxRetryWaitTime)
 	client.SetRetryCount(conf.RetryCount)
 	client.SetTimeout(conf.Timeout)
+	req := client.R()
+	if conf.Server == "" {
+		conf.Server = "kratosx http client"
+	}
+	req.Header.Set("User-Agent", conf.Server)
 	return &request{
 		c:        conf,
-		request:  client.R(),
+		request:  req,
 		logger:   logger,
 		inputLog: true,
 	}
