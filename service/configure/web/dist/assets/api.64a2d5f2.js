@@ -1,0 +1,1 @@
+import{s as r}from"./index.dcee45e5.js";function n(e){return r.get("/configure/api/v1/servers",{params:e})}function i(e){return r.post("/configure/api/v1/server",e)}function s(e){return r.put("/configure/api/v1/server",e)}function o(e){return r.delete("/configure/api/v1/server",{params:e})}export{i as C,o as D,n as L,s as U};

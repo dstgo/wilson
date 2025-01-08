@@ -1,0 +1,1 @@
+import{u as t,_ as a}from"./index.dcee45e5.js";import{d as s,A as _,aC as n,aJ as r,aM as c,aN as p,u as d,bL as i}from"./arco.5cfe922d.js";const u=s({__name:"index",setup(f){const e=t();return(x,l)=>{const o=i;return _(),n(o,{class:"footer"},{default:r(()=>[c(p(d(e).copyright),1)]),_:1})}}});const b=a(u,[["__scopeId","data-v-bd69e033"]]);export{b as F};
