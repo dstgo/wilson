@@ -23,7 +23,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/dstgo/wilson/service/gateway/client"
-	config2 "github.com/dstgo/wilson/service/gateway/config"
+	"github.com/dstgo/wilson/service/gateway/config"
 	"github.com/dstgo/wilson/service/gateway/consts"
 	gtmiddleware "github.com/dstgo/wilson/service/gateway/middleware"
 	"github.com/dstgo/wilson/service/gateway/router"
@@ -179,7 +179,7 @@ func New(clientFactory client.Factory, middlewareFactory gtmiddleware.FactoryV2)
 	return p, nil
 }
 
-func (p *Proxy) buildMiddleware(ms []config2.Middleware, next http.RoundTripper) (http.RoundTripper, error) {
+func (p *Proxy) buildMiddleware(ms []config.Middleware, next http.RoundTripper) (http.RoundTripper, error) {
 	for i := len(ms) - 1; i >= 0; i-- {
 		m, err := p.middlewareFactory(&ms[i])
 		if err != nil {
@@ -194,7 +194,7 @@ func (p *Proxy) buildMiddleware(ms []config2.Middleware, next http.RoundTripper)
 	return next, nil
 }
 
-func splitRetryMetricsHandler(e *config2.Endpoint) (func(int), func(int, error)) {
+func splitRetryMetricsHandler(e *config.Endpoint) (func(int), func(int, error)) {
 	labels := gtmiddleware.NewMetricsLabels(e)
 	success := func(i int) {
 		if i <= 0 {
@@ -214,7 +214,7 @@ func splitRetryMetricsHandler(e *config2.Endpoint) (func(int), func(int, error))
 	return success, failed
 }
 
-func (p *Proxy) buildEndpoint(e *config2.Endpoint, ms []config2.Middleware) (_ http.Handler, _ io.Closer, retError error) {
+func (p *Proxy) buildEndpoint(e *config.Endpoint, ms []config.Middleware) (_ http.Handler, _ io.Closer, retError error) {
 	client, err := p.clientFactory(e)
 	if err != nil {
 		return nil, nil, err
@@ -434,7 +434,7 @@ func closeOnError(closer io.Closer, err *error) {
 }
 
 // Update updates service endpoint.
-func (p *Proxy) Update(c *config2.Config) (retError error) {
+func (p *Proxy) Update(c *config.Config) (retError error) {
 	router := mux.NewRouter(http.HandlerFunc(notFoundHandler), http.HandlerFunc(methodNotAllowedHandler))
 	for _, e := range c.Endpoints {
 		ep := e
