@@ -25,7 +25,7 @@ import (
 	"github.com/dstgo/wilson/service/gateway/client"
 	config2 "github.com/dstgo/wilson/service/gateway/config"
 	"github.com/dstgo/wilson/service/gateway/consts"
-	middleware2 "github.com/dstgo/wilson/service/gateway/middleware"
+	gtmiddleware "github.com/dstgo/wilson/service/gateway/middleware"
 	"github.com/dstgo/wilson/service/gateway/router"
 	"github.com/dstgo/wilson/service/gateway/router/mux"
 )
@@ -89,7 +89,7 @@ func setXFFHeader(req *http.Request) {
 	}
 }
 
-func writeError(w http.ResponseWriter, r *http.Request, err error, labels middleware2.MetricsLabels) {
+func writeError(w http.ResponseWriter, r *http.Request, err error, labels gtmiddleware.MetricsLabels) {
 	var statusCode int
 	switch {
 	case errors.Is(err, context.Canceled),
@@ -163,11 +163,11 @@ type Proxy struct {
 	router            atomic.Value
 	clientFactory     client.Factory
 	Interceptors      interceptors
-	middlewareFactory middleware2.FactoryV2
+	middlewareFactory gtmiddleware.FactoryV2
 }
 
 // New is new a gateway proxy.
-func New(clientFactory client.Factory, middlewareFactory middleware2.FactoryV2) (*Proxy, error) {
+func New(clientFactory client.Factory, middlewareFactory gtmiddleware.FactoryV2) (*Proxy, error) {
 	p := &Proxy{
 		clientFactory:     clientFactory,
 		middlewareFactory: middlewareFactory,
@@ -183,7 +183,7 @@ func (p *Proxy) buildMiddleware(ms []config2.Middleware, next http.RoundTripper)
 	for i := len(ms) - 1; i >= 0; i-- {
 		m, err := p.middlewareFactory(&ms[i])
 		if err != nil {
-			if errors.Is(err, middleware2.ErrNotFound) {
+			if errors.Is(err, gtmiddleware.ErrNotFound) {
 				log.Errorf("Skip does not exist middleware: %s", ms[i].Name)
 				continue
 			}
@@ -195,7 +195,7 @@ func (p *Proxy) buildMiddleware(ms []config2.Middleware, next http.RoundTripper)
 }
 
 func splitRetryMetricsHandler(e *config2.Endpoint) (func(int), func(int, error)) {
-	labels := middleware2.NewMetricsLabels(e)
+	labels := gtmiddleware.NewMetricsLabels(e)
 	success := func(i int) {
 		if i <= 0 {
 			return
@@ -235,7 +235,7 @@ func (p *Proxy) buildEndpoint(e *config2.Endpoint, ms []config2.Middleware) (_ h
 	if err != nil {
 		return nil, nil, err
 	}
-	labels := middleware2.NewMetricsLabels(e)
+	labels := gtmiddleware.NewMetricsLabels(e)
 	markSuccessStat, markFailedStat := splitRetryMetricsHandler(e)
 	retryBreaker := sre.NewBreaker(sre.WithSuccess(0.8))
 	markSuccess := func(i int) {
@@ -254,8 +254,8 @@ func (p *Proxy) buildEndpoint(e *config2.Endpoint, ms []config2.Middleware) (_ h
 		startTime := time.Now()
 		setXFFHeader(req)
 
-		reqOpts := middleware2.NewRequestOptions(e)
-		ctx := middleware2.NewRequestContext(req.Context(), reqOpts)
+		reqOpts := gtmiddleware.NewRequestOptions(e)
+		ctx := gtmiddleware.NewRequestContext(req.Context(), reqOpts)
 		ctx, cancel := context.WithTimeout(ctx, retryStrategy.timeout)
 		defer cancel()
 		defer func() {
@@ -402,23 +402,23 @@ func (p *Proxy) buildEndpoint(e *config2.Endpoint, ms []config2.Middleware) (_ h
 	})), closer, nil
 }
 
-func receivedBytesAdd(labels middleware2.MetricsLabels, received int64) {
+func receivedBytesAdd(labels gtmiddleware.MetricsLabels, received int64) {
 	_metricReceivedBytes.WithLabelValues(labels.Protocol(), labels.Method(), labels.Path(), labels.Service(), labels.BasePath()).Add(float64(received))
 }
 
-func sentBytesAdd(labels middleware2.MetricsLabels, sent int64) {
+func sentBytesAdd(labels gtmiddleware.MetricsLabels, sent int64) {
 	_metricSentBytes.WithLabelValues(labels.Protocol(), labels.Method(), labels.Path(), labels.Service(), labels.BasePath()).Add(float64(sent))
 }
 
-func requestsTotalIncr(labels middleware2.MetricsLabels, statusCode int) {
+func requestsTotalIncr(labels gtmiddleware.MetricsLabels, statusCode int) {
 	_metricRequestsTotal.WithLabelValues(labels.Protocol(), labels.Method(), labels.Path(), strconv.Itoa(statusCode), labels.Service(), labels.BasePath()).Inc()
 }
 
-func requestsDurationObserve(labels middleware2.MetricsLabels, seconds float64) {
+func requestsDurationObserve(labels gtmiddleware.MetricsLabels, seconds float64) {
 	_metricRequestsDuration.WithLabelValues(labels.Protocol(), labels.Method(), labels.Path(), labels.Service(), labels.BasePath()).Observe(seconds)
 }
 
-func retryStateIncr(labels middleware2.MetricsLabels, success bool) {
+func retryStateIncr(labels gtmiddleware.MetricsLabels, success bool) {
 	if success {
 		_metricRetryState.WithLabelValues(labels.Protocol(), labels.Method(), labels.Path(), labels.Service(), labels.BasePath(), "true").Inc()
 		return

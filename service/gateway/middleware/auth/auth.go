@@ -10,13 +10,13 @@ import (
 
 	"github.com/dstgo/wilson/framework/kratosx"
 	"github.com/dstgo/wilson/service/gateway/config"
-	middleware2 "github.com/dstgo/wilson/service/gateway/middleware"
+	gtmiddleware "github.com/dstgo/wilson/service/gateway/middleware"
 	"github.com/dstgo/wilson/service/gateway/proxy"
 	"github.com/dstgo/wilson/service/gateway/utils"
 )
 
 func init() {
-	middleware2.Register("auth", Middleware)
+	gtmiddleware.Register("auth", Middleware)
 }
 
 type Auth struct {
@@ -59,7 +59,7 @@ type RequestInfo struct {
 
 var _nopBody = io.NopCloser(&bytes.Buffer{})
 
-func Middleware(c *config.Middleware) (middleware2.Middleware, error) {
+func Middleware(c *config.Middleware) (gtmiddleware.Middleware, error) {
 	auth := &Auth{}
 	if c.Options != nil {
 		if err := utils.Copy(c.Options, auth); err != nil {
@@ -71,7 +71,7 @@ func Middleware(c *config.Middleware) (middleware2.Middleware, error) {
 	}
 
 	return func(next http.RoundTripper) http.RoundTripper {
-		return middleware2.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
+		return gtmiddleware.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
 			if auth.isWhitelist(req.Method, req.URL.Path) {
 				return next.RoundTrip(req)
 			}

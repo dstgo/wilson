@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/dstgo/wilson/service/gateway/config"
-	middleware2 "github.com/dstgo/wilson/service/gateway/middleware"
+	gtmiddleware "github.com/dstgo/wilson/service/gateway/middleware"
 	"github.com/dstgo/wilson/service/gateway/utils"
 )
 
@@ -40,7 +40,7 @@ const (
 )
 
 func init() {
-	middleware2.Register("cors", Middleware)
+	gtmiddleware.Register("cors", Middleware)
 }
 
 func isOriginAllowed(origin string, allowOriginHosts []string) bool {
@@ -73,7 +73,7 @@ func newResponse(statusCode int, header http.Header) (*http.Response, error) {
 }
 
 // Middleware automatically sets the allow response header.
-func Middleware(c *config.Middleware) (middleware2.Middleware, error) {
+func Middleware(c *config.Middleware) (gtmiddleware.Middleware, error) {
 	options := &config.Cors{
 		AllowCredentials:    true,
 		AllowMethods:        defaultCorsMethods,
@@ -89,7 +89,7 @@ func Middleware(c *config.Middleware) (middleware2.Middleware, error) {
 	preflightHeaders := generatePreflightHeaders(options)
 	normalHeaders := generateNormalHeaders(options)
 	return func(next http.RoundTripper) http.RoundTripper {
-		return middleware2.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
+		return gtmiddleware.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
 			origin := req.Header.Get(corsOriginHeader)
 			if origin == "" {
 				// not a cors request

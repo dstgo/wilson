@@ -10,17 +10,17 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 
 	"github.com/dstgo/wilson/service/gateway/config"
-	middleware2 "github.com/dstgo/wilson/service/gateway/middleware"
+	gtmiddleware "github.com/dstgo/wilson/service/gateway/middleware"
 )
 
 func init() {
-	middleware2.Register("logging", Middleware)
+	gtmiddleware.Register("logging", Middleware)
 }
 
 // Middleware is a logging middleware.
-func Middleware(c *config.Middleware) (middleware2.Middleware, error) {
+func Middleware(c *config.Middleware) (gtmiddleware.Middleware, error) {
 	return func(next http.RoundTripper) http.RoundTripper {
-		return middleware2.RoundTripperFunc(func(req *http.Request) (reply *http.Response, err error) {
+		return gtmiddleware.RoundTripperFunc(func(req *http.Request) (reply *http.Response, err error) {
 			startTime := time.Now()
 			reply, err = next.RoundTrip(req)
 			level := log.LevelInfo
@@ -34,7 +34,7 @@ func Middleware(c *config.Middleware) (middleware2.Middleware, error) {
 			}
 			ctx := req.Context()
 			// nodes, _ := middleware.RequestBackendsFromContext(ctx)
-			reqOpt, _ := middleware2.FromRequestContext(ctx)
+			reqOpt, _ := gtmiddleware.FromRequestContext(ctx)
 			log.Context(ctx).Log(level,
 				"source", "accesslog",
 				"host", req.Host,

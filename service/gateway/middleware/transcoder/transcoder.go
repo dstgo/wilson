@@ -15,7 +15,7 @@ import (
 
 	"github.com/dstgo/wilson/service/gateway/config"
 	"github.com/dstgo/wilson/service/gateway/consts"
-	middleware2 "github.com/dstgo/wilson/service/gateway/middleware"
+	gtmiddleware "github.com/dstgo/wilson/service/gateway/middleware"
 )
 
 func decodeBinHeader(v string) ([]byte, error) {
@@ -36,16 +36,16 @@ func newResponse(statusCode int, header http.Header, data []byte) (*http.Respons
 }
 
 func init() {
-	middleware2.Register("transcoder", Middleware)
+	gtmiddleware.Register("transcoder", Middleware)
 }
 
 // Middleware is a gRPC transcoder.
-func Middleware(c *config.Middleware) (middleware2.Middleware, error) {
+func Middleware(c *config.Middleware) (gtmiddleware.Middleware, error) {
 	return func(next http.RoundTripper) http.RoundTripper {
-		return middleware2.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
+		return gtmiddleware.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
 			ctx := req.Context()
 			contentType := req.Header.Get("Content-Type")
-			endpoint, _ := middleware2.EndpointFromContext(ctx)
+			endpoint, _ := gtmiddleware.EndpointFromContext(ctx)
 			if endpoint.Protocol != consts.GRPC || strings.HasPrefix(contentType, "application/grpc") {
 				return next.RoundTrip(req)
 			}

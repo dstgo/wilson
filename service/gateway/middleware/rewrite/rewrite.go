@@ -6,12 +6,12 @@ import (
 	"strings"
 
 	"github.com/dstgo/wilson/service/gateway/config"
-	middleware2 "github.com/dstgo/wilson/service/gateway/middleware"
+	gtmiddleware "github.com/dstgo/wilson/service/gateway/middleware"
 	"github.com/dstgo/wilson/service/gateway/utils"
 )
 
 func init() {
-	middleware2.Register("rewrite", Middleware)
+	gtmiddleware.Register("rewrite", Middleware)
 }
 
 func stripPrefix(origin string, prefix string) string {
@@ -25,7 +25,7 @@ func stripPrefix(origin string, prefix string) string {
 	return out
 }
 
-func Middleware(c *config.Middleware) (middleware2.Middleware, error) {
+func Middleware(c *config.Middleware) (gtmiddleware.Middleware, error) {
 	options := &config.Rewrite{}
 	if c.Options != nil {
 		if err := utils.Copy(c.Options, options); err != nil {
@@ -35,7 +35,7 @@ func Middleware(c *config.Middleware) (middleware2.Middleware, error) {
 	requestHeadersRewrite := options.RequestHeadersRewrite
 	responseHeadersRewrite := options.ResponseHeadersRewrite
 	return func(next http.RoundTripper) http.RoundTripper {
-		return middleware2.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
+		return gtmiddleware.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
 			if options.PathRewrite != "" {
 				req.URL.Path = options.PathRewrite
 			}

@@ -15,14 +15,14 @@ import (
 
 	"github.com/dstgo/wilson/service/gateway/client"
 	"github.com/dstgo/wilson/service/gateway/config"
-	middleware2 "github.com/dstgo/wilson/service/gateway/middleware"
+	gtmiddleware "github.com/dstgo/wilson/service/gateway/middleware"
 	"github.com/dstgo/wilson/service/gateway/proxy/condition"
 	"github.com/dstgo/wilson/service/gateway/utils"
 )
 
 func Init(clientFactory client.Factory) {
 	breakerFactory := New(clientFactory)
-	middleware2.RegisterV2("circuitbreaker", breakerFactory)
+	gtmiddleware.RegisterV2("circuitbreaker", breakerFactory)
 	prometheus.MustRegister(_metricDeniedTotal)
 }
 
@@ -104,7 +104,7 @@ func makeOnBreakHandler(in *config.CircuitBreaker, factory client.Factory) (http
 
 	if action.ResponseData != nil {
 		log.Infof("Making static response data as on break handler: %+v", action.ResponseData)
-		return middleware2.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
+		return gtmiddleware.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
 			resp := &http.Response{
 				StatusCode: action.ResponseData.StatusCode,
 				Header:     http.Header{},
@@ -118,7 +118,7 @@ func makeOnBreakHandler(in *config.CircuitBreaker, factory client.Factory) (http
 	}
 
 	log.Warnf("Unrecoginzed circuit breaker aciton")
-	return middleware2.RoundTripperFunc(func(*http.Request) (*http.Response, error) {
+	return gtmiddleware.RoundTripperFunc(func(*http.Request) (*http.Response, error) {
 		// TBD: on break response
 		return &http.Response{
 			StatusCode: http.StatusServiceUnavailable,
@@ -133,15 +133,15 @@ func isSuccessResponse(conditions []condition.Condition, resp *http.Response) bo
 }
 
 func deniedRequestIncr(req *http.Request) {
-	labels, ok := middleware2.MetricsLabelsFromContext(req.Context())
+	labels, ok := gtmiddleware.MetricsLabelsFromContext(req.Context())
 	if ok {
 		_metricDeniedTotal.WithLabelValues(labels.Protocol(), labels.Method(), labels.Path(), labels.Service(), labels.BasePath()).Inc()
 		return
 	}
 }
 
-func New(factory client.Factory) middleware2.FactoryV2 {
-	return func(c *config.Middleware) (middleware2.MiddlewareV2, error) {
+func New(factory client.Factory) gtmiddleware.FactoryV2 {
+	return func(c *config.Middleware) (gtmiddleware.MiddlewareV2, error) {
 		options := &config.CircuitBreaker{}
 		if c.Options != nil {
 			if err := utils.Copy(c.Options, options); err != nil {
@@ -158,8 +158,8 @@ func New(factory client.Factory) middleware2.FactoryV2 {
 			return nil, err
 		}
 
-		return middleware2.NewWithCloser(func(next http.RoundTripper) http.RoundTripper {
-			return middleware2.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
+		return gtmiddleware.NewWithCloser(func(next http.RoundTripper) http.RoundTripper {
+			return gtmiddleware.RoundTripperFunc(func(req *http.Request) (*http.Response, error) {
 				if err := breaker.Allow(); err != nil {
 					// rejected
 					// NOTE: when client reject requests locally,

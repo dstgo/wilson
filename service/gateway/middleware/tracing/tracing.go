@@ -21,7 +21,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/dstgo/wilson/service/gateway/config"
-	middleware2 "github.com/dstgo/wilson/service/gateway/middleware"
+	gtmiddleware "github.com/dstgo/wilson/service/gateway/middleware"
 	"github.com/dstgo/wilson/service/gateway/utils"
 )
 
@@ -37,11 +37,11 @@ var globaltp = &struct {
 }{}
 
 func init() {
-	middleware2.Register("tracing", Middleware)
+	gtmiddleware.Register("tracing", Middleware)
 }
 
 // Middleware is a opentelemetry middleware.
-func Middleware(c *config.Middleware) (middleware2.Middleware, error) {
+func Middleware(c *config.Middleware) (gtmiddleware.Middleware, error) {
 	options := &config.Tracing{}
 	if c.Options != nil {
 		if err := utils.Copy(c.Options, options); err != nil {
@@ -58,7 +58,7 @@ func Middleware(c *config.Middleware) (middleware2.Middleware, error) {
 	}
 	tracer := otel.Tracer(defaultTracerName)
 	return func(next http.RoundTripper) http.RoundTripper {
-		return middleware2.RoundTripperFunc(func(req *http.Request) (reply *http.Response, err error) {
+		return gtmiddleware.RoundTripperFunc(func(req *http.Request) (reply *http.Response, err error) {
 			ctx, span := tracer.Start(
 				req.Context(),
 				fmt.Sprintf("%s %s", req.Method, req.URL.Path),
