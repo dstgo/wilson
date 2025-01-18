@@ -161,7 +161,7 @@ func (u *Export) getFileByValue(ctx kratosx.Context, value string) (*os.File, er
 	}
 
 	fileName := u.conf.Export.LocalDir + "/tmp/" + key
-	if filex.IsExistFile(fileName) {
+	if filex.IsFileExist(fileName) {
 		return os.Open(fileName)
 	}
 
@@ -246,7 +246,7 @@ func (u *Export) exportFile(ctx kratosx.Context, src string, list []*types.Expor
 	var oriExports = make(map[string]string)
 	for key, rename := range exports {
 		path := u.conf.Export.LocalDir + "/tmp/" + key
-		if filex.IsExistFile(path) {
+		if filex.IsFileExist(path) {
 			oriExports[path] = rename
 			continue
 		}
@@ -286,7 +286,7 @@ func (u *Export) exportFile(ctx kratosx.Context, src string, list []*types.Expor
 // clearExportTmpCache 清理临时文件夹
 func (u *Export) clearExportTmpCache() {
 	dir := u.conf.Export.LocalDir + "/tmp"
-	if !filex.IsExistFolder(dir) {
+	if !filex.IsDirExist(dir) {
 		return
 	}
 	_ = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
@@ -307,7 +307,7 @@ func (u *Export) clearExportTmpCache() {
 // clearExportFile 清理导出的过期的大文件
 func (u *Export) clearExportFile(ctx kratosx.Context) {
 	dir := u.conf.Export.LocalDir
-	if !filex.IsExistFolder(dir) {
+	if !filex.IsDirExist(dir) {
 		return
 	}
 

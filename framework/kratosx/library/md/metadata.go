@@ -21,7 +21,7 @@ func New(info *Auth) map[string]any {
 	return res
 }
 
-func Get(ctx kratosx.Context) *Auth {
+func GetAuthInfo(ctx kratosx.Context) *Auth {
 	var (
 		data Auth
 		err  error
@@ -43,23 +43,23 @@ func Get(ctx kratosx.Context) *Auth {
 }
 
 func UserId(ctx kratosx.Context) uint32 {
-	return Get(ctx).UserId
+	return GetAuthInfo(ctx).UserId
 }
 
 func RoleId(ctx kratosx.Context) uint32 {
-	return Get(ctx).RoleId
+	return GetAuthInfo(ctx).RoleId
 }
 
 func RoleKeyword(ctx kratosx.Context) string {
-	return Get(ctx).RoleKeyword
+	return GetAuthInfo(ctx).RoleKeyword
 }
 
 func DepartmentId(ctx kratosx.Context) uint32 {
-	return Get(ctx).DepartmentId
+	return GetAuthInfo(ctx).DepartmentId
 }
 
 func DepartmentKeyword(ctx kratosx.Context) string {
-	return Get(ctx).DepartmentKeyword
+	return GetAuthInfo(ctx).DepartmentKeyword
 }
 
 const (

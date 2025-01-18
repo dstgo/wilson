@@ -59,7 +59,7 @@ func RegisterServer(c config.Config, hs *http.Server, gs *grpc.Server) {
 		}
 	})
 
-	if !filex.IsExistFolder(cfg.Export.LocalDir) {
+	if !filex.IsDirExist(cfg.Export.LocalDir) {
 		_ = os.MkdirAll(cfg.Export.LocalDir, 0655)
 		_ = os.MkdirAll(cfg.Export.LocalDir+"/tmp", 0655)
 	}

@@ -13,7 +13,7 @@ import (
 	"github.com/dstgo/wilson/framework/pkg/crypto"
 	"github.com/dstgo/wilson/framework/pkg/slicex"
 	"github.com/dstgo/wilson/framework/pkg/ua"
-	valx2 "github.com/dstgo/wilson/framework/pkg/valx"
+	"github.com/dstgo/wilson/framework/pkg/valx"
 	"github.com/dstgo/wilson/framework/pkg/whois"
 
 	"github.com/forgoer/openssl"
@@ -556,10 +556,10 @@ func (u *Use) UserLogin(ctx kratosx.Context, in *types.UserLoginRequest) (token 
 
 	// 获取用户信息
 
-	if valx2.IsPhone(in.Username) {
+	if valx.IsPhone(in.Username) {
 		utype = "phone"
 		user, err = u.repo.GetUserByPhone(ctx, in.Username)
-	} else if valx2.IsEmail(in.Username) {
+	} else if valx.IsEmail(in.Username) {
 		utype = "email"
 		user, err = u.repo.GetUserByEmail(ctx, in.Username)
 	} else {

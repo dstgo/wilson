@@ -22,7 +22,7 @@ func NewAuth(conf *conf.Config) *Auth {
 
 // Auth 外部接口鉴权
 func (u *Auth) Auth(ctx kratosx.Context, in *types.AuthRequest) (*md.Auth, error) {
-	info := md.Get(ctx)
+	info := md.GetAuthInfo(ctx)
 
 	if lo.Contains(ctx.Config().App().Authentication.SkipRole, info.RoleKeyword) {
 		return info, nil
