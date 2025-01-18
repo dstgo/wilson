@@ -1,11 +1,25 @@
+PACKAGE := github.com/dstgo/wilson
+GOFILES := $(shell find -name "*.go" ! -name "*.pb.*")
+
 .PHONY: install
 install:
+	# style, lint tools
+	go install golang.org/x/tools/cmd/goimports@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+	# proto tools
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	go install ./framework/kratosx/cmd/protoc-gen-go-errorsx
 	go install ./framework/kratosx/cmd/protoc-gen-go-httpx
 	go install github.com/envoyproxy/protoc-gen-validate@latest
+
+.PHONY: style
+style:
+	# go fmt
+	@gofmt -w $(GOFILES)
+	# sort go imports
+	@goimports -format-only -local $(PACKAGE) -w $(GOFILES)
 
 .PHONY: lint
 lint:
@@ -47,9 +61,9 @@ API_PB_FILES := $(shell find $(API_DIR) -name "*.proto")
 .PHONY: pb
 pb:
 	# create dir
-	mkdir -p $(API_GEN_DIR)
+	@mkdir -p $(API_GEN_DIR)
 	# generate proto files
-	protoc --proto_path=$(API_DIR)\
+	@protoc --proto_path=$(API_DIR)\
               --proto_path=$(API_THIRD_PARTY_DIR) \
               --go_out=$(API_GEN_DIR)\
 			  --go-grpc_out=$(API_GEN_DIR)\
@@ -61,9 +75,9 @@ pb:
 .PHONY: doc
 doc:
 	# create doc dir
-	mkdir -p $(API_DOC_DIR)
+	@mkdir -p $(API_DOC_DIR)
 	# generate openapi doc
-	protoc --proto_path=$(API_DIR)\
+	@protoc --proto_path=$(API_DIR)\
 				  --proto_path=$(API_THIRD_PARTY_DIR) \
 				  --openapi_out=fq_schema_naming=true,default_response=false:$(API_DOC_DIR)\
 				  $(API_PB_FILES)
