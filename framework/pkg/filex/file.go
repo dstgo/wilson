@@ -7,10 +7,7 @@ import (
 
 func IsExist(path string) bool {
 	_, err := os.Stat(path)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func IsDirExist(dir string) bool {
