@@ -85,6 +85,10 @@ func (r runner) Ctx() context.Context {
 	return r.ctx
 }
 
-func AddRunner(ctx context.Context, fn func() error) Runner {
+func BgRunner(fn func() error) Runner {
+	return NewRunner(context.Background(), fn)
+}
+
+func NewRunner(ctx context.Context, fn func() error) Runner {
 	return &runner{fn: fn, ctx: ctx}
 }
