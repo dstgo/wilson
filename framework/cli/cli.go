@@ -1,10 +1,9 @@
 package cli
 
 import (
-	"runtime"
+	"os"
 	"time"
 
-	"github.com/pkg/errors"
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 )
@@ -13,13 +12,32 @@ type Options struct {
 	AppName      string
 	AppVersion   string
 	AppBuildTime string
-	ConfigFile   string
 	Description  string
 
-	StartFn func(opt *Options) error
+	ConfigFile  string
+	ConfigHost  string
+	ConfigToken string
+	ServiceName string
+
+	StartFn func(opt *StartOptions) error
+}
+
+type StartOptions struct {
+	AppName      string
+	AppVersion   string
+	AppBuildTime string
+	ServiceName  string
+	Loader       Loader
 }
 
 func NewCLI(opts *Options) Service {
+	if opts == nil {
+		opts = &Options{}
+	}
+
+	if opts.AppName == "" {
+		panic("app name is required")
+	}
 
 	opts.AppVersion = lo.Ternary(opts.AppVersion == "", "v0.0.0", opts.AppVersion)
 	opts.AppBuildTime = lo.Ternary(opts.AppBuildTime == "", time.Time{}.Format(time.DateTime), opts.AppBuildTime)
@@ -34,21 +52,13 @@ func NewCLI(opts *Options) Service {
 	versionCmd := &cobra.Command{
 		Use:   "version",
 		Short: "Print the service version",
-		Run: func(cmd *cobra.Command, args []string) {
-			cmd.Printf("%s version %s %s/%s\n", opts.AppName, opts.AppVersion, runtime.GOOS, runtime.GOARCH)
-		},
+		RunE:  cmdVersion(opts),
 	}
 
 	startCmd := &cobra.Command{
 		Use:   "start",
 		Short: "Start the service",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			err := opts.StartFn(opts)
-			if err != nil {
-				return errors.Wrapf(err, "service %s failed to start", opts.AppName)
-			}
-			return nil
-		},
+		RunE:  cmdStart(opts),
 	}
 
 	rootCmd.AddCommand(versionCmd)
@@ -65,9 +75,32 @@ type Service struct {
 	cmd  *cobra.Command
 }
 
+const (
+	EnvConfigFile  = "CONF_FILE"
+	EnvConfigHost  = "CONF_HOST"
+	EnvConfigToken = "CONF_TOKEN"
+	EnvServiceName = "SERVICE_NAME"
+)
+
 func (c Service) Parse() {
 	if c.cmd != nil {
-		c.cmd.PersistentFlags().StringVarP(&c.opts.ConfigFile, "conf", "f", "conf.yaml", "config file path, default: conf.yaml")
+		c.cmd.PersistentFlags().StringVar(&c.opts.ConfigFile, "file", "", "config file path")
+		c.cmd.PersistentFlags().StringVar(&c.opts.ConfigHost, "host", "", "configure host")
+		c.cmd.PersistentFlags().StringVar(&c.opts.ConfigToken, "token", "", "configure token")
+		c.cmd.PersistentFlags().StringVar(&c.opts.ServiceName, "name", "", "service name")
+
+		if c.opts.ConfigFile == "" {
+			c.opts.ConfigFile = os.Getenv(EnvConfigFile)
+		}
+		if c.opts.ConfigHost == "" {
+			c.opts.ConfigHost = os.Getenv(EnvConfigHost)
+		}
+		if c.opts.ConfigToken == "" {
+			c.opts.ConfigToken = os.Getenv(EnvConfigToken)
+		}
+		if c.opts.ServiceName == "" {
+			c.opts.ServiceName = os.Getenv(EnvServiceName)
+		}
 	}
 }
 
