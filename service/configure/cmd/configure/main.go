@@ -4,10 +4,8 @@ import (
 	"log"
 
 	"github.com/go-kratos/kratos/v2"
-	configfile "github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	thttp "github.com/go-kratos/kratos/v2/transport/http"
-	"github.com/samber/lo"
 	_ "go.uber.org/automaxprocs"
 
 	"github.com/dstgo/wilson/framework/cli"
@@ -20,25 +18,22 @@ import (
 	"github.com/dstgo/wilson/service/configure/internal/conf"
 )
 
+const AppName = "configure"
+
 var (
-	AppName      string
 	AppVersion   string
 	AppBuildTime string
 )
 
-var service cli.Service
+var service = cli.NewCLI(&cli.Options{
+	AppName:      AppName,
+	AppVersion:   AppVersion,
+	AppBuildTime: AppBuildTime,
+	Description:  "configure service for wilson framework",
+	StartFn:      Start,
+})
 
 func init() {
-	opts := &cli.Options{
-		AppName:      lo.Ternary(AppName != "", AppName, "service-configure"),
-		AppVersion:   AppVersion,
-		AppBuildTime: AppBuildTime,
-		Description:  "service for wilson configure",
-		StartFn:      Start,
-	}
-
-	service = cli.NewCLI(opts)
-
 	service.Parse()
 }
 
@@ -46,9 +41,9 @@ func main() {
 	service.Start()
 }
 
-func Start(opts *cli.Options) error {
+func Start(opts *cli.StartOptions) error {
 	server := kratosx.New(
-		kratosx.Config(configfile.NewSource(opts.ConfigFile)),
+		kratosx.Config(opts.Loader()),
 		kratosx.RegistrarServer(RegisterServer),
 		kratosx.Options(
 			kratos.Metadata(map[string]string{
@@ -66,9 +61,9 @@ func RegisterServer(c config.Config, hs *thttp.Server, gs *grpc.Server) {
 	cfg := &conf.Config{}
 
 	// watch config
-	c.ScanWatch("business", func(value config.Value) {
+	c.ScanWatch("configure", func(value config.Value) {
 		if err := value.Scan(cfg); err != nil {
-			log.Printf("business config format error: %s", err.Error())
+			log.Printf("configure config format error: %s", err.Error())
 		}
 	})
 

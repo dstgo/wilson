@@ -31,7 +31,8 @@ client:
 # 日志配置
 log:
   # 日志输出等级
-  level: 0
+  level: debug
+  encode: json
   caller: true
   output:
     # stdout:控制台输出，k8s日志收集
@@ -110,8 +111,8 @@ jwt:
     "POST:/configure/api/v1/login": true
     "POST:/configure/api/v1/token/refresh": true
 
-# 业务配置
-business:
+# 服务配置
+configure:
   webui:
     enable: true
     dist: "static/web/dist"
