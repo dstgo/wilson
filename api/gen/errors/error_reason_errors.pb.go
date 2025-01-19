@@ -21,7 +21,7 @@ func IsSystemError(err error) bool {
 }
 
 // Common errors (0-999)
-func SystemError(args ...any) *errors.Error {
+func SystemError() *errors.Error {
 	return errors.New(500, ErrorReason_SystemError.String(), "系统错误")
 }
 
@@ -38,7 +38,7 @@ func IsFileSystemError(err error) bool {
 	return e.Reason == ErrorReason_FileSystemError.String() && e.Code == 500
 }
 
-func FileSystemError(args ...any) *errors.Error {
+func FileSystemError() *errors.Error {
 	return errors.New(500, ErrorReason_FileSystemError.String(), "文件系统错误")
 }
 
@@ -54,7 +54,7 @@ func IsNetWorkError(err error) bool {
 	return e.Reason == ErrorReason_NetWorkError.String() && e.Code == 500
 }
 
-func NetWorkError(args ...any) *errors.Error {
+func NetWorkError() *errors.Error {
 	return errors.New(500, ErrorReason_NetWorkError.String(), "网络传输错误")
 }
 
@@ -70,7 +70,7 @@ func IsDatabaseError(err error) bool {
 	return e.Reason == ErrorReason_DatabaseError.String() && e.Code == 500
 }
 
-func DatabaseError(args ...any) *errors.Error {
+func DatabaseError() *errors.Error {
 	return errors.New(500, ErrorReason_DatabaseError.String(), "数据库错误")
 }
 
@@ -86,7 +86,7 @@ func IsParamsError(err error) bool {
 	return e.Reason == ErrorReason_ParamsError.String() && e.Code == 500
 }
 
-func ParamsError(args ...any) *errors.Error {
+func ParamsError() *errors.Error {
 	return errors.New(500, ErrorReason_ParamsError.String(), "参数错误")
 }
 
@@ -102,7 +102,7 @@ func IsTransformError(err error) bool {
 	return e.Reason == ErrorReason_TransformError.String() && e.Code == 500
 }
 
-func TransformError(args ...any) *errors.Error {
+func TransformError() *errors.Error {
 	return errors.New(500, ErrorReason_TransformError.String(), "数据转换失败")
 }
 
@@ -118,7 +118,7 @@ func IsGetError(err error) bool {
 	return e.Reason == ErrorReason_GetError.String() && e.Code == 500
 }
 
-func GetError(args ...any) *errors.Error {
+func GetError() *errors.Error {
 	return errors.New(500, ErrorReason_GetError.String(), "获取数据失败")
 }
 
@@ -134,7 +134,7 @@ func IsListError(err error) bool {
 	return e.Reason == ErrorReason_ListError.String() && e.Code == 500
 }
 
-func ListError(args ...any) *errors.Error {
+func ListError() *errors.Error {
 	return errors.New(500, ErrorReason_ListError.String(), "获取列表数据失败")
 }
 
@@ -150,7 +150,7 @@ func IsCreateError(err error) bool {
 	return e.Reason == ErrorReason_CreateError.String() && e.Code == 500
 }
 
-func CreateError(args ...any) *errors.Error {
+func CreateError() *errors.Error {
 	return errors.New(500, ErrorReason_CreateError.String(), "创建数据失败")
 }
 
@@ -166,7 +166,7 @@ func IsImportError(err error) bool {
 	return e.Reason == ErrorReason_ImportError.String() && e.Code == 500
 }
 
-func ImportError(args ...any) *errors.Error {
+func ImportError() *errors.Error {
 	return errors.New(500, ErrorReason_ImportError.String(), "导入数据失败")
 }
 
@@ -182,7 +182,7 @@ func IsExportError(err error) bool {
 	return e.Reason == ErrorReason_ExportError.String() && e.Code == 500
 }
 
-func ExportError(args ...any) *errors.Error {
+func ExportError() *errors.Error {
 	return errors.New(500, ErrorReason_ExportError.String(), "导出数据失败")
 }
 
@@ -198,7 +198,7 @@ func IsUpdateError(err error) bool {
 	return e.Reason == ErrorReason_UpdateError.String() && e.Code == 500
 }
 
-func UpdateError(args ...any) *errors.Error {
+func UpdateError() *errors.Error {
 	return errors.New(500, ErrorReason_UpdateError.String(), "更新数据失败")
 }
 
@@ -214,7 +214,7 @@ func IsDeleteError(err error) bool {
 	return e.Reason == ErrorReason_DeleteError.String() && e.Code == 500
 }
 
-func DeleteError(args ...any) *errors.Error {
+func DeleteError() *errors.Error {
 	return errors.New(500, ErrorReason_DeleteError.String(), "删除数据失败")
 }
 
@@ -232,7 +232,7 @@ func IsConfigServiceError(err error) bool {
 }
 
 // Config service errors (1000-1999)
-func ConfigServiceError(args ...any) *errors.Error {
+func ConfigServiceError() *errors.Error {
 	return errors.New(500, ErrorReason_ConfigServiceError.String(), "配置服务异常")
 }
 
@@ -249,7 +249,7 @@ func IsGetTrashError(err error) bool {
 	return e.Reason == ErrorReason_GetTrashError.String() && e.Code == 500
 }
 
-func GetTrashError(args ...any) *errors.Error {
+func GetTrashError() *errors.Error {
 	return errors.New(500, ErrorReason_GetTrashError.String(), "获取回收站数据失败")
 }
 
@@ -265,7 +265,7 @@ func IsListTrashError(err error) bool {
 	return e.Reason == ErrorReason_ListTrashError.String() && e.Code == 500
 }
 
-func ListTrashError(args ...any) *errors.Error {
+func ListTrashError() *errors.Error {
 	return errors.New(500, ErrorReason_ListTrashError.String(), "获取回收站列表数据失败")
 }
 
@@ -281,7 +281,7 @@ func IsDeleteTrashError(err error) bool {
 	return e.Reason == ErrorReason_DeleteTrashError.String() && e.Code == 500
 }
 
-func DeleteTrashError(args ...any) *errors.Error {
+func DeleteTrashError() *errors.Error {
 	return errors.New(500, ErrorReason_DeleteTrashError.String(), "删除回收站数据失败")
 }
 
@@ -297,7 +297,7 @@ func IsRevertTrashError(err error) bool {
 	return e.Reason == ErrorReason_RevertTrashError.String() && e.Code == 500
 }
 
-func RevertTrashError(args ...any) *errors.Error {
+func RevertTrashError() *errors.Error {
 	return errors.New(500, ErrorReason_RevertTrashError.String(), "还原回收站数据失败")
 }
 
@@ -313,7 +313,7 @@ func IsBusinessValueTypeError(err error) bool {
 	return e.Reason == ErrorReason_BusinessValueTypeError.String() && e.Code == 500
 }
 
-func BusinessValueTypeError(args ...any) *errors.Error {
+func BusinessValueTypeError() *errors.Error {
 	return errors.New(500, ErrorReason_BusinessValueTypeError.String(), "业务配置值类型错误")
 }
 
@@ -329,7 +329,7 @@ func IsResourceValueTypeError(err error) bool {
 	return e.Reason == ErrorReason_ResourceValueTypeError.String() && e.Code == 500
 }
 
-func ResourceValueTypeError(args ...any) *errors.Error {
+func ResourceValueTypeError() *errors.Error {
 	return errors.New(500, ErrorReason_ResourceValueTypeError.String(), "资源配置值类型错误")
 }
 
@@ -345,7 +345,7 @@ func IsRenderTemplateError(err error) bool {
 	return e.Reason == ErrorReason_RenderTemplateError.String() && e.Code == 500
 }
 
-func RenderTemplateError(args ...any) *errors.Error {
+func RenderTemplateError() *errors.Error {
 	return errors.New(500, ErrorReason_RenderTemplateError.String(), "渲染模板错误")
 }
 
@@ -361,7 +361,7 @@ func IsTemplateVersionExistError(err error) bool {
 	return e.Reason == ErrorReason_TemplateVersionExistError.String() && e.Code == 500
 }
 
-func TemplateVersionExistError(args ...any) *errors.Error {
+func TemplateVersionExistError() *errors.Error {
 	return errors.New(500, ErrorReason_TemplateVersionExistError.String(), "模板已存在此版本")
 }
 
@@ -377,7 +377,7 @@ func IsServerNotExistTemplateError(err error) bool {
 	return e.Reason == ErrorReason_ServerNotExistTemplateError.String() && e.Code == 500
 }
 
-func ServerNotExistTemplateError(args ...any) *errors.Error {
+func ServerNotExistTemplateError() *errors.Error {
 	return errors.New(500, ErrorReason_ServerNotExistTemplateError.String(), "当前服务还未提交过模板")
 }
 
@@ -393,7 +393,7 @@ func IsConfigureVersionExistError(err error) bool {
 	return e.Reason == ErrorReason_ConfigureVersionExistError.String() && e.Code == 500
 }
 
-func ConfigureVersionExistError(args ...any) *errors.Error {
+func ConfigureVersionExistError() *errors.Error {
 	return errors.New(500, ErrorReason_ConfigureVersionExistError.String(), "配置已存在此版本")
 }
 
@@ -409,7 +409,7 @@ func IsWatchConfigureError(err error) bool {
 	return e.Reason == ErrorReason_WatchConfigureError.String() && e.Code == 500
 }
 
-func WatchConfigureError(args ...any) *errors.Error {
+func WatchConfigureError() *errors.Error {
 	return errors.New(500, ErrorReason_WatchConfigureError.String(), "监听版本更新失败")
 }
 
@@ -425,7 +425,7 @@ func IsTokenAuthError(err error) bool {
 	return e.Reason == ErrorReason_TokenAuthError.String() && e.Code == 500
 }
 
-func TokenAuthError(args ...any) *errors.Error {
+func TokenAuthError() *errors.Error {
 	return errors.New(500, ErrorReason_TokenAuthError.String(), "token验证失败")
 }
 
@@ -441,7 +441,7 @@ func IsServerNotFound(err error) bool {
 	return e.Reason == ErrorReason_ServerNotFound.String() && e.Code == 500
 }
 
-func ServerNotFound(args ...any) *errors.Error {
+func ServerNotFound() *errors.Error {
 	return errors.New(500, ErrorReason_ServerNotFound.String(), "服务不存在")
 }
 
@@ -457,7 +457,7 @@ func IsPasswordError(err error) bool {
 	return e.Reason == ErrorReason_PasswordError.String() && e.Code == 500
 }
 
-func PasswordError(args ...any) *errors.Error {
+func PasswordError() *errors.Error {
 	return errors.New(500, ErrorReason_PasswordError.String(), "密码错误")
 }
 
@@ -473,7 +473,7 @@ func IsPasswordExpireError(err error) bool {
 	return e.Reason == ErrorReason_PasswordExpireError.String() && e.Code == 500
 }
 
-func PasswordExpireError(args ...any) *errors.Error {
+func PasswordExpireError() *errors.Error {
 	return errors.New(500, ErrorReason_PasswordExpireError.String(), "密码已过期")
 }
 
@@ -489,7 +489,7 @@ func IsRefreshTokenError(err error) bool {
 	return e.Reason == ErrorReason_RefreshTokenError.String() && e.Code == 401
 }
 
-func RefreshTokenError(args ...any) *errors.Error {
+func RefreshTokenError() *errors.Error {
 	return errors.New(401, ErrorReason_RefreshTokenError.String(), "刷新token失败")
 }
 
@@ -505,7 +505,7 @@ func IsBroadcastConfigureError(err error) bool {
 	return e.Reason == ErrorReason_BroadcastConfigureError.String() && e.Code == 500
 }
 
-func BroadcastConfigureError(args ...any) *errors.Error {
+func BroadcastConfigureError() *errors.Error {
 	return errors.New(500, ErrorReason_BroadcastConfigureError.String(), "广播配置变更消息失败")
 }
 
@@ -523,7 +523,7 @@ func IsResourceServiceError(err error) bool {
 }
 
 // Resource service errors (2000-2999)
-func ResourceServiceError(args ...any) *errors.Error {
+func ResourceServiceError() *errors.Error {
 	return errors.New(500, ErrorReason_ResourceServiceError.String(), "资源服务异常")
 }
 
@@ -540,7 +540,7 @@ func IsNoSupportStoreError(err error) bool {
 	return e.Reason == ErrorReason_NoSupportStoreError.String() && e.Code == 500
 }
 
-func NoSupportStoreError(args ...any) *errors.Error {
+func NoSupportStoreError() *errors.Error {
 	return errors.New(500, ErrorReason_NoSupportStoreError.String(), "不支持的存储引擎")
 }
 
@@ -556,7 +556,7 @@ func IsNoSupportFileTypeError(err error) bool {
 	return e.Reason == ErrorReason_NoSupportFileTypeError.String() && e.Code == 500
 }
 
-func NoSupportFileTypeError(args ...any) *errors.Error {
+func NoSupportFileTypeError() *errors.Error {
 	return errors.New(500, ErrorReason_NoSupportFileTypeError.String(), "不支持的文件类型")
 }
 
@@ -572,7 +572,7 @@ func IsVerifySignError(err error) bool {
 	return e.Reason == ErrorReason_VerifySignError.String() && e.Code == 500
 }
 
-func VerifySignError(args ...any) *errors.Error {
+func VerifySignError() *errors.Error {
 	return errors.New(500, ErrorReason_VerifySignError.String(), "签名验证失败")
 }
 
@@ -588,7 +588,7 @@ func IsChunkUploadError(err error) bool {
 	return e.Reason == ErrorReason_ChunkUploadError.String() && e.Code == 500
 }
 
-func ChunkUploadError(args ...any) *errors.Error {
+func ChunkUploadError() *errors.Error {
 	return errors.New(500, ErrorReason_ChunkUploadError.String(), "分片上传失败")
 }
 
@@ -604,7 +604,7 @@ func IsStatusProgressError(err error) bool {
 	return e.Reason == ErrorReason_StatusProgressError.String() && e.Code == 500
 }
 
-func StatusProgressError(args ...any) *errors.Error {
+func StatusProgressError() *errors.Error {
 	return errors.New(500, ErrorReason_StatusProgressError.String(), "文件上传中")
 }
 
@@ -620,7 +620,7 @@ func IsUploadFileError(err error) bool {
 	return e.Reason == ErrorReason_UploadFileError.String() && e.Code == 500
 }
 
-func UploadFileError(args ...any) *errors.Error {
+func UploadFileError() *errors.Error {
 	return errors.New(500, ErrorReason_UploadFileError.String(), "文件上传失败")
 }
 
@@ -636,7 +636,7 @@ func IsInitStoreError(err error) bool {
 	return e.Reason == ErrorReason_InitStoreError.String() && e.Code == 500
 }
 
-func InitStoreError(args ...any) *errors.Error {
+func InitStoreError() *errors.Error {
 	return errors.New(500, ErrorReason_InitStoreError.String(), "存储引擎初始化失败")
 }
 
@@ -652,7 +652,7 @@ func IsFileFormatError(err error) bool {
 	return e.Reason == ErrorReason_FileFormatError.String() && e.Code == 500
 }
 
-func FileFormatError(args ...any) *errors.Error {
+func FileFormatError() *errors.Error {
 	return errors.New(500, ErrorReason_FileFormatError.String(), "文件格式错误")
 }
 
@@ -668,7 +668,7 @@ func IsNotExistFileError(err error) bool {
 	return e.Reason == ErrorReason_NotExistFileError.String() && e.Code == 500
 }
 
-func NotExistFileError(args ...any) *errors.Error {
+func NotExistFileError() *errors.Error {
 	return errors.New(500, ErrorReason_NotExistFileError.String(), "文件不存在")
 }
 
@@ -684,7 +684,7 @@ func IsAlreadyExistFileNameError(err error) bool {
 	return e.Reason == ErrorReason_AlreadyExistFileNameError.String() && e.Code == 500
 }
 
-func AlreadyExistFileNameError(args ...any) *errors.Error {
+func AlreadyExistFileNameError() *errors.Error {
 	return errors.New(500, ErrorReason_AlreadyExistFileNameError.String(), "文件名已存在")
 }
 
@@ -700,7 +700,7 @@ func IsAccessResourceError(err error) bool {
 	return e.Reason == ErrorReason_AccessResourceError.String() && e.Code == 500
 }
 
-func AccessResourceError(args ...any) *errors.Error {
+func AccessResourceError() *errors.Error {
 	return errors.New(500, ErrorReason_AccessResourceError.String(), "访问资源文件异常")
 }
 
@@ -716,7 +716,7 @@ func IsExportFileNameDupError(err error) bool {
 	return e.Reason == ErrorReason_ExportFileNameDupError.String() && e.Code == 500
 }
 
-func ExportFileNameDupError(args ...any) *errors.Error {
+func ExportFileNameDupError() *errors.Error {
 	return errors.New(500, ErrorReason_ExportFileNameDupError.String(), "导出文件重命名重复")
 }
 
@@ -732,7 +732,7 @@ func IsExportTaskProcessError(err error) bool {
 	return e.Reason == ErrorReason_ExportTaskProcessError.String() && e.Code == 500
 }
 
-func ExportTaskProcessError(args ...any) *errors.Error {
+func ExportTaskProcessError() *errors.Error {
 	return errors.New(500, ErrorReason_ExportTaskProcessError.String(), "导出任务正在进行中")
 }
 
@@ -748,7 +748,7 @@ func IsExceedMaxSizeError(err error) bool {
 	return e.Reason == ErrorReason_ExceedMaxSizeError.String() && e.Code == 500
 }
 
-func ExceedMaxSizeError(args ...any) *errors.Error {
+func ExceedMaxSizeError() *errors.Error {
 	return errors.New(500, ErrorReason_ExceedMaxSizeError.String(), "超过允许上传的文件大小")
 }
 
@@ -766,7 +766,7 @@ func IsManagerServiceError(err error) bool {
 }
 
 // Manager service errors (3000-3999)
-func ManagerServiceError(args ...any) *errors.Error {
+func ManagerServiceError() *errors.Error {
 	return errors.New(500, ErrorReason_ManagerServiceError.String(), "管理中心服务异常")
 }
 
@@ -783,7 +783,7 @@ func IsDepartmentPurviewError(err error) bool {
 	return e.Reason == ErrorReason_DepartmentPurviewError.String() && e.Code == 500
 }
 
-func DepartmentPurviewError(args ...any) *errors.Error {
+func DepartmentPurviewError() *errors.Error {
 	return errors.New(500, ErrorReason_DepartmentPurviewError.String(), "无此部门权限")
 }
 
@@ -799,7 +799,7 @@ func IsRolePurviewError(err error) bool {
 	return e.Reason == ErrorReason_RolePurviewError.String() && e.Code == 500
 }
 
-func RolePurviewError(args ...any) *errors.Error {
+func RolePurviewError() *errors.Error {
 	return errors.New(500, ErrorReason_RolePurviewError.String(), "无此角色权限")
 }
 
@@ -815,7 +815,7 @@ func IsUserPurviewError(err error) bool {
 	return e.Reason == ErrorReason_UserPurviewError.String() && e.Code == 500
 }
 
-func UserPurviewError(args ...any) *errors.Error {
+func UserPurviewError() *errors.Error {
 	return errors.New(500, ErrorReason_UserPurviewError.String(), "无此用户权限")
 }
 
@@ -831,7 +831,7 @@ func IsMenuPurviewError(err error) bool {
 	return e.Reason == ErrorReason_MenuPurviewError.String() && e.Code == 500
 }
 
-func MenuPurviewError(args ...any) *errors.Error {
+func MenuPurviewError() *errors.Error {
 	return errors.New(500, ErrorReason_MenuPurviewError.String(), "无此菜单权限")
 }
 
@@ -847,7 +847,7 @@ func IsEditSystemDataError(err error) bool {
 	return e.Reason == ErrorReason_EditSystemDataError.String() && e.Code == 500
 }
 
-func EditSystemDataError(args ...any) *errors.Error {
+func EditSystemDataError() *errors.Error {
 	return errors.New(500, ErrorReason_EditSystemDataError.String(), "系统数据，不允许修改")
 }
 
@@ -863,7 +863,7 @@ func IsGenCaptchaError(err error) bool {
 	return e.Reason == ErrorReason_GenCaptchaError.String() && e.Code == 500
 }
 
-func GenCaptchaError(args ...any) *errors.Error {
+func GenCaptchaError() *errors.Error {
 	return errors.New(500, ErrorReason_GenCaptchaError.String(), "生成验证码失败")
 }
 
@@ -879,7 +879,7 @@ func IsSendCaptchaError(err error) bool {
 	return e.Reason == ErrorReason_SendCaptchaError.String() && e.Code == 500
 }
 
-func SendCaptchaError(args ...any) *errors.Error {
+func SendCaptchaError() *errors.Error {
 	return errors.New(500, ErrorReason_SendCaptchaError.String(), "发送验证码失败")
 }
 
@@ -895,7 +895,7 @@ func IsDeleteSystemDataError(err error) bool {
 	return e.Reason == ErrorReason_DeleteSystemDataError.String() && e.Code == 500
 }
 
-func DeleteSystemDataError(args ...any) *errors.Error {
+func DeleteSystemDataError() *errors.Error {
 	return errors.New(500, ErrorReason_DeleteSystemDataError.String(), "系统数据，不允许删除")
 }
 
@@ -911,7 +911,7 @@ func IsVerifyCaptchaError(err error) bool {
 	return e.Reason == ErrorReason_VerifyCaptchaError.String() && e.Code == 500
 }
 
-func VerifyCaptchaError(args ...any) *errors.Error {
+func VerifyCaptchaError() *errors.Error {
 	return errors.New(500, ErrorReason_VerifyCaptchaError.String(), "验证码错误")
 }
 
@@ -927,7 +927,7 @@ func IsUsernameFormatError(err error) bool {
 	return e.Reason == ErrorReason_UsernameFormatError.String() && e.Code == 500
 }
 
-func UsernameFormatError(args ...any) *errors.Error {
+func UsernameFormatError() *errors.Error {
 	return errors.New(500, ErrorReason_UsernameFormatError.String(), "用户名格式错误")
 }
 
@@ -943,7 +943,7 @@ func IsUsernameNotExistError(err error) bool {
 	return e.Reason == ErrorReason_UsernameNotExistError.String() && e.Code == 500
 }
 
-func UsernameNotExistError(args ...any) *errors.Error {
+func UsernameNotExistError() *errors.Error {
 	return errors.New(500, ErrorReason_UsernameNotExistError.String(), "用户不存在")
 }
 
@@ -959,7 +959,7 @@ func IsUserDisableError(err error) bool {
 	return e.Reason == ErrorReason_UserDisableError.String() && e.Code == 500
 }
 
-func UserDisableError(args ...any) *errors.Error {
+func UserDisableError() *errors.Error {
 	return errors.New(500, ErrorReason_UserDisableError.String(), "用户已被禁用")
 }
 
@@ -975,7 +975,7 @@ func IsRoleDisableError(err error) bool {
 	return e.Reason == ErrorReason_RoleDisableError.String() && e.Code == 500
 }
 
-func RoleDisableError(args ...any) *errors.Error {
+func RoleDisableError() *errors.Error {
 	return errors.New(500, ErrorReason_RoleDisableError.String(), "角色已被禁用")
 }
 
@@ -991,7 +991,7 @@ func IsGenTokenError(err error) bool {
 	return e.Reason == ErrorReason_GenTokenError.String() && e.Code == 500
 }
 
-func GenTokenError(args ...any) *errors.Error {
+func GenTokenError() *errors.Error {
 	return errors.New(500, ErrorReason_GenTokenError.String(), "token生成失败")
 }
 
@@ -1007,7 +1007,7 @@ func IsParseTokenError(err error) bool {
 	return e.Reason == ErrorReason_ParseTokenError.String() && e.Code == 500
 }
 
-func ParseTokenError(args ...any) *errors.Error {
+func ParseTokenError() *errors.Error {
 	return errors.New(500, ErrorReason_ParseTokenError.String(), "token解析失败")
 }
 
@@ -1023,7 +1023,7 @@ func IsForbiddenError(err error) bool {
 	return e.Reason == ErrorReason_ForbiddenError.String() && e.Code == 403
 }
 
-func ForbiddenError(args ...any) *errors.Error {
+func ForbiddenError() *errors.Error {
 	return errors.New(403, ErrorReason_ForbiddenError.String(), "无接口权限")
 }
 
@@ -1039,7 +1039,7 @@ func IsNotPermissionError(err error) bool {
 	return e.Reason == ErrorReason_NotPermissionError.String() && e.Code == 500
 }
 
-func NotPermissionError(args ...any) *errors.Error {
+func NotPermissionError() *errors.Error {
 	return errors.New(500, ErrorReason_NotPermissionError.String(), "无资源权限")
 }
 
@@ -1057,7 +1057,7 @@ func IsUserServiceError(err error) bool {
 }
 
 // Usercenter errors (4000-4999)
-func UserServiceError(args ...any) *errors.Error {
+func UserServiceError() *errors.Error {
 	return errors.New(500, ErrorReason_UserServiceError.String(), "用户服务异常")
 }
 
@@ -1074,7 +1074,7 @@ func IsGenCaptchaTypeError(err error) bool {
 	return e.Reason == ErrorReason_GenCaptchaTypeError.String() && e.Code == 500
 }
 
-func GenCaptchaTypeError(args ...any) *errors.Error {
+func GenCaptchaTypeError() *errors.Error {
 	return errors.New(500, ErrorReason_GenCaptchaTypeError.String(), "错误的验证码类型")
 }
 
@@ -1090,7 +1090,7 @@ func IsNotExistEmailError(err error) bool {
 	return e.Reason == ErrorReason_NotExistEmailError.String() && e.Code == 500
 }
 
-func NotExistEmailError(args ...any) *errors.Error {
+func NotExistEmailError() *errors.Error {
 	return errors.New(500, ErrorReason_NotExistEmailError.String(), "不存在此邮箱")
 }
 
@@ -1106,7 +1106,7 @@ func IsOAuthLoginError(err error) bool {
 	return e.Reason == ErrorReason_OAuthLoginError.String() && e.Code == 500
 }
 
-func OAuthLoginError(args ...any) *errors.Error {
+func OAuthLoginError() *errors.Error {
 	return errors.New(500, ErrorReason_OAuthLoginError.String(), "三方授权登陆失败")
 }
 
@@ -1122,7 +1122,7 @@ func IsNotUserError(err error) bool {
 	return e.Reason == ErrorReason_NotUserError.String() && e.Code == 500
 }
 
-func NotUserError(args ...any) *errors.Error {
+func NotUserError() *errors.Error {
 	return errors.New(500, ErrorReason_NotUserError.String(), "用户不存在")
 }
 
@@ -1138,7 +1138,7 @@ func IsNotAppScopeError(err error) bool {
 	return e.Reason == ErrorReason_NotAppScopeError.String() && e.Code == 500
 }
 
-func NotAppScopeError(args ...any) *errors.Error {
+func NotAppScopeError() *errors.Error {
 	return errors.New(500, ErrorReason_NotAppScopeError.String(), "用户无应用权限")
 }
 
@@ -1154,7 +1154,7 @@ func IsRsaDecodeError(err error) bool {
 	return e.Reason == ErrorReason_RsaDecodeError.String() && e.Code == 500
 }
 
-func RsaDecodeError(args ...any) *errors.Error {
+func RsaDecodeError() *errors.Error {
 	return errors.New(500, ErrorReason_RsaDecodeError.String(), "rsa解密失败")
 }
 
@@ -1170,7 +1170,7 @@ func IsPasswordFormatError(err error) bool {
 	return e.Reason == ErrorReason_PasswordFormatError.String() && e.Code == 500
 }
 
-func PasswordFormatError(args ...any) *errors.Error {
+func PasswordFormatError() *errors.Error {
 	return errors.New(500, ErrorReason_PasswordFormatError.String(), "密码格式错误")
 }
 
@@ -1186,7 +1186,7 @@ func IsDisableRegisterError(err error) bool {
 	return e.Reason == ErrorReason_DisableRegisterError.String() && e.Code == 401
 }
 
-func DisableRegisterError(args ...any) *errors.Error {
+func DisableRegisterError() *errors.Error {
 	return errors.New(401, ErrorReason_DisableRegisterError.String(), "应用已关闭注册权限")
 }
 
@@ -1202,7 +1202,7 @@ func IsAlreadyExistEmailError(err error) bool {
 	return e.Reason == ErrorReason_AlreadyExistEmailError.String() && e.Code == 500
 }
 
-func AlreadyExistEmailError(args ...any) *errors.Error {
+func AlreadyExistEmailError() *errors.Error {
 	return errors.New(500, ErrorReason_AlreadyExistEmailError.String(), "邮箱已存在")
 }
 
@@ -1218,7 +1218,7 @@ func IsAlreadyExistUsernameError(err error) bool {
 	return e.Reason == ErrorReason_AlreadyExistUsernameError.String() && e.Code == 500
 }
 
-func AlreadyExistUsernameError(args ...any) *errors.Error {
+func AlreadyExistUsernameError() *errors.Error {
 	return errors.New(500, ErrorReason_AlreadyExistUsernameError.String(), "账号已存在")
 }
 
@@ -1234,7 +1234,7 @@ func IsRegisterError(err error) bool {
 	return e.Reason == ErrorReason_RegisterError.String() && e.Code == 500
 }
 
-func RegisterError(args ...any) *errors.Error {
+func RegisterError() *errors.Error {
 	return errors.New(500, ErrorReason_RegisterError.String(), "用户注册失败")
 }
 
@@ -1250,7 +1250,7 @@ func IsBindError(err error) bool {
 	return e.Reason == ErrorReason_BindError.String() && e.Code == 500
 }
 
-func BindError(args ...any) *errors.Error {
+func BindError() *errors.Error {
 	return errors.New(500, ErrorReason_BindError.String(), "用户注册失败")
 }
 
@@ -1266,7 +1266,7 @@ func IsLoginError(err error) bool {
 	return e.Reason == ErrorReason_LoginError.String() && e.Code == 500
 }
 
-func LoginError(args ...any) *errors.Error {
+func LoginError() *errors.Error {
 	return errors.New(500, ErrorReason_LoginError.String(), "登陆失败")
 }
 
@@ -1282,7 +1282,7 @@ func IsExistFeedbackError(err error) bool {
 	return e.Reason == ErrorReason_ExistFeedbackError.String() && e.Code == 500
 }
 
-func ExistFeedbackError(args ...any) *errors.Error {
+func ExistFeedbackError() *errors.Error {
 	return errors.New(500, ErrorReason_ExistFeedbackError.String(), "已存在重复的反馈内容")
 }
 
@@ -1298,7 +1298,7 @@ func IsAlreadyBindError(err error) bool {
 	return e.Reason == ErrorReason_AlreadyBindError.String() && e.Code == 500
 }
 
-func AlreadyBindError(args ...any) *errors.Error {
+func AlreadyBindError() *errors.Error {
 	return errors.New(500, ErrorReason_AlreadyBindError.String(), "该账号已绑定过其他平台，不能重复绑定")
 }
 
@@ -1314,7 +1314,7 @@ func IsAppMaintenanceError(err error) bool {
 	return e.Reason == ErrorReason_AppMaintenanceError.String() && e.Code == 500
 }
 
-func AppMaintenanceError(args ...any) *errors.Error {
+func AppMaintenanceError() *errors.Error {
 	return errors.New(500, ErrorReason_AppMaintenanceError.String(), "当前应用正在维护中")
 }
 
@@ -1330,7 +1330,7 @@ func IsChannelCloseError(err error) bool {
 	return e.Reason == ErrorReason_ChannelCloseError.String() && e.Code == 500
 }
 
-func ChannelCloseError(args ...any) *errors.Error {
+func ChannelCloseError() *errors.Error {
 	return errors.New(500, ErrorReason_ChannelCloseError.String(), "当前渠道已关闭")
 }
 
@@ -1346,7 +1346,7 @@ func IsAppNotBindChannelError(err error) bool {
 	return e.Reason == ErrorReason_AppNotBindChannelError.String() && e.Code == 500
 }
 
-func AppNotBindChannelError(args ...any) *errors.Error {
+func AppNotBindChannelError() *errors.Error {
 	return errors.New(500, ErrorReason_AppNotBindChannelError.String(), "应用未开通此渠道")
 }
 
@@ -1362,7 +1362,7 @@ func IsChannelNotBindUserError(err error) bool {
 	return e.Reason == ErrorReason_ChannelNotBindUserError.String() && e.Code == 500
 }
 
-func ChannelNotBindUserError(args ...any) *errors.Error {
+func ChannelNotBindUserError() *errors.Error {
 	return errors.New(500, ErrorReason_ChannelNotBindUserError.String(), "当前授权渠道未绑定用户")
 }
 
