@@ -2,29 +2,31 @@ package webserver
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
-	"unsafe"
 
 	"github.com/go-kratos/kratos/v2/log"
+
+	"github.com/dstgo/wilson/framework/pkg/strs"
 )
 
-func Run(dir string, addr string, data map[string]any) {
+func ServeDir(dir string, addr string, data map[string]any) error {
 	path := filepath.Join(dir, "index.html")
 	content, err := os.ReadFile(path)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	if len(data) != 0 {
-		var out = bytes.NewBuffer([]byte(""))
+		var out = bytes.NewBuffer(nil)
 		tpl := template.New("html")
-		parser, err := tpl.Parse(*(*string)(unsafe.Pointer(&content)))
+		parser, err := tpl.Parse(strs.BytesToString(content))
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		if err = parser.Execute(out, data); err != nil {
@@ -50,8 +52,10 @@ func Run(dir string, addr string, data map[string]any) {
 		http.NotFound(w, r)
 	})
 
-	log.Infof("Starting web server at %s\n", addr)
+	log.Infof("static web server lisenting at %s\n", addr)
 	if err := http.ListenAndServe(addr, nil); err != nil {
-		panic("Failed to start web server: " + err.Error())
+		return fmt.Errorf("failed to start web server: %s", err)
 	}
+
+	return err
 }
