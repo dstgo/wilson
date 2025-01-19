@@ -71,7 +71,7 @@ func genErrorsReason(_ *protogen.Plugin, _ *protogen.File, g *protogen.Generated
 	for _, v := range enum.Values {
 		enumCode := code
 		eCode := proto.GetExtension(v.Desc.Options(), errors.E_Code)
-		if c, ok := eCode.(int32); ok {
+		if c, ok := eCode.(int32); ok && c > 0 {
 			enumCode = int(c)
 		}
 		// If the current enumeration does not contain 'errors.code'
@@ -84,7 +84,7 @@ func genErrorsReason(_ *protogen.Plugin, _ *protogen.File, g *protogen.Generated
 		}
 
 		pm := proto.GetExtension(v.Desc.Options(), errors.E_Message)
-		message := "未知错误"
+		message := "unknown error"
 		if msg, ok := pm.(string); ok {
 			message = msg
 		}
@@ -99,6 +99,7 @@ func genErrorsReason(_ *protogen.Plugin, _ *protogen.File, g *protogen.Generated
 			Value:      string(v.Desc.Name()),
 			CamelValue: case2Camel(string(v.Desc.Name())),
 			HTTPCode:   enumCode,
+			Number:     int32(v.Desc.Number()),
 			Comment:    comment,
 			HasComment: len(comment) > 0,
 			Message:    message,

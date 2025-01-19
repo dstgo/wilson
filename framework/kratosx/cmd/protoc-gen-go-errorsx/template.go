@@ -13,6 +13,7 @@ type errorInfo struct {
 	Name       string
 	Value      string
 	HTTPCode   int
+	Number     int32
 	CamelValue string
 	Comment    string
 	HasComment bool
