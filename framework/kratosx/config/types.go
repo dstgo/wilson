@@ -5,17 +5,11 @@ import (
 )
 
 type App struct {
-	ID      string
-	Name    string
-	Version string
-	Env     string
-	Server  *struct {
-		Count    int
-		Registry *string
-		Http     *HttpService
-		Grpc     *GrpcService
-		Tls      *Tls
-	}
+	ID             string
+	Name           string
+	Version        string
+	Env            string
+	Server         *ServerConfig
 	Signature      *Signature
 	Log            *Logger
 	Pool           *Pool
@@ -33,6 +27,32 @@ type App struct {
 	RateLimit      bool
 	Metrics        bool
 	Prometheus     []*Prometheus
+}
+
+type ServerConfig struct {
+	Count    int
+	Registry *string
+	Http     *HttpService
+	Grpc     *GrpcService
+	Tls      *Tls
+}
+
+type LoggerFile struct {
+	Name      string
+	MaxSize   int
+	MaxBackup int
+	MaxAge    int
+	Compress  bool
+	LocalTime bool
+}
+
+type Logger struct {
+	Level      string
+	Output     []string
+	Encode     string
+	Caller     bool
+	CallerSkip *int
+	File       *LoggerFile
 }
 
 type Tls struct {
@@ -85,6 +105,17 @@ type DBConnect struct {
 	DBName   string
 }
 
+type DBErrorFormat struct {
+	Duplicated *string
+	AddForeign *string
+	DelForeign *string
+}
+
+type DBTransformError struct {
+	Enable bool
+	Format *DBErrorFormat
+}
+
 type DBConfig struct {
 	TablePrefix    string
 	Connect        DBConnect
@@ -97,15 +128,6 @@ type DBConfig struct {
 	MaxOpenConn    int
 	MaxIdleConn    int
 	Initializer    *DBInitializer
-}
-
-type DBTransformError struct {
-	Enable bool
-	Format *struct {
-		Duplicated *string
-		AddForeign *string
-		DelForeign *string
-	}
 }
 
 type DBInitializer struct {
@@ -186,22 +208,6 @@ type Authentication struct {
 	RoleKey    string
 	Whitelist  map[string]bool
 	SkipRole   []string
-}
-
-type Logger struct {
-	Level      string
-	Output     []string
-	Encode     string
-	Caller     bool
-	CallerSkip *int
-	File       *struct {
-		Name      string
-		MaxSize   int
-		MaxBackup int
-		MaxAge    int
-		Compress  bool
-		LocalTime bool
-	}
 }
 
 type Tracing struct {
