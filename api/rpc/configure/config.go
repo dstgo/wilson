@@ -40,7 +40,7 @@ func NewFromEnv() config.Source {
 	name := os.Getenv("APP_NAME")
 	conn, err := grpc.DialInsecure(context.Background(), grpc.WithEndpoint(host))
 	if err != nil {
-		panic("configure connect error:" + err.Error())
+		panic("configure connect error: " + err.Error())
 	}
 
 	return &source{
