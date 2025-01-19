@@ -40,7 +40,7 @@ func NewResource(
 func (u *Resource) GetResource(ctx kratosx.Context, id uint32) (*entity.Resource, error) {
 	resource, err := u.repo.GetResource(ctx, id)
 	if err != nil {
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 	return resource, nil
 }
@@ -49,7 +49,7 @@ func (u *Resource) GetResource(ctx kratosx.Context, id uint32) (*entity.Resource
 func (u *Resource) GetResourceByKeyword(ctx kratosx.Context, keyword string) (*entity.Resource, error) {
 	resource, err := u.repo.GetResourceByKeyword(ctx, keyword)
 	if err != nil {
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 	return resource, nil
 }
@@ -58,7 +58,7 @@ func (u *Resource) GetResourceByKeyword(ctx kratosx.Context, keyword string) (*e
 func (u *Resource) ListResource(ctx kratosx.Context, req *types.ListResourceRequest) ([]*entity.Resource, uint32, error) {
 	list, total, err := u.repo.ListResource(ctx, req)
 	if err != nil {
-		return nil, 0, errors.ListError(err.Error())
+		return nil, 0, errors.ListErrorWrap(err)
 	}
 	return list, total, nil
 }
@@ -67,7 +67,7 @@ func (u *Resource) ListResource(ctx kratosx.Context, req *types.ListResourceRequ
 func (u *Resource) CreateResource(ctx kratosx.Context, req *entity.Resource) (uint32, error) {
 	id, err := u.repo.CreateResource(ctx, req)
 	if err != nil {
-		return 0, errors.CreateError(err.Error())
+		return 0, errors.CreateErrorWrap(err)
 	}
 	return id, nil
 }
@@ -75,7 +75,7 @@ func (u *Resource) CreateResource(ctx kratosx.Context, req *entity.Resource) (ui
 // UpdateResource 更新资源配置信息
 func (u *Resource) UpdateResource(ctx kratosx.Context, req *entity.Resource) error {
 	if err := u.repo.UpdateResource(ctx, req); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }
@@ -83,7 +83,7 @@ func (u *Resource) UpdateResource(ctx kratosx.Context, req *entity.Resource) err
 // DeleteResource 删除资源配置信息
 func (u *Resource) DeleteResource(ctx kratosx.Context, id uint32) error {
 	if err := u.repo.DeleteResource(ctx, id); err != nil {
-		return errors.DeleteError(err.Error())
+		return errors.DeleteErrorWrap(err)
 	}
 	return nil
 }
@@ -94,7 +94,7 @@ func (u *Resource) ListResourceValue(ctx kratosx.Context, rid uint32) ([]*entity
 		ResourceId: &rid,
 	})
 	if err != nil {
-		return nil, errors.ListError(err.Error())
+		return nil, errors.ListErrorWrap(err)
 	}
 
 	all, scopes, err := u.permission.GetEnv(ctx)
@@ -121,7 +121,7 @@ func (u *Resource) UpdateResourceValue(ctx kratosx.Context, list []*entity.Resou
 	// 检验数据类型
 	resource, err := u.repo.GetResource(ctx, list[0].ResourceId)
 	if err != nil {
-		return errors.GetError(err.Error())
+		return errors.GetErrorWrap(err)
 	}
 	fields := strings.Split(resource.Fields, ",")
 
@@ -141,7 +141,7 @@ func (u *Resource) UpdateResourceValue(ctx kratosx.Context, list []*entity.Resou
 		value := item.Value
 		m := make(map[string]any)
 		if err := json.Unmarshal([]byte(value), &m); err != nil || len(m) == 0 {
-			return errors.ResourceValueTypeError("字段类型必须是对象")
+			return errors.ResourceValueTypeErrorf("字段类型必须是对象")
 		}
 		for _, key := range fields {
 			if m[key] == nil {
@@ -156,7 +156,7 @@ func (u *Resource) UpdateResourceValue(ctx kratosx.Context, list []*entity.Resou
 	}
 
 	if err := u.repo.UpdateResourceValues(ctx, result); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }

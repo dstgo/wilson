@@ -86,7 +86,7 @@ func (u *Configure) GetConfigureByEnvAndSrv(ctx kratosx.Context, envId, srvId ui
 func (u *Configure) ListConfigure(ctx kratosx.Context, req *types.ListConfigureRequest) ([]*entity.Configure, uint32, error) {
 	list, total, err := u.repo.ListConfigure(ctx, req)
 	if err != nil {
-		return nil, 0, errors.ListError(err.Error())
+		return nil, 0, errors.ListErrorWrap(err)
 	}
 	return list, total, nil
 }
@@ -102,7 +102,7 @@ func (u *Configure) UpdateConfigure(ctx kratosx.Context, req *entity.Configure) 
 
 	format, content, err := u.RenderCurrentTemplate(ctx, req.ServerId, req.EnvId)
 	if err != nil {
-		return errors.RenderTemplateError(err.Error())
+		return errors.RenderTemplateErrorWrap(err)
 	}
 
 	// 生成数据
@@ -118,11 +118,11 @@ func (u *Configure) UpdateConfigure(ctx kratosx.Context, req *entity.Configure) 
 		}
 		req.Id = configure.Id
 		if err := u.repo.UpdateConfigure(ctx, req); err != nil {
-			return errors.DatabaseError(err.Error())
+			return errors.DatabaseErrorWrap(err)
 		}
 	} else {
 		if _, err := u.repo.CreateConfigure(ctx, req); err != nil {
-			return errors.DatabaseError(err.Error())
+			return errors.DatabaseErrorWrap(err)
 		}
 	}
 
@@ -166,7 +166,7 @@ func (u *Configure) RenderCurrentTemplate(ctx kratosx.Context, srvId, envId uint
 	tpr := utils.NewTemplateParser()
 	content, err := tpr.RenderTemplate(bvs, rvs, template.Format, template.Content)
 	if err != nil {
-		return "", "", errors.RenderTemplateError(err.Error())
+		return "", "", errors.RenderTemplateErrorWrap(err)
 	}
 
 	return template.Format, content, nil
@@ -201,7 +201,7 @@ func (u *Configure) CompareConfigure(ctx kratosx.Context, req *types.CompareConf
 	var curKeys []string
 	format, content, err := u.RenderCurrentTemplate(ctx, req.ServerId, req.EnvId)
 	if err != nil {
-		return nil, errors.RenderTemplateError(err.Error())
+		return nil, errors.RenderTemplateErrorWrap(err)
 	}
 	ctc := map[string]any{}
 	ce := encoding.GetCodec(format)
@@ -301,12 +301,12 @@ func (u *Configure) Watch(ctx kratosx.Context, in *types.WatcherConfigRequest, r
 		Content: configure.Content,
 		Format:  configure.Format,
 	}); err != nil {
-		return errors.WatchConfigureError(err.Error())
+		return errors.WatchConfigureErrorWrap(err)
 	}
 
 	// 注册回调监听
 	closer := <-u.registerWatch(env.Id, server.Id, reply)
-	return errors.WatchConfigureError(closer)
+	return errors.WatchConfigureErrorf("%s", closer)
 }
 
 func (u *Configure) registerWatch(envId, srvId uint32, reply types.WatcherConfigReplyFunc) <-chan string {
@@ -326,7 +326,7 @@ func (u *Configure) SendWatcher(ctx kratosx.Context, envId uint32, srvId uint32)
 	// 获取当前配置
 	cfg, err := u.repo.GetConfigureByEnvAndSrv(ctx, envId, srvId)
 	if err != nil {
-		return errors.DatabaseError(err.Error())
+		return errors.DatabaseErrorWrap(err)
 	}
 
 	u.mutex.Lock()

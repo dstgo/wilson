@@ -81,7 +81,7 @@ func (u *Menu) CreateMenu(ctx kratosx.Context, menu *entity.Menu) (uint32, error
 
 		return nil
 	}); err != nil {
-		return 0, errors.CreateError(err.Error())
+		return 0, errors.CreateErrorWrap(err)
 	}
 	return id, nil
 }
@@ -134,7 +134,7 @@ func (u *Menu) UpdateMenu(ctx kratosx.Context, menu *entity.Menu) error {
 	})
 
 	if err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }
@@ -164,7 +164,7 @@ func (u *Menu) DeleteMenu(ctx kratosx.Context, id uint32) error {
 		// 删除
 		return u.repo.DeleteMenu(ctx, id)
 	}); err != nil {
-		return errors.DeleteError(err.Error())
+		return errors.DeleteErrorWrap(err)
 	}
 	return nil
 }

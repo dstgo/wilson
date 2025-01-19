@@ -78,14 +78,12 @@ func (u *File) GetFile(ctx kratosx.Context, req *types.GetFileRequest) (*entity.
 		return nil, errors.ParamsError()
 	}
 	if err != nil {
-		return nil, errors.GetError(err.Error())
+		return nil, errors.NotExistFileErrorWrap(err)
 	}
 	if res.Status != STATUS_COMPLETED {
 		return nil, errors.NotExistFileError()
 	}
-	if err != nil {
-		return nil, errors.NotExistFileError(err.Error())
-	}
+
 	res.Url, _ = u.store.GenTemporaryURL(res.Key)
 	return res, nil
 }
@@ -94,7 +92,7 @@ func (u *File) GetFile(ctx kratosx.Context, req *types.GetFileRequest) (*entity.
 func (u *File) ListFile(ctx kratosx.Context, req *types.ListFileRequest) ([]*entity.File, uint32, error) {
 	list, total, err := u.repo.ListFile(ctx, req)
 	if err != nil {
-		return nil, 0, errors.ListError(err.Error())
+		return nil, 0, errors.ListErrorWrap(err)
 	}
 	for ind, item := range list {
 		url, err := u.store.GenTemporaryURL(item.Key)
@@ -120,7 +118,7 @@ func (u *File) PrepareUploadFile(ctx kratosx.Context, req *types.PrepareUploadFi
 		limit, err = u.directory.GetDirectoryLimitByPath(ctx, paths)
 	}
 	if err != nil {
-		return nil, errors.DatabaseError(err.Error())
+		return nil, errors.DatabaseErrorWrap(err)
 	}
 	directoryId = limit.DirectoryId
 	chunkSize := utils.GetKBSize(u.conf.ChunkSize)
@@ -128,13 +126,13 @@ func (u *File) PrepareUploadFile(ctx kratosx.Context, req *types.PrepareUploadFi
 	// 校验是否存在上传记录
 	oldFile, err := u.repo.GetFileBySha(ctx, req.Sha)
 	if err != nil && !gormtranserror.Is(err, gorm.ErrRecordNotFound) {
-		return nil, errors.UpdateError(err.Error())
+		return nil, errors.UpdateErrorWrap(err)
 	}
 	if err == nil {
 		// 触发秒传
 		if oldFile.Status == STATUS_COMPLETED {
 			if err := u.repo.CopyFile(ctx, oldFile, directoryId, req.Name); err != nil {
-				return nil, errors.UploadFileError(err.Error())
+				return nil, errors.UploadFileErrorWrap(err)
 			}
 			url, _ := u.store.GenTemporaryURL(oldFile.Key)
 			return &types.PrepareUploadFileReply{
@@ -152,13 +150,13 @@ func (u *File) PrepareUploadFile(ctx kratosx.Context, req *types.PrepareUploadFi
 		// 判断是否完成，完成则合并
 		if len(chunkFactory.UploadedChunkIndex()) == int(oldFile.ChunkCount) {
 			if err := chunkFactory.Complete(); err != nil {
-				return nil, errors.SystemError(err.Error())
+				return nil, errors.SystemErrorWrap(err)
 			}
 			if err := u.repo.UpdateFile(ctx, &entity.File{
 				BaseModel: ktypes.BaseModel{Id: oldFile.Id},
 				Status:    STATUS_COMPLETED,
 			}); err != nil {
-				return nil, errors.SystemError(err.Error())
+				return nil, errors.SystemErrorWrap(err)
 			}
 			url, _ := u.store.GenTemporaryURL(oldFile.Key)
 			return &types.PrepareUploadFileReply{
@@ -208,13 +206,13 @@ func (u *File) PrepareUploadFile(ctx kratosx.Context, req *types.PrepareUploadFi
 		file.ChunkCount = uint32(math.Ceil(float64(req.Size) / float64(chunkSize)))
 		chunkFactory, err := u.store.NewPutChunk(file.Key)
 		if err != nil {
-			return nil, errors.UpdateError(err.Error())
+			return nil, errors.UpdateErrorWrap(err)
 		}
 		file.UploadId = chunkFactory.UploadID()
 	}
 
 	if _, err = u.repo.CreateFile(ctx, file); err != nil {
-		return nil, errors.UpdateError(err.Error())
+		return nil, errors.UpdateErrorWrap(err)
 	}
 
 	return &types.PrepareUploadFileReply{
@@ -230,14 +228,14 @@ func (u *File) PrepareUploadFile(ctx kratosx.Context, req *types.PrepareUploadFi
 func (u *File) UploadFile(ctx kratosx.Context, req *types.UploadFileRequest) (*types.UploadFileReply, error) {
 	file, err := u.repo.GetFileByUploadId(ctx, req.UploadId)
 	if err != nil {
-		return nil, errors.UpdateError("不存在上传任务")
+		return nil, errors.UpdateErrorf("不存在上传任务")
 	}
 	if file.Status == STATUS_COMPLETED {
-		return nil, errors.UpdateError("请勿重复上传")
+		return nil, errors.UpdateErrorf("请勿重复上传")
 	}
 
 	if err != nil {
-		return nil, errors.UpdateError(err.Error())
+		return nil, errors.UpdateErrorWrap(err)
 	}
 
 	// 直接上传
@@ -249,12 +247,12 @@ func (u *File) UploadFile(ctx kratosx.Context, req *types.UploadFileRequest) (*t
 			BaseModel: ktypes.BaseModel{Id: file.Id},
 			Status:    STATUS_COMPLETED,
 		}); err != nil {
-			return nil, errors.UploadFileError(err.Error())
+			return nil, errors.UploadFileErrorWrap(err)
 		}
 	} else {
 		chunkFactory, err := u.store.NewPutChunkByUploadID(file.Key, req.UploadId)
 		if err != nil {
-			return nil, errors.UpdateError(err.Error())
+			return nil, errors.UpdateErrorWrap(err)
 		}
 		if err = chunkFactory.AppendBytes(req.Data, int(req.Index)); err != nil {
 			return nil, err
@@ -287,7 +285,7 @@ func (u *File) UploadFile(ctx kratosx.Context, req *types.UploadFileRequest) (*t
 					}()
 				})
 				if cErr != nil {
-					return nil, errors.UpdateError(err.Error())
+					return nil, errors.UpdateErrorWrap(err)
 				}
 			}
 			u.rw.RUnlock()
@@ -304,7 +302,7 @@ func (u *File) UploadFile(ctx kratosx.Context, req *types.UploadFileRequest) (*t
 // UpdateFile 更新文件信息
 func (u *File) UpdateFile(ctx kratosx.Context, req *entity.File) error {
 	if err := u.repo.UpdateFile(ctx, req); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }
@@ -322,7 +320,7 @@ func (u *File) DeleteFile(ctx kratosx.Context, ids []uint32) (uint32, error) {
 		}
 	})
 	if err != nil {
-		return 0, errors.DeleteError(err.Error())
+		return 0, errors.DeleteErrorWrap(err)
 	}
 	return total, nil
 }

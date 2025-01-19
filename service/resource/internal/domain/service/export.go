@@ -74,7 +74,7 @@ func (u *Export) ListExport(ctx kratosx.Context, req *types.ListExportRequest) (
 	list, total, err := u.repo.ListExport(ctx, req)
 	if err != nil {
 		ctx.Logger().Warnw("msg", "list directory error", "err", err.Error())
-		return nil, 0, errors.ListError(err.Error())
+		return nil, 0, errors.ListErrorWrap(err)
 	}
 	for ind, item := range list {
 		url, err := u.store.GenTemporaryURL(item.Src)
@@ -123,7 +123,7 @@ func (u *Export) ExportExcel(ctx kratosx.Context, req *types.ExportExcelRequest)
 	})
 	if err != nil {
 		ctx.Logger().Warnw("msg", "create export error", "err", err.Error())
-		return nil, errors.DatabaseError(err.Error())
+		return nil, errors.DatabaseErrorWrap(err)
 	}
 
 	go func() {
@@ -365,7 +365,7 @@ func (u *Export) ExportFile(ctx kratosx.Context, req *types.ExportFileRequest) (
 		for _, id := range req.Ids {
 			file, err := u.file.GetFile(ctx, id)
 			if err != nil {
-				return nil, errors.DatabaseError(err.Error())
+				return nil, errors.DatabaseErrorWrap(err)
 			}
 			req.Files = append(req.Files, &types.ExportFileItem{Value: file.Key})
 		}
@@ -382,7 +382,7 @@ func (u *Export) ExportFile(ctx kratosx.Context, req *types.ExportFileRequest) (
 		Status:       STATUS_PROGRESS,
 	})
 	if err != nil {
-		return nil, errors.DatabaseError(err.Error())
+		return nil, errors.DatabaseErrorWrap(err)
 	}
 
 	go func() {
@@ -411,7 +411,7 @@ func (u *Export) ExportFile(ctx kratosx.Context, req *types.ExportFileRequest) (
 func (u *Export) DeleteExport(ctx kratosx.Context, ids []uint32) (uint32, error) {
 	total, err := u.repo.DeleteExport(ctx, ids)
 	if err != nil {
-		return 0, errors.DeleteError(err.Error())
+		return 0, errors.DeleteErrorWrap(err)
 	}
 	return total, nil
 }
@@ -431,7 +431,7 @@ func (u *Export) GetExport(ctx kratosx.Context, req *types.GetExportRequest) (*e
 		return nil, errors.ParamsError()
 	}
 	if err != nil {
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 
 	res.Url, _ = u.store.GenTemporaryURL(res.Src)

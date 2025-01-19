@@ -63,7 +63,7 @@ func (u *Resource) GetResource(ctx kratosx.Context, req *types.GetResourceReques
 	// 获取资源的部门
 	ids, err := u.repo.GetResource(ctx, req)
 	if err != nil {
-		return nil, errors.DatabaseError(err.Error())
+		return nil, errors.DatabaseErrorWrap(err)
 	}
 	return ids, nil
 }
@@ -111,7 +111,7 @@ func (u *Resource) UpdateResource(ctx kratosx.Context, req *types.UpdateResource
 		// 设置新的资源权限
 		return u.repo.CreateResources(ctx, list)
 	}); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }

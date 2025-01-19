@@ -43,7 +43,7 @@ func (u *Server) ListServer(ctx kratosx.Context, req *types.ListServerRequest) (
 	// 获取列表
 	list, total, err := u.repo.ListServer(ctx, req)
 	if err != nil {
-		return nil, 0, errors.ListError(err.Error())
+		return nil, 0, errors.ListErrorWrap(err)
 	}
 	return list, total, nil
 }
@@ -52,7 +52,7 @@ func (u *Server) ListServer(ctx kratosx.Context, req *types.ListServerRequest) (
 func (u *Server) CreateServer(ctx kratosx.Context, req *entity.Server) (uint32, error) {
 	id, err := u.repo.CreateServer(ctx, req)
 	if err != nil {
-		return 0, errors.CreateError(err.Error())
+		return 0, errors.CreateErrorWrap(err)
 	}
 	return id, nil
 }
@@ -66,7 +66,7 @@ func (u *Server) UpdateServer(ctx kratosx.Context, req *entity.Server) error {
 
 	// 更新服务
 	if err := u.repo.UpdateServer(ctx, req); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }
@@ -80,7 +80,7 @@ func (u *Server) DeleteServer(ctx kratosx.Context, id uint32) error {
 
 	// 删除服务
 	if err := u.repo.DeleteServer(ctx, id); err != nil {
-		return errors.DeleteError(err.Error())
+		return errors.DeleteErrorWrap(err)
 	}
 	return nil
 }

@@ -54,7 +54,7 @@ func (t *Template) CurrentTemplate(ctx kratosx.Context, srvId uint32) (*entity.T
 		if gormtranserror.Is(gorm.ErrRecordNotFound, err) {
 			return nil, errors.ServerNotExistTemplateError()
 		}
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 	return template, nil
 }
@@ -67,7 +67,7 @@ func (t *Template) GetTemplate(ctx kratosx.Context, id uint32) (*entity.Template
 	}
 
 	if err != nil {
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 	return template, nil
 }
@@ -79,7 +79,7 @@ func (t *Template) ListTemplate(ctx kratosx.Context, req *types.ListTemplateRequ
 	}
 	list, total, err := t.repo.ListTemplate(ctx, req)
 	if err != nil {
-		return nil, 0, errors.ListError(err.Error())
+		return nil, 0, errors.ListErrorWrap(err)
 	}
 	return list, total, nil
 }
@@ -94,7 +94,7 @@ func (t *Template) CreateTemplate(ctx kratosx.Context, template *entity.Template
 	otc := map[string]any{}
 	oe := encoding.GetCodec(template.Format)
 	if err := oe.Unmarshal([]byte(template.Content), &otc); err != nil {
-		return 0, errors.RenderTemplateError(err.Error())
+		return 0, errors.RenderTemplateErrorWrap(err)
 	}
 
 	// 当前的版本
@@ -111,7 +111,7 @@ func (t *Template) CreateTemplate(ctx kratosx.Context, template *entity.Template
 	keys := append(bsKeys, rsKeys...)
 	tp := utils.NewTemplateParser()
 	if err := tp.CheckTemplate(keys, template.Content); err != nil {
-		return 0, errors.RenderTemplateError(err.Error())
+		return 0, errors.RenderTemplateErrorWrap(err)
 	}
 
 	// 获取当前的模板
@@ -124,7 +124,7 @@ func (t *Template) CreateTemplate(ctx kratosx.Context, template *entity.Template
 			Content: template.Content,
 		})
 		if err != nil {
-			return 0, errors.RenderTemplateError(err.Error())
+			return 0, errors.RenderTemplateErrorWrap(err)
 		}
 		compareByte, _ := json.Marshal(compare)
 		template.Compare = string(compareByte)
@@ -133,7 +133,7 @@ func (t *Template) CreateTemplate(ctx kratosx.Context, template *entity.Template
 	// 数据入库
 	id, err := t.repo.CreateTemplate(ctx, template)
 	if err != nil {
-		return 0, errors.CreateError(err.Error())
+		return 0, errors.CreateErrorWrap(err)
 	}
 
 	// 使用当前配置
@@ -189,7 +189,7 @@ func (t *Template) PreviewCurrentTemplate(ctx kratosx.Context, req *types.Previe
 
 	tp, err := t.repo.CurrentTemplate(ctx, req.ServerId)
 	if err != nil {
-		return nil, errors.DatabaseError(err.Error())
+		return nil, errors.DatabaseErrorWrap(err)
 	}
 
 	reply := &types.PreviewTemplateReply{
@@ -228,7 +228,7 @@ func (t *Template) SwitchTemplate(ctx kratosx.Context, srvId, tpId uint32) error
 	}
 
 	if err := t.repo.UseTemplate(ctx, srvId, tpId); err != nil {
-		return errors.DatabaseError(err.Error())
+		return errors.DatabaseErrorWrap(err)
 	}
 	return nil
 }
@@ -237,14 +237,14 @@ func (t *Template) SwitchTemplate(ctx kratosx.Context, srvId, tpId uint32) error
 func (t *Template) UpdateTemplate(ctx kratosx.Context, req *entity.Template) error {
 	template, err := t.repo.GetTemplate(ctx, req.Id)
 	if err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	if !t.permission.HasServer(ctx, template.ServerId) {
 		return errors.NotPermissionError()
 	}
 
 	if err := t.repo.UpdateTemplate(ctx, req); err != nil {
-		return errors.DatabaseError(err.Error())
+		return errors.DatabaseErrorWrap(err)
 	}
 	return nil
 }
@@ -253,14 +253,14 @@ func (t *Template) UpdateTemplate(ctx kratosx.Context, req *entity.Template) err
 func (t *Template) DeleteUpdateTemplate(ctx kratosx.Context, id uint32) error {
 	template, err := t.repo.GetTemplate(ctx, id)
 	if err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	if !t.permission.HasServer(ctx, template.ServerId) {
 		return errors.NotPermissionError()
 	}
 
 	if err := t.repo.DeleteTemplate(ctx, id); err != nil {
-		return errors.DatabaseError(err.Error())
+		return errors.DatabaseErrorWrap(err)
 	}
 	return nil
 }
@@ -270,7 +270,7 @@ func (t *Template) CompareTemplate(ctx kratosx.Context, req *types.CompareTempla
 	// 查询版本
 	template, err := t.repo.GetTemplate(ctx, req.Id)
 	if err != nil {
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 	if !t.permission.HasServer(ctx, template.ServerId) {
 		return nil, errors.NotPermissionError()

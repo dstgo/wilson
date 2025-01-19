@@ -204,7 +204,7 @@ func (s *Dictionary) GetDictionaryValues(c context.Context, req *pb.GetDictionar
 			}
 		}
 		if err := valx.Transform(values, &reply.Dict[key].List); err != nil {
-			return nil, errors.TransformError(err.Error())
+			return nil, errors.TransformErrorWrap(err)
 		}
 	}
 	return &reply, nil

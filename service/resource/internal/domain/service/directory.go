@@ -31,7 +31,7 @@ func (u *Directory) GetDirectory(ctx kratosx.Context, id uint32) (*entity.Direct
 	res, err := u.repo.GetDirectory(ctx, id)
 	if err != nil {
 		ctx.Logger().Warnw("msg", "get directory error", "err", err.Error())
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 	return res, nil
 }
@@ -41,7 +41,7 @@ func (u *Directory) ListDirectory(ctx kratosx.Context, req *types.ListDirectoryR
 	list, total, err := u.repo.ListDirectory(ctx, req)
 	if err != nil {
 		ctx.Logger().Warnw("msg", "list directory error", "err", err.Error())
-		return nil, 0, errors.ListError(err.Error())
+		return nil, 0, errors.ListErrorWrap(err)
 	}
 	return tree.BuildArrayTree(list), total, nil
 }
@@ -51,7 +51,7 @@ func (u *Directory) CreateDirectory(ctx kratosx.Context, req *entity.Directory) 
 	id, err := u.repo.CreateDirectory(ctx, req)
 	if err != nil {
 		ctx.Logger().Warnw("msg", "create directory error", "err", err.Error())
-		return 0, errors.CreateError(err.Error())
+		return 0, errors.CreateErrorWrap(err)
 	}
 	return id, nil
 }
@@ -60,7 +60,7 @@ func (u *Directory) CreateDirectory(ctx kratosx.Context, req *entity.Directory) 
 func (u *Directory) UpdateDirectory(ctx kratosx.Context, req *entity.Directory) error {
 	if err := u.repo.UpdateDirectory(ctx, req); err != nil {
 		ctx.Logger().Warnw("msg", "update directory error", "err", err.Error())
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }
@@ -70,7 +70,7 @@ func (u *Directory) DeleteDirectory(ctx kratosx.Context, ids []uint32) (uint32, 
 	total, err := u.repo.DeleteDirectory(ctx, ids)
 	if err != nil {
 		ctx.Logger().Warnw("msg", "delete directory error", "err", err.Error())
-		return 0, errors.DeleteError(err.Error())
+		return 0, errors.DeleteErrorWrap(err)
 	}
 	return total, nil
 }

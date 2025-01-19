@@ -22,7 +22,7 @@ func NewFile() *File {
 func (i File) client(ctx kratosx.Context) (file.FileClient, error) {
 	conn, err := kratosx.MustContext(ctx).GrpcConn(Resource)
 	if err != nil {
-		return nil, errors.ResourceServiceError(err)
+		return nil, errors.ResourceServiceErrorWrap(err)
 	}
 	return file.NewFileClient(conn), nil
 }

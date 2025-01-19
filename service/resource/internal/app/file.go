@@ -183,12 +183,12 @@ func (s *File) Upload() http.HandlerFunc {
 		in.Index = valx.StrToUint32(ctx.Request().FormValue("index"))
 		file, _, err := ctx.Request().FormFile("data")
 		if err != nil {
-			return errors.UploadFileError(err.Error())
+			return errors.UploadFileErrorWrap(err)
 		}
 
 		in.Data, err = io.ReadAll(file)
 		if err != nil {
-			return errors.UploadFileError(err.Error())
+			return errors.UploadFileErrorWrap(err)
 		}
 		if in.UploadId == "" || int(in.Index) <= 0 || len(in.Data) == 0 {
 			return errors.ParamsError()

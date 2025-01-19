@@ -35,7 +35,7 @@ func NewPermission() *Permission {
 func client(ctx kratosx.Context) (resourcev1.ResourceClient, error) {
 	conn, err := kratosx.MustContext(ctx).GrpcConn(Manager)
 	if err != nil {
-		return nil, errors.ManagerServiceError(ctx, err)
+		return nil, errors.ManagerServiceErrorWrap(err)
 	}
 	return resourcev1.NewResourceClient(conn), nil
 }

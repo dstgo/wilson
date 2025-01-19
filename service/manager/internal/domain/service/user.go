@@ -91,7 +91,7 @@ func (u *Use) GetUser(ctx kratosx.Context, req *types.GetUserRequest) (*entity.U
 	}
 
 	if err != nil {
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 
 	for _, role := range user.Roles {
@@ -111,7 +111,7 @@ func (u *Use) GetUser(ctx kratosx.Context, req *types.GetUserRequest) (*entity.U
 func (u *Use) ListUser(ctx kratosx.Context, req *types.ListUserRequest) ([]*entity.User, uint32, error) {
 	all, scopes, err := u.dept.GetDepartmentDataScope(ctx, md.UserId(ctx))
 	if err != nil {
-		return nil, 0, errors.DatabaseError(err.Error())
+		return nil, 0, errors.DatabaseErrorWrap(err)
 	}
 	if !all {
 		req.DepartmentIds = scopes
@@ -119,7 +119,7 @@ func (u *Use) ListUser(ctx kratosx.Context, req *types.ListUserRequest) ([]*enti
 
 	list, total, err := u.repo.ListUser(ctx, req)
 	if err != nil {
-		return nil, 0, errors.ListError(err.Error())
+		return nil, 0, errors.ListErrorWrap(err)
 	}
 
 	for ind, item := range list {
@@ -167,7 +167,7 @@ func (u *Use) CreateUser(ctx kratosx.Context, req *entity.User) (uint32, error) 
 
 	id, err := u.repo.CreateUser(ctx, req)
 	if err != nil {
-		return 0, errors.CreateError(err.Error())
+		return 0, errors.CreateErrorWrap(err)
 	}
 	return id, nil
 }
@@ -225,7 +225,7 @@ func (u *Use) UpdateUser(ctx kratosx.Context, user *entity.User) error {
 
 	// 更新用户
 	if err := u.repo.UpdateUser(ctx, user); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }
@@ -258,7 +258,7 @@ func (u *Use) UpdateUserStatus(ctx kratosx.Context, id uint32, status bool) erro
 
 	// 更新角色状态
 	if err := u.repo.UpdateUserStatus(ctx, id, status); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 
 	// 如果是禁用用户
@@ -297,7 +297,7 @@ func (u *Use) DeleteUser(ctx kratosx.Context, id uint32) error {
 	}
 
 	if err := u.repo.DeleteUser(ctx, id); err != nil {
-		return errors.DeleteError(err.Error())
+		return errors.DeleteErrorWrap(err)
 	}
 	return nil
 }
@@ -332,7 +332,7 @@ func (u *Use) ResetUserPassword(ctx kratosx.Context, id uint32) error {
 		BaseModel: ktypes.BaseModel{Id: id},
 		Password:  crypto.EncodePwd(u.conf.DefaultUserPassword),
 	}); err != nil {
-		return errors.DatabaseError(err.Error())
+		return errors.DatabaseErrorWrap(err)
 	}
 
 	return nil
@@ -342,7 +342,7 @@ func (u *Use) ResetUserPassword(ctx kratosx.Context, id uint32) error {
 func (u *Use) GetCurrentUser(ctx kratosx.Context) (*entity.User, error) {
 	res, err := u.repo.GetUser(ctx, md.UserId(ctx))
 	if err != nil {
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 	for _, role := range res.Roles {
 		if role.Id == res.RoleId {
@@ -364,7 +364,7 @@ func (u *Use) UpdateCurrentUser(ctx kratosx.Context, req *types.UpdateCurrentUse
 		Nickname:  req.Nickname,
 		Gender:    req.Gender,
 	}); err != nil {
-		return errors.DatabaseError(err.Error())
+		return errors.DatabaseErrorWrap(err)
 	}
 
 	return nil
@@ -385,7 +385,7 @@ func (u *Use) UpdateCurrentUserRole(ctx kratosx.Context, rid uint32) error {
 		BaseModel: ktypes.BaseModel{Id: md.UserId(ctx)},
 		RoleId:    rid,
 	}); err != nil {
-		return errors.DatabaseError(err.Error())
+		return errors.DatabaseErrorWrap(err)
 	}
 	return nil
 }
@@ -396,7 +396,7 @@ func (u *Use) UpdateCurrentUserSetting(ctx kratosx.Context, setting string) erro
 		BaseModel: ktypes.BaseModel{Id: md.UserId(ctx)},
 		Setting:   &setting,
 	}); err != nil {
-		return errors.DatabaseError(err.Error())
+		return errors.DatabaseErrorWrap(err)
 	}
 	return nil
 }
@@ -410,12 +410,12 @@ func (u *Use) SendCurrentUserCaptcha(ctx kratosx.Context, tp string) (*types.Sen
 
 	user, err := u.repo.GetUser(ctx, md.UserId(ctx))
 	if err != nil {
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 
 	resp, err := ctx.Captcha().Email(tp, ctx.ClientIP(), user.Email)
 	if err != nil {
-		return nil, errors.SendCaptchaError(err.Error())
+		return nil, errors.SendCaptchaErrorWrap(err)
 	}
 
 	return &types.SendCurrentUserCaptchaReply{
@@ -428,7 +428,7 @@ func (u *Use) SendCurrentUserCaptcha(ctx kratosx.Context, tp string) (*types.Sen
 func (u *Use) UpdateCurrentUserPassword(ctx kratosx.Context, req *types.UpdateCurrentUserPasswordRequest) error {
 	user, err := u.repo.GetBaseUser(ctx, md.UserId(ctx))
 	if err != nil {
-		return errors.DatabaseError(err.Error())
+		return errors.DatabaseErrorWrap(err)
 	}
 	switch u.conf.ChangePasswordType {
 	case ChangePwCaptchaType:
@@ -446,7 +446,7 @@ func (u *Use) UpdateCurrentUserPassword(ctx kratosx.Context, req *types.UpdateCu
 			return errors.PasswordError()
 		}
 	default:
-		return errors.SystemError("验证方式配置错误")
+		return errors.SystemErrorf("验证方式配置错误")
 	}
 
 	nu := entity.User{
@@ -454,7 +454,7 @@ func (u *Use) UpdateCurrentUserPassword(ctx kratosx.Context, req *types.UpdateCu
 		Password:  crypto.EncodePwd(req.Password),
 	}
 	if err := u.repo.UpdateUser(ctx, &nu); err != nil {
-		return errors.DatabaseError(err.Error())
+		return errors.DatabaseErrorWrap(err)
 	}
 	return nil
 }
@@ -463,7 +463,7 @@ func (u *Use) UpdateCurrentUserPassword(ctx kratosx.Context, req *types.UpdateCu
 func (u *Use) GetUserLoginCaptcha(ctx kratosx.Context) (*types.GetUserLoginCaptchaReply, error) {
 	resp, err := ctx.Captcha().Image(loginCaptchaKey, ctx.ClientIP())
 	if err != nil {
-		return nil, errors.GenCaptchaError(err.Error())
+		return nil, errors.GenCaptchaErrorWrap(err)
 	}
 
 	return &types.GetUserLoginCaptchaReply{
@@ -647,7 +647,7 @@ func (u *Use) UserLogout(ctx kratosx.Context) error {
 func (u *Use) UserRefreshToken(ctx kratosx.Context) (string, error) {
 	token, err := ctx.JWT().Renewal(ctx)
 	if err != nil {
-		return "", errors.RefreshTokenError(err.Error())
+		return "", errors.RefreshTokenErrorWrap(err)
 	}
 	return token, nil
 }

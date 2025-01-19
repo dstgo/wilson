@@ -37,7 +37,7 @@ func (u *Business) ListBusiness(ctx kratosx.Context, req *types.ListBusinessRequ
 
 	list, total, err := u.repo.ListBusiness(ctx, req)
 	if err != nil {
-		return nil, 0, errors.ListError(err.Error())
+		return nil, 0, errors.ListErrorWrap(err)
 	}
 	return list, total, nil
 }
@@ -50,7 +50,7 @@ func (u *Business) CreateBusiness(ctx kratosx.Context, req *entity.Business) (ui
 
 	id, err := u.repo.CreateBusiness(ctx, req)
 	if err != nil {
-		return 0, errors.CreateError(err.Error())
+		return 0, errors.CreateErrorWrap(err)
 	}
 	return id, nil
 }
@@ -62,7 +62,7 @@ func (u *Business) UpdateBusiness(ctx kratosx.Context, req *entity.Business) err
 	}
 
 	if err := u.repo.UpdateBusiness(ctx, req); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }
@@ -71,7 +71,7 @@ func (u *Business) UpdateBusiness(ctx kratosx.Context, req *entity.Business) err
 func (u *Business) DeleteBusiness(ctx kratosx.Context, id uint32) error {
 	business, err := u.repo.GetBusiness(ctx, id)
 	if err != nil {
-		return errors.DeleteError(err.Error())
+		return errors.DeleteErrorWrap(err)
 	}
 
 	if !u.permission.HasServer(ctx, business.ServerId) {
@@ -79,7 +79,7 @@ func (u *Business) DeleteBusiness(ctx kratosx.Context, id uint32) error {
 	}
 
 	if err := u.repo.DeleteBusiness(ctx, id); err != nil {
-		return errors.DeleteError(err.Error())
+		return errors.DeleteErrorWrap(err)
 	}
 	return nil
 }
@@ -88,7 +88,7 @@ func (u *Business) DeleteBusiness(ctx kratosx.Context, id uint32) error {
 func (u *Business) ListBusinessValue(ctx kratosx.Context, bid uint32) ([]*entity.BusinessValue, error) {
 	business, err := u.repo.GetBusiness(ctx, bid)
 	if err != nil {
-		return nil, errors.DeleteError(err.Error())
+		return nil, errors.DeleteErrorWrap(err)
 	}
 
 	if !u.permission.HasServer(ctx, business.ServerId) {
@@ -99,7 +99,7 @@ func (u *Business) ListBusinessValue(ctx kratosx.Context, bid uint32) ([]*entity
 		BusinessId: &bid,
 	})
 	if err != nil {
-		return nil, errors.ListError(err.Error())
+		return nil, errors.ListErrorWrap(err)
 	}
 	all, scopes, err := u.permission.GetEnv(ctx)
 	if err != nil {
@@ -128,7 +128,7 @@ func (u *Business) UpdateBusinessValue(ctx kratosx.Context, list []*entity.Busin
 	bid := list[0].BusinessId
 	business, err := u.repo.GetBusiness(ctx, bid)
 	if err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 
 	if !u.permission.HasServer(ctx, business.ServerId) {
@@ -163,7 +163,7 @@ func (u *Business) UpdateBusinessValue(ctx kratosx.Context, list []*entity.Busin
 
 	// 更新数据
 	if err := u.repo.UpdateBusinessValues(ctx, result); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }

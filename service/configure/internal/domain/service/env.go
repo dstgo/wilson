@@ -43,7 +43,7 @@ func (u *Env) ListEnv(ctx kratosx.Context, req *types.ListEnvRequest) ([]*entity
 	// 获取环境列表
 	list, total, err := u.repo.ListEnv(ctx, req)
 	if err != nil {
-		return nil, 0, errors.ListError(err.Error())
+		return nil, 0, errors.ListErrorWrap(err)
 	}
 	return list, total, nil
 }
@@ -58,7 +58,7 @@ func (u *Env) GetEnvToken(ctx kratosx.Context, id uint32) (string, error) {
 	// 获取指定环境
 	env, err := u.repo.GetEnv(ctx, id)
 	if err != nil {
-		return "", errors.CreateError(err.Error())
+		return "", errors.CreateErrorWrap(err)
 	}
 	return env.Token, nil
 }
@@ -67,7 +67,7 @@ func (u *Env) GetEnvToken(ctx kratosx.Context, id uint32) (string, error) {
 func (u *Env) CreateEnv(ctx kratosx.Context, req *entity.Env) (uint32, error) {
 	id, err := u.repo.CreateEnv(ctx, req)
 	if err != nil {
-		return 0, errors.CreateError(err.Error())
+		return 0, errors.CreateErrorWrap(err)
 	}
 	return id, nil
 }
@@ -80,7 +80,7 @@ func (u *Env) UpdateEnv(ctx kratosx.Context, req *entity.Env) error {
 	}
 	// 更新环境
 	if err := u.repo.UpdateEnv(ctx, req); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }
@@ -93,7 +93,7 @@ func (u *Env) DeleteEnv(ctx kratosx.Context, id uint32) error {
 	}
 	// 删除环境
 	if err := u.repo.DeleteEnv(ctx, id); err != nil {
-		return errors.DeleteError(err.Error())
+		return errors.DeleteErrorWrap(err)
 	}
 	return nil
 }

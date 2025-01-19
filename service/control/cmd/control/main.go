@@ -12,8 +12,8 @@ import (
 	"github.com/dstgo/wilson/framework/cli"
 	"github.com/dstgo/wilson/framework/kratosx"
 	"github.com/dstgo/wilson/framework/kratosx/config"
-	"github.com/dstgo/wilson/service/game/internal/app"
-	"github.com/dstgo/wilson/service/game/internal/conf"
+	"github.com/dstgo/wilson/service/control/internal/app"
+	"github.com/dstgo/wilson/service/control/internal/conf"
 )
 
 const AppName = "game"

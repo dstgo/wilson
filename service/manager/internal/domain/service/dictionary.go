@@ -42,7 +42,7 @@ func (u *Dictionary) CreateDictionary(ctx kratosx.Context, req *entity.Dictionar
 	id, err := u.repo.CreateDictionary(ctx, req)
 	if err != nil {
 		ctx.Logger().Warnw("msg", "create dictionary error", "err", err.Error())
-		return 0, errors.CreateError(err.Error())
+		return 0, errors.CreateErrorWrap(err)
 	}
 	return id, nil
 }
@@ -51,7 +51,7 @@ func (u *Dictionary) CreateDictionary(ctx kratosx.Context, req *entity.Dictionar
 func (u *Dictionary) UpdateDictionary(ctx kratosx.Context, req *entity.Dictionary) error {
 	if err := u.repo.UpdateDictionary(ctx, req); err != nil {
 		ctx.Logger().Warnw("msg", "update dictionary error", "err", err.Error())
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }
@@ -60,7 +60,7 @@ func (u *Dictionary) UpdateDictionary(ctx kratosx.Context, req *entity.Dictionar
 func (u *Dictionary) DeleteDictionary(ctx kratosx.Context, id uint32) error {
 	if err := u.repo.DeleteDictionary(ctx, id); err != nil {
 		ctx.Logger().Warnw("msg", "delete dictionary error", "err", err.Error())
-		return errors.DeleteError(err.Error())
+		return errors.DeleteErrorWrap(err)
 	}
 	return nil
 }
@@ -70,13 +70,13 @@ func (u *Dictionary) ListDictionaryValue(ctx kratosx.Context, req *types.ListDic
 	// 获取任务数据类型
 	task, err := u.repo.GetDictionary(ctx, req.DictionaryId)
 	if err != nil {
-		return nil, 0, errors.ListError(err.Error())
+		return nil, 0, errors.ListErrorWrap(err)
 	}
 	if task.Type == dataTypeList {
 		list, total, err := u.repo.ListDictionaryValue(ctx, req)
 		if err != nil {
 			ctx.Logger().Warnw("msg", "list dictionary error", "err", err.Error())
-			return nil, 0, errors.ListError(err.Error())
+			return nil, 0, errors.ListErrorWrap(err)
 		}
 		return list, total, nil
 	}
@@ -85,7 +85,7 @@ func (u *Dictionary) ListDictionaryValue(ctx kratosx.Context, req *types.ListDic
 	})
 	if err != nil {
 		ctx.Logger().Warnw("msg", "list dictionary error", "err", err.Error())
-		return nil, 0, errors.ListError(err.Error())
+		return nil, 0, errors.ListErrorWrap(err)
 	}
 	total := uint32(len(list))
 	return tree.BuildArrayTree(list), total, nil
@@ -96,7 +96,7 @@ func (u *Dictionary) CreateDictionaryValue(ctx kratosx.Context, req *entity.Dict
 	id, err := u.repo.CreateDictionaryValue(ctx, req)
 	if err != nil {
 		ctx.Logger().Warnw("msg", "create dictionary error", "err", err.Error())
-		return 0, errors.CreateError(err.Error())
+		return 0, errors.CreateErrorWrap(err)
 	}
 	return id, nil
 }
@@ -111,12 +111,12 @@ func (u *Dictionary) UpdateDictionaryValue(ctx kratosx.Context, dictValue *entit
 
 	// 是数的情况下，不能选择自己作为父节点
 	if dictionary.Type == "tree" && dictValue.Id == dictValue.ParentId {
-		return errors.UpdateError("不能选择自己作为父节点")
+		return errors.UpdateErrorf("不能选择自己作为父节点")
 	}
 
 	if err := u.repo.UpdateDictionaryValue(ctx, dictValue); err != nil {
 		ctx.Logger().Warnw("msg", "update dictionary error", "err", err.Error())
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }
@@ -126,7 +126,7 @@ func (u *Dictionary) UpdateDictionaryValueStatus(ctx kratosx.Context, id uint32,
 	if status {
 		if err := u.repo.UpdateDictionaryValueStatus(ctx, id, status); err != nil {
 			ctx.Logger().Warnw("msg", "update dictionary value error", "err", err.Error())
-			return errors.UpdateError(err.Error())
+			return errors.UpdateErrorWrap(err)
 		}
 		return nil
 	}
@@ -134,27 +134,27 @@ func (u *Dictionary) UpdateDictionaryValueStatus(ctx kratosx.Context, id uint32,
 	// 获取值所属字典id
 	oldValue, err := u.repo.GetDictionaryValue(ctx, id)
 	if err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 
 	// 获取字典信息
 	dictionary, err := u.repo.GetDictionary(ctx, oldValue.DictionaryId)
 	if err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 
 	// 如果是列表直接更新
 	if dictionary.Type == dataTypeList {
 		if err := u.repo.UpdateDictionaryValueStatus(ctx, id, status); err != nil {
 			ctx.Logger().Warnw("msg", "update dictionary value error", "err", err.Error())
-			return errors.UpdateError(err.Error())
+			return errors.UpdateErrorWrap(err)
 		}
 		return nil
 	}
 
 	list, err := u.repo.AllDictionaryValue(ctx, &types.AllDictionaryValueRequest{DictionaryId: oldValue.DictionaryId})
 	if err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	// 如果是树，则更新下属所有节点状态
 	td := tree.BuildTreeByID(list, oldValue.Id)
@@ -162,7 +162,7 @@ func (u *Dictionary) UpdateDictionaryValueStatus(ctx kratosx.Context, id uint32,
 	for _, iid := range ids {
 		if err := u.repo.UpdateDictionaryValueStatus(ctx, iid, status); err != nil {
 			ctx.Logger().Warnw("msg", "update dictionary value error", "err", err.Error())
-			return errors.UpdateError(err.Error())
+			return errors.UpdateErrorWrap(err)
 		}
 	}
 	return nil
@@ -172,7 +172,7 @@ func (u *Dictionary) UpdateDictionaryValueStatus(ctx kratosx.Context, id uint32,
 func (u *Dictionary) DeleteDictionaryValue(ctx kratosx.Context, id uint32) error {
 	if err := u.repo.DeleteDictionaryValue(ctx, id); err != nil {
 		ctx.Logger().Warnw("msg", "delete dictionary value error", "err", err.Error())
-		return errors.DeleteError(err.Error())
+		return errors.DeleteErrorWrap(err)
 	}
 	return nil
 }
@@ -193,7 +193,7 @@ func (u *Dictionary) GetDictionary(ctx kratosx.Context, req *types.GetDictionary
 	}
 
 	if err != nil {
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 	return res, nil
 }

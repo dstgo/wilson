@@ -92,7 +92,7 @@ func (u *Role) CreateRole(ctx kratosx.Context, req *entity.Role) (uint32, error)
 	// 创建角色
 	id, err := u.repo.CreateRole(ctx, req)
 	if err != nil {
-		return 0, errors.CreateError(err.Error())
+		return 0, errors.CreateErrorWrap(err)
 	}
 	return id, nil
 }
@@ -152,7 +152,7 @@ func (u *Role) UpdateRoleStatus(ctx kratosx.Context, id uint32, status bool) err
 
 	// 更新状态
 	if err := u.repo.UpdateRoleStatus(ctx, id, status); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }
@@ -293,7 +293,7 @@ func (u *Role) UpdateRoleMenu(ctx kratosx.Context, roleId uint32, menuIds []uint
 		}
 		return u.repo.UpdateRoleMenu(ctx, roleId, menuIds)
 	}); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 
 	return nil

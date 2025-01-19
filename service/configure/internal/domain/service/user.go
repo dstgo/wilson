@@ -35,7 +35,7 @@ func (us *User) Login(ctx kratosx.Context, username, password string) (string, e
 	pwByte, _ := base64.StdEncoding.DecodeString(password)
 	decryptData, err := openssl.RSADecrypt(pwByte, ctx.Loader("login"))
 	if err != nil {
-		return "", errors.PasswordError(err.Error())
+		return "", errors.PasswordErrorWrap(err)
 	}
 
 	// 序列化密码
@@ -57,7 +57,7 @@ func (us *User) Login(ctx kratosx.Context, username, password string) (string, e
 	// 生成登陆token
 	token, err := ctx.JWT().NewToken(map[string]any{"userId": 1, "roleKeyword": "superAdmin"})
 	if err != nil {
-		return "", errors.SystemError(err.Error())
+		return "", errors.SystemErrorWrap(err)
 	}
 
 	return token, nil
@@ -67,7 +67,7 @@ func (us *User) Login(ctx kratosx.Context, username, password string) (string, e
 func (us *User) RefreshToken(ctx kratosx.Context) (string, error) {
 	token, err := ctx.JWT().Renewal(ctx)
 	if err != nil {
-		return "", errors.RefreshTokenError(err.Error())
+		return "", errors.RefreshTokenErrorWrap(err)
 	}
 	return token, nil
 }

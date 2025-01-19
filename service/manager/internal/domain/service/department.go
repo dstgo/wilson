@@ -67,7 +67,7 @@ func (u *Department) CreateDepartment(ctx kratosx.Context, req *entity.Departmen
 	id, err := u.repo.CreateDepartment(ctx, req)
 	if err != nil {
 		ctx.Logger().Warnw("msg", "create department error", "err", err.Error())
-		return 0, errors.CreateError(err.Error())
+		return 0, errors.CreateErrorWrap(err)
 	}
 	return id, nil
 }
@@ -99,7 +99,7 @@ func (u *Department) UpdateDepartment(ctx kratosx.Context, req *entity.Departmen
 
 	// 更新数据
 	if err := u.repo.UpdateDepartment(ctx, req); err != nil {
-		return errors.UpdateError(err.Error())
+		return errors.UpdateErrorWrap(err)
 	}
 	return nil
 }
@@ -129,7 +129,7 @@ func (u *Department) DeleteDepartment(ctx kratosx.Context, id uint32) error {
 
 	// 更新数据
 	if err := u.repo.DeleteDepartment(ctx, id); err != nil {
-		return errors.DeleteError(err.Error())
+		return errors.DeleteErrorWrap(err)
 	}
 	return nil
 }
@@ -140,7 +140,7 @@ func (u *Department) GetDepartment(ctx kratosx.Context, id uint32) (*entity.Depa
 
 	if err != nil {
 		ctx.Logger().Warnw("msg", "get department error", "err", err.Error())
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 	return res, nil
 }
@@ -150,7 +150,7 @@ func (u *Department) GetDepartmentByKeyword(ctx kratosx.Context, keyword string)
 	res, err := u.repo.GetDepartmentByKeyword(ctx, keyword)
 	if err != nil {
 		ctx.Logger().Warnw("msg", "get department error", "err", err.Error())
-		return nil, errors.GetError(err.Error())
+		return nil, errors.GetErrorWrap(err)
 	}
 	return res, nil
 }
