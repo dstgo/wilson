@@ -4,12 +4,10 @@ import (
 	"os"
 
 	"github.com/go-kratos/kratos/v2"
-	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/dstgo/wilson/framework/kratosx/config"
 	"github.com/dstgo/wilson/framework/kratosx/library"
 	"github.com/dstgo/wilson/framework/kratosx/library/logger"
 	"github.com/dstgo/wilson/framework/kratosx/library/pprof"
@@ -28,9 +26,7 @@ var (
 )
 
 func New(opts ...Option) *kratos.App {
-	o := &options{
-		config: config.New(file.NewSource("internal/conf/conf.yaml")),
-	}
+	o := &options{}
 
 	for _, opt := range opts {
 		opt(o)
