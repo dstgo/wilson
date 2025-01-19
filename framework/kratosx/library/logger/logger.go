@@ -10,6 +10,7 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 
 	"github.com/dstgo/wilson/framework/kratosx/config"
+	"github.com/dstgo/wilson/framework/pkg/timex"
 )
 
 type LogField map[string]any
@@ -80,8 +81,8 @@ func (l *logger) newZapLogger(conf *config.Logger) *zap.Logger {
 		CallerKey:      "caller",
 		MessageKey:     "msg",
 		LineEnding:     zapcore.DefaultLineEnding,
-		EncodeLevel:    zapcore.LowercaseLevelEncoder,                          // 小写编码器
-		EncodeTime:     zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05.000"), // ISO8601 UTC 时间格式
+		EncodeLevel:    zapcore.LowercaseLevelEncoder,
+		EncodeTime:     zapcore.TimeEncoderOfLayout(timex.DateTimeMillFormat),
 		EncodeDuration: zapcore.SecondsDurationEncoder,
 		EncodeCaller:   zapcore.ShortCallerEncoder,
 	}
@@ -89,10 +90,10 @@ func (l *logger) newZapLogger(conf *config.Logger) *zap.Logger {
 	// 输出器配置
 	var output []zapcore.WriteSyncer
 	for _, val := range conf.Output {
-		if val == "stdout" {
+		switch val {
+		case "stdout":
 			output = append(output, zapcore.AddSync(os.Stdout))
-		}
-		if val == "file" {
+		case "file":
 			output = append(output, zapcore.AddSync(&lumberjack.Logger{
 				Filename:   conf.File.Name,
 				MaxSize:    conf.File.MaxSize,
@@ -105,15 +106,24 @@ func (l *logger) newZapLogger(conf *config.Logger) *zap.Logger {
 	}
 
 	var encoder zapcore.Encoder
-	if conf.EnCoder == "console" {
+	switch conf.Encode {
+	case "console":
 		encoder = zapcore.NewConsoleEncoder(encoderConfig)
-	} else {
+	case "json":
 		encoder = zapcore.NewJSONEncoder(encoderConfig)
+	default:
+		panic("invalid log encode: " + conf.Encode)
 	}
+
+	level, err := zapcore.ParseLevel(conf.Level)
+	if err != nil {
+		panic("invalid log level: " + conf.Level)
+	}
+
 	core := zapcore.NewCore(
-		encoder,                                // 编码器配置
-		zapcore.NewMultiWriteSyncer(output...), // 输出方式
-		zapcore.Level(conf.Level),              // 设置日志级别
+		encoder,
+		zapcore.NewMultiWriteSyncer(output...),
+		level,
 	)
 
 	// 添加回调

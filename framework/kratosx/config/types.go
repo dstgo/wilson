@@ -189,9 +189,9 @@ type Authentication struct {
 }
 
 type Logger struct {
-	Level      int8
+	Level      string
 	Output     []string
-	EnCoder    string
+	Encode     string
 	Caller     bool
 	CallerSkip *int
 	File       *struct {
