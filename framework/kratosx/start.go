@@ -1,8 +1,6 @@
 package kratosx
 
 import (
-	"os"
-
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport"
@@ -12,17 +10,6 @@ import (
 	"github.com/dstgo/wilson/framework/kratosx/library/logger"
 	"github.com/dstgo/wilson/framework/kratosx/library/pprof"
 	"github.com/dstgo/wilson/framework/kratosx/library/registry"
-)
-
-const (
-	AppName    = "APP_NAME"
-	AppVersion = "APP_VERSION"
-)
-
-var (
-	envName    = os.Getenv(AppName)
-	envVersion = os.Getenv(AppVersion)
-	id, _      = os.Hostname()
 )
 
 func New(opts ...Option) *kratos.App {
@@ -37,10 +24,7 @@ func New(opts ...Option) *kratos.App {
 		panic(err)
 	}
 
-	// 初始化服务信息
-	if o.config.App().Name == "" {
-		o.config.SetAppInfo(id, envName, envVersion)
-	}
+	o.config.SetAppInfo(o.id, o.name, o.version)
 
 	// 插件初始化
 	if o.loggerFields == nil {
@@ -60,7 +44,6 @@ func New(opts ...Option) *kratos.App {
 		kratos.ID(o.config.App().ID),
 		kratos.Name(o.config.App().Name),
 		kratos.Version(o.config.App().Version),
-		kratos.Metadata(map[string]string{}),
 	}
 
 	// 必注册服务

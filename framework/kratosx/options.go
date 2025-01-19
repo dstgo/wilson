@@ -16,6 +16,10 @@ type Option func(o *options)
 type RegistrarServerFn func(config config.Config, hs *http.Server, gs *grpc.Server)
 
 type options struct {
+	id      string
+	name    string
+	version string
+
 	regSrvFn       RegistrarServerFn
 	loggerFields   logger.LogField
 	config         config.Config
@@ -23,6 +27,24 @@ type options struct {
 	httpSrvOptions []http.ServerOption
 	grpcSrvOptions []grpc.ServerOption
 	midOpts        []middleware.Middleware
+}
+
+func ID(id string) Option {
+	return func(o *options) {
+		o.id = id
+	}
+}
+
+func Name(name string) Option {
+	return func(o *options) {
+		o.name = name
+	}
+}
+
+func Version(version string) Option {
+	return func(o *options) {
+		o.version = version
+	}
 }
 
 // RegistrarServer 服务注册
