@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package wilson.api.container.health.v1;
+
+option go_package = "container/health/v1;v1";

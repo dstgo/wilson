@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package wilson.api.control.health.v1;
+
+option go_package = "control/health/v1;v1";
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+service Health {
+  rpc Check(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      get: "/control/v1/health/check",
+    };
+  }
+}

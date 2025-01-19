@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package wilson.api.control.health.v1;
+
+option go_package = "control/health/v1;v1";

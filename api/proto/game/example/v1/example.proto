@@ -1,5 +1,0 @@
-syntax = "proto3";
-
-package wilson.api.game.example.v1;
-
-option go_package = "game/example/v1;v1";
