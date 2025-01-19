@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	_ "net/http/pprof"
@@ -11,7 +12,8 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 	_ "go.uber.org/automaxprocs"
 
-	"github.com/dstgo/wilson/api/rpc/configure"
+	"github.com/dstgo/wilson/framework/cli"
+	"github.com/dstgo/wilson/framework/kratosx"
 	"github.com/dstgo/wilson/service/gateway/client"
 	"github.com/dstgo/wilson/service/gateway/config"
 	"github.com/dstgo/wilson/service/gateway/discovery"
@@ -31,24 +33,53 @@ import (
 	_ "github.com/dstgo/wilson/service/gateway/middleware/transcoder"
 )
 
+const (
+	AppName = "gateway"
+)
+
+var (
+	AppVersion string
+)
+
+var service = cli.NewCLI(&cli.Options{
+	AppName:     AppName,
+	AppVersion:  AppVersion,
+	Description: "api gateway service for wilson framework",
+	StartFn:     Start,
+})
+
+func init() {
+	service.Parse()
+}
+
 func main() {
-	conf, err := config.New(configure.NewFromEnv())
+	service.Start()
+}
+
+func Start(opts *cli.StartOptions) error {
+	conf, err := config.New(opts.Loader())
 	if err != nil {
-		log.Fatal(err.Error())
+		return err
 	}
 
 	srv, err := NewServer(conf)
 	if err != nil {
-		log.Fatal(err.Error())
+		return err
 	}
 
 	app := kratos.New(
 		kratos.Server(srv),
+		kratos.ID(opts.ServiceID),
+		kratos.Name(opts.AppName),
+		kratos.Version(opts.AppVersion),
+		kratos.AfterStart(func(ctx context.Context) error {
+			kt := kratosx.MustContext(ctx)
+			kt.Logger().Infof("service %s started successfully!", kt.ID())
+			return nil
+		}),
 	)
 
-	if err := app.Run(); err != nil {
-		log.Errorf("run service fail: %v", err)
-	}
+	return app.Run()
 }
 
 func NewServer(conf *config.Config) (transport.Server, error) {
@@ -62,12 +93,12 @@ func NewServer(conf *config.Config) (transport.Server, error) {
 	circuitbreaker.Init(clientFactory)
 
 	if err = pxy.Update(conf); err != nil {
-		return nil, fmt.Errorf("failed to update service conf: %v", err)
+		return nil, fmt.Errorf("failed to update gateway config: %v", err)
 	}
 	// 监听配置变化
 	conf.WatchEndpoints(func(c *config.Config) {
 		if er := pxy.Update(c); er != nil {
-			log.Errorf("failed to update service config: %v", err)
+			log.Errorf("failed to update gateway config: %v", err)
 		}
 	})
 

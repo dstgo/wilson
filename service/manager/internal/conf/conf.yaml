@@ -1,118 +1,222 @@
 ---
+# 服务器配置
 server:
   http:
-    addr: 127.0.0.1:7001
+    # 服务器监听地址
+    addr: "127.0.0.1:7001"
+    # 请求超时时间
     timeout: 10s
     marshal:
+      # 是否输出未填充的字段
       emitUnpopulated: true
+      # 使用 Proto 名称
       useProtoNames: true
+#    # 是否格式化响应
 #    formatResponse: true
+#    # 跨域配置
 #    cors:
+#      # 允许携带凭证
 #      allowCredentials: true
+#      # 允许的源
 #      allowOrigins: [ "*" ]
+#      # 允许的 HTTP 方法
 #      allowMethods: [ "GET","POST","PUT","DELETE","OPTIONS" ]
+#      # 允许的头部
 #      AllowHeaders: [ "Content-Type", "Content-Length", "Authorization" ]
+#      # 暴露的头部
 #      ExposeHeaders: [ "Content-Length", "Access-Control-Allow-Headers" ]
+
+# 日志配置
 log:
+  # 日志级别
   level: 0
+  # 是否显示调用者信息
   caller: true
+  # 日志输出目标
   output:
     - stdout
     - file
   file:
+    # 日志文件路径
     name: "./tmp/runtime/output.log"
+    # 单个日志文件最大大小（MB）
     maxSize: 1
+    # 最大保留的旧日志文件数量
     maxBackup: 5
+    # 日志文件保留的最大天数
     maxAge: 1
+    # 是否压缩旧日志文件
     compress: false
+
+# 数据库配置
 database:
-  system: #数据库实例名称,如有多个数据库可新增
-    enable: true #是否启用数据库
-    drive: mysql #数据库类型
-    autoCreate: true #是否自动创建数据库
+  system:
+    # 是否启用数据库
+    enable: true
+    # 数据库类型
+    drive: "mysql"
+    # 是否自动创建数据库
+    autoCreate: true
     connect:
-      username: root
-      password: root
-      host: 127.0.0.1
+      # 数据库用户名
+      username: "root"
+      # 数据库密码
+      password: "root"
+      # 数据库主机地址
+      host: "127.0.0.1"
+      # 数据库端口
       port: 3306
-      dbName: manager
-      option: ?charset=utf8mb4&parseTime=True&loc=Local
+      # 数据库名称
+      dbName: "manager"
+      # 连接选项
+      option: "?charset=utf8mb4&parseTime=True&loc=Local"
     config:
       initializer:
+        # 是否启用初始化器
         enable: true
-        path: deploy/data.sql
+        # 初始化 SQL 文件路径
+        path: "deploy/data.sql"
       transformError:
+        # 是否启用错误转换
         enable: true
-      maxLifetime: 2h #最大生存时间
-      maxOpenConn: 10 #最大连接数量
-      maxIdleConn: 10 #最大空闲数量
-      logLevel: 4 #日志等级
-      slowThreshold: 2s #慢sql阈值
+      # 连接最大生存时间
+      maxLifetime: 2h
+      # 最大打开连接数
+      maxOpenConn: 10
+      # 最大空闲连接数
+      maxIdleConn: 10
+      # 日志级别
+      logLevel: 4
+      # 慢查询阈值
+      slowThreshold: 2s
+
+# Redis配置
 redis:
   cache:
+    # 是否启用 Redis
     enable: true
-    host: 127.0.0.1:6379
-    username: ''
-    password: ''
+    # Redis 主机地址和端口
+    host: "127.0.0.1:6379"
+    # Redis 用户名
+    username: ""
+    # Redis 密码
+    password: ""
+
+# 验证码配置
 captcha:
   login:
-    type: image
+    # 登录验证码类型
+    type: "image"
+    # 验证码长度
     length: 6
+    # 验证码过期时间
     expire: 180s
-    redis: cache
+    # 使用的 Redis 实例
+    redis: "cache"
+    # 图片验证码高度
     height: 80
+    # 图片验证码宽度
     width: 240
+    # 倾斜度
     skew: 0.7
+    # 干扰点数量
     dotCount: 80
+    # 是否允许刷新
     refresh: true
   changePassword:
-    type: email
+    # 修改密码验证码类型
+    type: "email"
+    # 验证码长度
     length: 6
+    # 验证码过期时间
     expire: 180s
-    redis: cache
-    template: captcha
+    # 使用的 Redis 实例
+    redis: "cache"
+    # 邮件模板名称
+    template: "captcha"
+
+# 客户端配置
 client:
-  - server: Resource
-    type: direct
+  - # 服务名称
+    server: "Resource"
+    # 连接类型
+    type: "direct"
     backends:
-      - target: 127.0.0.1:8003
+      # 后端服务地址
+      - target: "127.0.0.1:8003"
+
+# 加载器配置
 loader:
-  login: static/cert/login.pem
+  # 登录证书路径
+  login: "static/cert/login.pem"
+
+# 邮件配置
 email:
   template:
     captcha:
-      subject: 验证码发送通知
-      path: static/template/email/default.html
-      type: text/html
-  user: 860808187@qq.com
-  name: 青岑云
-  host: smtp.qq.com
+      # 邮件主题
+      subject: "验证码发送通知"
+      # 邮件模板路径
+      path: "static/template/email/default.html"
+      # 邮件内容类型
+      type: "text/html"
+  # 发件人邮箱
+  user: "860808187@qq.com"
+  # 发件人名称
+  name: "青岑云"
+  # SMTP 服务器地址
+  host: "smtp.qq.com"
+  # SMTP 服务器端口
   port: 25
-  password: fyudafdzqmhwbfbd
+  # 邮箱密码或授权码
+  password: "fyudafdzqmhwbfbd"
+
+# JWT配置
 jwt:
-  redis: cache
-  secret: limeschool
+  # 使用的 Redis 实例
+  redis: "cache"
+  # JWT 密钥
+  secret: "limeschool"
+  # JWT 过期时间
   expire: 2h
+  # JWT 续期时间
   renewal: 600s
+  # JWT 白名单
   whitelist:
     GET:/manager/api/v1/system/setting: true
     GET:/manager/api/v1/user/login/captcha: true
     POST:/manager/api/v1/user/login: true
     POST:/manager/api/v1/user/logout: true
     POST:/manager/api/v1/user/token/refresh: true
+
+# 认证配置
 authentication:
-  db: system
-  redis: cache
-  roleKey: roleKeyword
+  # 使用的数据库实例
+  db: "system"
+  # 使用的 Redis 实例
+  redis: "cache"
+  # 角色关键字
+  roleKey: "roleKeyword"
+  # 跳过角色验证的角色列表
   skipRole:
-    - superAdmin
-  whitelist: { }
-business:
-  changePasswordType: password
-  defaultUserPassword: '12345678'
+    - "superAdmin"
+  # 白名单
+  whitelist: {}
+
+# 服务配置
+manager:
+  # 修改密码类型
+  changePasswordType: "password"
+  # 默认用户密码
+  defaultUserPassword: "12345678"
   setting:
-    title: easy1-admin 后台管理系统
-    desc: 开放协作，拥抱未来，插件化编程实现1
-    copyright: Copyright © 2023 lime.qlime.cn. All rights reserved.
-    logo: http://p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image
-    watermark: admin-platform
+    # 系统标题
+    title: "easy1-admin 后台管理系统"
+    # 系统描述
+    desc: "开放协作，拥抱未来，插件化编程实现1"
+    # 版权信息
+    copyright: "Copyright © 2023 lime.qlime.cn. All rights reserved."
+    # 系统 Logo
+    logo: "http://p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
+    # 水印文字
+    watermark: "admin-platform"

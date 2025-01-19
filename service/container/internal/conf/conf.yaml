@@ -1,138 +1,99 @@
-env: TEST
+# 环境设置
+env: "TEST"
+
+# 服务器配置
 server:
   http:
-    host: 127.0.0.1
-    port: 7030
-    timeout: 10s
+    host: "0.0.0.0"
+    port: 6081
+    timeout: "10s"
+    cors:
+      allowCredentials: true
+      allowOrigins: [ "*" ]
+      allowMethods: [ "GET","POST","PUT","DELETE","OPTIONS" ]
+      AllowHeaders: [ "Content-Type", "Content-Length", "Authorization" ]
+      ExposeHeaders: [ "Content-Length", "Access-Control-Allow-Headers" ]
     marshal:
       emitUnpopulated: true
       useProtoNames: true
   grpc:
-    host: 127.0.0.1
-    port: 8030
-    timeout: 10s
+    host: "0.0.0.0"
+    port: 6082
+    timeout: "10s"
+
+# 客户端配置
 client:
-  - server: Resource
-    type: direct
+  - server: "Manager"
+    type: "direct"
     backends:
-      - target: 127.0.0.1:8020
+      - target: "127.0.0.1:8010"
+
+# 日志配置
 log:
-  level: 0
+  # 日志输出等级
+  level: debug
+  encode: json
   caller: true
   output:
-    - stdout
-    - file
+    # stdout:控制台输出，k8s日志收集
+    - "stdout"
+    # file:输出到文件
+    - "file"
+  # output存在file时此配置才可生效
   file:
-    name: ./tmp/runtime/output.log
+    # 日志存放地址
+    name: "log/service.log"
+    # 日志文件最大容量,单位m
     maxSize: 1
+    # 日志文件最多保存个数
     maxBackup: 5
-    maxAge: 1
+    # 保留旧文件的最大天数,单位天
+    maxAge: 30
+    # 是否进行压缩归档
     compress: false
+
+# 数据库实例配置
 database:
+  # 数据库实例名称,如有多个数据库可新增
   system:
-    enable: true #是否启用数据库
-    drive: mysql #数据库类型
-    autoCreate: true #是否自动创建数据库
+    # 是否启用数据库
+    enable: true
+    # 数据库类型，仅支持Gorm支持的数据库类型
+    drive: "mysql"
+    # 是否自动创建数据库
+    autoCreate: true
+    # 数据库连接配置
     connect:
-      username: root
-      password: root
-      host: 127.0.0.1
+      username: "root"
+      password: "123456"
+      host: "192.168.153.130"
       port: 3306
-      dbName: usercenter
-      option: ?charset=utf8mb4&parseTime=True&loc=Local
+      dbName: "container"
+      option: "?charset=utf8mb4&parseTime=True&loc=Local"
+    # 数据库配置项
     config:
-      transformError:
-        enable: true
       initializer:
         enable: true
-        path: deploy/data.sql
-      maxLifetime: 2h #最大生存时间
-      maxOpenConn: 20 #最大连接数量
-      maxIdleConn: 10 #最大空闲数量
-      logLevel: 4 #日志等级
-      slowThreshold: 2s #慢sql阈值
+        # 数据库初始化脚本
+        path: "deploy/data.sql"
+      # 外键错误格式化
+      transformError:
+        enable: true
+      # 最大生存时间
+      maxLifetime: "2h"
+      # 最大连接数量
+      maxOpenConn: 20
+      # 最大空闲数量
+      maxIdleConn: 10
+      # 日志等级
+      logLevel: 4
+      # 慢sql阈值
+      slowThreshold: "2s"
+
+# Redis配置
 redis:
   cache:
     enable: true
-    host: 127.0.0.1:6379
-    username:
-    password:
-captcha:
-  loginImage:
-    type: image
-    length: 6
-    expire: 180s
-    redis: cache
-    height: 80
-    width: 200
-    skew: 0.7
-    dotCount: 80
-    refresh: true
-  bindImage:
-    type: image
-    length: 6
-    expire: 180s
-    redis: cache
-    height: 80
-    width: 200
-    skew: 0.7
-    dotCount: 80
-    refresh: true
-  registerImage:
-    type: image
-    length: 6
-    expire: 180s
-    redis: cache
-    height: 80
-    width: 200
-    skew: 0.7
-    dotCount: 80
-    refresh: true
-  loginEmail:
-    type: email
-    length: 6
-    expire: 180s
-    redis: cache
-    template: login
-  bindEmail:
-    type: email
-    length: 6
-    expire: 180s
-    redis: cache
-    template: bind
-  registerEmail:
-    type: email
-    length: 6
-    expire: 180s
-    redis: cache
-    template: register
-loader:
-  password: static/cert/password.pem
-email:
-  template:
-    login:
-      subject: 登录验证码发送通知
-      path: static/template/email/default.html
-      type: text/html
-    bind:
-      subject: 绑定验证码发送通知
-      path: static/template/email/default.html
-      type: text/html
-    register:
-      subject: 注册验证码发送通知
-      path: static/template/email/default.html
-      type: text/html
-  user: 860808187@qq.com
-  name: 青岑云
-  host: smtp.qq.com
-  port: 25
-  password: fyudafdzqmhwbfbd
-jwt:
-  redis: cache
-  secret: limes-cloud-client-test
-  expire: 2h
-  renewal: 600s
-  whitelist: { "POST:/application/client/v1/bind/*": true,"GET:/application/client/v1/app": true,"POST:/application/client/v1/auth": true,"POST:/application/client/v1/token/refresh": true,"POST:/application/client/v1/login/*": true,"POST:/application/client/v1/logout": true,"POST:/application/client/v1/register/*": true,"POST:/application/client/v1/auth/captcha": true,"*:/application/api/*": true }
-business:
-  defaultPasswordExpire: 10s
-  defaultNickName: 用户-
+    host: "192.168.153.130:6379"
+    username: ""
+    password: "123456"

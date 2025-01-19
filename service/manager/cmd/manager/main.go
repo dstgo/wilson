@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"log"
 
 	"github.com/go-kratos/kratos/v2"
 
@@ -11,53 +9,60 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	_ "go.uber.org/automaxprocs"
 
-	"github.com/dstgo/wilson/api/rpc/configure"
+	"github.com/dstgo/wilson/framework/cli"
 	"github.com/dstgo/wilson/framework/kratosx"
 	"github.com/dstgo/wilson/framework/kratosx/config"
-	"github.com/dstgo/wilson/framework/kratosx/library/md"
 	"github.com/dstgo/wilson/service/manager/internal/app"
 	"github.com/dstgo/wilson/service/manager/internal/conf"
 )
 
+const AppName = "manager"
+
 var (
-	Name      string
-	Version   string
-	BuildTime string
+	AppVersion string
 )
 
+var service = cli.NewCLI(&cli.Options{
+	AppName:     AppName,
+	AppVersion:  AppVersion,
+	Description: "manager service for wilson framework",
+	StartFn:     Start,
+})
+
+func init() {
+	service.Parse()
+}
+
 func main() {
+	service.Start()
+}
+
+func Start(opts *cli.StartOptions) error {
 	server := kratosx.New(
-		kratosx.Config(configure.NewFromEnv()),
+		kratosx.ID(opts.ServiceID),
+		kratosx.Name(opts.AppName),
+		kratosx.Version(opts.AppVersion),
+		kratosx.Config(opts.Loader()),
 		kratosx.RegistrarServer(RegisterServer),
 		kratosx.Options(
-			kratos.Name(Name),
-			kratos.Version(Version),
-			kratos.Metadata(map[string]string{
-				md.ServiceAppName:    Name,
-				md.ServiceAppVersion: Version,
-				md.ServiceBuildTime:  BuildTime,
-			}),
 			kratos.AfterStart(func(ctx context.Context) error {
 				kt := kratosx.MustContext(ctx)
-				fmt.Printf("hello %s !\n", kt.Name())
+				kt.Logger().Infof("service %s started successfully!", kt.ID())
 				return nil
 			}),
 		),
 	)
 
-	if err := server.Run(); err != nil {
-		log.Fatal(err.Error())
-	}
+	return server.Run()
 }
 
 func RegisterServer(c config.Config, hs *http.Server, gs *grpc.Server) {
 	cfg := &conf.Config{}
-	c.ScanWatch("business", func(value config.Value) {
+	c.ScanWatch("manager", func(value config.Value) {
 		if err := value.Scan(cfg); err != nil {
-			panic("business config format error:" + err.Error())
+			panic("manager config format error: " + err.Error())
 		}
 	})
 
-	// 注册服务
 	app.New(cfg, hs, gs)
 }

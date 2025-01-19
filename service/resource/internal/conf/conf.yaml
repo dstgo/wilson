@@ -1,66 +1,124 @@
-env: PROD
+# 环境设置
+env: "PROD"
+
+# 服务器配置
 server:
   http:
-    addr: 127.0.0.1:7003
+    # HTTP 服务器监听地址
+    addr: "127.0.0.1:7003"
+    # HTTP 请求超时时间
     timeout: 60s
     marshal:
+      # 是否输出未填充的字段
       emitUnpopulated: true
+      # 使用 Proto 名称
       useProtoNames: true
   grpc:
-    addr: 127.0.0.1:8003
+    # gRPC 服务器监听地址
+    addr: "127.0.0.1:8003"
+    # gRPC 请求超时时间
     timeout: 60s
+
+# 日志配置
 log:
-  level: 0
+  # 日志级别
+  level: debug
+  encode: json
+  # 日志输出目标
   output:
     - stdout
     - file
   file:
-    name: ./tmp/runtime/output.log
-    maxSize: 1
+    # 日志文件路径
+    name: "log/resource.log"
+    # 单个日志文件最大大小（MB）
+    maxSize: 50
+    # 最大保留的旧日志文件数量
     maxBackup: 5
-    maxAge: 1
+    # 日志文件保留的最大天数
+    maxAge: 30
+    # 是否压缩旧日志文件
     compress: false
+
+# 数据库配置
 database:
   system:
-    enable: true #是否启用数据库
-    drive: mysql #数据库类型
-    autoCreate: true #是否自动创建数据库
+    # 是否启用数据库
+    enable: true
+    # 数据库类型
+    drive: "mysql"
+    # 是否自动创建数据库
+    autoCreate: true
     connect:
-      username: root
-      password: root
-      host: 127.0.0.1
+      # 数据库用户名
+      username: "root"
+      # 数据库密码
+      password: "root"
+      # 数据库主机地址
+      host: "127.0.0.1"
+      # 数据库端口
       port: 3306
-      dbName: resource
-      option: ?charset=utf8mb4&parseTime=True&loc=Local
+      # 数据库名称
+      dbName: "resource"
+      # 连接选项
+      option: "?charset=utf8mb4&parseTime=True&loc=Local"
     config:
       initializer:
+        # 是否启用初始化器
         enable: true
-        path: deploy/data.sql
+        # 初始化 SQL 文件路径
+        path: "deploy/data.sql"
       transformError:
+        # 是否启用错误转换
         enable: true
-      maxLifetime: 2h #最大生存时间
-      maxOpenConn: 20 #最大连接数量
-      maxIdleConn: 10 #最大空闲数量
-      logLevel: 3 #日志等级
-      slowThreshold: 2s #慢sql阈值
+      # 连接最大生存时间
+      maxLifetime: 2h
+      # 最大打开连接数
+      maxOpenConn: 20
+      # 最大空闲连接数
+      maxIdleConn: 10
+      # 日志级别
+      logLevel: 3
+      # 慢查询阈值
+      slowThreshold: 2s
+
+# Redis配置
 redis:
   cache:
+    # 是否启用 Redis
     enable: true
-    host: 127.0.0.1:6379
-    username: ''
-    password: ''
-business:
+    # Redis 主机地址和端口
+    host: "127.0.0.1:6379"
+    # Redis 用户名
+    username: ""
+    # Redis 密码
+    password: ""
+
+# 资源配置
+resource:
+  # 分块大小
   chunkSize: 1
+  # 默认最大文件大小（MB）
   defaultMaxSize: 10
+  # 默认允许的文件类型
   defaultAcceptTypes: [ "jpg","png","txt","ppt","pptx","mp4","pdf" ]
   storage:
-    type: local
-    endpoint: xxx
-    id: xxx
-    secret: xxx
-    serverUrl: http://127.0.0.1:7003/resource/api/v1/static
-    localDir: static
+    # 存储类型
+    type: "local"
+    # 存储端点
+    endpoint: "xxx"
+    # 存储 ID
+    id: "xxx"
+    # 存储密钥
+    secret: "xxx"
+    # 静态资源服务 URL
+    serverUrl: "http://127.0.0.1:7003/resource/api/v1/static"
+    # 本地存储目录
+    localDir: "static"
+    # 临时文件过期时间
     temporaryExpire: 600s
   export:
-    serverUrl: http://127.0.0.1:7003/resource/api/v1/download
-    localDir: static/export
+    # 下载服务 URL
+    serverUrl: "http://127.0.0.1:7003/resource/api/v1/download"
+    # 导出文件本地存储目录
+    localDir: "static/export"

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 
 	"github.com/go-kratos/kratos/v2"
@@ -12,7 +13,6 @@ import (
 	"github.com/dstgo/wilson/framework/kratosx"
 	"github.com/dstgo/wilson/framework/kratosx/config"
 	"github.com/dstgo/wilson/framework/kratosx/library/logger"
-	"github.com/dstgo/wilson/framework/kratosx/library/md"
 	"github.com/dstgo/wilson/framework/pkg/webserver"
 	"github.com/dstgo/wilson/service/configure/internal/app"
 	"github.com/dstgo/wilson/service/configure/internal/conf"
@@ -21,16 +21,14 @@ import (
 const AppName = "configure"
 
 var (
-	AppVersion   string
-	AppBuildTime string
+	AppVersion string
 )
 
 var service = cli.NewCLI(&cli.Options{
-	AppName:      AppName,
-	AppVersion:   AppVersion,
-	AppBuildTime: AppBuildTime,
-	Description:  "configure service for wilson framework",
-	StartFn:      Start,
+	AppName:     AppName,
+	AppVersion:  AppVersion,
+	Description: "configure service for wilson framework",
+	StartFn:     Start,
 })
 
 func init() {
@@ -43,13 +41,16 @@ func main() {
 
 func Start(opts *cli.StartOptions) error {
 	server := kratosx.New(
+		kratosx.ID(opts.ServiceID),
+		kratosx.Name(opts.AppName),
+		kratosx.Version(opts.AppVersion),
 		kratosx.Config(opts.Loader()),
 		kratosx.RegistrarServer(RegisterServer),
 		kratosx.Options(
-			kratos.Metadata(map[string]string{
-				md.ServiceAppName:    opts.AppName,
-				md.ServiceAppVersion: opts.AppVersion,
-				md.ServiceBuildTime:  opts.AppBuildTime,
+			kratos.AfterStart(func(ctx context.Context) error {
+				kt := kratosx.MustContext(ctx)
+				kt.Logger().Infof("service %s started successfully!", kt.ID())
+				return nil
 			}),
 		),
 	)
