@@ -16,7 +16,7 @@ import (
 	"github.com/dstgo/wilson/service/control/internal/conf"
 )
 
-const AppName = "game"
+const AppName = "control"
 
 var (
 	AppVersion string
@@ -25,7 +25,7 @@ var (
 var service = cli.NewCLI(&cli.Options{
 	AppName:     AppName,
 	AppVersion:  AppVersion,
-	Description: "game service for wilson framework",
+	Description: "control service for wilson framework",
 	StartFn:     Start,
 })
 
@@ -60,9 +60,9 @@ func RegisterServer(c config.Config, hs *thttp.Server, gs *grpc.Server) {
 	cfg := &conf.Config{}
 
 	// watch config
-	c.ScanWatch("game", func(value config.Value) {
+	c.ScanWatch("control", func(value config.Value) {
 		if err := value.Scan(cfg); err != nil {
-			log.Printf("game config format error: %s", err.Error())
+			log.Printf("control config format error: %s", err.Error())
 		}
 	})
 
