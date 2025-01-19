@@ -1,6 +1,6 @@
 # basic
 MODULE := $(shell go list ./cmd/...)
-APP_NAME := $(notdir $(MODULE))-service
+APP_NAME := service-$(notdir $(MODULE))
 GIT_VERSION := $(shell \
   if git rev-parse --is-inside-work-tree > /dev/null 2>&1 && [ -n "$$(git log -1 --format=%h 2>/dev/null)" ]; then \
     git tag --sort=-version:refname | sed -n 1p; \
