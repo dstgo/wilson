@@ -17,6 +17,6 @@ func fileLoader(opts *Options) Loader {
 
 func configureLoader(opts *Options) Loader {
 	return func() kratosConfig.Source {
-		return configuresource.New(opts.ConfigHost, opts.ConfigToken, opts.ServiceName)
+		return configuresource.New(opts.ConfigHost, opts.ConfigToken, opts.ServiceID)
 	}
 }

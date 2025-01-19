@@ -19,7 +19,7 @@ type Options struct {
 	ConfigFile  string
 	ConfigHost  string
 	ConfigToken string
-	ServiceName string
+	ServiceID   string
 	Timezone    string
 
 	StartFn func(opt *StartOptions) error
@@ -31,7 +31,7 @@ type StartOptions struct {
 	AppName      string
 	AppVersion   string
 	AppBuildTime string
-	ServiceName  string
+	ServiceID    string
 	Timezone     string
 }
 
@@ -45,7 +45,6 @@ func NewCLI(opts *Options) Service {
 	}
 
 	opts.AppVersion = lo.Ternary(opts.AppVersion == "", "v0.0.0", opts.AppVersion)
-	opts.AppBuildTime = lo.Ternary(opts.AppBuildTime == "", time.Time{}.Format(time.DateTime), opts.AppBuildTime)
 
 	rootCmd := &cobra.Command{
 		Use:           opts.AppName,
@@ -54,20 +53,13 @@ func NewCLI(opts *Options) Service {
 		Short:         opts.Description,
 	}
 
-	versionCmd := &cobra.Command{
-		Use:   "version",
-		Short: "Print the service version",
-		RunE:  cmdVersion(opts),
-	}
+	versionCmd := newVersionCmd(opts)
+	startCmd := newStartCmd(opts)
 
-	startCmd := &cobra.Command{
-		Use:   "start",
-		Short: "Start the service",
-		RunE:  cmdStart(opts),
-	}
-
-	rootCmd.AddCommand(versionCmd)
-	rootCmd.AddCommand(startCmd)
+	rootCmd.AddCommand(
+		versionCmd,
+		startCmd,
+	)
 
 	return Service{
 		opts: opts,
@@ -84,7 +76,7 @@ const (
 	EnvConfigFile  = "CONF_FILE"
 	EnvConfigHost  = "CONF_HOST"
 	EnvConfigToken = "CONF_TOKEN"
-	EnvServiceName = "SERVICE_NAME"
+	EnvServiceID   = "SERVICE_ID"
 	EnvTimezone    = "TIMEZONE"
 )
 
@@ -93,7 +85,7 @@ func (c Service) Parse() {
 		c.cmd.PersistentFlags().StringVar(&c.opts.ConfigFile, "file", "", "config file path")
 		c.cmd.PersistentFlags().StringVar(&c.opts.ConfigHost, "host", "", "configure host")
 		c.cmd.PersistentFlags().StringVar(&c.opts.ConfigToken, "token", "", "configure token")
-		c.cmd.PersistentFlags().StringVar(&c.opts.ServiceName, "name", "", "service name")
+		c.cmd.PersistentFlags().StringVar(&c.opts.ServiceID, "id", "", "service id")
 		c.cmd.PersistentFlags().StringVar(&c.opts.Timezone, "timezone", "", "time zone")
 
 		if c.opts.ConfigFile == "" {
@@ -105,8 +97,8 @@ func (c Service) Parse() {
 		if c.opts.ConfigToken == "" {
 			c.opts.ConfigToken = os.Getenv(EnvConfigToken)
 		}
-		if c.opts.ServiceName == "" {
-			c.opts.ServiceName = os.Getenv(EnvServiceName)
+		if c.opts.ServiceID == "" {
+			c.opts.ServiceID = os.Getenv(EnvServiceID)
 		}
 		if c.opts.Timezone == "" {
 			c.opts.Timezone = os.Getenv(EnvTimezone)
@@ -115,6 +107,11 @@ func (c Service) Parse() {
 }
 
 func (c Service) prepare() error {
+	if c.opts.ServiceID == "" {
+		hostname, _ := os.Hostname()
+		c.opts.ServiceID = fmt.Sprintf("%s-%s", c.opts.AppName, hostname)
+	}
+
 	if c.opts.Timezone == "" {
 		c.opts.Timezone = "Local"
 	}
