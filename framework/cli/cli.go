@@ -1,8 +1,10 @@
 package cli
 
 import (
+	"fmt"
 	"os"
 	"time"
+	_ "time/tzdata"
 
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
@@ -18,16 +20,19 @@ type Options struct {
 	ConfigHost  string
 	ConfigToken string
 	ServiceName string
+	Timezone    string
 
 	StartFn func(opt *StartOptions) error
 }
 
 type StartOptions struct {
+	Loader Loader
+
 	AppName      string
 	AppVersion   string
 	AppBuildTime string
 	ServiceName  string
-	Loader       Loader
+	Timezone     string
 }
 
 func NewCLI(opts *Options) Service {
@@ -80,6 +85,7 @@ const (
 	EnvConfigHost  = "CONF_HOST"
 	EnvConfigToken = "CONF_TOKEN"
 	EnvServiceName = "SERVICE_NAME"
+	EnvTimezone    = "TIMEZONE"
 )
 
 func (c Service) Parse() {
@@ -88,6 +94,7 @@ func (c Service) Parse() {
 		c.cmd.PersistentFlags().StringVar(&c.opts.ConfigHost, "host", "", "configure host")
 		c.cmd.PersistentFlags().StringVar(&c.opts.ConfigToken, "token", "", "configure token")
 		c.cmd.PersistentFlags().StringVar(&c.opts.ServiceName, "name", "", "service name")
+		c.cmd.PersistentFlags().StringVar(&c.opts.Timezone, "timezone", "", "time zone")
 
 		if c.opts.ConfigFile == "" {
 			c.opts.ConfigFile = os.Getenv(EnvConfigFile)
@@ -101,11 +108,34 @@ func (c Service) Parse() {
 		if c.opts.ServiceName == "" {
 			c.opts.ServiceName = os.Getenv(EnvServiceName)
 		}
+		if c.opts.Timezone == "" {
+			c.opts.Timezone = os.Getenv(EnvTimezone)
+		}
 	}
 }
 
+func (c Service) prepare() error {
+	if c.opts.Timezone == "" {
+		c.opts.Timezone = "Local"
+	}
+
+	location, err := time.LoadLocation(c.opts.Timezone)
+	if err != nil {
+		return fmt.Errorf("invalid timezone: %s", c.opts.Timezone)
+	}
+	time.Local = location
+
+	return nil
+}
+
 func (c Service) Start() {
-	err := c.cmd.Execute()
+	err := c.prepare()
+	if err != nil {
+		c.cmd.PrintErrf("Error: %v\n", err)
+		return
+	}
+
+	err = c.cmd.Execute()
 	if err != nil {
 		c.cmd.PrintErrf("Error: %v\n", err)
 	}
