@@ -25,7 +25,7 @@ func newWatcher(s *source) (*watcher, error) {
 
 	go func() {
 		for {
-			cf, err := s.client.Recv()
+			cf, err := s.watchClient.Recv()
 			if err != nil {
 				// 接收失败，则进行主动重连
 				for {
