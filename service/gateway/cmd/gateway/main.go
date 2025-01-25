@@ -13,7 +13,6 @@ import (
 	_ "go.uber.org/automaxprocs"
 
 	"github.com/dstgo/wilson/framework/cli"
-	"github.com/dstgo/wilson/framework/kratosx"
 	"github.com/dstgo/wilson/service/gateway/client"
 	"github.com/dstgo/wilson/service/gateway/config"
 	"github.com/dstgo/wilson/service/gateway/discovery"
@@ -73,8 +72,7 @@ func Start(opts *cli.StartOptions) error {
 		kratos.Name(opts.AppName),
 		kratos.Version(opts.AppVersion),
 		kratos.AfterStart(func(ctx context.Context) error {
-			kt := kratosx.MustContext(ctx)
-			kt.Logger().Infof("service %s started successfully!", kt.ID())
+			log.Infof("gateway started successfully!")
 			return nil
 		}),
 	)
