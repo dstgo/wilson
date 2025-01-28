@@ -3,7 +3,7 @@ package lock
 import (
 	"context"
 	"errors"
-	"math/rand"
+	"math/rand/v2"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -82,7 +82,8 @@ func (l *lock) AcquireFunc(ctx context.Context, cf func() error, do func() error
 		}
 
 		// 防止频繁自旋[5-30ms]
-		time.Sleep(time.Duration(5+rand.Intn(25)) * time.Millisecond)
+		// #nosec G404: Use of weak random number generator
+		time.Sleep(time.Duration(5+rand.IntN(25)) * time.Millisecond)
 	}
 
 	// 查询缓存数据，防止获取锁之后，存在

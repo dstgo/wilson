@@ -2,7 +2,6 @@ package captcha
 
 import (
 	"context"
-	"crypto/md5"
 	"errors"
 	"fmt"
 	"math"
@@ -17,6 +16,8 @@ import (
 	"github.com/dstgo/wilson/framework/kratosx/config"
 	"github.com/dstgo/wilson/framework/kratosx/library/email"
 	"github.com/dstgo/wilson/framework/kratosx/library/redis"
+	"github.com/dstgo/wilson/framework/pkg/cryptox"
+	"github.com/dstgo/wilson/framework/pkg/randx"
 )
 
 type Captcha interface {
@@ -219,16 +220,16 @@ func (c *captcha) verify(tp, ip, name, id, answer, sender string) error {
 // randomCode 生成随机数验证码
 func (c *captcha) randomCode(len int) string {
 	rand.New(rand.NewSource(time.Now().Unix()))
-	var code = rand.Intn(int(math.Pow10(len)) - int(math.Pow10(len-1)))
-	return strconv.Itoa(code + int(math.Pow10(len-1)))
+	code := randx.Int64(int64(math.Pow10(len)) - int64(math.Pow10(len-1)))
+	return strconv.FormatInt(code+int64(math.Pow10(len-1)), 10)
 }
 
 // uid 获取唯一id
 func (c *captcha) clientUid(tp, ip, name string) string {
-	return fmt.Sprintf("captcha:%s:%s:%x", name, tp, md5.Sum([]byte(ip)))
+	return fmt.Sprintf("captcha:%s:%s:%s", name, tp, cryptox.Sha256Hex([]byte(ip)))
 }
 
 // uid 获取唯一id
 func (c *captcha) uid(cid, ans, sender string) string {
-	return fmt.Sprintf("%x", md5.Sum([]byte(fmt.Sprintf("%s:%s:%s", cid, ans, sender))))
+	return cryptox.Sha256Hex([]byte(fmt.Sprintf("%s:%s:%s", cid, ans, sender)))
 }
