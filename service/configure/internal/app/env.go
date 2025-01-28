@@ -10,7 +10,7 @@ import (
 	"github.com/dstgo/wilson/api/rpc/manager"
 	"github.com/dstgo/wilson/framework/kratosx"
 	ktypes "github.com/dstgo/wilson/framework/kratosx/types"
-	"github.com/dstgo/wilson/framework/pkg/crypto"
+	"github.com/dstgo/wilson/framework/pkg/cryptox"
 
 	pb "github.com/dstgo/wilson/api/gen/configure/env/v1"
 	"github.com/dstgo/wilson/service/configure/internal/conf"
@@ -72,7 +72,7 @@ func (app *Env) CreateEnv(c context.Context, req *pb.CreateEnvRequest) (*pb.Crea
 		Name:        req.Name,
 		Status:      req.Status,
 		Description: req.Description,
-		Token:       crypto.MD5ToUpper([]byte(uuid.NewString())),
+		Token:       cryptox.Sha256HexUpper([]byte(uuid.NewString())),
 	})
 	if err != nil {
 		return nil, err
@@ -115,7 +115,7 @@ func (app *Env) GetEnvToken(c context.Context, req *pb.GetEnvTokenRequest) (*pb.
 func (app *Env) ResetEnvToken(c context.Context, req *pb.ResetEnvTokenRequest) (*pb.ResetEnvTokenReply, error) {
 	in := entity.Env{
 		BaseModel: ktypes.BaseModel{Id: req.Id},
-		Token:     crypto.MD5ToUpper([]byte(uuid.NewString())),
+		Token:     cryptox.Sha256HexUpper([]byte(uuid.NewString())),
 	}
 	return &pb.ResetEnvTokenReply{Token: in.Token}, app.srv.UpdateEnv(kratosx.MustContext(c), &in)
 }

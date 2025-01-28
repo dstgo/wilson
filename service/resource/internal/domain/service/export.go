@@ -18,7 +18,7 @@ import (
 	"github.com/dstgo/wilson/framework/kratosx"
 	"github.com/dstgo/wilson/framework/kratosx/library/db/gormtranserror"
 	ktypes "github.com/dstgo/wilson/framework/kratosx/types"
-	"github.com/dstgo/wilson/framework/pkg/crypto"
+	"github.com/dstgo/wilson/framework/pkg/cryptox"
 	"github.com/dstgo/wilson/framework/pkg/filex"
 	"github.com/dstgo/wilson/framework/pkg/xlsx"
 
@@ -89,7 +89,7 @@ func (u *Export) ListExport(ctx kratosx.Context, req *types.ListExportRequest) (
 // ExportExcel 创建导出表格
 func (u *Export) ExportExcel(ctx kratosx.Context, req *types.ExportExcelRequest) (*types.ExportExcelReply, error) {
 	b, _ := json.Marshal(req.Rows)
-	sha := crypto.MD5(b)
+	sha := cryptox.Sha256Hex(b)
 	export, err := u.repo.GetExportBySha(ctx, sha)
 	if err != nil && !gormtranserror.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
@@ -339,7 +339,7 @@ func (u *Export) clearExportFile(ctx kratosx.Context) {
 func (u *Export) ExportFile(ctx kratosx.Context, req *types.ExportFileRequest) (*types.ExportFileReply, error) {
 	b, _ := json.Marshal(req.Files)
 	ids, _ := json.Marshal(req.Ids)
-	sha := crypto.MD5(append(b, ids...))
+	sha := cryptox.Sha256Hex(append(b, ids...))
 	export, err := u.repo.GetExportBySha(ctx, sha)
 	if err != nil && !gormtranserror.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err

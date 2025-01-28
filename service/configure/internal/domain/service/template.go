@@ -9,7 +9,7 @@ import (
 
 	"github.com/dstgo/wilson/framework/kratosx"
 	"github.com/dstgo/wilson/framework/kratosx/library/db/gormtranserror"
-	"github.com/dstgo/wilson/framework/pkg/crypto"
+	"github.com/dstgo/wilson/framework/pkg/cryptox"
 
 	"github.com/dstgo/wilson/api/gen/errors"
 
@@ -98,7 +98,7 @@ func (t *Template) CreateTemplate(ctx kratosx.Context, template *entity.Template
 	}
 
 	// 当前的版本
-	template.Version = crypto.MD5ToUpper([]byte(template.Content))
+	template.Version = cryptox.Sha256HexUpper([]byte(template.Content))
 
 	// 查找是否存在相同的版本
 	if _, err := t.repo.GetTemplateByVersion(ctx, template.Version); err == nil {

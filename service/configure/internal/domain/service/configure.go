@@ -7,7 +7,7 @@ import (
 	"github.com/go-kratos/kratos/v2/encoding"
 
 	"github.com/dstgo/wilson/framework/kratosx"
-	"github.com/dstgo/wilson/framework/pkg/crypto"
+	"github.com/dstgo/wilson/framework/pkg/cryptox"
 
 	"github.com/dstgo/wilson/api/gen/errors"
 
@@ -106,7 +106,7 @@ func (u *Configure) UpdateConfigure(ctx kratosx.Context, req *entity.Configure) 
 	}
 
 	// 生成数据
-	req.Version = crypto.MD5([]byte(content))
+	req.Version = cryptox.Sha256Hex([]byte(content))
 	req.Format = format
 	req.Content = content
 
