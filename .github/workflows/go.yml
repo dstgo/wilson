@@ -52,6 +52,20 @@ jobs:
         with:
           version: v1.60
 
+  # Inspects source code for security problems by scanning the Go AST and SSA code representation.
+  gosec:
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: '-r -exclude-generated -exclude=G115 -nosec -concurrency=64'
+
   # Build go program
   build:
     runs-on: ubuntu-latest
