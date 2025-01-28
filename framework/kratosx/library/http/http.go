@@ -2,13 +2,13 @@ package http
 
 import (
 	"time"
-	"unsafe"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-resty/resty/v2"
 	json "github.com/json-iterator/go"
 
 	"github.com/dstgo/wilson/framework/kratosx/config"
+	"github.com/dstgo/wilson/framework/pkg/strs"
 )
 
 type request struct {
@@ -90,7 +90,7 @@ func (h *request) log(t int64, res *response) {
 		"header", h.request.Header,
 		"body", h.request.Body,
 		"cost", time.Now().UnixMilli() - t,
-		"res", *(*string)(unsafe.Pointer(&resData)),
+		"res", strs.BytesToString(resData),
 	}
 	if len(h.request.FormData) != 0 {
 		logs = append(logs, "form-data", h.request.FormData)
