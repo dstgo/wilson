@@ -9,7 +9,6 @@ import (
 	"os"
 	"strings"
 	"time"
-	"unsafe"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
@@ -17,6 +16,7 @@ import (
 
 	"github.com/dstgo/wilson/framework/pkg/cryptox"
 	"github.com/dstgo/wilson/framework/pkg/lock"
+	"github.com/dstgo/wilson/framework/pkg/strs"
 	"github.com/dstgo/wilson/service/resource/internal/infra/store/config"
 	"github.com/dstgo/wilson/service/resource/internal/infra/store/types"
 )
@@ -225,7 +225,7 @@ func (u *upload) Append(r io.Reader, index int) error {
 		Index:    index,
 		Sha:      cryptox.Sha256Hex(all),
 		Size:     len(all),
-		Data:     *(*string)(unsafe.Pointer(&all)),
+		Data:     strs.BytesToString(all),
 	}
 
 	return chunk.Add(u.Local.db)
@@ -237,7 +237,7 @@ func (u *upload) AppendBytes(r []byte, index int) error {
 		Index:    index,
 		Size:     len(r),
 		Sha:      cryptox.Sha256Hex(r),
-		Data:     *(*string)(unsafe.Pointer(&r)),
+		Data:     strs.BytesToString(r),
 	}
 
 	return chunk.Add(u.Local.db)

@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"strings"
 	"text/template"
-	"unsafe"
 
 	lua "github.com/yuin/gopher-lua"
 
 	"github.com/dstgo/wilson/framework/dontstarve/luax"
+	"github.com/dstgo/wilson/framework/pkg/strs"
 )
 
 type ModInfo struct {
@@ -85,6 +85,10 @@ func ParseModInfo(luaScript []byte) (ModInfo, error) {
 
 // ParseModInfoWithEnv parse mod info from lua script with mod environment variables.
 func ParseModInfoWithEnv(luaScript []byte, folderName, locale string) (ModInfo, error) {
+	if len(luaScript) == 0 {
+		return ModInfo{}, nil
+	}
+
 	l := luax.NewVM()
 	defer l.Close()
 
@@ -99,7 +103,7 @@ func ParseModInfoWithEnv(luaScript []byte, folderName, locale string) (ModInfo, 
 	l.SetGlobal("ChooseTranslationTable", ChooseTranslationTable(l, locale))
 
 	// parse script
-	if err := l.DoString(unsafe.String(unsafe.SliceData(luaScript), len(luaScript))); err != nil {
+	if err := l.DoString(strs.BytesToString(luaScript)); err != nil {
 		return ModInfo{}, err
 	}
 
@@ -240,10 +244,14 @@ func parseModOptionItems(optTable luax.Table) []ModOptionItem {
 
 // ParseModOverrides returns the mod override options from modoverrides.lua
 func ParseModOverrides(luaScript []byte) ([]ModOverRideOption, error) {
+	if len(luaScript) == 0 {
+		return nil, nil
+	}
+
 	l := luax.NewVM()
 	defer l.Close()
 
-	if err := l.DoString(unsafe.String(unsafe.SliceData(luaScript), len(luaScript))); err != nil {
+	if err := l.DoString(strs.BytesToString(luaScript)); err != nil {
 		return nil, err
 	}
 	var options []ModOverRideOption

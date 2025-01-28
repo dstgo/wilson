@@ -5,11 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
-	"unsafe"
 
 	"gopkg.in/gomail.v2"
 
 	ec "github.com/dstgo/wilson/framework/kratosx/config"
+	"github.com/dstgo/wilson/framework/pkg/strs"
 )
 
 type Sender interface {
@@ -40,7 +40,7 @@ func (s *sender) Send(email string, name string, variable ...any) error {
 	if len(variable) != 0 {
 		params = variable[0]
 	}
-	parser, err := n.Parse(*(*string)(unsafe.Pointer(&tpv)))
+	parser, err := n.Parse(strs.BytesToString(tpv))
 	if err != nil {
 		return err
 	}
