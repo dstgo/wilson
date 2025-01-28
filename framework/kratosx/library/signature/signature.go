@@ -26,9 +26,13 @@ import (
 const (
 	defaultTime = time.Second * 10
 
-	timeHeader    = "x-md-sign-time"
-	tokenHeader   = "x-md-sign-token"
-	signReason    = "SignatureInvalid"
+	// #nosec G101: Potential hardcoded credentials
+	timeHeader = "x-md-sign-time"
+	// #nosec G101: Potential hardcoded credentials
+	tokenHeader = "x-md-sign-token"
+	// #nosec G101: Potential hardcoded credentials
+	signReason = "SignatureInvalid"
+	// #nosec G101: Potential hardcoded credentials
 	genSignReason = "GenSignatureInvalid"
 )
 
