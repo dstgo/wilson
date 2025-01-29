@@ -17,7 +17,7 @@ import (
 	"github.com/dstgo/wilson/framework/kratosx/library/email"
 	"github.com/dstgo/wilson/framework/kratosx/library/redis"
 	"github.com/dstgo/wilson/framework/pkg/cryptox"
-	"github.com/dstgo/wilson/framework/pkg/randx"
+	"github.com/dstgo/wilson/framework/pkg/random"
 )
 
 type Captcha interface {
@@ -220,8 +220,8 @@ func (c *captcha) verify(tp, ip, name, id, answer, sender string) error {
 // randomCode 生成随机数验证码
 func (c *captcha) randomCode(len int) string {
 	rand.New(rand.NewSource(time.Now().Unix()))
-	code := randx.SecInt64(int64(math.Pow10(len)) - int64(math.Pow10(len-1)))
-	return strconv.FormatInt(code+int64(math.Pow10(len-1)), 10)
+	code := random.SecIntN(int(math.Pow10(len)) - int(math.Pow10(len-1)))
+	return strconv.Itoa(code + int(math.Pow10(len-1)))
 }
 
 // uid 获取唯一id
