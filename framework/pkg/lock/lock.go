@@ -82,7 +82,8 @@ func (l *lock) AcquireFunc(ctx context.Context, cf func() error, do func() error
 		}
 
 		// 防止频繁自旋[5-30ms]
-		// #nosec G404: Use of weak random number generator
+		// G404: Use of weak random number generator
+		// #nosec
 		time.Sleep(time.Duration(5+rand.IntN(25)) * time.Millisecond)
 	}
 

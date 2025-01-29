@@ -220,7 +220,7 @@ func (c *captcha) verify(tp, ip, name, id, answer, sender string) error {
 // randomCode 生成随机数验证码
 func (c *captcha) randomCode(len int) string {
 	rand.New(rand.NewSource(time.Now().Unix()))
-	code := randx.Int64(int64(math.Pow10(len)) - int64(math.Pow10(len-1)))
+	code := randx.SecInt64(int64(math.Pow10(len)) - int64(math.Pow10(len-1)))
 	return strconv.FormatInt(code+int64(math.Pow10(len-1)), 10)
 }
 

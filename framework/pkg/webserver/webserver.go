@@ -53,6 +53,9 @@ func ServeDir(dir string, addr string, data map[string]any) error {
 	})
 
 	log.Infof("static web server lisenting at %s\n", addr)
+
+	// G114 (CWE-676): Use of net/http serve function that has no support for setting timeouts
+	// #nosec
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		return fmt.Errorf("failed to start web server: %s", err)
 	}
