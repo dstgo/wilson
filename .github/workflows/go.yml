@@ -68,7 +68,7 @@ jobs:
       - name: Run Gosec Security Scanner
         uses: securego/gosec@e0cca6fe95306b7e7790d6f1bf6a7bec6d622459 # v2.22.0
         with:
-          args: '-r -exclude-generated -exclude=G115 -nosec=true -concurrency=64'
+          args: '-r -terse -exclude-generated -exclude=G115 -nosec=true -concurrency=64'
 
   # Build go program
   build:
