@@ -10,7 +10,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 
 	"github.com/dstgo/wilson/framework/kratosx/library/md"
-	"github.com/dstgo/wilson/framework/pkg/crypto"
+	"github.com/dstgo/wilson/framework/pkg/cryptox"
 	"github.com/dstgo/wilson/framework/pkg/slicex"
 	"github.com/dstgo/wilson/framework/pkg/ua"
 	"github.com/dstgo/wilson/framework/pkg/valx"
@@ -161,7 +161,7 @@ func (u *Use) CreateUser(ctx kratosx.Context, req *entity.User) (uint32, error) 
 	// 创建用户信息
 	req.Nickname = req.Name
 	req.Avatar = &u.conf.DefaultUserAvatar
-	req.Password = crypto.EncodePwd(u.conf.DefaultUserPassword)
+	req.Password = cryptox.EncodePwd(u.conf.DefaultUserPassword)
 	req.RoleId = req.UserRoles[0].RoleId
 	req.Status = proto.Bool(true)
 
@@ -330,7 +330,7 @@ func (u *Use) ResetUserPassword(ctx kratosx.Context, id uint32) error {
 
 	if err = u.repo.UpdateUser(ctx, &entity.User{
 		BaseModel: ktypes.BaseModel{Id: id},
-		Password:  crypto.EncodePwd(u.conf.DefaultUserPassword),
+		Password:  cryptox.EncodePwd(u.conf.DefaultUserPassword),
 	}); err != nil {
 		return errors.DatabaseErrorWrap(err)
 	}
@@ -442,7 +442,7 @@ func (u *Use) UpdateCurrentUserPassword(ctx kratosx.Context, req *types.UpdateCu
 		if req.OldPassword == nil {
 			return errors.ParamsError()
 		}
-		if !crypto.CompareHashPwd(user.Password, *req.OldPassword) {
+		if !cryptox.CompareHashPwd(user.Password, *req.OldPassword) {
 			return errors.PasswordError()
 		}
 	default:
@@ -451,7 +451,7 @@ func (u *Use) UpdateCurrentUserPassword(ctx kratosx.Context, req *types.UpdateCu
 
 	nu := entity.User{
 		BaseModel: ktypes.BaseModel{Id: md.UserId(ctx)},
-		Password:  crypto.EncodePwd(req.Password),
+		Password:  cryptox.EncodePwd(req.Password),
 	}
 	if err := u.repo.UpdateUser(ctx, &nu); err != nil {
 		return errors.DatabaseErrorWrap(err)
@@ -601,7 +601,7 @@ func (u *Use) UserLogin(ctx kratosx.Context, in *types.UserLoginRequest) (token 
 		user.Role = enableRoles[0]
 	}
 
-	if !crypto.CompareHashPwd(user.Password, pw.Password) {
+	if !cryptox.CompareHashPwd(user.Password, pw.Password) {
 		rerr = errors.PasswordError()
 		return
 	}

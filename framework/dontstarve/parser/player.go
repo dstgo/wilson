@@ -3,7 +3,8 @@ package dstparser
 import (
 	"strconv"
 	"strings"
-	"unsafe"
+
+	"github.com/dstgo/wilson/framework/pkg/strs"
 )
 
 // ParsePlayerTxt parse player.txt file, returns slice of klei ID
@@ -17,7 +18,7 @@ func ParsePlayerTxt(content string) []string {
 // ToPlayerTxt converts kleiIDs to player.txt
 func ToPlayerTxt(kleiIDs []string) ([]byte, error) {
 	joinStr := strings.Join(kleiIDs, "\n")
-	return unsafe.Slice(unsafe.StringData(joinStr), len(joinStr)), nil
+	return strs.StringToBytes(joinStr), nil
 }
 
 // ChatLog represents a chat record in server_chat_log.txt
@@ -44,7 +45,7 @@ func ParseServerChatLogs(content []byte) ([]ChatLog, error) {
 		return nil, nil
 	}
 
-	logsStr := unsafe.String(unsafe.SliceData(content), len(content))
+	logsStr := strs.BytesToString(content)
 
 	var logs []ChatLog
 	lines := strings.Split(logsStr, "\n")

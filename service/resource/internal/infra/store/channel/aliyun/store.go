@@ -3,7 +3,6 @@ package aliyun
 import (
 	"bytes"
 	"context"
-	"crypto/md5"
 	"errors"
 	"fmt"
 	"io"
@@ -13,6 +12,7 @@ import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/go-redis/redis/v8"
 
+	"github.com/dstgo/wilson/framework/pkg/cryptox"
 	"github.com/dstgo/wilson/framework/pkg/lock"
 	"github.com/dstgo/wilson/service/resource/internal/infra/store/config"
 	"github.com/dstgo/wilson/service/resource/internal/infra/store/types"
@@ -59,7 +59,7 @@ func (s *Aliyun) GenTemporaryURL(key string) (string, error) {
 		target string
 		locker = lock.New(s.cache, key+":lock")
 	)
-	ck := fmt.Sprintf("resource:%x", md5.Sum([]byte(key)))
+	ck := fmt.Sprintf("resource:%s", cryptox.Sha256Hex([]byte(key)))
 	err = locker.AcquireFunc(context.Background(),
 		func() error {
 			target, err = s.cache.Get(context.Background(), ck).Result()
@@ -71,7 +71,7 @@ func (s *Aliyun) GenTemporaryURL(key string) (string, error) {
 			target = fmt.Sprintf("%s/%s/%s/%s",
 				s.cdn,
 				t,
-				fmt.Sprintf("%x", md5.Sum([]byte(st))),
+				cryptox.Sha256Hex([]byte(st)),
 				key,
 			)
 			return s.cache.Set(context.Background(), ck, target, s.expire-10*time.Second).Err()

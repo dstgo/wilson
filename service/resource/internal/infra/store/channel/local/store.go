@@ -3,21 +3,20 @@ package local
 import (
 	"bytes"
 	"context"
-	"crypto/md5"
 	"errors"
 	"fmt"
 	"io"
 	"os"
 	"strings"
 	"time"
-	"unsafe"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
-	"github.com/dstgo/wilson/framework/pkg/crypto"
+	"github.com/dstgo/wilson/framework/pkg/cryptox"
 	"github.com/dstgo/wilson/framework/pkg/lock"
+	"github.com/dstgo/wilson/framework/pkg/strs"
 	"github.com/dstgo/wilson/service/resource/internal/infra/store/config"
 	"github.com/dstgo/wilson/service/resource/internal/infra/store/types"
 )
@@ -54,7 +53,7 @@ func (s *Local) GenTemporaryURL(key string) (string, error) {
 		target string
 		locker = lock.New(s.cache, key+":lock")
 	)
-	ck := fmt.Sprintf("resource:%x", md5.Sum([]byte(key)))
+	ck := fmt.Sprintf("resource:%s", cryptox.Sha256Hex([]byte(key)))
 	err = locker.AcquireFunc(context.Background(),
 		func() error {
 			target, err = s.cache.Get(context.Background(), ck).Result()
@@ -66,7 +65,7 @@ func (s *Local) GenTemporaryURL(key string) (string, error) {
 			target = fmt.Sprintf("%s/%s/%s/%s",
 				s.url,
 				t,
-				fmt.Sprintf("%x", md5.Sum([]byte(st))),
+				cryptox.Sha256Hex([]byte(st)),
 				key,
 			)
 			return s.cache.Set(context.Background(), ck, target, s.expire-10*time.Second).Err()
@@ -91,7 +90,7 @@ func (s *Local) VerifyTemporaryURL(key string, expire string, sign string) error
 
 	// 重新计算签名
 	st := s.secret + expire + "/" + key
-	oriSign := fmt.Sprintf("%x", md5.Sum([]byte(st)))
+	oriSign := cryptox.Sha256Hex([]byte(st))
 	if oriSign != sign {
 		return errors.New("sign is invoke")
 	}
@@ -213,7 +212,7 @@ func (u *upload) Append(r io.Reader, index int) error {
 		return err
 	}
 
-	sha := crypto.Sha256(all)
+	sha := cryptox.Sha256Hex(all)
 
 	oldChunk := Chunk{}
 	// 查询是否已经存在数据
@@ -224,9 +223,9 @@ func (u *upload) Append(r io.Reader, index int) error {
 	chunk := Chunk{
 		UploadID: u.uuid,
 		Index:    index,
-		Sha:      crypto.Sha256(all),
+		Sha:      cryptox.Sha256Hex(all),
 		Size:     len(all),
-		Data:     *(*string)(unsafe.Pointer(&all)),
+		Data:     strs.BytesToString(all),
 	}
 
 	return chunk.Add(u.Local.db)
@@ -237,8 +236,8 @@ func (u *upload) AppendBytes(r []byte, index int) error {
 		UploadID: u.uuid,
 		Index:    index,
 		Size:     len(r),
-		Sha:      crypto.Sha256(r),
-		Data:     *(*string)(unsafe.Pointer(&r)),
+		Sha:      cryptox.Sha256Hex(r),
+		Data:     strs.BytesToString(r),
 	}
 
 	return chunk.Add(u.Local.db)

@@ -430,7 +430,7 @@ func closeOnError(closer io.Closer, err *error) {
 	if *err == nil {
 		return
 	}
-	closer.Close()
+	_ = closer.Close()
 }
 
 // Update updates service endpoint.
@@ -464,7 +464,7 @@ func tryCloseRouter(in any) {
 	go func() {
 		ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 		defer cancel()
-		r.SyncClose(ctx)
+		_ = r.SyncClose(ctx)
 	}()
 }
 

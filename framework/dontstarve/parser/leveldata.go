@@ -3,11 +3,11 @@ package dstparser
 import (
 	"bytes"
 	"text/template"
-	"unsafe"
 
 	"github.com/mitchellh/mapstructure"
 
 	"github.com/dstgo/wilson/framework/dontstarve/luax"
+	"github.com/dstgo/wilson/framework/pkg/strs"
 )
 
 type LevelOverrideItem struct {
@@ -50,9 +50,13 @@ type LevelDataOverrides struct {
 
 // ParseLevelDataOverrides parses the leveldataoverrides.lua, returns LevelDataOverrides information
 func ParseLevelDataOverrides(luaScript []byte) (LevelDataOverrides, error) {
+	if len(luaScript) == 0 {
+		return LevelDataOverrides{}, nil
+	}
+
 	l := luax.NewVM()
 	defer l.Close()
-	if err := l.DoString(unsafe.String(unsafe.SliceData(luaScript), len(luaScript))); err != nil {
+	if err := l.DoString(strs.BytesToString(luaScript)); err != nil {
 		return LevelDataOverrides{}, err
 	}
 

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	_ "net/http/pprof"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
