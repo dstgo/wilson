@@ -4,80 +4,90 @@ import (
 	cryptorand "crypto/rand"
 	"encoding/binary"
 	"math"
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	"math/rand/v2"
 )
 
 // Int returns a non-negative random int.
+// #nosec G404 (CWE-338): Use of weak random number generator
 func Int() int {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	return rand.Int()
+	return DefaultRand.Int()
 }
 
 // Int32 returns a random 32-bit integer as an int32.
+// #nosec G404 (CWE-338): Use of weak random number generator
 func Int32() int32 {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	return rand.Int32()
+	return DefaultRand.Int32()
 }
 
 // Int64 returns a random 64-bit integer as an int64.
+// #nosec G404 (CWE-338): Use of weak random number generator
 func Int64() int64 {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	return rand.Int64()
+	return DefaultRand.Int64()
 }
 
 // Uint returns a random unsigned int.
+// #nosec G404 (CWE-338): Use of weak random number generator
 func Uint() uint {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	return rand.Uint()
+	return DefaultRand.Uint()
 }
 
 // Uint32 returns a random 32-bit unsigned integer as a uint32.
+// #nosec G404 (CWE-338): Use of weak random number generator
 func Uint32() uint32 {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	return rand.Uint32()
+	return DefaultRand.Uint32()
 }
 
 // Uint64 returns a random 64-bit unsigned integer as a uint64.
+// #nosec G404 (CWE-338): Use of weak random number generator
 func Uint64() uint64 {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	return rand.Uint64()
+	return DefaultRand.Uint64()
 }
 
 // IntN returns a random integer in the range [0, max).
+// #nosec G404 (CWE-338): Use of weak random number generator
 func IntN(max int) int {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	return rand.IntN(max)
+	return DefaultRand.IntN(max)
 }
 
 // Int32N returns a random 32-bit integer in the range [0, max).
+// #nosec G404 (CWE-338): Use of weak random number generator
 func Int32N(max int32) int32 {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	return rand.Int32N(max)
+	return DefaultRand.Int32N(max)
 }
 
 // Int64N returns a random 64-bit integer in the range [0, max).
+// #nosec G404 (CWE-338): Use of weak random number generator
 func Int64N(max int64) int64 {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	return rand.Int64N(max)
+	return DefaultRand.Int64N(max)
 }
 
 // UintN returns a random unsigned integer in the range [0, max).
+// #nosec G404 (CWE-338): Use of weak random number generator
 func UintN(max uint) uint {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	return rand.UintN(max)
+	return DefaultRand.UintN(max)
 }
 
 // Uint32N returns a random 32-bit unsigned integer in the range [0, max).
+// #nosec G404 (CWE-338): Use of weak random number generator
 func Uint32N(max uint32) uint32 {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	return rand.Uint32N(max)
+	return DefaultRand.Uint32N(max)
 }
 
 // Uint64N returns a random 64-bit unsigned integer in the range [0, max).
+// #nosec G404 (CWE-338): Use of weak random number generator
 func Uint64N(max uint64) uint64 {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	return rand.Uint64N(max)
+	return DefaultRand.Uint64N(max)
+}
+
+// Float32 returns a random float32 in the range [0.0, 1.0).
+// #nosec G404 (CWE-338): Use of weak random number generator
+func Float32() float32 {
+	return DefaultRand.Float32()
+}
+
+// Float64 returns a random float64 in the range [0.0, 1.0).
+// #nosec G404 (CWE-338): Use of weak random number generator
+func Float64() float64 {
+	return DefaultRand.Float64()
 }
 
 // SecInt returns a secure random non-negative int.
@@ -90,7 +100,7 @@ func SecInt32() int32 {
 	var buf [binary.MaxVarintLen32]byte
 	_, err := cryptorand.Read(buf[:])
 	if err != nil {
-		panic(err)
+		return NewChaCha8().Int32()
 	}
 	return int32(binary.BigEndian.Uint32(buf[:]) &^ (1 << 31))
 }
@@ -100,7 +110,7 @@ func SecInt64() int64 {
 	var buf [binary.MaxVarintLen64]byte
 	_, err := cryptorand.Read(buf[:])
 	if err != nil {
-		panic(err)
+		return NewChaCha8().Int64()
 	}
 	return int64(binary.BigEndian.Uint64(buf[:]) &^ (1 << 63))
 }
@@ -115,7 +125,7 @@ func SecUint32() uint32 {
 	var buf [binary.MaxVarintLen32]byte
 	_, err := cryptorand.Read(buf[:])
 	if err != nil {
-		panic(err)
+		return NewChaCha8().Uint32()
 	}
 	return binary.BigEndian.Uint32(buf[:])
 }
@@ -125,9 +135,21 @@ func SecUint64() uint64 {
 	var buf [binary.MaxVarintLen64]byte
 	_, err := cryptorand.Read(buf[:])
 	if err != nil {
-		panic(err)
+		return NewChaCha8().Uint64()
 	}
 	return binary.BigEndian.Uint64(buf[:])
+}
+
+// SecFloat32 returns a secure random float32 in the range [0.0, 1.0).
+func SecFloat32() float32 {
+	// There are exactly 1<<24 float32s in [0,1).
+	return float32(SecUint32()<<8>>8) / (1 << 24)
+}
+
+// SecFloat64 returns a secure random float64 in the range [0.0, 1.0).
+func SecFloat64() float64 {
+	// There are exactly 1<<53 float64s in [0,1).
+	return float64(SecUint64()<<11>>11) / (1 << 53)
 }
 
 // SecIntN returns a secure random integer in the range [0, max).
@@ -162,8 +184,9 @@ func SecInt32N(max int32) int32 {
 		var buf [binary.MaxVarintLen32]byte
 		_, err := cryptorand.Read(buf[:])
 		if err != nil {
-			panic(err)
+			return NewChaCha8().Int32N(max)
 		}
+
 		// Apply the mask to ensure the number is within the desired range
 		n := int32(binary.BigEndian.Uint32(buf[:]) & mask)
 		// Reject if n is outside the desired range
@@ -194,7 +217,7 @@ func SecInt64N(max int64) int64 {
 		var buf [binary.MaxVarintLen64]byte
 		_, err := cryptorand.Read(buf[:])
 		if err != nil {
-			panic(err)
+			return NewChaCha8().Int64N(max)
 		}
 		// Apply the mask to ensure the number is within the desired range
 		n := int64(binary.BigEndian.Uint64(buf[:]) & mask)
@@ -237,7 +260,7 @@ func SecUint32N(max uint32) uint32 {
 		var buf [binary.MaxVarintLen32]byte
 		_, err := cryptorand.Read(buf[:])
 		if err != nil {
-			panic(err)
+			return NewChaCha8().Uint32N(max)
 		}
 		// Apply the mask to ensure the number is within the desired range
 		n := binary.BigEndian.Uint32(buf[:]) & mask
@@ -269,7 +292,7 @@ func SecUint64N(max uint64) uint64 {
 		var buf [binary.MaxVarintLen64]byte
 		_, err := cryptorand.Read(buf[:])
 		if err != nil {
-			panic(err)
+			return NewChaCha8().Uint64N(max)
 		}
 		// Apply the mask to ensure the number is within the desired range
 		n := binary.BigEndian.Uint64(buf[:]) & mask

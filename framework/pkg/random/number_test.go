@@ -3,6 +3,8 @@ package random
 import (
 	"math"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestInt(t *testing.T) {
@@ -201,6 +203,102 @@ func TestSecUint64N(t *testing.T) {
 			t.Errorf("SecUint64N(%d) = %d; want value in range [0, %d)", upperBound, n, upperBound)
 		}
 	}
+}
+
+func TestFloat32(t *testing.T) {
+	const iterations = 100000
+	const epsilon = 1e-1
+
+	smallestObserved := float32(1.0)
+	largestObserved := float32(0.0)
+	totalSum := float32(0.0)
+
+	for i := 0; i < iterations; i++ {
+		value := Float32()
+		assert.GreaterOrEqual(t, value, float32(0.0), "Float32() should return values >= 0")
+		assert.Less(t, value, float32(1.0), "Float32() should return values < 1")
+
+		smallestObserved = float32(math.Min(float64(smallestObserved), float64(value)))
+		largestObserved = float32(math.Max(float64(largestObserved), float64(value)))
+		totalSum += value
+	}
+
+	averageValue := totalSum / float32(iterations)
+	assert.InDelta(t, averageValue, 0.5, epsilon, "Average value should be close to 0.5")
+	assert.InDelta(t, smallestObserved, 0.0, epsilon, "Smallest observed value should be close to 0")
+	assert.InDelta(t, largestObserved, 1.0, epsilon, "Largest observed value should be close to 1")
+}
+
+func TestFloat64(t *testing.T) {
+	const iterations = 100000
+	const epsilon = 1e-1
+
+	smallestObserved := 1.0
+	largestObserved := 0.0
+	totalSum := 0.0
+
+	for i := 0; i < iterations; i++ {
+		value := Float64()
+		assert.GreaterOrEqual(t, value, 0.0, "Float64() should return values >= 0")
+		assert.Less(t, value, 1.0, "Float64() should return values < 1")
+
+		smallestObserved = math.Min(smallestObserved, value)
+		largestObserved = math.Max(largestObserved, value)
+		totalSum += value
+	}
+
+	averageValue := totalSum / float64(iterations)
+	assert.InDelta(t, averageValue, 0.5, epsilon, "Average value should be close to 0.5")
+	assert.InDelta(t, smallestObserved, 0.0, epsilon, "Smallest observed value should be close to 0")
+	assert.InDelta(t, largestObserved, 1.0, epsilon, "Largest observed value should be close to 1")
+}
+
+func TestSecFloat32(t *testing.T) {
+	const iterations = 100000
+	const epsilon = 1e-1
+
+	smallestObserved := float32(1.0)
+	largestObserved := float32(0.0)
+	totalSum := float32(0.0)
+
+	for i := 0; i < iterations; i++ {
+		value := SecFloat32()
+		assert.GreaterOrEqual(t, value, float32(0.0), "SecFloat32() should return values >= 0")
+		assert.Less(t, value, float32(1.0), "SecFloat32() should return values < 1")
+
+		smallestObserved = float32(math.Min(float64(smallestObserved), float64(value)))
+		largestObserved = float32(math.Max(float64(largestObserved), float64(value)))
+		totalSum += value
+	}
+
+	averageValue := totalSum / float32(iterations)
+	assert.InDelta(t, averageValue, 0.5, epsilon, "Average value should be close to 0.5")
+	assert.InDelta(t, smallestObserved, 0.0, epsilon, "Smallest observed value should be close to 0")
+	assert.InDelta(t, largestObserved, 1.0, epsilon, "Largest observed value should be close to 1")
+}
+
+func TestSecFloat64(t *testing.T) {
+	const iterations = 100000
+	const epsilon = 1e-1
+
+	smallestObserved := 1.0
+	largestObserved := 0.0
+	totalSum := 0.0
+
+	for i := 0; i < iterations; i++ {
+		value := SecFloat64()
+		assert.GreaterOrEqual(t, value, 0.0, "SecFloat64() should return values >= 0")
+		assert.Less(t, value, 1.0, "SecFloat64() should return values < 1")
+
+		smallestObserved = math.Min(smallestObserved, value)
+		largestObserved = math.Max(largestObserved, value)
+		totalSum += value
+	}
+
+	averageValue := totalSum / float64(iterations)
+	assert.InDelta(t, averageValue, 0.5, epsilon, "Average value should be close to 0.5")
+	assert.InDelta(t, smallestObserved, 0.0, epsilon, "Smallest observed value should be close to 0")
+	assert.InDelta(t, largestObserved, 1.0, epsilon, "Largest observed value should be close to 1")
 }
 
 func TestPanicConditions(t *testing.T) {
