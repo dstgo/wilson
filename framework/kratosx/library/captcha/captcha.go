@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"math/rand"
 	"strconv"
 	"sync"
 	"time"
@@ -219,7 +218,6 @@ func (c *captcha) verify(tp, ip, name, id, answer, sender string) error {
 
 // randomCode 生成随机数验证码
 func (c *captcha) randomCode(len int) string {
-	rand.New(rand.NewSource(time.Now().Unix()))
 	code := random.SecIntN(int(math.Pow10(len)) - int(math.Pow10(len-1)))
 	return strconv.Itoa(code + int(math.Pow10(len-1)))
 }
