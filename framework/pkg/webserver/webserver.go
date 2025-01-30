@@ -36,7 +36,13 @@ func ServeDir(dir string, addr string, data map[string]any) error {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		path := filepath.Join(dir, r.URL.Path)
+		// 利用Clean函数去除路径中的 .. 和其他特殊字符，确保请求路径不会导致目录遍历
+		path := filepath.Join(dir, filepath.Clean(r.URL.Path))
+		// 使用 strings.HasPrefix() 确保用户只能访问 dir 目录下的文件。如果请求的路径试图超出这个目录，返回 404 错误
+		if !strings.HasPrefix(path, dir) {
+			http.NotFound(w, r)
+			return
+		}
 		if stat, err := os.Stat(path); err == nil && !stat.IsDir() {
 			http.ServeFile(w, r, path)
 			return
