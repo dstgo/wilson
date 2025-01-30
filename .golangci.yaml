@@ -103,7 +103,7 @@ run:
   # Timeout for analysis, e.g. 30s, 5m.
   # If the value is lower or equal to 0, the timeout is disabled.
   # Default: 1m
-  timeout: 0
+  timeout: 30m
 
   # Exit code when at least one issue was found.
   # Default: 1
