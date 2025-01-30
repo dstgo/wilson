@@ -4,66 +4,79 @@ import (
 	cryptorand "crypto/rand"
 	"encoding/binary"
 	"math"
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	"math/rand/v2"
 )
 
 // Int returns a non-negative random int.
 func Int() int {
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	return rand.Int()
 }
 
 // Int32 returns a random 32-bit integer as an int32.
 func Int32() int32 {
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	return rand.Int32()
 }
 
 // Int64 returns a random 64-bit integer as an int64.
 func Int64() int64 {
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	return rand.Int64()
 }
 
 // Uint returns a random unsigned int.
 func Uint() uint {
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	return rand.Uint()
 }
 
 // Uint32 returns a random 32-bit unsigned integer as a uint32.
 func Uint32() uint32 {
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	return rand.Uint32()
 }
 
 // Uint64 returns a random 64-bit unsigned integer as a uint64.
 func Uint64() uint64 {
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	return rand.Uint64()
 }
 
 // IntN returns a random integer in the range [0, max).
 func IntN(max int) int {
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	return rand.IntN(max)
 }
 
 // Int32N returns a random 32-bit integer in the range [0, max).
 func Int32N(max int32) int32 {
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	return rand.Int32N(max)
 }
 
 // Int64N returns a random 64-bit integer in the range [0, max).
 func Int64N(max int64) int64 {
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	return rand.Int64N(max)
 }
 
 // UintN returns a random unsigned integer in the range [0, max).
 func UintN(max uint) uint {
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	return rand.UintN(max)
 }
 
 // Uint32N returns a random 32-bit unsigned integer in the range [0, max).
 func Uint32N(max uint32) uint32 {
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	return rand.Uint32N(max)
 }
 
 // Uint64N returns a random 64-bit unsigned integer in the range [0, max).
 func Uint64N(max uint64) uint64 {
+	// #nosec G404 (CWE-338): Use of weak random number generator
 	return rand.Uint64N(max)
 }
 
