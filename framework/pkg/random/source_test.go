@@ -6,6 +6,18 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestNewCrypto(t *testing.T) {
+	rng := NewCrypto()
+	assert.NotNil(t, rng, "NewCrypto should return a non-nil random number generator")
+
+	// Generate a sequence of numbers and ensure they're not all the same
+	values := make([]int64, 1000)
+	for i := range values {
+		values[i] = rng.Int64()
+	}
+	assert.NotEqual(t, values[0], values[1], "Generated values should not be identical")
+}
+
 func TestNewChaCha8(t *testing.T) {
 	rng := NewChaCha8()
 	assert.NotNil(t, rng, "NewChaCha8 should return a non-nil random number generator")

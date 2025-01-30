@@ -1,11 +1,5 @@
 package random
 
-import (
-	cryptorand "crypto/rand"
-	"encoding/binary"
-	"math"
-)
-
 // Int returns a non-negative random int.
 // #nosec G404 (CWE-338): Use of weak random number generator
 func Int() int {
@@ -92,213 +86,70 @@ func Float64() float64 {
 
 // SecInt returns a secure random non-negative int.
 func SecInt() int {
-	return int(uint(SecUint64()) << 1 >> 1)
+	return CryptoRand.Int()
 }
 
 // SecInt32 returns a secure random 32-bit integer.
 func SecInt32() int32 {
-	var buf [binary.MaxVarintLen32]byte
-	_, err := cryptorand.Read(buf[:])
-	if err != nil {
-		return NewChaCha8().Int32()
-	}
-	return int32(binary.BigEndian.Uint32(buf[:]) &^ (1 << 31))
+	return CryptoRand.Int32()
 }
 
 // SecInt64 returns a secure random 64-bit integer.
 func SecInt64() int64 {
-	var buf [binary.MaxVarintLen64]byte
-	_, err := cryptorand.Read(buf[:])
-	if err != nil {
-		return NewChaCha8().Int64()
-	}
-	return int64(binary.BigEndian.Uint64(buf[:]) &^ (1 << 63))
+	return CryptoRand.Int64()
 }
 
 // SecUint returns a secure random unsigned int.
 func SecUint() uint {
-	return uint(SecUint64())
+	return CryptoRand.Uint()
 }
 
 // SecUint32 returns a secure random 32-bit unsigned integer.
 func SecUint32() uint32 {
-	var buf [binary.MaxVarintLen32]byte
-	_, err := cryptorand.Read(buf[:])
-	if err != nil {
-		return NewChaCha8().Uint32()
-	}
-	return binary.BigEndian.Uint32(buf[:])
+	return CryptoRand.Uint32()
 }
 
 // SecUint64 returns a secure random 64-bit unsigned integer.
 func SecUint64() uint64 {
-	var buf [binary.MaxVarintLen64]byte
-	_, err := cryptorand.Read(buf[:])
-	if err != nil {
-		return NewChaCha8().Uint64()
-	}
-	return binary.BigEndian.Uint64(buf[:])
+	return CryptoRand.Uint64()
 }
 
 // SecFloat32 returns a secure random float32 in the range [0.0, 1.0).
 func SecFloat32() float32 {
-	// There are exactly 1<<24 float32s in [0,1).
-	return float32(SecUint32()<<8>>8) / (1 << 24)
+	return CryptoRand.Float32()
 }
 
 // SecFloat64 returns a secure random float64 in the range [0.0, 1.0).
 func SecFloat64() float64 {
-	// There are exactly 1<<53 float64s in [0,1).
-	return float64(SecUint64()<<11>>11) / (1 << 53)
+	return CryptoRand.Float64()
 }
 
-// SecIntN returns a secure random integer in the range [0, max).
-func SecIntN(max int) int {
-	if max <= 0 {
-		panic("max must be positive")
-	}
-
-	if max <= math.MaxInt32 {
-		return int(SecInt32N(int32(max)))
-	}
-	return int(SecInt64N(int64(max)))
+// SecIntN returns a secure random integer in the range [0, n).
+func SecIntN(n int) int {
+	return CryptoRand.IntN(n)
 }
 
-// SecInt32N returns a secure random 32-bit integer in the range [0, max).
-func SecInt32N(max int32) int32 {
-	if max <= 0 {
-		panic("max must be positive")
-	}
-
-	// Create a mask that is the next power of 2 minus 1
-	mask := uint32(max - 1)
-	// Fill in all bits below the highest set bit
-	// This creates a mask with all bits set to 1 from the highest bit down
-	mask |= mask >> 1  // Set all bits below the highest bit
-	mask |= mask >> 2  // Set all bits below the 2nd highest bit
-	mask |= mask >> 4  // Set all bits below the 4th highest bit
-	mask |= mask >> 8  // Set all bits below the 8th highest bit
-	mask |= mask >> 16 // Set all remaining bits
-
-	for {
-		var buf [binary.MaxVarintLen32]byte
-		_, err := cryptorand.Read(buf[:])
-		if err != nil {
-			return NewChaCha8().Int32N(max)
-		}
-
-		// Apply the mask to ensure the number is within the desired range
-		n := int32(binary.BigEndian.Uint32(buf[:]) & mask)
-		// Reject if n is outside the desired range
-		if n < max {
-			return n
-		}
-	}
+// SecInt32N returns a secure random 32-bit integer in the range [0, n).
+func SecInt32N(n int32) int32 {
+	return CryptoRand.Int32N(n)
 }
 
-// SecInt64N returns a secure random 64-bit integer in the range [0, max).
-func SecInt64N(max int64) int64 {
-	if max <= 0 {
-		panic("max must be positive")
-	}
-
-	// Create a mask that is the next power of 2 minus 1
-	mask := uint64(max - 1)
-	// Fill in all bits below the highest set bit
-	// This creates a mask with all bits set to 1 from the highest bit down
-	mask |= mask >> 1  // Set all bits below the highest bit
-	mask |= mask >> 2  // Set all bits below the 2nd highest bit
-	mask |= mask >> 4  // Set all bits below the 4th highest bit
-	mask |= mask >> 8  // Set all bits below the 8th highest bit
-	mask |= mask >> 16 // Set all bits below the 16th highest bit
-	mask |= mask >> 32 // Set all remaining bits
-
-	for {
-		var buf [binary.MaxVarintLen64]byte
-		_, err := cryptorand.Read(buf[:])
-		if err != nil {
-			return NewChaCha8().Int64N(max)
-		}
-		// Apply the mask to ensure the number is within the desired range
-		n := int64(binary.BigEndian.Uint64(buf[:]) & mask)
-		// Reject if n is outside the desired range
-		if n < max {
-			return n
-		}
-	}
+// SecInt64N returns a secure random 64-bit integer in the range [0, n).
+func SecInt64N(n int64) int64 {
+	return CryptoRand.Int64N(n)
 }
 
-// SecUintN returns a secure random unsigned integer in the range [0, max).
-func SecUintN(max uint) uint {
-	if max == 0 {
-		panic("max must be positive")
-	}
-
-	if max <= math.MaxUint32 {
-		return uint(SecUint32N(uint32(max)))
-	}
-	return uint(SecUint64N(uint64(max)))
+// SecUintN returns a secure random unsigned integer in the range [0, n).
+func SecUintN(n uint) uint {
+	return CryptoRand.UintN(n)
 }
 
-// SecUint32N returns a secure random 32-bit unsigned integer in the range [0, max).
-func SecUint32N(max uint32) uint32 {
-	if max == 0 {
-		panic("max must be positive")
-	}
-
-	// Create a mask that is the next power of 2 minus 1
-	mask := max - 1
-	// Fill in all bits below the highest set bit
-	// This creates a mask with all bits set to 1 from the highest bit down
-	mask |= mask >> 1  // Set all bits below the highest bit
-	mask |= mask >> 2  // Set all bits below the 2nd highest bit
-	mask |= mask >> 4  // Set all bits below the 4th highest bit
-	mask |= mask >> 8  // Set all bits below the 8th highest bit
-	mask |= mask >> 16 // Set all remaining bits
-
-	for {
-		var buf [binary.MaxVarintLen32]byte
-		_, err := cryptorand.Read(buf[:])
-		if err != nil {
-			return NewChaCha8().Uint32N(max)
-		}
-		// Apply the mask to ensure the number is within the desired range
-		n := binary.BigEndian.Uint32(buf[:]) & mask
-		// Reject if n is outside the desired range
-		if n < max {
-			return n
-		}
-	}
+// SecUint32N returns a secure random 32-bit unsigned integer in the range [0, n).
+func SecUint32N(n uint32) uint32 {
+	return CryptoRand.Uint32N(n)
 }
 
-// SecUint64N returns a secure random 64-bit unsigned integer in the range [0, max).
+// SecUint64N returns a secure random 64-bit unsigned integer in the range [0, n).
 func SecUint64N(max uint64) uint64 {
-	if max == 0 {
-		panic("max must be positive")
-	}
-
-	// Create a mask that is the next power of 2 minus 1
-	mask := max - 1
-	// Fill in all bits below the highest set bit
-	// This creates a mask with all bits set to 1 from the highest bit down
-	mask |= mask >> 1  // Set all bits below the highest bit
-	mask |= mask >> 2  // Set all bits below the 2nd highest bit
-	mask |= mask >> 4  // Set all bits below the 4th highest bit
-	mask |= mask >> 8  // Set all bits below the 8th highest bit
-	mask |= mask >> 16 // Set all bits below the 16th highest bit
-	mask |= mask >> 32 // Set all remaining bits
-
-	for {
-		var buf [binary.MaxVarintLen64]byte
-		_, err := cryptorand.Read(buf[:])
-		if err != nil {
-			return NewChaCha8().Uint64N(max)
-		}
-		// Apply the mask to ensure the number is within the desired range
-		n := binary.BigEndian.Uint64(buf[:]) & mask
-		// Reject if n is outside the desired range
-		if n < max {
-			return n
-		}
-	}
+	return CryptoRand.Uint64N(max)
 }
