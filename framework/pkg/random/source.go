@@ -10,7 +10,12 @@ import (
 	"time"
 )
 
-var DefaultRand = NewChaCha8()
+var (
+	DefaultRand = ChaCha8Rand
+	ChaCha8Rand = NewChaCha8()
+	PCGRand     = NewPCG()
+	ZipfRand    = NewZipf()
+)
 
 // NewChaCha8 returns a new ChaCha8 random number generator.
 // ChaCha8 is a variant of the ChaCha stream cipher, designed for
