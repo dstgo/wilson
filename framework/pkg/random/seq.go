@@ -20,7 +20,6 @@ func SecByte() byte {
 }
 
 // BytesN generates a random slice of n bytes in the range [low, high].
-// #nosec G404 (CWE-338): Use of weak random number generator
 func (r *Rand) BytesN(n int, low, high byte) []byte {
 	if low > high {
 		panic("low > high")
@@ -36,7 +35,6 @@ func (r *Rand) BytesN(n int, low, high byte) []byte {
 }
 
 // BytesN generates a random slice of n bytes in the range [low, high] using the default random source.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func BytesN(n int, low, high byte) []byte {
 	return runtimeRng.BytesN(n, low, high)
 }
@@ -47,7 +45,6 @@ func SecBytesN(n int, low, high byte) []byte {
 }
 
 // BytesSeqN generates a random slice of n bytes as a string.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func BytesSeqN(n int, low, high byte) string {
 	return string(BytesN(n, low, high))
 }
@@ -73,7 +70,6 @@ func SecRune() rune {
 }
 
 // RunesN generates a random slice of n runes in the range [low, high].
-// #nosec G404 (CWE-338): Use of weak random number generator
 func (r *Rand) RunesN(n int, low, high rune) []rune {
 	if low > high {
 		panic("low > high")
@@ -89,7 +85,6 @@ func (r *Rand) RunesN(n int, low, high rune) []rune {
 }
 
 // RunesN generates a random slice of n runes in the range [low, high] using the default random source.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func RunesN(n int, low, high rune) []rune {
 	return runtimeRng.RunesN(n, low, high)
 }
@@ -100,7 +95,6 @@ func SecRunesN(n int, low, high rune) []rune {
 }
 
 // RunesSeq generates a random slice of n runes as a string.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func RunesSeq(n int, low, high rune) string {
 	return string(RunesN(n, low, high))
 }
@@ -111,13 +105,11 @@ func SecRunesSeq(n int, low, high rune) string {
 }
 
 // DigitsN generates a random string of n digits.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func (r *Rand) DigitsN(n int) string {
 	return string(r.BytesN(n, '0', '9'))
 }
 
 // DigitsN generates a random string of n digits using the default random source.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func DigitsN(n int) string {
 	return runtimeRng.DigitsN(n)
 }
@@ -128,13 +120,11 @@ func SecDigitsN(n int) string {
 }
 
 // LowerN generates a random string of n lowercase letters.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func (r *Rand) LowerN(n int) string {
 	return string(r.RunesN(n, 'a', 'z'))
 }
 
 // LowerN generates a random string of n lowercase letters using the default random source.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func LowerN(n int) string {
 	return runtimeRng.LowerN(n)
 }
@@ -145,13 +135,11 @@ func SecLowerN(n int) string {
 }
 
 // UpperN generates a random string of n uppercase letters.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func (r *Rand) UpperN(n int) string {
 	return string(r.RunesN(n, 'A', 'Z'))
 }
 
 // Upper generates a random string of n uppercase letters using the default random source.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func Upper(n int) string {
 	return runtimeRng.UpperN(n)
 }
@@ -162,7 +150,6 @@ func SecUpperN(n int) string {
 }
 
 // LettersN generates a random string of n letters (mixed case).
-// #nosec G404 (CWE-338): Use of weak random number generator
 func (r *Rand) LettersN(n int) string {
 	letters := make([]rune, n)
 	for i := 0; i < n; i++ {
@@ -176,7 +163,6 @@ func (r *Rand) LettersN(n int) string {
 }
 
 // Letters generates a random string of n letters (mixed case) using the default random source.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func Letters(n int) string {
 	return runtimeRng.LettersN(n)
 }
@@ -189,7 +175,6 @@ func SecLetters(n int) string {
 const alphaNumericCharSet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 // AlphaNumericN generates a random string of n alphanumeric characters.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func (r *Rand) AlphaNumericN(n int) string {
 	result := make([]byte, n)
 	for i := range result {
@@ -199,7 +184,6 @@ func (r *Rand) AlphaNumericN(n int) string {
 }
 
 // AlphaNumeric generates a random string of n alphanumeric characters using the default random source.
-// #nosec G404 (CWE-338): Use of weak random number generator
 func AlphaNumeric(n int) string {
 	return runtimeRng.AlphaNumericN(n)
 }
