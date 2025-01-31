@@ -35,11 +35,13 @@ func (r *Rand) IntRange(min, max int) int {
 		panic("min > max")
 	}
 
-	if max-min < 0 {
-		panic("overflow: max - min < 0")
+	if min == max {
+		return min
 	}
 
-	return min + r.IntN(max-min)
+	diff := uint(max) - uint(min)
+
+	return int(uint(min) + r.UintN(diff))
 }
 
 // Int32Range returns a random int32 in the range [min, max).
@@ -48,11 +50,13 @@ func (r *Rand) Int32Range(min, max int32) int32 {
 		panic("min > max")
 	}
 
-	if max-min < 0 {
-		panic("overflow: max - min < 0")
+	if min == max {
+		return min
 	}
 
-	return min + r.Int32N(max-min)
+	diff := uint32(max) - uint32(min)
+
+	return int32(uint32(min) + r.Uint32N(diff))
 }
 
 // Int64Range returns a random int64 in the range [min, max).
@@ -61,11 +65,13 @@ func (r *Rand) Int64Range(min, max int64) int64 {
 		panic("min > max")
 	}
 
-	if max-min < 0 {
-		panic("overflow: max - min < 0")
+	if min == max {
+		return min
 	}
 
-	return min + r.Int64N(max-min)
+	diff := uint64(max) - uint64(min)
+
+	return int64(uint64(min) + r.Uint64N(diff))
 }
 
 // UintRange returns a random uint in the range [min, max).
@@ -73,6 +79,11 @@ func (r *Rand) UintRange(min, max uint) uint {
 	if min > max {
 		panic("min > max")
 	}
+
+	if min == max {
+		return min
+	}
+
 	return min + r.UintN(max-min)
 }
 
@@ -81,6 +92,11 @@ func (r *Rand) Uint32Range(min, max uint32) uint32 {
 	if min > max {
 		panic("min > max")
 	}
+
+	if min == max {
+		return min
+	}
+
 	return min + r.Uint32N(max-min)
 }
 
@@ -89,6 +105,11 @@ func (r *Rand) Uint64Range(min, max uint64) uint64 {
 	if min > max {
 		panic("min > max")
 	}
+
+	if min == max {
+		return min
+	}
+
 	return min + r.Uint64N(max-min)
 }
 
@@ -98,17 +119,14 @@ func (r *Rand) Float32Range(min, max float32) float32 {
 		panic("min > max")
 	}
 
-	diff := float64(max) - float64(min)
-	if diff > math.MaxFloat32 {
-		panic("overflow: max - min > math.MaxFloat32")
-	}
+	diff := float64(max - min)
 
 	if math.IsInf(diff, 0) {
 		panic("overflow: max - min = +Inf")
 	}
 
-	if max-min < 0 {
-		panic("overflow: max - min < 0")
+	if math.IsNaN(diff) {
+		panic("invalid: max - min = NaN")
 	}
 
 	return min + r.Float32()*(max-min)
@@ -126,8 +144,8 @@ func (r *Rand) Float64Range(min, max float64) float64 {
 		panic("overflow: max - min = +Inf")
 	}
 
-	if max-min < 0 {
-		panic("overflow: max - min < 0")
+	if math.IsNaN(diff) {
+		panic("invalid: max - min = NaN")
 	}
 
 	return min + r.Float64()*(max-min)
