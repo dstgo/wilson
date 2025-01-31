@@ -33,7 +33,7 @@ var (
 // - Simple and efficient implementation
 // This implementation uses PCG to generate the initial seed.
 // #nosec G404 (CWE-338): Use of weak random number generator
-func NewChaCha8() *rand.Rand {
+func NewChaCha8() *Rand {
 	pcg := NewPCG()
 
 	var seed [32]byte
@@ -41,7 +41,7 @@ func NewChaCha8() *rand.Rand {
 		binary.BigEndian.PutUint64(seed[i:], pcg.Uint64()%math.MaxUint8)
 	}
 
-	return rand.New(rand.NewChaCha8(seed))
+	return New(rand.NewChaCha8(seed))
 }
 
 // NewPCG returns a new PCG random number generator.
@@ -52,7 +52,7 @@ func NewChaCha8() *rand.Rand {
 // PCG combines a linear congruential generator with output permutation,
 // providing high-quality randomness with minimal computational overhead.
 // #nosec G404 (CWE-338): Use of weak random number generator
-func NewPCG() *rand.Rand {
+func NewPCG() *Rand {
 	ng := runtime.NumGoroutine()
 	pid := os.Getpid()
 	micro := time.Now().UnixMicro()
@@ -61,7 +61,7 @@ func NewPCG() *rand.Rand {
 	seed1 := uint64(micro ^ int64(ng)&int64(pid))
 	seed2 := uint64(nano&int64(ng) ^ int64(pid))
 
-	return rand.New(rand.NewPCG(seed1, seed2))
+	return New(rand.NewPCG(seed1, seed2))
 }
 
 // NewZipf returns a new Zipf-distributed random number generator.
@@ -71,33 +71,30 @@ func NewPCG() *rand.Rand {
 // This generator is suitable for modeling power-law distributions in
 // various applications, such as word frequencies or city populations.
 // #nosec G404 (CWE-338): Use of weak random number generator
-func NewZipf() *rand.Rand {
+func NewZipf() *Rand {
 	pcg := NewPCG()
 
 	s := 1.0 + 1e-6 + pcg.Float64() + pcg.Float64()
 	v := 1.0
 	imax := uint64(math.MaxUint64)
 
-	return rand.New(rand.NewZipf(pcg, s, v, imax))
+	return New(rand.NewZipf(pcg.Rand, s, v, imax))
 }
 
 // NewCrypto returns a concurrent-safe new cryptographically secure random number generator.
-// #nosec G404 (CWE-338): Use of weak random number generator
-func NewCrypto() *rand.Rand {
-	return rand.New(&_Crypto{})
+func NewCrypto() *Rand {
+	return New(&_Crypto{})
 }
 
 // NewCryptoBackoff returns a new concurrent-safe cryptographically secure random number generator
 // with a specified backoff generator.
-// #nosec G404 (CWE-338): Use of weak random number generator
-func NewCryptoBackoff(backoff *rand.Rand) *rand.Rand {
-	return rand.New(&_Crypto{backoff: backoff})
+func NewCryptoBackoff(backoff *Rand) *Rand {
+	return New(&_Crypto{backoff: backoff})
 }
 
 // _Crypto is a concurrent-safe cryptographically secure random number generator that with a backoff generator.
 type _Crypto struct {
-	// #nosec G404 (CWE-338): Use of weak random number generator
-	backoff *rand.Rand
+	backoff *Rand
 }
 
 func (c *_Crypto) Uint64() uint64 {
