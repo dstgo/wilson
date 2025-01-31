@@ -12,6 +12,8 @@ type Source interface {
 	rand.Source
 }
 
+// New returns a new Rand using the provided source.
+// #nosec G404 (CWE-338): Use of weak random number generator
 func New(source Source) *Rand {
 	return &Rand{rand.New(source)}
 }
