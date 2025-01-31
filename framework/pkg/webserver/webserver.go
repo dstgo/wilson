@@ -36,7 +36,15 @@ func ServeDir(dir string, addr string, data map[string]any) error {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		path := filepath.Join(dir, r.URL.Path)
+		unsafePath := filepath.Clean(r.URL.Path)
+		// 检查路径是否有效并且位于安全目录内
+		absDir, dirErr := filepath.Abs(dir)
+		absPath, pathErr := filepath.Abs(filepath.Join(dir, unsafePath))
+		if dirErr != nil || pathErr != nil || !strings.HasPrefix(absPath, absDir) {
+			http.Error(w, "Invalid file path", http.StatusBadRequest)
+			return
+		}
+
 		if stat, err := os.Stat(path); err == nil && !stat.IsDir() {
 			http.ServeFile(w, r, path)
 			return
