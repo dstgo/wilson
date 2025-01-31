@@ -36,14 +36,15 @@ func ServeDir(dir string, addr string, data map[string]any) error {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// 利用Clean函数去除路径中的 .. 和其他特殊字符，确保请求路径不会导致目录遍历
-		path := filepath.Join(dir, filepath.Clean(r.URL.Path))
-		// 使用 strings.HasPrefix() 确保用户只能访问 dir 目录下的文件。如果请求的路径试图超出这个目录，返回 404 错误
-		// 将路径分隔符统一为正斜杠再进行比较
-		if !strings.HasPrefix(filepath.ToSlash(path), filepath.ToSlash(dir)) {
-			http.NotFound(w, r)
+		unsafePath := filepath.Clean(r.URL.Path)
+		// 检查路径是否有效并且位于安全目录内
+		absDir, dirErr := filepath.Abs(dir)
+		absPath, pathErr := filepath.Abs(filepath.Join(dir, unsafePath))
+		if dirErr != nil || pathErr != nil || !strings.HasPrefix(absPath, absDir) {
+			http.Error(w, "Invalid file path", http.StatusBadRequest)
 			return
 		}
+
 		if stat, err := os.Stat(path); err == nil && !stat.IsDir() {
 			http.ServeFile(w, r, path)
 			return
