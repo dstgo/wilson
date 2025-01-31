@@ -97,7 +97,7 @@ func (_Runtime) Uint64() uint64 {
 // This implementation uses PCG to generate the initial seed.
 // #nosec G404 (CWE-338): Use of weak random number generator
 func NewChaCha8() *Rand {
-	seed := BytesN(New(NewPCG()), 32, 0, math.MaxUint8)
+	seed := New(NewPCG()).BytesN(32, 0, math.MaxUint8)
 	return New(rand.NewChaCha8(*(*[32]byte)(seed)))
 }
 
