@@ -13,10 +13,8 @@ import (
 )
 
 var (
-	// DefaultRng is the default concurrent-safe random number generator.
-	DefaultRng = RuntimeRng
-	CryptoRng  = NewCrypto()
-	RuntimeRng = NewRuntime()
+	cryptoRng  = NewCrypto()
+	runtimeRng = NewRuntime()
 )
 
 // NewCrypto returns a new concurrent-safe cryptographically secure random number generator.
@@ -49,7 +47,7 @@ type _Crypto struct {
 func (c *_Crypto) Uint64() uint64 {
 	if c.backoff == nil {
 		// default to ChaCha8 if no backoff generator is provided.
-		c.backoff = RuntimeRng
+		c.backoff = runtimeRng
 	}
 
 	var buf [binary.MaxVarintLen64]byte

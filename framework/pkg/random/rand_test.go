@@ -8,7 +8,7 @@ import (
 )
 
 func TestRand_Bool(t *testing.T) {
-	r := New(DefaultRng)
+	r := New(runtimeRng)
 	trueCount := 0
 	iterations := 10000
 
@@ -23,7 +23,7 @@ func TestRand_Bool(t *testing.T) {
 }
 
 func TestRand_IntRange(t *testing.T) {
-	r := New(DefaultRng)
+	r := New(runtimeRng)
 	testCases := []struct {
 		name      string
 		min       int
@@ -73,7 +73,7 @@ func TestRand_IntRange(t *testing.T) {
 }
 
 func TestRand_Int32Range(t *testing.T) {
-	r := New(DefaultRng)
+	r := New(runtimeRng)
 	testCases := []struct {
 		name      string
 		min       int32
@@ -123,7 +123,7 @@ func TestRand_Int32Range(t *testing.T) {
 }
 
 func TestRand_Int64Range(t *testing.T) {
-	r := New(DefaultRng)
+	r := New(runtimeRng)
 	testCases := []struct {
 		name      string
 		min       int64
@@ -173,7 +173,7 @@ func TestRand_Int64Range(t *testing.T) {
 }
 
 func TestRand_UintRange(t *testing.T) {
-	r := New(DefaultRng)
+	r := New(runtimeRng)
 	testCases := []struct {
 		name      string
 		min       uint
@@ -223,7 +223,7 @@ func TestRand_UintRange(t *testing.T) {
 }
 
 func TestRand_Uint32Range(t *testing.T) {
-	r := New(DefaultRng)
+	r := New(runtimeRng)
 	testCases := []struct {
 		name      string
 		min       uint32
@@ -273,7 +273,7 @@ func TestRand_Uint32Range(t *testing.T) {
 }
 
 func TestRand_Uint64Range(t *testing.T) {
-	r := New(DefaultRng)
+	r := New(runtimeRng)
 	testCases := []struct {
 		name      string
 		min       uint64
@@ -323,7 +323,7 @@ func TestRand_Uint64Range(t *testing.T) {
 }
 
 func TestRand_Float32Range(t *testing.T) {
-	r := New(DefaultRng)
+	r := New(runtimeRng)
 	testCases := []struct {
 		name      string
 		min       float32
@@ -387,7 +387,7 @@ func TestRand_Float32Range(t *testing.T) {
 }
 
 func TestRand_Float64Range(t *testing.T) {
-	r := New(DefaultRng)
+	r := New(runtimeRng)
 	testCases := []struct {
 		name      string
 		min       float64
