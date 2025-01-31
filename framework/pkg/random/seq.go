@@ -23,7 +23,7 @@ func BytesN(rng *Rand, n int, low, high byte) []byte {
 // Bytes returns a random slice of n bytes in the range [0, 255].
 // #nosec G404 (CWE-338): Use of weak random number generator
 func Bytes(n int) []byte {
-	return BytesN(DefaultRand, n, 0, math.MaxUint8)
+	return BytesN(DefaultRng, n, 0, math.MaxUint8)
 }
 
 // BytesSeq returns a random slice of n bytes as a string.
@@ -51,7 +51,7 @@ func RunesN(rng *Rand, n int, low, high rune) []rune {
 // Runes returns a random slice of n runes in the range [0, math.MaxInt32].
 // #nosec G404 (CWE-338): Use of weak random number generator
 func Runes(n int) []rune {
-	return RunesN(DefaultRand, n, 0, math.MaxInt32)
+	return RunesN(DefaultRng, n, 0, math.MaxInt32)
 }
 
 // RunesSeq returns a random slice of n runes as a string.
@@ -69,7 +69,7 @@ func DigitsN(rng *Rand, n int) string {
 // Digits returns a random string of n digits using the default random source.
 // #nosec G404 (CWE-338): Use of weak random number generator
 func Digits(n int) string {
-	return DigitsN(DefaultRand, n)
+	return DigitsN(DefaultRng, n)
 }
 
 // LowerN returns a random string of n lowercase letters.
@@ -81,7 +81,7 @@ func LowerN(rng *Rand, n int) string {
 // Lower returns a random string of n lowercase letters using the default random source.
 // #nosec G404 (CWE-338): Use of weak random number generator
 func Lower(n int) string {
-	return LowerN(DefaultRand, n)
+	return LowerN(DefaultRng, n)
 }
 
 // UpperN returns a random string of n uppercase letters.
@@ -93,7 +93,7 @@ func UpperN(rng *Rand, n int) string {
 // Upper returns a random string of n uppercase letters using the default random source.
 // #nosec G404 (CWE-338): Use of weak random number generator
 func Upper(n int) string {
-	return UpperN(DefaultRand, n)
+	return UpperN(DefaultRng, n)
 }
 
 // LettersN returns a random string of n letters (mixed case).
@@ -113,7 +113,7 @@ func LettersN(rng *Rand, n int) string {
 // Letters returns a random string of n letters (mixed case) using the default random source.
 // #nosec G404 (CWE-338): Use of weak random number generator
 func Letters(n int) string {
-	return LettersN(DefaultRand, n)
+	return LettersN(DefaultRng, n)
 }
 
 // AlphaNumericN returns a random string of n alphanumeric characters.
@@ -130,5 +130,5 @@ func AlphaNumericN(rng *Rand, n int) string {
 // AlphaNumeric returns a random string of n alphanumeric characters using the default random source.
 // #nosec G404 (CWE-338): Use of weak random number generator
 func AlphaNumeric(n int) string {
-	return AlphaNumericN(DefaultRand, n)
+	return AlphaNumericN(DefaultRng, n)
 }
