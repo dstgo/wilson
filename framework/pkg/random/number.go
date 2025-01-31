@@ -75,6 +75,16 @@ func Float64() float64 {
 	return runtimeRng.Float64()
 }
 
+// NormFloat64 returns a random float64 with a normal distribution.
+func NormFloat64() float64 {
+	return runtimeRng.NormFloat64()
+}
+
+// ExpFloat64 returns a random float64 with an exponential distribution.
+func ExpFloat64() float64 {
+	return runtimeRng.ExpFloat64()
+}
+
 // IntRange returns a random integer in the range [min, max).
 func IntRange(min, max int) int {
 	return runtimeRng.IntRange(min, max)
@@ -158,6 +168,16 @@ func SecFloat32() float32 {
 // SecFloat64 returns a secure random float64 in the range [0.0, 1.0).
 func SecFloat64() float64 {
 	return cryptoRng.Float64()
+}
+
+// SecNormFloat64 returns a secure random float64 with a normal distribution.
+func SecNormFloat64() float64 {
+	return cryptoRng.NormFloat64()
+}
+
+// SecExpFloat64 returns a secure random float64 with an exponential distribution.
+func SecExpFloat64() float64 {
+	return cryptoRng.ExpFloat64()
 }
 
 // SecIntN returns a secure random integer in the range [0, n).
