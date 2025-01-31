@@ -1,5 +1,24 @@
 package random
 
+import (
+	"math"
+)
+
+// Byte returns a random byte.
+func (r *Rand) Byte() byte {
+	return byte(r.Uint32Range(0, math.MaxUint8+1))
+}
+
+// Byte returns a random byte using the default random source.
+func Byte() byte {
+	return runtimeRng.Byte()
+}
+
+// SecByte returns a cryptographically secure random byte.
+func SecByte() byte {
+	return cryptoRng.Byte()
+}
+
 // BytesN generates a random slice of n bytes in the range [low, high].
 // #nosec G404 (CWE-338): Use of weak random number generator
 func (r *Rand) BytesN(n int, low, high byte) []byte {
@@ -36,6 +55,21 @@ func BytesSeqN(n int, low, high byte) string {
 // SecBytesSeqN generates a cryptographically secure random slice of n bytes as a string.
 func SecBytesSeqN(n int, low, high byte) string {
 	return string(SecBytesN(n, low, high))
+}
+
+// Rune returns a random rune.
+func (r *Rand) Rune() rune {
+	return rune(r.Uint32Range(0, math.MaxInt32+1))
+}
+
+// Rune returns a random rune using the default random source.
+func Rune() rune {
+	return runtimeRng.Rune()
+}
+
+// SecRune returns a cryptographically secure random rune.
+func SecRune() rune {
+	return cryptoRng.Rune()
 }
 
 // RunesN generates a random slice of n runes in the range [low, high].
