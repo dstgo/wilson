@@ -12,6 +12,7 @@ env:
   DOCKER_REGISTRY: docker.io
   IMAGE_NAME: dstgo/dst-server
   DOCKERFILE_PATH: deploy/dontstarve/docker/Dockerfile
+  TEMP_TAG: temp
 
 jobs:
   build-and-push:
@@ -30,19 +31,23 @@ jobs:
           file: ${{ env.DOCKERFILE_PATH }}
           push: false
           load: true
-          tags: ${{ env.IMAGE_NAME }}:temp
+          tags: ${{ env.IMAGE_NAME }}:${{env.TEMP_TAG}}
 
       - name: Get DST server version from image
         id: get_version
         run: |
-          VERSION=$(docker run --rm --entrypoint /bin/bash ${{env.IMAGE_NAME}} -c 'cat $DST_VERSION_FILE')
+          VERSION=$(docker run --rm --entrypoint /bin/bash ${{env.IMAGE_NAME}}:${{env.TEMP_TAG}} -c 'cat $DST_VERSION_FILE')
+          if [[ -z "$VERSION" ]] || ! [[ "$VERSION" =~ ^[0-9]+$ ]]; then
+            echo "Error: Invalid or empty version number: $VERSION"
+            exit 1
+          fi
           echo "DST_VERSION=${VERSION}" >> $GITHUB_OUTPUT
           echo "DST_VERSION=${VERSION}"
 
       - name: Tag Docker image
         run: |
-          docker tag ${{ env.IMAGE_NAME }}:temp ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          docker tag ${{ env.IMAGE_NAME }}:temp ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.DST_VERSION }}
+          docker tag ${{ env.IMAGE_NAME }}:${{env.TEMP_TAG}} ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          docker tag ${{ env.IMAGE_NAME }}:${{env.TEMP_TAG}} ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.DST_VERSION }}
           echo "Tagged images:"
           docker images | grep ${{ env.IMAGE_NAME }}
 
