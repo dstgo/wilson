@@ -1,17 +1,17 @@
 FROM steamcmd/steamcmd:debian
-USER root
-WORKDIR /root
 
 ARG APP_ID=343050
-ARG DATA_DIR="/root/data"
+ARG DATA_DIR="/data"
 
-ENV DST_DIR="/root/dst"
 ENV DATA_DIR=${DATA_DIR}
+ENV DST_DIR="/var/lib/dst"
 ENV DST_VERSION_FILE="${DST_DIR}/version.txt"
 ENV TZ="Asia/Shanghai"
 
-RUN apt update \
-    && apt install -y libcurl4-gnutls-dev \
+RUN dpkg --add-architecture i386  \
+    # Prepare i386 dependency
+    && apt update\
+    && apt -y install lib32z1 lib32stdc++6 libcurl4-gnutls-dev:i386 \
     # Set up Timezone
     && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime  \
     && echo ${TZ} > /etc/timezone \
@@ -22,18 +22,15 @@ RUN apt update \
         +login anonymous \
         +app_update ${APP_ID} validate \
         +quit \
-    # Set up DST_VERSION
-    && CUR_VERSION=$(cat ${DST_VERSION_FILE}) \
-    && echo "DST_VERSION=${CUR_VERSION}" >> /etc/environment \
-    && echo "export DST_VERSION=${CUR_VERSION}" >> ~/.bashrc \
     # Clean up
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 LABEL maintainer="dstgo" \
-      description="Dont Starve Together Dedicated Server"
+      description="Dont Starve Together Dedicated Server for x86 arch"
 
-VOLUME ${DATA_DIR}
+USER root
+WORKDIR ${DST_DIR}/bin/
 
 ENTRYPOINT ["/bin/bash","-c"]
-CMD ["steamcmd +help"]
+CMD ["cat ${DST_VERSION_FILE}"]
