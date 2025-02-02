@@ -30,11 +30,8 @@ RUN apt update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV DST_VERSION=${CUR_VERSION}
-
 LABEL maintainer="dstgo" \
-      description="Dont Starve Together Dedicated Server" \
-      version=${DST_VERSION}
+      description="Dont Starve Together Dedicated Server"
 
 VOLUME ${DATA_DIR}
 
