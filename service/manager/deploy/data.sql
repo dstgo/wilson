@@ -1,22 +1,4 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : dev
- Source Server Type    : MySQL
- Source Server Version : 80300
- Source Host           : localhost:3306
- Source Schema         : manager
-
- Target Server Type    : MySQL
- Target Server Version : 80300
- File Encoding         : 65001
-
- Date: 30/08/2024 10:42:56
-*/
-
-SET NAMES utf8mb4;
-SET
-FOREIGN_KEY_CHECKS = 0;
+SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
 -- Table structure for casbin_rule
@@ -24,22 +6,25 @@ FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `casbin_rule`;
 CREATE TABLE `casbin_rule`
 (
-    `id`    bigint unsigned NOT NULL AUTO_INCREMENT,
-    `ptype` varchar(100) DEFAULT NULL,
-    `v0`    varchar(100) DEFAULT NULL,
-    `v1`    varchar(100) DEFAULT NULL,
-    `v2`    varchar(100) DEFAULT NULL,
-    `v3`    varchar(100) DEFAULT NULL,
-    `v4`    varchar(100) DEFAULT NULL,
-    `v5`    varchar(100) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `idx_casbin_rule` (`ptype`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`)
-) ENGINE=InnoDB AUTO_INCREMENT=1973 DEFAULT CHARSET=utf8mb4;
+    `id`    BIGINT(0) UNSIGNED                                                NOT NULL AUTO_INCREMENT,
+    `ptype` VARCHAR(100) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL DEFAULT NULL,
+    `v0`    VARCHAR(100) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL DEFAULT NULL,
+    `v1`    VARCHAR(100) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL DEFAULT NULL,
+    `v2`    VARCHAR(100) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL DEFAULT NULL,
+    `v3`    VARCHAR(100) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL DEFAULT NULL,
+    `v4`    VARCHAR(100) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL DEFAULT NULL,
+    `v5`    VARCHAR(100) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `idx_casbin_rule` (`ptype`, `v0`, `v1`, `v2`, `v3`, `v4`, `v5`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1973
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci`
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of casbin_rule
 -- ----------------------------
-BEGIN;
 INSERT INTO `casbin_rule`
 VALUES (1794, 'p', '3', '/configure/api/v1/business', 'DELETE', '', '', '');
 INSERT INTO `casbin_rule`
@@ -318,7 +303,6 @@ INSERT INTO `casbin_rule`
 VALUES (1761, 'p', '3', '/usercenter/api/v1/users', 'GET', '', '', '');
 INSERT INTO `casbin_rule`
 VALUES (1763, 'p', '3', '/usercenter/api/v1/users', 'POST', '', '', '');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for department
@@ -326,23 +310,26 @@ COMMIT;
 DROP TABLE IF EXISTS `department`;
 CREATE TABLE `department`
 (
-    `id`          bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `parent_id`   bigint unsigned NOT NULL COMMENT '父id',
-    `keyword`     char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '标识',
-    `name`        varchar(64)                                        NOT NULL COMMENT '名称',
-    `description` varchar(256)                                       NOT NULL COMMENT '描述',
-    `created_at`  bigint unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-    `updated_at`  bigint unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `keyword` (`keyword`),
-    KEY           `idx_department_created_at` (`created_at`),
-    KEY           `idx_department_updated_at` (`updated_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4  COMMENT='部门信息';
+    `id`          BIGINT(0) UNSIGNED                                                NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `parent_id`   BIGINT(0) UNSIGNED                                                NOT NULL COMMENT '父id',
+    `keyword`     CHAR(32) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_bin`            NOT NULL COMMENT '标识',
+    `name`        VARCHAR(64) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`  NOT NULL COMMENT '名称',
+    `description` VARCHAR(256) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NOT NULL COMMENT '描述',
+    `created_at`  BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `updated_at`  BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '修改时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `keyword` (`keyword`) USING BTREE,
+    INDEX `idx_department_created_at` (`created_at`) USING BTREE,
+    INDEX `idx_department_updated_at` (`updated_at`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 11
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '部门信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of department
 -- ----------------------------
-BEGIN;
 INSERT INTO `department`
 VALUES (1, 0, 'company', '贵州青橙科技有限公司', '开放合作，拥抱未来', 1713706137, 1713706137);
 INSERT INTO `department`
@@ -355,7 +342,6 @@ INSERT INTO `department`
 VALUES (8, 7, 'dep4', '下级测试部门4', '下级测试部门2', 1720685670, 1720685670);
 INSERT INTO `department`
 VALUES (9, 6, 'dep5', '下级测试部门5', '下级测试部门2', 1720685679, 1720685679);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for department_closure
@@ -363,20 +349,23 @@ COMMIT;
 DROP TABLE IF EXISTS `department_closure`;
 CREATE TABLE `department_closure`
 (
-    `id`       bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `parent`   bigint unsigned NOT NULL COMMENT '部门id',
-    `children` bigint unsigned NOT NULL COMMENT '部门id',
-    PRIMARY KEY (`id`),
-    KEY        `parent` (`parent`),
-    KEY        `children` (`children`),
-    CONSTRAINT `department_closure_ibfk_1` FOREIGN KEY (`children`) REFERENCES `department` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `department_closure_ibfk_2` FOREIGN KEY (`parent`) REFERENCES `department` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4  COMMENT='部门层级信息';
+    `id`       BIGINT(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `parent`   BIGINT(0) UNSIGNED NOT NULL COMMENT '部门id',
+    `children` BIGINT(0) UNSIGNED NOT NULL COMMENT '部门id',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `parent` (`parent`) USING BTREE,
+    INDEX `children` (`children`) USING BTREE,
+    CONSTRAINT `department_closure_ibfk_1` FOREIGN KEY (`children`) REFERENCES `department` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+    CONSTRAINT `department_closure_ibfk_2` FOREIGN KEY (`parent`) REFERENCES `department` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 22
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '部门层级信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of department_closure
 -- ----------------------------
-BEGIN;
 INSERT INTO `department_closure`
 VALUES (10, 1, 5);
 INSERT INTO `department_closure`
@@ -395,7 +384,6 @@ INSERT INTO `department_closure`
 VALUES (17, 5, 9);
 INSERT INTO `department_closure`
 VALUES (18, 1, 9);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for dictionary
@@ -403,29 +391,31 @@ COMMIT;
 DROP TABLE IF EXISTS `dictionary`;
 CREATE TABLE `dictionary`
 (
-    `id`          bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `keyword`     char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '关键字',
-    `name`        varchar(64)                                        NOT NULL COMMENT '名称',
-    `description` varchar(256) DEFAULT NULL COMMENT '描述',
-    `created_at`  bigint unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-    `updated_at`  bigint unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-    `deleted_at`  bigint unsigned NOT NULL DEFAULT '0' COMMENT '删除时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `keyword` (`keyword`,`deleted_at`),
-    KEY           `idx_dictionary_created_at` (`created_at`),
-    KEY           `idx_dictionary_updated_at` (`updated_at`),
-    KEY           `idx_dictionary_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4  COMMENT='字典信息';
+    `id`          BIGINT(0) UNSIGNED                                                NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `keyword`     CHAR(32) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_bin`            NOT NULL COMMENT '关键字',
+    `name`        VARCHAR(64) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`  NOT NULL COMMENT '名称',
+    `description` VARCHAR(256) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL     DEFAULT NULL COMMENT '描述',
+    `created_at`  BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `updated_at`  BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '修改时间',
+    `deleted_at`  BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '删除时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `keyword` (`keyword`, `deleted_at`) USING BTREE,
+    INDEX `idx_dictionary_created_at` (`created_at`) USING BTREE,
+    INDEX `idx_dictionary_updated_at` (`updated_at`) USING BTREE,
+    INDEX `idx_dictionary_deleted_at` (`deleted_at`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 7
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '字典信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of dictionary
 -- ----------------------------
-BEGIN;
 INSERT INTO `dictionary`
 VALUES (4, 't2', 't2', 't', 1721835689, 1721837018, 0);
 INSERT INTO `dictionary`
 VALUES (6, '1', '1', '1', 1721964102, 1721964102, 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for dictionary_value
@@ -433,30 +423,32 @@ COMMIT;
 DROP TABLE IF EXISTS `dictionary_value`;
 CREATE TABLE `dictionary_value`
 (
-    `id`            bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `dictionary_id` bigint unsigned NOT NULL COMMENT '字典id',
-    `label`         varchar(128) NOT NULL COMMENT '标签',
-    `value`         varchar(128) NOT NULL COMMENT '标识',
-    `status`        tinyint(1) DEFAULT '1' COMMENT '状态',
-    `weight`        int unsigned DEFAULT '0' COMMENT '权重',
-    `type`          char(32)     DEFAULT NULL COMMENT '类型',
-    `extra`         varchar(512) DEFAULT NULL COMMENT '扩展信息',
-    `description`   varchar(256) DEFAULT NULL COMMENT '描述',
-    `created_at`    bigint unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-    `updated_at`    bigint unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `value` (`dictionary_id`,`value`),
-    KEY             `idx_dictionary_value_created_at` (`created_at`),
-    KEY             `idx_dictionary_value_updated_at` (`updated_at`),
-    KEY             `idx_dictionary_value_weight` (`weight`),
-    CONSTRAINT `fk_dictionary_value_dict` FOREIGN KEY (`dictionary_id`) REFERENCES `dictionary` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4  COMMENT='字典值信息';
+    `id`            BIGINT(0) UNSIGNED                                                NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `dictionary_id` BIGINT(0) UNSIGNED                                                NOT NULL COMMENT '字典id',
+    `label`         VARCHAR(128) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NOT NULL COMMENT '标签',
+    `value`         VARCHAR(128) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NOT NULL COMMENT '标识',
+    `status`        TINYINT(1)                                                        NULL     DEFAULT 1 COMMENT '状态',
+    `weight`        INT(0) UNSIGNED                                                   NULL     DEFAULT 0 COMMENT '权重',
+    `type`          CHAR(32) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`     NULL     DEFAULT NULL COMMENT '类型',
+    `extra`         VARCHAR(512) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL     DEFAULT NULL COMMENT '扩展信息',
+    `description`   VARCHAR(256) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL     DEFAULT NULL COMMENT '描述',
+    `created_at`    BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `updated_at`    BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '修改时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `value` (`dictionary_id`, `value`) USING BTREE,
+    INDEX `idx_dictionary_value_created_at` (`created_at`) USING BTREE,
+    INDEX `idx_dictionary_value_updated_at` (`updated_at`) USING BTREE,
+    INDEX `idx_dictionary_value_weight` (`weight`) USING BTREE,
+    CONSTRAINT `fk_dictionary_value_dict` FOREIGN KEY (`dictionary_id`) REFERENCES `dictionary` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 3
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '字典值信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of dictionary_value
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for gorm_init
@@ -464,18 +456,20 @@ COMMIT;
 DROP TABLE IF EXISTS `gorm_init`;
 CREATE TABLE `gorm_init`
 (
-    `id`   int unsigned NOT NULL AUTO_INCREMENT,
-    `init` tinyint(1) DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+    `id`   INT(0) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `init` TINYINT(1)      NULL DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 2
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci`
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gorm_init
 -- ----------------------------
-BEGIN;
 INSERT INTO `gorm_init`
 VALUES (1, 1);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for job
@@ -483,29 +477,31 @@ COMMIT;
 DROP TABLE IF EXISTS `job`;
 CREATE TABLE `job`
 (
-    `id`          bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `keyword`     varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '关键字',
-    `name`        varchar(64)                                           NOT NULL COMMENT '名称',
-    `weight`      int unsigned DEFAULT NULL COMMENT '权重',
-    `description` varchar(256)                                          NOT NULL COMMENT '描述',
-    `created_at`  bigint unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-    `updated_at`  bigint unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-    `deleted_at`  bigint unsigned NOT NULL DEFAULT '0' COMMENT '删除时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `keyword` (`keyword`,`deleted_at`),
-    KEY           `idx_job_weight` (`weight`),
-    KEY           `idx_job_updated_at` (`updated_at`),
-    KEY           `idx_job_created_at` (`created_at`),
-    KEY           `idx_job_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4  COMMENT='职位信息';
+    `id`          BIGINT(0) UNSIGNED                                                NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `keyword`     VARCHAR(32) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_bin`         NOT NULL COMMENT '关键字',
+    `name`        VARCHAR(64) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`  NOT NULL COMMENT '名称',
+    `weight`      INT(0) UNSIGNED                                                   NULL     DEFAULT NULL COMMENT '权重',
+    `description` VARCHAR(256) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NOT NULL COMMENT '描述',
+    `created_at`  BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `updated_at`  BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '修改时间',
+    `deleted_at`  BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '删除时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `keyword` (`keyword`, `deleted_at`) USING BTREE,
+    INDEX `idx_job_weight` (`weight`) USING BTREE,
+    INDEX `idx_job_updated_at` (`updated_at`) USING BTREE,
+    INDEX `idx_job_created_at` (`created_at`) USING BTREE,
+    INDEX `idx_job_deleted_at` (`deleted_at`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 14
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '职位信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of job
 -- ----------------------------
-BEGIN;
 INSERT INTO `job`
 VALUES (1, 'chairman', '董事长', 2, '董事长', 1713706137, 1721838228, 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for menu
@@ -513,38 +509,41 @@ COMMIT;
 DROP TABLE IF EXISTS `menu`;
 CREATE TABLE `menu`
 (
-    `id`         bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `parent_id`  bigint unsigned NOT NULL COMMENT '父id',
-    `title`      varchar(128) NOT NULL COMMENT '标题',
-    `type`       char(32)     NOT NULL COMMENT '类型',
-    `keyword`    varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '关键词',
-    `icon`       char(32)                                              DEFAULT NULL COMMENT '图标',
-    `api`        varchar(128)                                          DEFAULT NULL COMMENT '接口',
-    `method`     varchar(12)                                           DEFAULT NULL COMMENT '接口方法',
-    `path`       varchar(128)                                          DEFAULT NULL COMMENT '路径',
-    `permission` varchar(128)                                          DEFAULT NULL COMMENT '指令',
-    `component`  varchar(128)                                          DEFAULT NULL COMMENT '组件',
-    `redirect`   varchar(128)                                          DEFAULT NULL COMMENT '重定向地址',
-    `weight`     int unsigned DEFAULT '0' COMMENT '权重',
-    `is_hidden`  tinyint(1) DEFAULT NULL COMMENT '是否隐藏',
-    `is_cache`   tinyint(1) DEFAULT NULL COMMENT '是否缓存',
-    `is_home`    tinyint(1) DEFAULT NULL COMMENT '是否为首页',
-    `is_affix`   tinyint(1) DEFAULT NULL COMMENT '是否为标签',
-    `created_at` bigint unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-    `updated_at` bigint unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `keyword` (`keyword`),
-    UNIQUE KEY `path` (`path`),
-    UNIQUE KEY `api_method` (`api`,`method`),
-    KEY          `idx_menu_created_at` (`created_at`),
-    KEY          `idx_menu_updated_at` (`updated_at`),
-    KEY          `idx_menu_weight` (`weight`)
-) ENGINE=InnoDB AUTO_INCREMENT=7660 DEFAULT CHARSET=utf8mb4  COMMENT='菜单信息';
+    `id`         BIGINT(0) UNSIGNED                                                NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `parent_id`  BIGINT(0) UNSIGNED                                                NOT NULL COMMENT '父id',
+    `title`      VARCHAR(128) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NOT NULL COMMENT '标题',
+    `type`       CHAR(32) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`     NOT NULL COMMENT '类型',
+    `keyword`    VARCHAR(64) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_bin`         NULL     DEFAULT NULL COMMENT '关键词',
+    `icon`       CHAR(32) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`     NULL     DEFAULT NULL COMMENT '图标',
+    `api`        VARCHAR(128) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL     DEFAULT NULL COMMENT '接口',
+    `method`     VARCHAR(12) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`  NULL     DEFAULT NULL COMMENT '接口方法',
+    `path`       VARCHAR(128) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL     DEFAULT NULL COMMENT '路径',
+    `permission` VARCHAR(128) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL     DEFAULT NULL COMMENT '指令',
+    `component`  VARCHAR(128) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL     DEFAULT NULL COMMENT '组件',
+    `redirect`   VARCHAR(128) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL     DEFAULT NULL COMMENT '重定向地址',
+    `weight`     INT(0) UNSIGNED                                                   NULL     DEFAULT 0 COMMENT '权重',
+    `is_hidden`  TINYINT(1)                                                        NULL     DEFAULT NULL COMMENT '是否隐藏',
+    `is_cache`   TINYINT(1)                                                        NULL     DEFAULT NULL COMMENT '是否缓存',
+    `is_home`    TINYINT(1)                                                        NULL     DEFAULT NULL COMMENT '是否为首页',
+    `is_affix`   TINYINT(1)                                                        NULL     DEFAULT NULL COMMENT '是否为标签',
+    `created_at` BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `updated_at` BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '修改时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `keyword` (`keyword`) USING BTREE,
+    UNIQUE INDEX `path` (`path`) USING BTREE,
+    UNIQUE INDEX `api_method` (`api`, `method`) USING BTREE,
+    INDEX `idx_menu_created_at` (`created_at`) USING BTREE,
+    INDEX `idx_menu_updated_at` (`updated_at`) USING BTREE,
+    INDEX `idx_menu_weight` (`weight`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 7660
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '菜单信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-BEGIN;
 INSERT INTO `menu`
 VALUES (7368, 0, '管理平台', 'R', 'SystemPlatform', 'apps', NULL, NULL, '/', NULL, 'Layout', NULL, 2, 0, NULL, NULL,
         NULL, 1724036084, 1724036084);
@@ -1425,7 +1424,6 @@ VALUES (7658, 7657, '查看留言', 'A', NULL, NULL, '/poverty/api/v1/comments',
 INSERT INTO `menu`
 VALUES (7659, 7657, '删除留言', 'A', NULL, NULL, '/poverty/api/v1/comment', 'DELETE', NULL, 'poverty:comment:delete',
         NULL, NULL, 0, NULL, NULL, NULL, NULL, 1724036084, 1724036084);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for menu_closure
@@ -1433,20 +1431,23 @@ COMMIT;
 DROP TABLE IF EXISTS `menu_closure`;
 CREATE TABLE `menu_closure`
 (
-    `id`       bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `parent`   bigint unsigned NOT NULL COMMENT '菜单id',
-    `children` bigint unsigned NOT NULL COMMENT '菜单id',
-    PRIMARY KEY (`id`),
-    KEY        `parent` (`parent`),
-    KEY        `children` (`children`),
-    CONSTRAINT `menu_closure_ibfk_1` FOREIGN KEY (`children`) REFERENCES `menu` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `menu_closure_ibfk_2` FOREIGN KEY (`parent`) REFERENCES `menu` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=21295 DEFAULT CHARSET=utf8mb4  COMMENT='菜单层级信息';
+    `id`       BIGINT(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `parent`   BIGINT(0) UNSIGNED NOT NULL COMMENT '菜单id',
+    `children` BIGINT(0) UNSIGNED NOT NULL COMMENT '菜单id',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `parent` (`parent`) USING BTREE,
+    INDEX `children` (`children`) USING BTREE,
+    CONSTRAINT `menu_closure_ibfk_1` FOREIGN KEY (`children`) REFERENCES `menu` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+    CONSTRAINT `menu_closure_ibfk_2` FOREIGN KEY (`parent`) REFERENCES `menu` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 21295
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '菜单层级信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of menu_closure
 -- ----------------------------
-BEGIN;
 INSERT INTO `menu_closure`
 VALUES (20410, 7368, 7372);
 INSERT INTO `menu_closure`
@@ -3217,7 +3218,6 @@ INSERT INTO `menu_closure`
 VALUES (21293, 7562, 7564);
 INSERT INTO `menu_closure`
 VALUES (21294, 7562, 7626);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for resource
@@ -3225,21 +3225,22 @@ COMMIT;
 DROP TABLE IF EXISTS `resource`;
 CREATE TABLE `resource`
 (
-    `id`            bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `keyword`       varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '关键字',
-    `department_id` bigint unsigned NOT NULL COMMENT '部门id',
-    `resource_id`   bigint unsigned NOT NULL COMMENT '资源id',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `department_id` (`keyword`,`department_id`,`resource_id`),
-    KEY             `department_id_2` (`department_id`),
-    CONSTRAINT `resource_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `id`            BIGINT(0) UNSIGNED                                        NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `keyword`       VARCHAR(32) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_bin` NOT NULL COMMENT '关键字',
+    `department_id` BIGINT(0) UNSIGNED                                        NOT NULL COMMENT '部门id',
+    `resource_id`   BIGINT(0) UNSIGNED                                        NOT NULL COMMENT '资源id',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `department_id` (`keyword`, `department_id`, `resource_id`) USING BTREE,
+    INDEX `department_id_2` (`department_id`) USING BTREE,
+    CONSTRAINT `resource_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci`
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of resource
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for role
@@ -3247,33 +3248,35 @@ COMMIT;
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role`
 (
-    `id`             bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `parent_id`      bigint unsigned NOT NULL COMMENT '父id',
-    `name`           varchar(64)                                        NOT NULL COMMENT '名称',
-    `keyword`        char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '标识',
-    `status`         tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态',
-    `description`    varchar(128)                                       NOT NULL COMMENT '描述',
-    `department_ids` tinytext COMMENT '自定义部门',
-    `data_scope`     char(32)                                           NOT NULL COMMENT '权限类型',
-    `created_at`     bigint unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-    `updated_at`     bigint unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-    `deleted_at`     bigint unsigned NOT NULL DEFAULT '0' COMMENT '删除时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `keyword` (`keyword`,`deleted_at`),
-    KEY              `idx_role_created_at` (`created_at`),
-    KEY              `idx_role_updated_at` (`updated_at`),
-    KEY              `idx_role_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4  COMMENT='角色信息';
+    `id`             BIGINT(0) UNSIGNED                                                NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `parent_id`      BIGINT(0) UNSIGNED                                                NOT NULL COMMENT '父id',
+    `name`           VARCHAR(64) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`  NOT NULL COMMENT '名称',
+    `keyword`        CHAR(32) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_bin`            NOT NULL COMMENT '标识',
+    `status`         TINYINT(1)                                                        NOT NULL DEFAULT 0 COMMENT '状态',
+    `description`    VARCHAR(128) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NOT NULL COMMENT '描述',
+    `department_ids` TINYTEXT CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`     NULL COMMENT '自定义部门',
+    `data_scope`     CHAR(32) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`     NOT NULL COMMENT '权限类型',
+    `created_at`     BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `updated_at`     BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '修改时间',
+    `deleted_at`     BIGINT(0) UNSIGNED                                                NOT NULL DEFAULT 0 COMMENT '删除时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `keyword` (`keyword`, `deleted_at`) USING BTREE,
+    INDEX `idx_role_created_at` (`created_at`) USING BTREE,
+    INDEX `idx_role_updated_at` (`updated_at`) USING BTREE,
+    INDEX `idx_role_deleted_at` (`deleted_at`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 9
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '角色信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-BEGIN;
 INSERT INTO `role`
 VALUES (1, 0, '超级管理员', 'superAdmin', 1, '超级管理员  ', NULL, 'ALL', 1713706137, 1713706137, 0);
 INSERT INTO `role`
 VALUES (5, 1, '21', '3', 1, '412', NULL, 'CUR_DOWN', 1719464519, 1721837751, 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for role_closure
@@ -3281,23 +3284,25 @@ COMMIT;
 DROP TABLE IF EXISTS `role_closure`;
 CREATE TABLE `role_closure`
 (
-    `id`       bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `parent`   bigint unsigned NOT NULL COMMENT '角色id',
-    `children` bigint unsigned NOT NULL COMMENT '角色id',
-    PRIMARY KEY (`id`),
-    KEY        `parent` (`parent`),
-    KEY        `children` (`children`),
-    CONSTRAINT `role_closure_ibfk_1` FOREIGN KEY (`children`) REFERENCES `role` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `role_closure_ibfk_2` FOREIGN KEY (`parent`) REFERENCES `role` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4  COMMENT='角色层级信息';
+    `id`       BIGINT(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `parent`   BIGINT(0) UNSIGNED NOT NULL COMMENT '角色id',
+    `children` BIGINT(0) UNSIGNED NOT NULL COMMENT '角色id',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `parent` (`parent`) USING BTREE,
+    INDEX `children` (`children`) USING BTREE,
+    CONSTRAINT `role_closure_ibfk_1` FOREIGN KEY (`children`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+    CONSTRAINT `role_closure_ibfk_2` FOREIGN KEY (`parent`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 12
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '角色层级信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of role_closure
 -- ----------------------------
-BEGIN;
 INSERT INTO `role_closure`
 VALUES (5, 1, 5);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for role_menu
@@ -3305,22 +3310,24 @@ COMMIT;
 DROP TABLE IF EXISTS `role_menu`;
 CREATE TABLE `role_menu`
 (
-    `id`      bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `role_id` bigint unsigned NOT NULL COMMENT '角色id',
-    `menu_id` bigint unsigned NOT NULL COMMENT '菜单id',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `role_id_2` (`role_id`,`menu_id`),
-    KEY       `role_id` (`role_id`),
-    KEY       `menu_id` (`menu_id`),
-    CONSTRAINT `role_menu_ibfk_1` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `role_menu_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2289 DEFAULT CHARSET=utf8mb4  COMMENT='角色菜单信息';
+    `id`      BIGINT(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `role_id` BIGINT(0) UNSIGNED NOT NULL COMMENT '角色id',
+    `menu_id` BIGINT(0) UNSIGNED NOT NULL COMMENT '菜单id',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `role_id_2` (`role_id`, `menu_id`) USING BTREE,
+    INDEX `role_id` (`role_id`) USING BTREE,
+    INDEX `menu_id` (`menu_id`) USING BTREE,
+    CONSTRAINT `role_menu_ibfk_1` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+    CONSTRAINT `role_menu_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 2289
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '角色菜单信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of role_menu
 -- ----------------------------
-BEGIN;
-COMMIT;
 
 -- ----------------------------
 -- Table structure for user
@@ -3328,35 +3335,38 @@ COMMIT;
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`
 (
-    `id`            bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `department_id` bigint unsigned NOT NULL COMMENT '部门id',
-    `role_id`       bigint unsigned NOT NULL COMMENT '角色id',
-    `name`          char(32)     NOT NULL COMMENT '名称',
-    `nickname`      varchar(64)  NOT NULL COMMENT '昵称',
-    `gender`        char(32)     NOT NULL COMMENT '性别',
-    `avatar`        varchar(256)          DEFAULT NULL COMMENT '头像',
-    `email`         varchar(64)  NOT NULL COMMENT '邮箱',
-    `phone`         char(32)     NOT NULL COMMENT '电话',
-    `password`      varchar(256) NOT NULL COMMENT '密码',
-    `status`        tinyint(1) DEFAULT '0' COMMENT '状态',
-    `setting`       tinytext COMMENT '用户设置',
-    `token`         varchar(512)          DEFAULT NULL COMMENT '用户token',
-    `logged_at`     bigint       NOT NULL DEFAULT '0' COMMENT '登陆时间',
-    `created_at`    bigint       NOT NULL DEFAULT '0' COMMENT '创建时间',
-    `updated_at`    bigint       NOT NULL DEFAULT '0' COMMENT '修改时间',
-    PRIMARY KEY (`id`),
-    KEY             `idx_user_updated_at` (`updated_at`),
-    KEY             `idx_user_created_at` (`created_at`),
-    KEY             `fk_user_role` (`role_id`),
-    KEY             `fk_user_department` (`department_id`),
-    CONSTRAINT `fk_user_department` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`),
-    CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4  COMMENT='用户信息';
+    `id`            BIGINT(0) UNSIGNED                                                NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `department_id` BIGINT(0) UNSIGNED                                                NOT NULL COMMENT '部门id',
+    `role_id`       BIGINT(0) UNSIGNED                                                NOT NULL COMMENT '角色id',
+    `name`          CHAR(32) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`     NOT NULL COMMENT '名称',
+    `nickname`      VARCHAR(64) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`  NOT NULL COMMENT '昵称',
+    `gender`        CHAR(32) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`     NOT NULL COMMENT '性别',
+    `avatar`        VARCHAR(256) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL     DEFAULT NULL COMMENT '头像',
+    `email`         VARCHAR(64) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`  NOT NULL COMMENT '邮箱',
+    `phone`         CHAR(32) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`     NOT NULL COMMENT '电话',
+    `password`      VARCHAR(256) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NOT NULL COMMENT '密码',
+    `status`        TINYINT(1)                                                        NULL     DEFAULT 0 COMMENT '状态',
+    `setting`       TINYTEXT CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`     NULL COMMENT '用户设置',
+    `token`         VARCHAR(512) CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci` NULL     DEFAULT NULL COMMENT '用户token',
+    `logged_at`     BIGINT(0)                                                         NOT NULL DEFAULT 0 COMMENT '登陆时间',
+    `created_at`    BIGINT(0)                                                         NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `updated_at`    BIGINT(0)                                                         NOT NULL DEFAULT 0 COMMENT '修改时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `idx_user_updated_at` (`updated_at`) USING BTREE,
+    INDEX `idx_user_created_at` (`created_at`) USING BTREE,
+    INDEX `fk_user_role` (`role_id`) USING BTREE,
+    INDEX `fk_user_department` (`department_id`) USING BTREE,
+    CONSTRAINT `fk_user_department` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 5
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '用户信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-BEGIN;
 INSERT INTO `user`
 VALUES (1, 1, 1, '超级管理员', '超级管理员', 'F', 'a9f224627346905e258d771e4043f921', '1280291001@qq.com',
         '18888888888', '$2a$10$9qRJe9KQo6sEcU8ipKg.e.dkl2E7Wy64SigYlgraTAn.1paHFq6W.', 1,
@@ -3366,7 +3376,6 @@ VALUES (1, 1, 1, '超级管理员', '超级管理员', 'F', 'a9f224627346905e258
 INSERT INTO `user`
 VALUES (4, 5, 5, '1', '1', 'F', '', '31@q.com', '18286219255',
         '$2a$10$lpaNcnRMxC3oqVx4sYr16OvLy5BY1j8iFyUPyqAnprnC1wK/QsySq', 1, NULL, NULL, 0, 1721840505, 1721840505);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for user_job
@@ -3374,25 +3383,27 @@ COMMIT;
 DROP TABLE IF EXISTS `user_job`;
 CREATE TABLE `user_job`
 (
-    `id`      bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `job_id`  bigint unsigned NOT NULL COMMENT '职位id',
-    `user_id` bigint unsigned NOT NULL COMMENT '用户id',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `job_id` (`job_id`,`user_id`),
-    KEY       `user_id` (`user_id`),
-    CONSTRAINT `user_job_ibfk_1` FOREIGN KEY (`job_id`) REFERENCES `job` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `user_job_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4  COMMENT='用户职位信息';
+    `id`      BIGINT(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `job_id`  BIGINT(0) UNSIGNED NOT NULL COMMENT '职位id',
+    `user_id` BIGINT(0) UNSIGNED NOT NULL COMMENT '用户id',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `job_id` (`job_id`, `user_id`) USING BTREE,
+    INDEX `user_id` (`user_id`) USING BTREE,
+    CONSTRAINT `user_job_ibfk_1` FOREIGN KEY (`job_id`) REFERENCES `job` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+    CONSTRAINT `user_job_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 13
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '用户职位信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_job
 -- ----------------------------
-BEGIN;
 INSERT INTO `user_job`
 VALUES (1, 1, 1);
 INSERT INTO `user_job`
 VALUES (12, 1, 4);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for user_role
@@ -3400,25 +3411,26 @@ COMMIT;
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role`
 (
-    `id`      bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `role_id` bigint unsigned NOT NULL COMMENT '角色id',
-    `user_id` bigint unsigned NOT NULL COMMENT '用户id',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `role_id` (`role_id`,`user_id`),
-    KEY       `user_id` (`user_id`),
-    CONSTRAINT `user_role_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `user_role_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4  COMMENT='用户角色信息';
+    `id`      BIGINT(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `role_id` BIGINT(0) UNSIGNED NOT NULL COMMENT '角色id',
+    `user_id` BIGINT(0) UNSIGNED NOT NULL COMMENT '用户id',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `role_id` (`role_id`, `user_id`) USING BTREE,
+    INDEX `user_id` (`user_id`) USING BTREE,
+    CONSTRAINT `user_role_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+    CONSTRAINT `user_role_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 11
+  CHARACTER SET = `utf8mb4`
+  COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '用户角色信息'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_role
 -- ----------------------------
-BEGIN;
 INSERT INTO `user_role`
 VALUES (1, 1, 1);
 INSERT INTO `user_role`
 VALUES (10, 5, 4);
-COMMIT;
 
-SET
-FOREIGN_KEY_CHECKS = 1;
+SET FOREIGN_KEY_CHECKS = 1;
