@@ -28,28 +28,43 @@ jobs:
       - name: Check Game Updates
         id: check
         run: |
-          # fetch latest image version
-          CUR_VERSION=$(curl -s https://registry.hub.docker.com/v2/repositories/dstgo/dst-server-x64/tags/ | jq -r '.results[].name' | grep -v '^latest$' | sort -rn | head -n 1)
-          if [[ -z "$CUR_VERSION" ]]; then
-            echo "Error: Failed to get latest Docker image version"
+          # Check if image exists
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://registry.hub.docker.com/v2/repositories/dstgo/dst-server-x64/tags/)
+
+          if [[ "$HTTP_STATUS" == "404" ]]; then
+            echo "Image does not exist, proceeding with build"
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Fetch latest image version
+          CUR_VERSION=$(curl -s https://registry.hub.docker.com/v2/repositories/dstgo/dst-server-x64/tags/ | \
+            jq -r '.results[].name' | \
+            grep -v '^latest$' | \
+            grep -E '^[0-9]+$' | \
+            sort -rn | \
+            head -n 1)
+
+          if [[ -z "$CUR_VERSION" ]] || ! [[ "$CUR_VERSION" =~ ^[0-9]+$ ]]; then
+            echo "Error: failed to fetch latest image version: $CUR_VERSION"
             exit 1
           fi
-          
-          # fetch latest dst version
+
+          # Fetch latest dst version
           LATEST_VERSION=$(go run ./framework/dontstarve/release/cmd/dstv latest)
           if [[ -z "$LATEST_VERSION" ]] || ! [[ "$LATEST_VERSION" =~ ^[0-9]+$ ]]; then
-            echo "Error: failed to fetch latest version: $LATEST_VERSION"
+            echo "Error: failed to fetch latest dst version: $LATEST_VERSION"
             exit 1
           fi
-          
+
           echo "Current version: $CUR_VERSION"
           echo "Latest version: $LATEST_VERSION"
-          
-          # check if a new version is available
-          if (( CUR_VERSION >= LATEST_VERSION )); then
-            echo "should_build=false" >> $GITHUB_OUTPUT
-          else
+
+          # Check if a new version is available
+          if (( CUR_VERSION < LATEST_VERSION )); then
             echo "should_build=true" >> $GITHUB_OUTPUT
+          else
+            echo "should_build=false" >> $GITHUB_OUTPUT
           fi
 
   dst-build-push:
