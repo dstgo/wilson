@@ -1,3 +1,6 @@
+SET
+FOREIGN_KEY_CHECKS = 0;
+
 -- ----------------------------
 -- Table structure for gorm_init
 -- ----------------------------
@@ -220,3 +223,5 @@ CREATE TABLE `template`
 ) ENGINE = InnoDB
   CHARACTER SET = `utf8mb4`
   COLLATE = `utf8mb4_0900_ai_ci` COMMENT = '配置模板';
+
+SET FOREIGN_KEY_CHECKS = 1;
