@@ -5,7 +5,7 @@ permissions:
 
 on:
   schedule:
-    - cron: '0 */1 * * *' # run every hour
+    - cron: '0 * * * *' # run every hour
   workflow_dispatch: # allow to run manually
 
 env:
@@ -45,8 +45,14 @@ jobs:
             sort -rn | \
             head -n 1)
 
-          if [[ -z "$CUR_VERSION" ]] || ! [[ "$CUR_VERSION" =~ ^[0-9]+$ ]]; then
-            echo "Error: failed to fetch latest image version: $CUR_VERSION"
+          if [[ -z "$CUR_VERSION" ]]; then
+            echo "No valid version found, proceeding with build"
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          if ! [[ "$CUR_VERSION" =~ ^[0-9]+$ ]]; then
+            echo "Error: Invalid version number: $CUR_VERSION"
             exit 1
           fi
 
