@@ -5,7 +5,7 @@ permissions:
 
 on:
   schedule:
-    - cron: '0 1 * * *' # run every hour
+    - cron: '0 */1 * * *' # run every hour
   workflow_dispatch: # allow to run manually
 
 env:
