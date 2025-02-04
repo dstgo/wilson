@@ -44,7 +44,7 @@ func ServeDir(dir string, addr string, data map[string]any) error {
 			http.Error(w, "Invalid file path", http.StatusBadRequest)
 			return
 		}
-		safePath := unsafePath
+		safePath := filepath.Join(dir, unsafePath)
 		if stat, err := os.Stat(safePath); err == nil && !stat.IsDir() {
 			http.ServeFile(w, r, safePath)
 			return
