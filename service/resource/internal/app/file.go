@@ -190,7 +190,7 @@ func (s *File) Upload() http.HandlerFunc {
 		if err != nil {
 			return errors.UploadFileErrorWrap(err)
 		}
-		if in.UploadId == "" || int(in.Index) <= 0 || len(in.Data) == 0 {
+		if in.UploadId == "" || in.Index == 0 || len(in.Data) == 0 {
 			return errors.ParamsError()
 		}
 
