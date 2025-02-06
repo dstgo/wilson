@@ -79,7 +79,7 @@ func Middleware(c *config.Middleware) (gtmiddleware.Middleware, error) {
 			resp.Trailer = nil
 			resp.Header.Set("Content-Type", contentType)
 			if grpcStatus := resp.Header.Get("grpc-status"); grpcStatus != "0" {
-				code, err := strconv.ParseInt(grpcStatus, 10, 64)
+				code, err := strconv.ParseInt(grpcStatus, 10, 32)
 				if err != nil {
 					return nil, err
 				}
