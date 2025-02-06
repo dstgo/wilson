@@ -14,7 +14,7 @@ var latestCmd = &cobra.Command{
 	Use:   "latest",
 	Short: "fetch the latest version",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		version, err := FetchLatestVersion(!unstable)
+		version, err := FetchLatestVersion(unstable)
 		if err != nil {
 			return err
 		}

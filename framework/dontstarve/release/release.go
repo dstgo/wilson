@@ -67,7 +67,7 @@ func (c *Client) Latest(stable bool) (Release, error) {
 
 	var maxRelease Release
 	for _, release := range list {
-		if !stable && release.Branch == BranchTest {
+		if stable && release.Branch == BranchTest {
 			continue
 		}
 
