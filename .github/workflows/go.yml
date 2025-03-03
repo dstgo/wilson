@@ -54,7 +54,7 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@fe19838e9e0ffa7eae178e20d30baba60002bab1 # v6.5.0
         with:
-          version: v1.60
+          version: v1.64
 
   # Inspects source code for security problems by scanning the Go AST and SSA code representation.
   gosec:
