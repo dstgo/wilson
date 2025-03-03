@@ -57,7 +57,8 @@ func (c *client) RoundTrip(req *http.Request) (*http.Response, error) {
 	// Inject the context into the HTTP headers
 	otel.GetTextMapPropagator().Inject(ctx, propagation.HeaderCarrier(req.Header))
 
-	resp, err := n.(*node).client.Do(req)
+	node, _ := n.(*node)
+	resp, err := node.client.Do(req)
 	reqOpt.UpstreamResponseTime = append(reqOpt.UpstreamResponseTime, time.Since(startAt).Seconds())
 	if err != nil {
 		done(ctx, selector.DoneInfo{Err: err})
