@@ -22,22 +22,22 @@ func IsSystemError(err error) bool {
 
 // Common errors (0-999)
 func SystemError() *errors.Error {
-	return errors.New(500, ErrorReason_SystemError.String(), "系统错误")
+	return errors.New(500, ErrorReason_SystemError.String(), "system error")
 }
 
 // Common errors (0-999)
 func SystemErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_SystemError.String(), fmt.Sprintf("系统错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_SystemError.String(), fmt.Sprintf("system error: %s", fmt.Sprintf(msg, args...)))
 }
 
 // Common errors (0-999)
 func SystemErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_SystemError.String(), fmt.Sprintf("系统错误: %s", err))
+	return errors.New(500, ErrorReason_SystemError.String(), fmt.Sprintf("system error: %s", err))
 }
 
 // Common errors (0-999)
 func SystemErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_SystemError.String(), fmt.Sprintf("系统错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_SystemError.String(), fmt.Sprintf("system error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsFileSystemError(err error) bool {
@@ -49,19 +49,19 @@ func IsFileSystemError(err error) bool {
 }
 
 func FileSystemError() *errors.Error {
-	return errors.New(500, ErrorReason_FileSystemError.String(), "文件系统错误")
+	return errors.New(500, ErrorReason_FileSystemError.String(), "file system error")
 }
 
 func FileSystemErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_FileSystemError.String(), fmt.Sprintf("文件系统错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_FileSystemError.String(), fmt.Sprintf("file system error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func FileSystemErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_FileSystemError.String(), fmt.Sprintf("文件系统错误: %s", err))
+	return errors.New(500, ErrorReason_FileSystemError.String(), fmt.Sprintf("file system error: %s", err))
 }
 
 func FileSystemErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_FileSystemError.String(), fmt.Sprintf("文件系统错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_FileSystemError.String(), fmt.Sprintf("file system error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsNetWorkError(err error) bool {
@@ -73,19 +73,19 @@ func IsNetWorkError(err error) bool {
 }
 
 func NetWorkError() *errors.Error {
-	return errors.New(500, ErrorReason_NetWorkError.String(), "网络传输错误")
+	return errors.New(500, ErrorReason_NetWorkError.String(), "network error")
 }
 
 func NetWorkErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NetWorkError.String(), fmt.Sprintf("网络传输错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_NetWorkError.String(), fmt.Sprintf("network error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func NetWorkErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_NetWorkError.String(), fmt.Sprintf("网络传输错误: %s", err))
+	return errors.New(500, ErrorReason_NetWorkError.String(), fmt.Sprintf("network error: %s", err))
 }
 
 func NetWorkErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NetWorkError.String(), fmt.Sprintf("网络传输错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_NetWorkError.String(), fmt.Sprintf("network error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsDatabaseError(err error) bool {
@@ -97,19 +97,19 @@ func IsDatabaseError(err error) bool {
 }
 
 func DatabaseError() *errors.Error {
-	return errors.New(500, ErrorReason_DatabaseError.String(), "数据库错误")
+	return errors.New(500, ErrorReason_DatabaseError.String(), "database error")
 }
 
 func DatabaseErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_DatabaseError.String(), fmt.Sprintf("数据库错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_DatabaseError.String(), fmt.Sprintf("database error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func DatabaseErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_DatabaseError.String(), fmt.Sprintf("数据库错误: %s", err))
+	return errors.New(500, ErrorReason_DatabaseError.String(), fmt.Sprintf("database error: %s", err))
 }
 
 func DatabaseErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_DatabaseError.String(), fmt.Sprintf("数据库错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_DatabaseError.String(), fmt.Sprintf("database error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsParamsError(err error) bool {
@@ -121,19 +121,19 @@ func IsParamsError(err error) bool {
 }
 
 func ParamsError() *errors.Error {
-	return errors.New(500, ErrorReason_ParamsError.String(), "参数错误")
+	return errors.New(500, ErrorReason_ParamsError.String(), "parameter error")
 }
 
 func ParamsErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ParamsError.String(), fmt.Sprintf("参数错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ParamsError.String(), fmt.Sprintf("parameter error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ParamsErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ParamsError.String(), fmt.Sprintf("参数错误: %s", err))
+	return errors.New(500, ErrorReason_ParamsError.String(), fmt.Sprintf("parameter error: %s", err))
 }
 
 func ParamsErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ParamsError.String(), fmt.Sprintf("参数错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ParamsError.String(), fmt.Sprintf("parameter error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsTransformError(err error) bool {
@@ -145,19 +145,19 @@ func IsTransformError(err error) bool {
 }
 
 func TransformError() *errors.Error {
-	return errors.New(500, ErrorReason_TransformError.String(), "数据转换失败")
+	return errors.New(500, ErrorReason_TransformError.String(), "transform error")
 }
 
 func TransformErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_TransformError.String(), fmt.Sprintf("数据转换失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_TransformError.String(), fmt.Sprintf("transform error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func TransformErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_TransformError.String(), fmt.Sprintf("数据转换失败: %s", err))
+	return errors.New(500, ErrorReason_TransformError.String(), fmt.Sprintf("transform error: %s", err))
 }
 
 func TransformErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_TransformError.String(), fmt.Sprintf("数据转换失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_TransformError.String(), fmt.Sprintf("transform error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsGetError(err error) bool {
@@ -169,19 +169,19 @@ func IsGetError(err error) bool {
 }
 
 func GetError() *errors.Error {
-	return errors.New(500, ErrorReason_GetError.String(), "获取数据失败")
+	return errors.New(500, ErrorReason_GetError.String(), "query error")
 }
 
 func GetErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_GetError.String(), fmt.Sprintf("获取数据失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_GetError.String(), fmt.Sprintf("query error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func GetErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_GetError.String(), fmt.Sprintf("获取数据失败: %s", err))
+	return errors.New(500, ErrorReason_GetError.String(), fmt.Sprintf("query error: %s", err))
 }
 
 func GetErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_GetError.String(), fmt.Sprintf("获取数据失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_GetError.String(), fmt.Sprintf("query error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsListError(err error) bool {
@@ -193,19 +193,19 @@ func IsListError(err error) bool {
 }
 
 func ListError() *errors.Error {
-	return errors.New(500, ErrorReason_ListError.String(), "获取列表数据失败")
+	return errors.New(500, ErrorReason_ListError.String(), "list query error")
 }
 
 func ListErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ListError.String(), fmt.Sprintf("获取列表数据失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ListError.String(), fmt.Sprintf("list query error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ListErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ListError.String(), fmt.Sprintf("获取列表数据失败: %s", err))
+	return errors.New(500, ErrorReason_ListError.String(), fmt.Sprintf("list query error: %s", err))
 }
 
 func ListErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ListError.String(), fmt.Sprintf("获取列表数据失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ListError.String(), fmt.Sprintf("list query error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsCreateError(err error) bool {
@@ -217,19 +217,19 @@ func IsCreateError(err error) bool {
 }
 
 func CreateError() *errors.Error {
-	return errors.New(500, ErrorReason_CreateError.String(), "创建数据失败")
+	return errors.New(500, ErrorReason_CreateError.String(), "create error")
 }
 
 func CreateErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_CreateError.String(), fmt.Sprintf("创建数据失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_CreateError.String(), fmt.Sprintf("create error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func CreateErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_CreateError.String(), fmt.Sprintf("创建数据失败: %s", err))
+	return errors.New(500, ErrorReason_CreateError.String(), fmt.Sprintf("create error: %s", err))
 }
 
 func CreateErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_CreateError.String(), fmt.Sprintf("创建数据失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_CreateError.String(), fmt.Sprintf("create error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsImportError(err error) bool {
@@ -241,19 +241,19 @@ func IsImportError(err error) bool {
 }
 
 func ImportError() *errors.Error {
-	return errors.New(500, ErrorReason_ImportError.String(), "导入数据失败")
+	return errors.New(500, ErrorReason_ImportError.String(), "import error")
 }
 
 func ImportErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ImportError.String(), fmt.Sprintf("导入数据失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ImportError.String(), fmt.Sprintf("import error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ImportErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ImportError.String(), fmt.Sprintf("导入数据失败: %s", err))
+	return errors.New(500, ErrorReason_ImportError.String(), fmt.Sprintf("import error: %s", err))
 }
 
 func ImportErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ImportError.String(), fmt.Sprintf("导入数据失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ImportError.String(), fmt.Sprintf("import error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsExportError(err error) bool {
@@ -265,19 +265,19 @@ func IsExportError(err error) bool {
 }
 
 func ExportError() *errors.Error {
-	return errors.New(500, ErrorReason_ExportError.String(), "导出数据失败")
+	return errors.New(500, ErrorReason_ExportError.String(), "export error")
 }
 
 func ExportErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ExportError.String(), fmt.Sprintf("导出数据失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ExportError.String(), fmt.Sprintf("export error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ExportErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ExportError.String(), fmt.Sprintf("导出数据失败: %s", err))
+	return errors.New(500, ErrorReason_ExportError.String(), fmt.Sprintf("export error: %s", err))
 }
 
 func ExportErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ExportError.String(), fmt.Sprintf("导出数据失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ExportError.String(), fmt.Sprintf("export error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsUpdateError(err error) bool {
@@ -289,19 +289,19 @@ func IsUpdateError(err error) bool {
 }
 
 func UpdateError() *errors.Error {
-	return errors.New(500, ErrorReason_UpdateError.String(), "更新数据失败")
+	return errors.New(500, ErrorReason_UpdateError.String(), "update error")
 }
 
 func UpdateErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UpdateError.String(), fmt.Sprintf("更新数据失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_UpdateError.String(), fmt.Sprintf("update error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func UpdateErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_UpdateError.String(), fmt.Sprintf("更新数据失败: %s", err))
+	return errors.New(500, ErrorReason_UpdateError.String(), fmt.Sprintf("update error: %s", err))
 }
 
 func UpdateErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UpdateError.String(), fmt.Sprintf("更新数据失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_UpdateError.String(), fmt.Sprintf("update error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsDeleteError(err error) bool {
@@ -313,19 +313,19 @@ func IsDeleteError(err error) bool {
 }
 
 func DeleteError() *errors.Error {
-	return errors.New(500, ErrorReason_DeleteError.String(), "删除数据失败")
+	return errors.New(500, ErrorReason_DeleteError.String(), "delete error")
 }
 
 func DeleteErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_DeleteError.String(), fmt.Sprintf("删除数据失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_DeleteError.String(), fmt.Sprintf("delete error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func DeleteErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_DeleteError.String(), fmt.Sprintf("删除数据失败: %s", err))
+	return errors.New(500, ErrorReason_DeleteError.String(), fmt.Sprintf("delete error: %s", err))
 }
 
 func DeleteErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_DeleteError.String(), fmt.Sprintf("删除数据失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_DeleteError.String(), fmt.Sprintf("delete error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 // Config service errors (1000-1999)
@@ -339,22 +339,22 @@ func IsConfigServiceError(err error) bool {
 
 // Config service errors (1000-1999)
 func ConfigServiceError() *errors.Error {
-	return errors.New(500, ErrorReason_ConfigServiceError.String(), "配置服务异常")
+	return errors.New(500, ErrorReason_ConfigServiceError.String(), "configure service error")
 }
 
 // Config service errors (1000-1999)
 func ConfigServiceErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ConfigServiceError.String(), fmt.Sprintf("配置服务异常: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ConfigServiceError.String(), fmt.Sprintf("configure service error: %s", fmt.Sprintf(msg, args...)))
 }
 
 // Config service errors (1000-1999)
 func ConfigServiceErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ConfigServiceError.String(), fmt.Sprintf("配置服务异常: %s", err))
+	return errors.New(500, ErrorReason_ConfigServiceError.String(), fmt.Sprintf("configure service error: %s", err))
 }
 
 // Config service errors (1000-1999)
 func ConfigServiceErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ConfigServiceError.String(), fmt.Sprintf("配置服务异常: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ConfigServiceError.String(), fmt.Sprintf("configure service error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsGetTrashError(err error) bool {
@@ -366,19 +366,19 @@ func IsGetTrashError(err error) bool {
 }
 
 func GetTrashError() *errors.Error {
-	return errors.New(500, ErrorReason_GetTrashError.String(), "获取回收站数据失败")
+	return errors.New(500, ErrorReason_GetTrashError.String(), "get trash error")
 }
 
 func GetTrashErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_GetTrashError.String(), fmt.Sprintf("获取回收站数据失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_GetTrashError.String(), fmt.Sprintf("get trash error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func GetTrashErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_GetTrashError.String(), fmt.Sprintf("获取回收站数据失败: %s", err))
+	return errors.New(500, ErrorReason_GetTrashError.String(), fmt.Sprintf("get trash error: %s", err))
 }
 
 func GetTrashErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_GetTrashError.String(), fmt.Sprintf("获取回收站数据失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_GetTrashError.String(), fmt.Sprintf("get trash error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsListTrashError(err error) bool {
@@ -390,19 +390,19 @@ func IsListTrashError(err error) bool {
 }
 
 func ListTrashError() *errors.Error {
-	return errors.New(500, ErrorReason_ListTrashError.String(), "获取回收站列表数据失败")
+	return errors.New(500, ErrorReason_ListTrashError.String(), "list trash error")
 }
 
 func ListTrashErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ListTrashError.String(), fmt.Sprintf("获取回收站列表数据失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ListTrashError.String(), fmt.Sprintf("list trash error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ListTrashErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ListTrashError.String(), fmt.Sprintf("获取回收站列表数据失败: %s", err))
+	return errors.New(500, ErrorReason_ListTrashError.String(), fmt.Sprintf("list trash error: %s", err))
 }
 
 func ListTrashErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ListTrashError.String(), fmt.Sprintf("获取回收站列表数据失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ListTrashError.String(), fmt.Sprintf("list trash error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsDeleteTrashError(err error) bool {
@@ -414,19 +414,19 @@ func IsDeleteTrashError(err error) bool {
 }
 
 func DeleteTrashError() *errors.Error {
-	return errors.New(500, ErrorReason_DeleteTrashError.String(), "删除回收站数据失败")
+	return errors.New(500, ErrorReason_DeleteTrashError.String(), "delete trash error")
 }
 
 func DeleteTrashErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_DeleteTrashError.String(), fmt.Sprintf("删除回收站数据失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_DeleteTrashError.String(), fmt.Sprintf("delete trash error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func DeleteTrashErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_DeleteTrashError.String(), fmt.Sprintf("删除回收站数据失败: %s", err))
+	return errors.New(500, ErrorReason_DeleteTrashError.String(), fmt.Sprintf("delete trash error: %s", err))
 }
 
 func DeleteTrashErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_DeleteTrashError.String(), fmt.Sprintf("删除回收站数据失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_DeleteTrashError.String(), fmt.Sprintf("delete trash error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsRevertTrashError(err error) bool {
@@ -438,19 +438,19 @@ func IsRevertTrashError(err error) bool {
 }
 
 func RevertTrashError() *errors.Error {
-	return errors.New(500, ErrorReason_RevertTrashError.String(), "还原回收站数据失败")
+	return errors.New(500, ErrorReason_RevertTrashError.String(), "revert trash error")
 }
 
 func RevertTrashErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_RevertTrashError.String(), fmt.Sprintf("还原回收站数据失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_RevertTrashError.String(), fmt.Sprintf("revert trash error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func RevertTrashErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_RevertTrashError.String(), fmt.Sprintf("还原回收站数据失败: %s", err))
+	return errors.New(500, ErrorReason_RevertTrashError.String(), fmt.Sprintf("revert trash error: %s", err))
 }
 
 func RevertTrashErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_RevertTrashError.String(), fmt.Sprintf("还原回收站数据失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_RevertTrashError.String(), fmt.Sprintf("revert trash error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsBusinessValueTypeError(err error) bool {
@@ -462,19 +462,19 @@ func IsBusinessValueTypeError(err error) bool {
 }
 
 func BusinessValueTypeError() *errors.Error {
-	return errors.New(500, ErrorReason_BusinessValueTypeError.String(), "业务配置值类型错误")
+	return errors.New(500, ErrorReason_BusinessValueTypeError.String(), "business value type error")
 }
 
 func BusinessValueTypeErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_BusinessValueTypeError.String(), fmt.Sprintf("业务配置值类型错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_BusinessValueTypeError.String(), fmt.Sprintf("business value type error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func BusinessValueTypeErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_BusinessValueTypeError.String(), fmt.Sprintf("业务配置值类型错误: %s", err))
+	return errors.New(500, ErrorReason_BusinessValueTypeError.String(), fmt.Sprintf("business value type error: %s", err))
 }
 
 func BusinessValueTypeErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_BusinessValueTypeError.String(), fmt.Sprintf("业务配置值类型错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_BusinessValueTypeError.String(), fmt.Sprintf("business value type error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsResourceValueTypeError(err error) bool {
@@ -486,19 +486,19 @@ func IsResourceValueTypeError(err error) bool {
 }
 
 func ResourceValueTypeError() *errors.Error {
-	return errors.New(500, ErrorReason_ResourceValueTypeError.String(), "资源配置值类型错误")
+	return errors.New(500, ErrorReason_ResourceValueTypeError.String(), "resource configuration value type error")
 }
 
 func ResourceValueTypeErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ResourceValueTypeError.String(), fmt.Sprintf("资源配置值类型错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ResourceValueTypeError.String(), fmt.Sprintf("resource configuration value type error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ResourceValueTypeErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ResourceValueTypeError.String(), fmt.Sprintf("资源配置值类型错误: %s", err))
+	return errors.New(500, ErrorReason_ResourceValueTypeError.String(), fmt.Sprintf("resource configuration value type error: %s", err))
 }
 
 func ResourceValueTypeErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ResourceValueTypeError.String(), fmt.Sprintf("资源配置值类型错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ResourceValueTypeError.String(), fmt.Sprintf("resource configuration value type error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsRenderTemplateError(err error) bool {
@@ -510,19 +510,19 @@ func IsRenderTemplateError(err error) bool {
 }
 
 func RenderTemplateError() *errors.Error {
-	return errors.New(500, ErrorReason_RenderTemplateError.String(), "渲染模板错误")
+	return errors.New(500, ErrorReason_RenderTemplateError.String(), "render template error")
 }
 
 func RenderTemplateErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_RenderTemplateError.String(), fmt.Sprintf("渲染模板错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_RenderTemplateError.String(), fmt.Sprintf("render template error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func RenderTemplateErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_RenderTemplateError.String(), fmt.Sprintf("渲染模板错误: %s", err))
+	return errors.New(500, ErrorReason_RenderTemplateError.String(), fmt.Sprintf("render template error: %s", err))
 }
 
 func RenderTemplateErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_RenderTemplateError.String(), fmt.Sprintf("渲染模板错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_RenderTemplateError.String(), fmt.Sprintf("render template error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsTemplateVersionExistError(err error) bool {
@@ -534,19 +534,19 @@ func IsTemplateVersionExistError(err error) bool {
 }
 
 func TemplateVersionExistError() *errors.Error {
-	return errors.New(500, ErrorReason_TemplateVersionExistError.String(), "模板已存在此版本")
+	return errors.New(500, ErrorReason_TemplateVersionExistError.String(), "template version already exists")
 }
 
 func TemplateVersionExistErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_TemplateVersionExistError.String(), fmt.Sprintf("模板已存在此版本: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_TemplateVersionExistError.String(), fmt.Sprintf("template version already exists: %s", fmt.Sprintf(msg, args...)))
 }
 
 func TemplateVersionExistErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_TemplateVersionExistError.String(), fmt.Sprintf("模板已存在此版本: %s", err))
+	return errors.New(500, ErrorReason_TemplateVersionExistError.String(), fmt.Sprintf("template version already exists: %s", err))
 }
 
 func TemplateVersionExistErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_TemplateVersionExistError.String(), fmt.Sprintf("模板已存在此版本: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_TemplateVersionExistError.String(), fmt.Sprintf("template version already exists: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsServerNotExistTemplateError(err error) bool {
@@ -558,19 +558,19 @@ func IsServerNotExistTemplateError(err error) bool {
 }
 
 func ServerNotExistTemplateError() *errors.Error {
-	return errors.New(500, ErrorReason_ServerNotExistTemplateError.String(), "当前服务还未提交过模板")
+	return errors.New(500, ErrorReason_ServerNotExistTemplateError.String(), "current service has not submitted a template yet")
 }
 
 func ServerNotExistTemplateErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ServerNotExistTemplateError.String(), fmt.Sprintf("当前服务还未提交过模板: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ServerNotExistTemplateError.String(), fmt.Sprintf("current service has not submitted a template yet: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ServerNotExistTemplateErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ServerNotExistTemplateError.String(), fmt.Sprintf("当前服务还未提交过模板: %s", err))
+	return errors.New(500, ErrorReason_ServerNotExistTemplateError.String(), fmt.Sprintf("current service has not submitted a template yet: %s", err))
 }
 
 func ServerNotExistTemplateErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ServerNotExistTemplateError.String(), fmt.Sprintf("当前服务还未提交过模板: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ServerNotExistTemplateError.String(), fmt.Sprintf("current service has not submitted a template yet: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsConfigureVersionExistError(err error) bool {
@@ -582,19 +582,19 @@ func IsConfigureVersionExistError(err error) bool {
 }
 
 func ConfigureVersionExistError() *errors.Error {
-	return errors.New(500, ErrorReason_ConfigureVersionExistError.String(), "配置已存在此版本")
+	return errors.New(500, ErrorReason_ConfigureVersionExistError.String(), "configuration version already exists")
 }
 
 func ConfigureVersionExistErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ConfigureVersionExistError.String(), fmt.Sprintf("配置已存在此版本: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ConfigureVersionExistError.String(), fmt.Sprintf("configuration version already exists: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ConfigureVersionExistErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ConfigureVersionExistError.String(), fmt.Sprintf("配置已存在此版本: %s", err))
+	return errors.New(500, ErrorReason_ConfigureVersionExistError.String(), fmt.Sprintf("configuration version already exists: %s", err))
 }
 
 func ConfigureVersionExistErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ConfigureVersionExistError.String(), fmt.Sprintf("配置已存在此版本: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ConfigureVersionExistError.String(), fmt.Sprintf("configuration version already exists: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsWatchConfigureError(err error) bool {
@@ -606,19 +606,19 @@ func IsWatchConfigureError(err error) bool {
 }
 
 func WatchConfigureError() *errors.Error {
-	return errors.New(500, ErrorReason_WatchConfigureError.String(), "监听版本更新失败")
+	return errors.New(500, ErrorReason_WatchConfigureError.String(), "failed to watch version update")
 }
 
 func WatchConfigureErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_WatchConfigureError.String(), fmt.Sprintf("监听版本更新失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_WatchConfigureError.String(), fmt.Sprintf("failed to watch version update: %s", fmt.Sprintf(msg, args...)))
 }
 
 func WatchConfigureErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_WatchConfigureError.String(), fmt.Sprintf("监听版本更新失败: %s", err))
+	return errors.New(500, ErrorReason_WatchConfigureError.String(), fmt.Sprintf("failed to watch version update: %s", err))
 }
 
 func WatchConfigureErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_WatchConfigureError.String(), fmt.Sprintf("监听版本更新失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_WatchConfigureError.String(), fmt.Sprintf("failed to watch version update: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsTokenAuthError(err error) bool {
@@ -630,19 +630,19 @@ func IsTokenAuthError(err error) bool {
 }
 
 func TokenAuthError() *errors.Error {
-	return errors.New(500, ErrorReason_TokenAuthError.String(), "token验证失败")
+	return errors.New(500, ErrorReason_TokenAuthError.String(), "token authentication failed")
 }
 
 func TokenAuthErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_TokenAuthError.String(), fmt.Sprintf("token验证失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_TokenAuthError.String(), fmt.Sprintf("token authentication failed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func TokenAuthErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_TokenAuthError.String(), fmt.Sprintf("token验证失败: %s", err))
+	return errors.New(500, ErrorReason_TokenAuthError.String(), fmt.Sprintf("token authentication failed: %s", err))
 }
 
 func TokenAuthErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_TokenAuthError.String(), fmt.Sprintf("token验证失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_TokenAuthError.String(), fmt.Sprintf("token authentication failed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsServerNotFound(err error) bool {
@@ -654,19 +654,19 @@ func IsServerNotFound(err error) bool {
 }
 
 func ServerNotFound() *errors.Error {
-	return errors.New(500, ErrorReason_ServerNotFound.String(), "服务不存在")
+	return errors.New(500, ErrorReason_ServerNotFound.String(), "service not found")
 }
 
 func ServerNotFoundf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ServerNotFound.String(), fmt.Sprintf("服务不存在: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ServerNotFound.String(), fmt.Sprintf("service not found: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ServerNotFoundWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ServerNotFound.String(), fmt.Sprintf("服务不存在: %s", err))
+	return errors.New(500, ErrorReason_ServerNotFound.String(), fmt.Sprintf("service not found: %s", err))
 }
 
 func ServerNotFoundWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ServerNotFound.String(), fmt.Sprintf("服务不存在: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ServerNotFound.String(), fmt.Sprintf("service not found: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsPasswordError(err error) bool {
@@ -678,19 +678,19 @@ func IsPasswordError(err error) bool {
 }
 
 func PasswordError() *errors.Error {
-	return errors.New(500, ErrorReason_PasswordError.String(), "密码错误")
+	return errors.New(500, ErrorReason_PasswordError.String(), "incorrect password")
 }
 
 func PasswordErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_PasswordError.String(), fmt.Sprintf("密码错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_PasswordError.String(), fmt.Sprintf("incorrect password: %s", fmt.Sprintf(msg, args...)))
 }
 
 func PasswordErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_PasswordError.String(), fmt.Sprintf("密码错误: %s", err))
+	return errors.New(500, ErrorReason_PasswordError.String(), fmt.Sprintf("incorrect password: %s", err))
 }
 
 func PasswordErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_PasswordError.String(), fmt.Sprintf("密码错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_PasswordError.String(), fmt.Sprintf("incorrect password: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsPasswordExpireError(err error) bool {
@@ -702,19 +702,19 @@ func IsPasswordExpireError(err error) bool {
 }
 
 func PasswordExpireError() *errors.Error {
-	return errors.New(500, ErrorReason_PasswordExpireError.String(), "密码已过期")
+	return errors.New(500, ErrorReason_PasswordExpireError.String(), "password has expired")
 }
 
 func PasswordExpireErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_PasswordExpireError.String(), fmt.Sprintf("密码已过期: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_PasswordExpireError.String(), fmt.Sprintf("password has expired: %s", fmt.Sprintf(msg, args...)))
 }
 
 func PasswordExpireErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_PasswordExpireError.String(), fmt.Sprintf("密码已过期: %s", err))
+	return errors.New(500, ErrorReason_PasswordExpireError.String(), fmt.Sprintf("password has expired: %s", err))
 }
 
 func PasswordExpireErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_PasswordExpireError.String(), fmt.Sprintf("密码已过期: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_PasswordExpireError.String(), fmt.Sprintf("password has expired: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsRefreshTokenError(err error) bool {
@@ -726,19 +726,19 @@ func IsRefreshTokenError(err error) bool {
 }
 
 func RefreshTokenError() *errors.Error {
-	return errors.New(401, ErrorReason_RefreshTokenError.String(), "刷新token失败")
+	return errors.New(401, ErrorReason_RefreshTokenError.String(), "failed to refresh token")
 }
 
 func RefreshTokenErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(401, ErrorReason_RefreshTokenError.String(), fmt.Sprintf("刷新token失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(401, ErrorReason_RefreshTokenError.String(), fmt.Sprintf("failed to refresh token: %s", fmt.Sprintf(msg, args...)))
 }
 
 func RefreshTokenErrorWrap(err error) *errors.Error {
-	return errors.New(401, ErrorReason_RefreshTokenError.String(), fmt.Sprintf("刷新token失败: %s", err))
+	return errors.New(401, ErrorReason_RefreshTokenError.String(), fmt.Sprintf("failed to refresh token: %s", err))
 }
 
 func RefreshTokenErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(401, ErrorReason_RefreshTokenError.String(), fmt.Sprintf("刷新token失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(401, ErrorReason_RefreshTokenError.String(), fmt.Sprintf("failed to refresh token: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsBroadcastConfigureError(err error) bool {
@@ -750,19 +750,19 @@ func IsBroadcastConfigureError(err error) bool {
 }
 
 func BroadcastConfigureError() *errors.Error {
-	return errors.New(500, ErrorReason_BroadcastConfigureError.String(), "广播配置变更消息失败")
+	return errors.New(500, ErrorReason_BroadcastConfigureError.String(), "failed to broadcast configuration change message")
 }
 
 func BroadcastConfigureErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_BroadcastConfigureError.String(), fmt.Sprintf("广播配置变更消息失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_BroadcastConfigureError.String(), fmt.Sprintf("failed to broadcast configuration change message: %s", fmt.Sprintf(msg, args...)))
 }
 
 func BroadcastConfigureErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_BroadcastConfigureError.String(), fmt.Sprintf("广播配置变更消息失败: %s", err))
+	return errors.New(500, ErrorReason_BroadcastConfigureError.String(), fmt.Sprintf("failed to broadcast configuration change message: %s", err))
 }
 
 func BroadcastConfigureErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_BroadcastConfigureError.String(), fmt.Sprintf("广播配置变更消息失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_BroadcastConfigureError.String(), fmt.Sprintf("failed to broadcast configuration change message: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 // Resource service errors (2000-2999)
@@ -776,22 +776,22 @@ func IsResourceServiceError(err error) bool {
 
 // Resource service errors (2000-2999)
 func ResourceServiceError() *errors.Error {
-	return errors.New(500, ErrorReason_ResourceServiceError.String(), "资源服务异常")
+	return errors.New(500, ErrorReason_ResourceServiceError.String(), "resource service error")
 }
 
 // Resource service errors (2000-2999)
 func ResourceServiceErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ResourceServiceError.String(), fmt.Sprintf("资源服务异常: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ResourceServiceError.String(), fmt.Sprintf("resource service error: %s", fmt.Sprintf(msg, args...)))
 }
 
 // Resource service errors (2000-2999)
 func ResourceServiceErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ResourceServiceError.String(), fmt.Sprintf("资源服务异常: %s", err))
+	return errors.New(500, ErrorReason_ResourceServiceError.String(), fmt.Sprintf("resource service error: %s", err))
 }
 
 // Resource service errors (2000-2999)
 func ResourceServiceErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ResourceServiceError.String(), fmt.Sprintf("资源服务异常: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ResourceServiceError.String(), fmt.Sprintf("resource service error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsNoSupportStoreError(err error) bool {
@@ -803,19 +803,19 @@ func IsNoSupportStoreError(err error) bool {
 }
 
 func NoSupportStoreError() *errors.Error {
-	return errors.New(500, ErrorReason_NoSupportStoreError.String(), "不支持的存储引擎")
+	return errors.New(500, ErrorReason_NoSupportStoreError.String(), "unsupported storage engine")
 }
 
 func NoSupportStoreErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NoSupportStoreError.String(), fmt.Sprintf("不支持的存储引擎: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_NoSupportStoreError.String(), fmt.Sprintf("unsupported storage engine: %s", fmt.Sprintf(msg, args...)))
 }
 
 func NoSupportStoreErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_NoSupportStoreError.String(), fmt.Sprintf("不支持的存储引擎: %s", err))
+	return errors.New(500, ErrorReason_NoSupportStoreError.String(), fmt.Sprintf("unsupported storage engine: %s", err))
 }
 
 func NoSupportStoreErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NoSupportStoreError.String(), fmt.Sprintf("不支持的存储引擎: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_NoSupportStoreError.String(), fmt.Sprintf("unsupported storage engine: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsNoSupportFileTypeError(err error) bool {
@@ -827,19 +827,19 @@ func IsNoSupportFileTypeError(err error) bool {
 }
 
 func NoSupportFileTypeError() *errors.Error {
-	return errors.New(500, ErrorReason_NoSupportFileTypeError.String(), "不支持的文件类型")
+	return errors.New(500, ErrorReason_NoSupportFileTypeError.String(), "unsupported file type")
 }
 
 func NoSupportFileTypeErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NoSupportFileTypeError.String(), fmt.Sprintf("不支持的文件类型: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_NoSupportFileTypeError.String(), fmt.Sprintf("unsupported file type: %s", fmt.Sprintf(msg, args...)))
 }
 
 func NoSupportFileTypeErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_NoSupportFileTypeError.String(), fmt.Sprintf("不支持的文件类型: %s", err))
+	return errors.New(500, ErrorReason_NoSupportFileTypeError.String(), fmt.Sprintf("unsupported file type: %s", err))
 }
 
 func NoSupportFileTypeErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NoSupportFileTypeError.String(), fmt.Sprintf("不支持的文件类型: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_NoSupportFileTypeError.String(), fmt.Sprintf("unsupported file type: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsVerifySignError(err error) bool {
@@ -851,19 +851,19 @@ func IsVerifySignError(err error) bool {
 }
 
 func VerifySignError() *errors.Error {
-	return errors.New(500, ErrorReason_VerifySignError.String(), "签名验证失败")
+	return errors.New(500, ErrorReason_VerifySignError.String(), "signature verification failed")
 }
 
 func VerifySignErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_VerifySignError.String(), fmt.Sprintf("签名验证失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_VerifySignError.String(), fmt.Sprintf("signature verification failed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func VerifySignErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_VerifySignError.String(), fmt.Sprintf("签名验证失败: %s", err))
+	return errors.New(500, ErrorReason_VerifySignError.String(), fmt.Sprintf("signature verification failed: %s", err))
 }
 
 func VerifySignErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_VerifySignError.String(), fmt.Sprintf("签名验证失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_VerifySignError.String(), fmt.Sprintf("signature verification failed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsChunkUploadError(err error) bool {
@@ -875,19 +875,19 @@ func IsChunkUploadError(err error) bool {
 }
 
 func ChunkUploadError() *errors.Error {
-	return errors.New(500, ErrorReason_ChunkUploadError.String(), "分片上传失败")
+	return errors.New(500, ErrorReason_ChunkUploadError.String(), "chunk upload failed")
 }
 
 func ChunkUploadErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ChunkUploadError.String(), fmt.Sprintf("分片上传失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ChunkUploadError.String(), fmt.Sprintf("chunk upload failed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ChunkUploadErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ChunkUploadError.String(), fmt.Sprintf("分片上传失败: %s", err))
+	return errors.New(500, ErrorReason_ChunkUploadError.String(), fmt.Sprintf("chunk upload failed: %s", err))
 }
 
 func ChunkUploadErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ChunkUploadError.String(), fmt.Sprintf("分片上传失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ChunkUploadError.String(), fmt.Sprintf("chunk upload failed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsStatusProgressError(err error) bool {
@@ -899,19 +899,19 @@ func IsStatusProgressError(err error) bool {
 }
 
 func StatusProgressError() *errors.Error {
-	return errors.New(500, ErrorReason_StatusProgressError.String(), "文件上传中")
+	return errors.New(500, ErrorReason_StatusProgressError.String(), "file upload in progress")
 }
 
 func StatusProgressErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_StatusProgressError.String(), fmt.Sprintf("文件上传中: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_StatusProgressError.String(), fmt.Sprintf("file upload in progress: %s", fmt.Sprintf(msg, args...)))
 }
 
 func StatusProgressErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_StatusProgressError.String(), fmt.Sprintf("文件上传中: %s", err))
+	return errors.New(500, ErrorReason_StatusProgressError.String(), fmt.Sprintf("file upload in progress: %s", err))
 }
 
 func StatusProgressErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_StatusProgressError.String(), fmt.Sprintf("文件上传中: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_StatusProgressError.String(), fmt.Sprintf("file upload in progress: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsUploadFileError(err error) bool {
@@ -923,19 +923,19 @@ func IsUploadFileError(err error) bool {
 }
 
 func UploadFileError() *errors.Error {
-	return errors.New(500, ErrorReason_UploadFileError.String(), "文件上传失败")
+	return errors.New(500, ErrorReason_UploadFileError.String(), "file upload failed")
 }
 
 func UploadFileErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UploadFileError.String(), fmt.Sprintf("文件上传失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_UploadFileError.String(), fmt.Sprintf("file upload failed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func UploadFileErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_UploadFileError.String(), fmt.Sprintf("文件上传失败: %s", err))
+	return errors.New(500, ErrorReason_UploadFileError.String(), fmt.Sprintf("file upload failed: %s", err))
 }
 
 func UploadFileErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UploadFileError.String(), fmt.Sprintf("文件上传失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_UploadFileError.String(), fmt.Sprintf("file upload failed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsInitStoreError(err error) bool {
@@ -947,19 +947,19 @@ func IsInitStoreError(err error) bool {
 }
 
 func InitStoreError() *errors.Error {
-	return errors.New(500, ErrorReason_InitStoreError.String(), "存储引擎初始化失败")
+	return errors.New(500, ErrorReason_InitStoreError.String(), "storage engine initialization failed")
 }
 
 func InitStoreErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_InitStoreError.String(), fmt.Sprintf("存储引擎初始化失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_InitStoreError.String(), fmt.Sprintf("storage engine initialization failed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func InitStoreErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_InitStoreError.String(), fmt.Sprintf("存储引擎初始化失败: %s", err))
+	return errors.New(500, ErrorReason_InitStoreError.String(), fmt.Sprintf("storage engine initialization failed: %s", err))
 }
 
 func InitStoreErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_InitStoreError.String(), fmt.Sprintf("存储引擎初始化失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_InitStoreError.String(), fmt.Sprintf("storage engine initialization failed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsFileFormatError(err error) bool {
@@ -971,19 +971,19 @@ func IsFileFormatError(err error) bool {
 }
 
 func FileFormatError() *errors.Error {
-	return errors.New(500, ErrorReason_FileFormatError.String(), "文件格式错误")
+	return errors.New(500, ErrorReason_FileFormatError.String(), "file format error")
 }
 
 func FileFormatErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_FileFormatError.String(), fmt.Sprintf("文件格式错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_FileFormatError.String(), fmt.Sprintf("file format error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func FileFormatErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_FileFormatError.String(), fmt.Sprintf("文件格式错误: %s", err))
+	return errors.New(500, ErrorReason_FileFormatError.String(), fmt.Sprintf("file format error: %s", err))
 }
 
 func FileFormatErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_FileFormatError.String(), fmt.Sprintf("文件格式错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_FileFormatError.String(), fmt.Sprintf("file format error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsNotExistFileError(err error) bool {
@@ -995,19 +995,19 @@ func IsNotExistFileError(err error) bool {
 }
 
 func NotExistFileError() *errors.Error {
-	return errors.New(500, ErrorReason_NotExistFileError.String(), "文件不存在")
+	return errors.New(500, ErrorReason_NotExistFileError.String(), "file does not exist")
 }
 
 func NotExistFileErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NotExistFileError.String(), fmt.Sprintf("文件不存在: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_NotExistFileError.String(), fmt.Sprintf("file does not exist: %s", fmt.Sprintf(msg, args...)))
 }
 
 func NotExistFileErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_NotExistFileError.String(), fmt.Sprintf("文件不存在: %s", err))
+	return errors.New(500, ErrorReason_NotExistFileError.String(), fmt.Sprintf("file does not exist: %s", err))
 }
 
 func NotExistFileErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NotExistFileError.String(), fmt.Sprintf("文件不存在: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_NotExistFileError.String(), fmt.Sprintf("file does not exist: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsAlreadyExistFileNameError(err error) bool {
@@ -1019,19 +1019,19 @@ func IsAlreadyExistFileNameError(err error) bool {
 }
 
 func AlreadyExistFileNameError() *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyExistFileNameError.String(), "文件名已存在")
+	return errors.New(500, ErrorReason_AlreadyExistFileNameError.String(), "file name already exists")
 }
 
 func AlreadyExistFileNameErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyExistFileNameError.String(), fmt.Sprintf("文件名已存在: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_AlreadyExistFileNameError.String(), fmt.Sprintf("file name already exists: %s", fmt.Sprintf(msg, args...)))
 }
 
 func AlreadyExistFileNameErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyExistFileNameError.String(), fmt.Sprintf("文件名已存在: %s", err))
+	return errors.New(500, ErrorReason_AlreadyExistFileNameError.String(), fmt.Sprintf("file name already exists: %s", err))
 }
 
 func AlreadyExistFileNameErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyExistFileNameError.String(), fmt.Sprintf("文件名已存在: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_AlreadyExistFileNameError.String(), fmt.Sprintf("file name already exists: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsAccessResourceError(err error) bool {
@@ -1043,19 +1043,19 @@ func IsAccessResourceError(err error) bool {
 }
 
 func AccessResourceError() *errors.Error {
-	return errors.New(500, ErrorReason_AccessResourceError.String(), "访问资源文件异常")
+	return errors.New(500, ErrorReason_AccessResourceError.String(), "resource file access error")
 }
 
 func AccessResourceErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AccessResourceError.String(), fmt.Sprintf("访问资源文件异常: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_AccessResourceError.String(), fmt.Sprintf("resource file access error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func AccessResourceErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_AccessResourceError.String(), fmt.Sprintf("访问资源文件异常: %s", err))
+	return errors.New(500, ErrorReason_AccessResourceError.String(), fmt.Sprintf("resource file access error: %s", err))
 }
 
 func AccessResourceErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AccessResourceError.String(), fmt.Sprintf("访问资源文件异常: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_AccessResourceError.String(), fmt.Sprintf("resource file access error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsExportFileNameDupError(err error) bool {
@@ -1067,19 +1067,19 @@ func IsExportFileNameDupError(err error) bool {
 }
 
 func ExportFileNameDupError() *errors.Error {
-	return errors.New(500, ErrorReason_ExportFileNameDupError.String(), "导出文件重命名重复")
+	return errors.New(500, ErrorReason_ExportFileNameDupError.String(), "export file rename duplicate")
 }
 
 func ExportFileNameDupErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ExportFileNameDupError.String(), fmt.Sprintf("导出文件重命名重复: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ExportFileNameDupError.String(), fmt.Sprintf("export file rename duplicate: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ExportFileNameDupErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ExportFileNameDupError.String(), fmt.Sprintf("导出文件重命名重复: %s", err))
+	return errors.New(500, ErrorReason_ExportFileNameDupError.String(), fmt.Sprintf("export file rename duplicate: %s", err))
 }
 
 func ExportFileNameDupErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ExportFileNameDupError.String(), fmt.Sprintf("导出文件重命名重复: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ExportFileNameDupError.String(), fmt.Sprintf("export file rename duplicate: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsExportTaskProcessError(err error) bool {
@@ -1091,19 +1091,19 @@ func IsExportTaskProcessError(err error) bool {
 }
 
 func ExportTaskProcessError() *errors.Error {
-	return errors.New(500, ErrorReason_ExportTaskProcessError.String(), "导出任务正在进行中")
+	return errors.New(500, ErrorReason_ExportTaskProcessError.String(), "export task is in progress")
 }
 
 func ExportTaskProcessErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ExportTaskProcessError.String(), fmt.Sprintf("导出任务正在进行中: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ExportTaskProcessError.String(), fmt.Sprintf("export task is in progress: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ExportTaskProcessErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ExportTaskProcessError.String(), fmt.Sprintf("导出任务正在进行中: %s", err))
+	return errors.New(500, ErrorReason_ExportTaskProcessError.String(), fmt.Sprintf("export task is in progress: %s", err))
 }
 
 func ExportTaskProcessErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ExportTaskProcessError.String(), fmt.Sprintf("导出任务正在进行中: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ExportTaskProcessError.String(), fmt.Sprintf("export task is in progress: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsExceedMaxSizeError(err error) bool {
@@ -1115,19 +1115,19 @@ func IsExceedMaxSizeError(err error) bool {
 }
 
 func ExceedMaxSizeError() *errors.Error {
-	return errors.New(500, ErrorReason_ExceedMaxSizeError.String(), "超过允许上传的文件大小")
+	return errors.New(500, ErrorReason_ExceedMaxSizeError.String(), "exceeds allowed upload file size")
 }
 
 func ExceedMaxSizeErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ExceedMaxSizeError.String(), fmt.Sprintf("超过允许上传的文件大小: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ExceedMaxSizeError.String(), fmt.Sprintf("exceeds allowed upload file size: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ExceedMaxSizeErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ExceedMaxSizeError.String(), fmt.Sprintf("超过允许上传的文件大小: %s", err))
+	return errors.New(500, ErrorReason_ExceedMaxSizeError.String(), fmt.Sprintf("exceeds allowed upload file size: %s", err))
 }
 
 func ExceedMaxSizeErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ExceedMaxSizeError.String(), fmt.Sprintf("超过允许上传的文件大小: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ExceedMaxSizeError.String(), fmt.Sprintf("exceeds allowed upload file size: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 // Manager service errors (3000-3999)
@@ -1141,22 +1141,22 @@ func IsManagerServiceError(err error) bool {
 
 // Manager service errors (3000-3999)
 func ManagerServiceError() *errors.Error {
-	return errors.New(500, ErrorReason_ManagerServiceError.String(), "管理中心服务异常")
+	return errors.New(500, ErrorReason_ManagerServiceError.String(), "manager service error")
 }
 
 // Manager service errors (3000-3999)
 func ManagerServiceErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ManagerServiceError.String(), fmt.Sprintf("管理中心服务异常: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ManagerServiceError.String(), fmt.Sprintf("manager service error: %s", fmt.Sprintf(msg, args...)))
 }
 
 // Manager service errors (3000-3999)
 func ManagerServiceErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ManagerServiceError.String(), fmt.Sprintf("管理中心服务异常: %s", err))
+	return errors.New(500, ErrorReason_ManagerServiceError.String(), fmt.Sprintf("manager service error: %s", err))
 }
 
 // Manager service errors (3000-3999)
 func ManagerServiceErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ManagerServiceError.String(), fmt.Sprintf("管理中心服务异常: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ManagerServiceError.String(), fmt.Sprintf("manager service error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsDepartmentPurviewError(err error) bool {
@@ -1168,19 +1168,19 @@ func IsDepartmentPurviewError(err error) bool {
 }
 
 func DepartmentPurviewError() *errors.Error {
-	return errors.New(500, ErrorReason_DepartmentPurviewError.String(), "无此部门权限")
+	return errors.New(500, ErrorReason_DepartmentPurviewError.String(), "no permission for this department")
 }
 
 func DepartmentPurviewErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_DepartmentPurviewError.String(), fmt.Sprintf("无此部门权限: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_DepartmentPurviewError.String(), fmt.Sprintf("no permission for this department: %s", fmt.Sprintf(msg, args...)))
 }
 
 func DepartmentPurviewErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_DepartmentPurviewError.String(), fmt.Sprintf("无此部门权限: %s", err))
+	return errors.New(500, ErrorReason_DepartmentPurviewError.String(), fmt.Sprintf("no permission for this department: %s", err))
 }
 
 func DepartmentPurviewErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_DepartmentPurviewError.String(), fmt.Sprintf("无此部门权限: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_DepartmentPurviewError.String(), fmt.Sprintf("no permission for this department: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsRolePurviewError(err error) bool {
@@ -1192,19 +1192,19 @@ func IsRolePurviewError(err error) bool {
 }
 
 func RolePurviewError() *errors.Error {
-	return errors.New(500, ErrorReason_RolePurviewError.String(), "无此角色权限")
+	return errors.New(500, ErrorReason_RolePurviewError.String(), "no permission for this role")
 }
 
 func RolePurviewErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_RolePurviewError.String(), fmt.Sprintf("无此角色权限: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_RolePurviewError.String(), fmt.Sprintf("no permission for this role: %s", fmt.Sprintf(msg, args...)))
 }
 
 func RolePurviewErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_RolePurviewError.String(), fmt.Sprintf("无此角色权限: %s", err))
+	return errors.New(500, ErrorReason_RolePurviewError.String(), fmt.Sprintf("no permission for this role: %s", err))
 }
 
 func RolePurviewErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_RolePurviewError.String(), fmt.Sprintf("无此角色权限: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_RolePurviewError.String(), fmt.Sprintf("no permission for this role: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsUserPurviewError(err error) bool {
@@ -1216,19 +1216,19 @@ func IsUserPurviewError(err error) bool {
 }
 
 func UserPurviewError() *errors.Error {
-	return errors.New(500, ErrorReason_UserPurviewError.String(), "无此用户权限")
+	return errors.New(500, ErrorReason_UserPurviewError.String(), "no permission for this user")
 }
 
 func UserPurviewErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UserPurviewError.String(), fmt.Sprintf("无此用户权限: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_UserPurviewError.String(), fmt.Sprintf("no permission for this user: %s", fmt.Sprintf(msg, args...)))
 }
 
 func UserPurviewErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_UserPurviewError.String(), fmt.Sprintf("无此用户权限: %s", err))
+	return errors.New(500, ErrorReason_UserPurviewError.String(), fmt.Sprintf("no permission for this user: %s", err))
 }
 
 func UserPurviewErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UserPurviewError.String(), fmt.Sprintf("无此用户权限: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_UserPurviewError.String(), fmt.Sprintf("no permission for this user: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsMenuPurviewError(err error) bool {
@@ -1240,19 +1240,19 @@ func IsMenuPurviewError(err error) bool {
 }
 
 func MenuPurviewError() *errors.Error {
-	return errors.New(500, ErrorReason_MenuPurviewError.String(), "无此菜单权限")
+	return errors.New(500, ErrorReason_MenuPurviewError.String(), "no permission for this menu")
 }
 
 func MenuPurviewErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_MenuPurviewError.String(), fmt.Sprintf("无此菜单权限: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_MenuPurviewError.String(), fmt.Sprintf("no permission for this menu: %s", fmt.Sprintf(msg, args...)))
 }
 
 func MenuPurviewErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_MenuPurviewError.String(), fmt.Sprintf("无此菜单权限: %s", err))
+	return errors.New(500, ErrorReason_MenuPurviewError.String(), fmt.Sprintf("no permission for this menu: %s", err))
 }
 
 func MenuPurviewErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_MenuPurviewError.String(), fmt.Sprintf("无此菜单权限: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_MenuPurviewError.String(), fmt.Sprintf("no permission for this menu: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsEditSystemDataError(err error) bool {
@@ -1264,19 +1264,19 @@ func IsEditSystemDataError(err error) bool {
 }
 
 func EditSystemDataError() *errors.Error {
-	return errors.New(500, ErrorReason_EditSystemDataError.String(), "系统数据，不允许修改")
+	return errors.New(500, ErrorReason_EditSystemDataError.String(), "system data, modification not allowed")
 }
 
 func EditSystemDataErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_EditSystemDataError.String(), fmt.Sprintf("系统数据，不允许修改: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_EditSystemDataError.String(), fmt.Sprintf("system data, modification not allowed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func EditSystemDataErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_EditSystemDataError.String(), fmt.Sprintf("系统数据，不允许修改: %s", err))
+	return errors.New(500, ErrorReason_EditSystemDataError.String(), fmt.Sprintf("system data, modification not allowed: %s", err))
 }
 
 func EditSystemDataErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_EditSystemDataError.String(), fmt.Sprintf("系统数据，不允许修改: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_EditSystemDataError.String(), fmt.Sprintf("system data, modification not allowed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsGenCaptchaError(err error) bool {
@@ -1288,19 +1288,19 @@ func IsGenCaptchaError(err error) bool {
 }
 
 func GenCaptchaError() *errors.Error {
-	return errors.New(500, ErrorReason_GenCaptchaError.String(), "生成验证码失败")
+	return errors.New(500, ErrorReason_GenCaptchaError.String(), "failed to generate captcha")
 }
 
 func GenCaptchaErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_GenCaptchaError.String(), fmt.Sprintf("生成验证码失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_GenCaptchaError.String(), fmt.Sprintf("failed to generate captcha: %s", fmt.Sprintf(msg, args...)))
 }
 
 func GenCaptchaErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_GenCaptchaError.String(), fmt.Sprintf("生成验证码失败: %s", err))
+	return errors.New(500, ErrorReason_GenCaptchaError.String(), fmt.Sprintf("failed to generate captcha: %s", err))
 }
 
 func GenCaptchaErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_GenCaptchaError.String(), fmt.Sprintf("生成验证码失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_GenCaptchaError.String(), fmt.Sprintf("failed to generate captcha: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsSendCaptchaError(err error) bool {
@@ -1312,19 +1312,19 @@ func IsSendCaptchaError(err error) bool {
 }
 
 func SendCaptchaError() *errors.Error {
-	return errors.New(500, ErrorReason_SendCaptchaError.String(), "发送验证码失败")
+	return errors.New(500, ErrorReason_SendCaptchaError.String(), "failed to send captcha")
 }
 
 func SendCaptchaErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_SendCaptchaError.String(), fmt.Sprintf("发送验证码失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_SendCaptchaError.String(), fmt.Sprintf("failed to send captcha: %s", fmt.Sprintf(msg, args...)))
 }
 
 func SendCaptchaErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_SendCaptchaError.String(), fmt.Sprintf("发送验证码失败: %s", err))
+	return errors.New(500, ErrorReason_SendCaptchaError.String(), fmt.Sprintf("failed to send captcha: %s", err))
 }
 
 func SendCaptchaErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_SendCaptchaError.String(), fmt.Sprintf("发送验证码失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_SendCaptchaError.String(), fmt.Sprintf("failed to send captcha: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsDeleteSystemDataError(err error) bool {
@@ -1336,19 +1336,19 @@ func IsDeleteSystemDataError(err error) bool {
 }
 
 func DeleteSystemDataError() *errors.Error {
-	return errors.New(500, ErrorReason_DeleteSystemDataError.String(), "系统数据，不允许删除")
+	return errors.New(500, ErrorReason_DeleteSystemDataError.String(), "system data, deletion not allowed")
 }
 
 func DeleteSystemDataErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_DeleteSystemDataError.String(), fmt.Sprintf("系统数据，不允许删除: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_DeleteSystemDataError.String(), fmt.Sprintf("system data, deletion not allowed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func DeleteSystemDataErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_DeleteSystemDataError.String(), fmt.Sprintf("系统数据，不允许删除: %s", err))
+	return errors.New(500, ErrorReason_DeleteSystemDataError.String(), fmt.Sprintf("system data, deletion not allowed: %s", err))
 }
 
 func DeleteSystemDataErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_DeleteSystemDataError.String(), fmt.Sprintf("系统数据，不允许删除: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_DeleteSystemDataError.String(), fmt.Sprintf("system data, deletion not allowed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsVerifyCaptchaError(err error) bool {
@@ -1360,19 +1360,19 @@ func IsVerifyCaptchaError(err error) bool {
 }
 
 func VerifyCaptchaError() *errors.Error {
-	return errors.New(500, ErrorReason_VerifyCaptchaError.String(), "验证码错误")
+	return errors.New(500, ErrorReason_VerifyCaptchaError.String(), "incorrect captcha")
 }
 
 func VerifyCaptchaErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_VerifyCaptchaError.String(), fmt.Sprintf("验证码错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_VerifyCaptchaError.String(), fmt.Sprintf("incorrect captcha: %s", fmt.Sprintf(msg, args...)))
 }
 
 func VerifyCaptchaErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_VerifyCaptchaError.String(), fmt.Sprintf("验证码错误: %s", err))
+	return errors.New(500, ErrorReason_VerifyCaptchaError.String(), fmt.Sprintf("incorrect captcha: %s", err))
 }
 
 func VerifyCaptchaErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_VerifyCaptchaError.String(), fmt.Sprintf("验证码错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_VerifyCaptchaError.String(), fmt.Sprintf("incorrect captcha: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsUsernameFormatError(err error) bool {
@@ -1384,19 +1384,19 @@ func IsUsernameFormatError(err error) bool {
 }
 
 func UsernameFormatError() *errors.Error {
-	return errors.New(500, ErrorReason_UsernameFormatError.String(), "用户名格式错误")
+	return errors.New(500, ErrorReason_UsernameFormatError.String(), "username format error")
 }
 
 func UsernameFormatErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UsernameFormatError.String(), fmt.Sprintf("用户名格式错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_UsernameFormatError.String(), fmt.Sprintf("username format error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func UsernameFormatErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_UsernameFormatError.String(), fmt.Sprintf("用户名格式错误: %s", err))
+	return errors.New(500, ErrorReason_UsernameFormatError.String(), fmt.Sprintf("username format error: %s", err))
 }
 
 func UsernameFormatErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UsernameFormatError.String(), fmt.Sprintf("用户名格式错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_UsernameFormatError.String(), fmt.Sprintf("username format error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsUsernameNotExistError(err error) bool {
@@ -1408,19 +1408,19 @@ func IsUsernameNotExistError(err error) bool {
 }
 
 func UsernameNotExistError() *errors.Error {
-	return errors.New(500, ErrorReason_UsernameNotExistError.String(), "用户不存在")
+	return errors.New(500, ErrorReason_UsernameNotExistError.String(), "user does not exist")
 }
 
 func UsernameNotExistErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UsernameNotExistError.String(), fmt.Sprintf("用户不存在: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_UsernameNotExistError.String(), fmt.Sprintf("user does not exist: %s", fmt.Sprintf(msg, args...)))
 }
 
 func UsernameNotExistErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_UsernameNotExistError.String(), fmt.Sprintf("用户不存在: %s", err))
+	return errors.New(500, ErrorReason_UsernameNotExistError.String(), fmt.Sprintf("user does not exist: %s", err))
 }
 
 func UsernameNotExistErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UsernameNotExistError.String(), fmt.Sprintf("用户不存在: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_UsernameNotExistError.String(), fmt.Sprintf("user does not exist: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsUserDisableError(err error) bool {
@@ -1432,19 +1432,19 @@ func IsUserDisableError(err error) bool {
 }
 
 func UserDisableError() *errors.Error {
-	return errors.New(500, ErrorReason_UserDisableError.String(), "用户已被禁用")
+	return errors.New(500, ErrorReason_UserDisableError.String(), "user has been disabled")
 }
 
 func UserDisableErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UserDisableError.String(), fmt.Sprintf("用户已被禁用: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_UserDisableError.String(), fmt.Sprintf("user has been disabled: %s", fmt.Sprintf(msg, args...)))
 }
 
 func UserDisableErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_UserDisableError.String(), fmt.Sprintf("用户已被禁用: %s", err))
+	return errors.New(500, ErrorReason_UserDisableError.String(), fmt.Sprintf("user has been disabled: %s", err))
 }
 
 func UserDisableErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UserDisableError.String(), fmt.Sprintf("用户已被禁用: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_UserDisableError.String(), fmt.Sprintf("user has been disabled: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsRoleDisableError(err error) bool {
@@ -1456,19 +1456,19 @@ func IsRoleDisableError(err error) bool {
 }
 
 func RoleDisableError() *errors.Error {
-	return errors.New(500, ErrorReason_RoleDisableError.String(), "角色已被禁用")
+	return errors.New(500, ErrorReason_RoleDisableError.String(), "role has been disabled")
 }
 
 func RoleDisableErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_RoleDisableError.String(), fmt.Sprintf("角色已被禁用: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_RoleDisableError.String(), fmt.Sprintf("role has been disabled: %s", fmt.Sprintf(msg, args...)))
 }
 
 func RoleDisableErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_RoleDisableError.String(), fmt.Sprintf("角色已被禁用: %s", err))
+	return errors.New(500, ErrorReason_RoleDisableError.String(), fmt.Sprintf("role has been disabled: %s", err))
 }
 
 func RoleDisableErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_RoleDisableError.String(), fmt.Sprintf("角色已被禁用: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_RoleDisableError.String(), fmt.Sprintf("role has been disabled: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsGenTokenError(err error) bool {
@@ -1480,19 +1480,19 @@ func IsGenTokenError(err error) bool {
 }
 
 func GenTokenError() *errors.Error {
-	return errors.New(500, ErrorReason_GenTokenError.String(), "token生成失败")
+	return errors.New(500, ErrorReason_GenTokenError.String(), "failed to generate token")
 }
 
 func GenTokenErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_GenTokenError.String(), fmt.Sprintf("token生成失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_GenTokenError.String(), fmt.Sprintf("failed to generate token: %s", fmt.Sprintf(msg, args...)))
 }
 
 func GenTokenErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_GenTokenError.String(), fmt.Sprintf("token生成失败: %s", err))
+	return errors.New(500, ErrorReason_GenTokenError.String(), fmt.Sprintf("failed to generate token: %s", err))
 }
 
 func GenTokenErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_GenTokenError.String(), fmt.Sprintf("token生成失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_GenTokenError.String(), fmt.Sprintf("failed to generate token: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsParseTokenError(err error) bool {
@@ -1504,19 +1504,19 @@ func IsParseTokenError(err error) bool {
 }
 
 func ParseTokenError() *errors.Error {
-	return errors.New(500, ErrorReason_ParseTokenError.String(), "token解析失败")
+	return errors.New(500, ErrorReason_ParseTokenError.String(), "failed to parse token")
 }
 
 func ParseTokenErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ParseTokenError.String(), fmt.Sprintf("token解析失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ParseTokenError.String(), fmt.Sprintf("failed to parse token: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ParseTokenErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ParseTokenError.String(), fmt.Sprintf("token解析失败: %s", err))
+	return errors.New(500, ErrorReason_ParseTokenError.String(), fmt.Sprintf("failed to parse token: %s", err))
 }
 
 func ParseTokenErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ParseTokenError.String(), fmt.Sprintf("token解析失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ParseTokenError.String(), fmt.Sprintf("failed to parse token: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsForbiddenError(err error) bool {
@@ -1528,19 +1528,19 @@ func IsForbiddenError(err error) bool {
 }
 
 func ForbiddenError() *errors.Error {
-	return errors.New(403, ErrorReason_ForbiddenError.String(), "无接口权限")
+	return errors.New(403, ErrorReason_ForbiddenError.String(), "no interface permission")
 }
 
 func ForbiddenErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(403, ErrorReason_ForbiddenError.String(), fmt.Sprintf("无接口权限: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(403, ErrorReason_ForbiddenError.String(), fmt.Sprintf("no interface permission: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ForbiddenErrorWrap(err error) *errors.Error {
-	return errors.New(403, ErrorReason_ForbiddenError.String(), fmt.Sprintf("无接口权限: %s", err))
+	return errors.New(403, ErrorReason_ForbiddenError.String(), fmt.Sprintf("no interface permission: %s", err))
 }
 
 func ForbiddenErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(403, ErrorReason_ForbiddenError.String(), fmt.Sprintf("无接口权限: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(403, ErrorReason_ForbiddenError.String(), fmt.Sprintf("no interface permission: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsNotPermissionError(err error) bool {
@@ -1552,19 +1552,19 @@ func IsNotPermissionError(err error) bool {
 }
 
 func NotPermissionError() *errors.Error {
-	return errors.New(500, ErrorReason_NotPermissionError.String(), "无资源权限")
+	return errors.New(500, ErrorReason_NotPermissionError.String(), "no resource permission")
 }
 
 func NotPermissionErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NotPermissionError.String(), fmt.Sprintf("无资源权限: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_NotPermissionError.String(), fmt.Sprintf("no resource permission: %s", fmt.Sprintf(msg, args...)))
 }
 
 func NotPermissionErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_NotPermissionError.String(), fmt.Sprintf("无资源权限: %s", err))
+	return errors.New(500, ErrorReason_NotPermissionError.String(), fmt.Sprintf("no resource permission: %s", err))
 }
 
 func NotPermissionErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NotPermissionError.String(), fmt.Sprintf("无资源权限: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_NotPermissionError.String(), fmt.Sprintf("no resource permission: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 // Usercenter errors (4000-4999)
@@ -1578,22 +1578,22 @@ func IsUserServiceError(err error) bool {
 
 // Usercenter errors (4000-4999)
 func UserServiceError() *errors.Error {
-	return errors.New(500, ErrorReason_UserServiceError.String(), "用户服务异常")
+	return errors.New(500, ErrorReason_UserServiceError.String(), "user service error")
 }
 
 // Usercenter errors (4000-4999)
 func UserServiceErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UserServiceError.String(), fmt.Sprintf("用户服务异常: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_UserServiceError.String(), fmt.Sprintf("user service error: %s", fmt.Sprintf(msg, args...)))
 }
 
 // Usercenter errors (4000-4999)
 func UserServiceErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_UserServiceError.String(), fmt.Sprintf("用户服务异常: %s", err))
+	return errors.New(500, ErrorReason_UserServiceError.String(), fmt.Sprintf("user service error: %s", err))
 }
 
 // Usercenter errors (4000-4999)
 func UserServiceErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_UserServiceError.String(), fmt.Sprintf("用户服务异常: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_UserServiceError.String(), fmt.Sprintf("user service error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsGenCaptchaTypeError(err error) bool {
@@ -1605,19 +1605,19 @@ func IsGenCaptchaTypeError(err error) bool {
 }
 
 func GenCaptchaTypeError() *errors.Error {
-	return errors.New(500, ErrorReason_GenCaptchaTypeError.String(), "错误的验证码类型")
+	return errors.New(500, ErrorReason_GenCaptchaTypeError.String(), "incorrect captcha type")
 }
 
 func GenCaptchaTypeErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_GenCaptchaTypeError.String(), fmt.Sprintf("错误的验证码类型: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_GenCaptchaTypeError.String(), fmt.Sprintf("incorrect captcha type: %s", fmt.Sprintf(msg, args...)))
 }
 
 func GenCaptchaTypeErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_GenCaptchaTypeError.String(), fmt.Sprintf("错误的验证码类型: %s", err))
+	return errors.New(500, ErrorReason_GenCaptchaTypeError.String(), fmt.Sprintf("incorrect captcha type: %s", err))
 }
 
 func GenCaptchaTypeErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_GenCaptchaTypeError.String(), fmt.Sprintf("错误的验证码类型: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_GenCaptchaTypeError.String(), fmt.Sprintf("incorrect captcha type: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsNotExistEmailError(err error) bool {
@@ -1629,19 +1629,19 @@ func IsNotExistEmailError(err error) bool {
 }
 
 func NotExistEmailError() *errors.Error {
-	return errors.New(500, ErrorReason_NotExistEmailError.String(), "不存在此邮箱")
+	return errors.New(500, ErrorReason_NotExistEmailError.String(), "email does not exist")
 }
 
 func NotExistEmailErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NotExistEmailError.String(), fmt.Sprintf("不存在此邮箱: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_NotExistEmailError.String(), fmt.Sprintf("email does not exist: %s", fmt.Sprintf(msg, args...)))
 }
 
 func NotExistEmailErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_NotExistEmailError.String(), fmt.Sprintf("不存在此邮箱: %s", err))
+	return errors.New(500, ErrorReason_NotExistEmailError.String(), fmt.Sprintf("email does not exist: %s", err))
 }
 
 func NotExistEmailErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NotExistEmailError.String(), fmt.Sprintf("不存在此邮箱: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_NotExistEmailError.String(), fmt.Sprintf("email does not exist: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsOAuthLoginError(err error) bool {
@@ -1653,19 +1653,19 @@ func IsOAuthLoginError(err error) bool {
 }
 
 func OAuthLoginError() *errors.Error {
-	return errors.New(500, ErrorReason_OAuthLoginError.String(), "三方授权登陆失败")
+	return errors.New(500, ErrorReason_OAuthLoginError.String(), "third-party authorization login failed")
 }
 
 func OAuthLoginErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_OAuthLoginError.String(), fmt.Sprintf("三方授权登陆失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_OAuthLoginError.String(), fmt.Sprintf("third-party authorization login failed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func OAuthLoginErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_OAuthLoginError.String(), fmt.Sprintf("三方授权登陆失败: %s", err))
+	return errors.New(500, ErrorReason_OAuthLoginError.String(), fmt.Sprintf("third-party authorization login failed: %s", err))
 }
 
 func OAuthLoginErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_OAuthLoginError.String(), fmt.Sprintf("三方授权登陆失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_OAuthLoginError.String(), fmt.Sprintf("third-party authorization login failed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsNotUserError(err error) bool {
@@ -1677,19 +1677,19 @@ func IsNotUserError(err error) bool {
 }
 
 func NotUserError() *errors.Error {
-	return errors.New(500, ErrorReason_NotUserError.String(), "用户不存在")
+	return errors.New(500, ErrorReason_NotUserError.String(), "user does not exist")
 }
 
 func NotUserErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NotUserError.String(), fmt.Sprintf("用户不存在: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_NotUserError.String(), fmt.Sprintf("user does not exist: %s", fmt.Sprintf(msg, args...)))
 }
 
 func NotUserErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_NotUserError.String(), fmt.Sprintf("用户不存在: %s", err))
+	return errors.New(500, ErrorReason_NotUserError.String(), fmt.Sprintf("user does not exist: %s", err))
 }
 
 func NotUserErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NotUserError.String(), fmt.Sprintf("用户不存在: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_NotUserError.String(), fmt.Sprintf("user does not exist: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsNotAppScopeError(err error) bool {
@@ -1701,19 +1701,19 @@ func IsNotAppScopeError(err error) bool {
 }
 
 func NotAppScopeError() *errors.Error {
-	return errors.New(500, ErrorReason_NotAppScopeError.String(), "用户无应用权限")
+	return errors.New(500, ErrorReason_NotAppScopeError.String(), "user has no application permission")
 }
 
 func NotAppScopeErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NotAppScopeError.String(), fmt.Sprintf("用户无应用权限: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_NotAppScopeError.String(), fmt.Sprintf("user has no application permission: %s", fmt.Sprintf(msg, args...)))
 }
 
 func NotAppScopeErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_NotAppScopeError.String(), fmt.Sprintf("用户无应用权限: %s", err))
+	return errors.New(500, ErrorReason_NotAppScopeError.String(), fmt.Sprintf("user has no application permission: %s", err))
 }
 
 func NotAppScopeErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_NotAppScopeError.String(), fmt.Sprintf("用户无应用权限: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_NotAppScopeError.String(), fmt.Sprintf("user has no application permission: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsRsaDecodeError(err error) bool {
@@ -1725,19 +1725,19 @@ func IsRsaDecodeError(err error) bool {
 }
 
 func RsaDecodeError() *errors.Error {
-	return errors.New(500, ErrorReason_RsaDecodeError.String(), "rsa解密失败")
+	return errors.New(500, ErrorReason_RsaDecodeError.String(), "RSA decryption failed")
 }
 
 func RsaDecodeErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_RsaDecodeError.String(), fmt.Sprintf("rsa解密失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_RsaDecodeError.String(), fmt.Sprintf("RSA decryption failed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func RsaDecodeErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_RsaDecodeError.String(), fmt.Sprintf("rsa解密失败: %s", err))
+	return errors.New(500, ErrorReason_RsaDecodeError.String(), fmt.Sprintf("RSA decryption failed: %s", err))
 }
 
 func RsaDecodeErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_RsaDecodeError.String(), fmt.Sprintf("rsa解密失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_RsaDecodeError.String(), fmt.Sprintf("RSA decryption failed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsPasswordFormatError(err error) bool {
@@ -1749,19 +1749,19 @@ func IsPasswordFormatError(err error) bool {
 }
 
 func PasswordFormatError() *errors.Error {
-	return errors.New(500, ErrorReason_PasswordFormatError.String(), "密码格式错误")
+	return errors.New(500, ErrorReason_PasswordFormatError.String(), "password format error")
 }
 
 func PasswordFormatErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_PasswordFormatError.String(), fmt.Sprintf("密码格式错误: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_PasswordFormatError.String(), fmt.Sprintf("password format error: %s", fmt.Sprintf(msg, args...)))
 }
 
 func PasswordFormatErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_PasswordFormatError.String(), fmt.Sprintf("密码格式错误: %s", err))
+	return errors.New(500, ErrorReason_PasswordFormatError.String(), fmt.Sprintf("password format error: %s", err))
 }
 
 func PasswordFormatErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_PasswordFormatError.String(), fmt.Sprintf("密码格式错误: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_PasswordFormatError.String(), fmt.Sprintf("password format error: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsDisableRegisterError(err error) bool {
@@ -1773,19 +1773,19 @@ func IsDisableRegisterError(err error) bool {
 }
 
 func DisableRegisterError() *errors.Error {
-	return errors.New(401, ErrorReason_DisableRegisterError.String(), "应用已关闭注册权限")
+	return errors.New(401, ErrorReason_DisableRegisterError.String(), "application has closed registration")
 }
 
 func DisableRegisterErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(401, ErrorReason_DisableRegisterError.String(), fmt.Sprintf("应用已关闭注册权限: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(401, ErrorReason_DisableRegisterError.String(), fmt.Sprintf("application has closed registration: %s", fmt.Sprintf(msg, args...)))
 }
 
 func DisableRegisterErrorWrap(err error) *errors.Error {
-	return errors.New(401, ErrorReason_DisableRegisterError.String(), fmt.Sprintf("应用已关闭注册权限: %s", err))
+	return errors.New(401, ErrorReason_DisableRegisterError.String(), fmt.Sprintf("application has closed registration: %s", err))
 }
 
 func DisableRegisterErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(401, ErrorReason_DisableRegisterError.String(), fmt.Sprintf("应用已关闭注册权限: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(401, ErrorReason_DisableRegisterError.String(), fmt.Sprintf("application has closed registration: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsAlreadyExistEmailError(err error) bool {
@@ -1797,19 +1797,19 @@ func IsAlreadyExistEmailError(err error) bool {
 }
 
 func AlreadyExistEmailError() *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyExistEmailError.String(), "邮箱已存在")
+	return errors.New(500, ErrorReason_AlreadyExistEmailError.String(), "email already exists")
 }
 
 func AlreadyExistEmailErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyExistEmailError.String(), fmt.Sprintf("邮箱已存在: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_AlreadyExistEmailError.String(), fmt.Sprintf("email already exists: %s", fmt.Sprintf(msg, args...)))
 }
 
 func AlreadyExistEmailErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyExistEmailError.String(), fmt.Sprintf("邮箱已存在: %s", err))
+	return errors.New(500, ErrorReason_AlreadyExistEmailError.String(), fmt.Sprintf("email already exists: %s", err))
 }
 
 func AlreadyExistEmailErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyExistEmailError.String(), fmt.Sprintf("邮箱已存在: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_AlreadyExistEmailError.String(), fmt.Sprintf("email already exists: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsAlreadyExistUsernameError(err error) bool {
@@ -1821,19 +1821,19 @@ func IsAlreadyExistUsernameError(err error) bool {
 }
 
 func AlreadyExistUsernameError() *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyExistUsernameError.String(), "账号已存在")
+	return errors.New(500, ErrorReason_AlreadyExistUsernameError.String(), "account already exists")
 }
 
 func AlreadyExistUsernameErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyExistUsernameError.String(), fmt.Sprintf("账号已存在: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_AlreadyExistUsernameError.String(), fmt.Sprintf("account already exists: %s", fmt.Sprintf(msg, args...)))
 }
 
 func AlreadyExistUsernameErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyExistUsernameError.String(), fmt.Sprintf("账号已存在: %s", err))
+	return errors.New(500, ErrorReason_AlreadyExistUsernameError.String(), fmt.Sprintf("account already exists: %s", err))
 }
 
 func AlreadyExistUsernameErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyExistUsernameError.String(), fmt.Sprintf("账号已存在: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_AlreadyExistUsernameError.String(), fmt.Sprintf("account already exists: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsRegisterError(err error) bool {
@@ -1845,19 +1845,19 @@ func IsRegisterError(err error) bool {
 }
 
 func RegisterError() *errors.Error {
-	return errors.New(500, ErrorReason_RegisterError.String(), "用户注册失败")
+	return errors.New(500, ErrorReason_RegisterError.String(), "user registration failed")
 }
 
 func RegisterErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_RegisterError.String(), fmt.Sprintf("用户注册失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_RegisterError.String(), fmt.Sprintf("user registration failed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func RegisterErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_RegisterError.String(), fmt.Sprintf("用户注册失败: %s", err))
+	return errors.New(500, ErrorReason_RegisterError.String(), fmt.Sprintf("user registration failed: %s", err))
 }
 
 func RegisterErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_RegisterError.String(), fmt.Sprintf("用户注册失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_RegisterError.String(), fmt.Sprintf("user registration failed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsBindError(err error) bool {
@@ -1869,19 +1869,19 @@ func IsBindError(err error) bool {
 }
 
 func BindError() *errors.Error {
-	return errors.New(500, ErrorReason_BindError.String(), "用户注册失败")
+	return errors.New(500, ErrorReason_BindError.String(), "user binding failed")
 }
 
 func BindErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_BindError.String(), fmt.Sprintf("用户注册失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_BindError.String(), fmt.Sprintf("user binding failed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func BindErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_BindError.String(), fmt.Sprintf("用户注册失败: %s", err))
+	return errors.New(500, ErrorReason_BindError.String(), fmt.Sprintf("user binding failed: %s", err))
 }
 
 func BindErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_BindError.String(), fmt.Sprintf("用户注册失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_BindError.String(), fmt.Sprintf("user binding failed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsLoginError(err error) bool {
@@ -1893,19 +1893,19 @@ func IsLoginError(err error) bool {
 }
 
 func LoginError() *errors.Error {
-	return errors.New(500, ErrorReason_LoginError.String(), "登陆失败")
+	return errors.New(500, ErrorReason_LoginError.String(), "login failed")
 }
 
 func LoginErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_LoginError.String(), fmt.Sprintf("登陆失败: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_LoginError.String(), fmt.Sprintf("login failed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func LoginErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_LoginError.String(), fmt.Sprintf("登陆失败: %s", err))
+	return errors.New(500, ErrorReason_LoginError.String(), fmt.Sprintf("login failed: %s", err))
 }
 
 func LoginErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_LoginError.String(), fmt.Sprintf("登陆失败: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_LoginError.String(), fmt.Sprintf("login failed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsExistFeedbackError(err error) bool {
@@ -1917,19 +1917,19 @@ func IsExistFeedbackError(err error) bool {
 }
 
 func ExistFeedbackError() *errors.Error {
-	return errors.New(500, ErrorReason_ExistFeedbackError.String(), "已存在重复的反馈内容")
+	return errors.New(500, ErrorReason_ExistFeedbackError.String(), "duplicate feedback content already exists")
 }
 
 func ExistFeedbackErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ExistFeedbackError.String(), fmt.Sprintf("已存在重复的反馈内容: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ExistFeedbackError.String(), fmt.Sprintf("duplicate feedback content already exists: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ExistFeedbackErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ExistFeedbackError.String(), fmt.Sprintf("已存在重复的反馈内容: %s", err))
+	return errors.New(500, ErrorReason_ExistFeedbackError.String(), fmt.Sprintf("duplicate feedback content already exists: %s", err))
 }
 
 func ExistFeedbackErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ExistFeedbackError.String(), fmt.Sprintf("已存在重复的反馈内容: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ExistFeedbackError.String(), fmt.Sprintf("duplicate feedback content already exists: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsAlreadyBindError(err error) bool {
@@ -1941,19 +1941,19 @@ func IsAlreadyBindError(err error) bool {
 }
 
 func AlreadyBindError() *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyBindError.String(), "该账号已绑定过其他平台，不能重复绑定")
+	return errors.New(500, ErrorReason_AlreadyBindError.String(), "this account has already been bound to another platform, cannot be bound again")
 }
 
 func AlreadyBindErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyBindError.String(), fmt.Sprintf("该账号已绑定过其他平台，不能重复绑定: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_AlreadyBindError.String(), fmt.Sprintf("this account has already been bound to another platform, cannot be bound again: %s", fmt.Sprintf(msg, args...)))
 }
 
 func AlreadyBindErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyBindError.String(), fmt.Sprintf("该账号已绑定过其他平台，不能重复绑定: %s", err))
+	return errors.New(500, ErrorReason_AlreadyBindError.String(), fmt.Sprintf("this account has already been bound to another platform, cannot be bound again: %s", err))
 }
 
 func AlreadyBindErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AlreadyBindError.String(), fmt.Sprintf("该账号已绑定过其他平台，不能重复绑定: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_AlreadyBindError.String(), fmt.Sprintf("this account has already been bound to another platform, cannot be bound again: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsAppMaintenanceError(err error) bool {
@@ -1965,19 +1965,19 @@ func IsAppMaintenanceError(err error) bool {
 }
 
 func AppMaintenanceError() *errors.Error {
-	return errors.New(500, ErrorReason_AppMaintenanceError.String(), "当前应用正在维护中")
+	return errors.New(500, ErrorReason_AppMaintenanceError.String(), "current application is under maintenance")
 }
 
 func AppMaintenanceErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AppMaintenanceError.String(), fmt.Sprintf("当前应用正在维护中: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_AppMaintenanceError.String(), fmt.Sprintf("current application is under maintenance: %s", fmt.Sprintf(msg, args...)))
 }
 
 func AppMaintenanceErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_AppMaintenanceError.String(), fmt.Sprintf("当前应用正在维护中: %s", err))
+	return errors.New(500, ErrorReason_AppMaintenanceError.String(), fmt.Sprintf("current application is under maintenance: %s", err))
 }
 
 func AppMaintenanceErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AppMaintenanceError.String(), fmt.Sprintf("当前应用正在维护中: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_AppMaintenanceError.String(), fmt.Sprintf("current application is under maintenance: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsChannelCloseError(err error) bool {
@@ -1989,19 +1989,19 @@ func IsChannelCloseError(err error) bool {
 }
 
 func ChannelCloseError() *errors.Error {
-	return errors.New(500, ErrorReason_ChannelCloseError.String(), "当前渠道已关闭")
+	return errors.New(500, ErrorReason_ChannelCloseError.String(), "current channel is closed")
 }
 
 func ChannelCloseErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ChannelCloseError.String(), fmt.Sprintf("当前渠道已关闭: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ChannelCloseError.String(), fmt.Sprintf("current channel is closed: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ChannelCloseErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ChannelCloseError.String(), fmt.Sprintf("当前渠道已关闭: %s", err))
+	return errors.New(500, ErrorReason_ChannelCloseError.String(), fmt.Sprintf("current channel is closed: %s", err))
 }
 
 func ChannelCloseErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ChannelCloseError.String(), fmt.Sprintf("当前渠道已关闭: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ChannelCloseError.String(), fmt.Sprintf("current channel is closed: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsAppNotBindChannelError(err error) bool {
@@ -2013,19 +2013,19 @@ func IsAppNotBindChannelError(err error) bool {
 }
 
 func AppNotBindChannelError() *errors.Error {
-	return errors.New(500, ErrorReason_AppNotBindChannelError.String(), "应用未开通此渠道")
+	return errors.New(500, ErrorReason_AppNotBindChannelError.String(), "application has not opened this channel")
 }
 
 func AppNotBindChannelErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AppNotBindChannelError.String(), fmt.Sprintf("应用未开通此渠道: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_AppNotBindChannelError.String(), fmt.Sprintf("application has not opened this channel: %s", fmt.Sprintf(msg, args...)))
 }
 
 func AppNotBindChannelErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_AppNotBindChannelError.String(), fmt.Sprintf("应用未开通此渠道: %s", err))
+	return errors.New(500, ErrorReason_AppNotBindChannelError.String(), fmt.Sprintf("application has not opened this channel: %s", err))
 }
 
 func AppNotBindChannelErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_AppNotBindChannelError.String(), fmt.Sprintf("应用未开通此渠道: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_AppNotBindChannelError.String(), fmt.Sprintf("application has not opened this channel: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
 func IsChannelNotBindUserError(err error) bool {
@@ -2037,17 +2037,17 @@ func IsChannelNotBindUserError(err error) bool {
 }
 
 func ChannelNotBindUserError() *errors.Error {
-	return errors.New(500, ErrorReason_ChannelNotBindUserError.String(), "当前授权渠道未绑定用户")
+	return errors.New(500, ErrorReason_ChannelNotBindUserError.String(), "current authorized channel is not bound to a user")
 }
 
 func ChannelNotBindUserErrorf(msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ChannelNotBindUserError.String(), fmt.Sprintf("当前授权渠道未绑定用户: %s", fmt.Sprintf(msg, args...)))
+	return errors.New(500, ErrorReason_ChannelNotBindUserError.String(), fmt.Sprintf("current authorized channel is not bound to a user: %s", fmt.Sprintf(msg, args...)))
 }
 
 func ChannelNotBindUserErrorWrap(err error) *errors.Error {
-	return errors.New(500, ErrorReason_ChannelNotBindUserError.String(), fmt.Sprintf("当前授权渠道未绑定用户: %s", err))
+	return errors.New(500, ErrorReason_ChannelNotBindUserError.String(), fmt.Sprintf("current authorized channel is not bound to a user: %s", err))
 }
 
 func ChannelNotBindUserErrorWrapf(err error, msg string, args ...any) *errors.Error {
-	return errors.New(500, ErrorReason_ChannelNotBindUserError.String(), fmt.Sprintf("当前授权渠道未绑定用户: %s: %s", fmt.Sprintf(msg, args...), err))
+	return errors.New(500, ErrorReason_ChannelNotBindUserError.String(), fmt.Sprintf("current authorized channel is not bound to a user: %s: %s", fmt.Sprintf(msg, args...), err))
 }
