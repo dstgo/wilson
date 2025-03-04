@@ -118,5 +118,5 @@ configure:
     dist: "static/web/dist"
     addr: ":6080"
   author:
-    adminUser: "1280291001@qq.com"
-    adminPassword: "xrxy0852"
+    adminUser: "admin@dstgo.cn"
+    adminPassword: "dstgowilson"
