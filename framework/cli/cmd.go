@@ -47,7 +47,7 @@ func runStartCmd(opts *Options) func(cmd *cobra.Command, args []string) error {
 
 		err := opts.StartFn(startOpts)
 		if err != nil {
-			return fmt.Errorf("failed to start service %s", opts.AppName)
+			return fmt.Errorf("failed to start service %s: %s", opts.AppName, err)
 		}
 		return nil
 	}
