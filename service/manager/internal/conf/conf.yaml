@@ -29,7 +29,8 @@ server:
 # 日志配置
 log:
   # 日志级别
-  level: 0
+  level: debug
+  encode: json
   # 是否显示调用者信息
   caller: true
   # 日志输出目标
@@ -38,7 +39,7 @@ log:
     - file
   file:
     # 日志文件路径
-    name: "./tmp/runtime/output.log"
+    name: "/etc/wilson/manager/log/output.log"
     # 单个日志文件最大大小（MB）
     maxSize: 1
     # 最大保留的旧日志文件数量
@@ -61,7 +62,7 @@ database:
       # 数据库用户名
       username: "root"
       # 数据库密码
-      password: "root"
+      password: "123456"
       # 数据库主机地址
       host: "127.0.0.1"
       # 数据库端口
@@ -73,9 +74,9 @@ database:
     config:
       initializer:
         # 是否启用初始化器
-        enable: true
+        enable: false
         # 初始化 SQL 文件路径
-        path: "deploy/data.sql"
+        path: "/etc/wilson/manager/deploy/data.sql"
       transformError:
         # 是否启用错误转换
         enable: true
@@ -100,7 +101,7 @@ redis:
     # Redis 用户名
     username: ""
     # Redis 密码
-    password: ""
+    password: "123456"
 
 # 验证码配置
 captcha:
@@ -148,7 +149,7 @@ client:
 # 加载器配置
 loader:
   # 登录证书路径
-  login: "static/cert/login.pem"
+  login: "/etc/wilson/manager/static/cert/login.pem"
 
 # 邮件配置
 email:
@@ -157,7 +158,7 @@ email:
       # 邮件主题
       subject: "验证码发送通知"
       # 邮件模板路径
-      path: "static/template/email/default.html"
+      path: "/etc/wilson/manager/static/template/email/default.html"
       # 邮件内容类型
       type: "text/html"
   # 发件人邮箱

@@ -42,7 +42,7 @@ log:
   # output存在file时此配置才可生效
   file:
     # 日志存放地址
-    name: "log/service.log"
+    name: "/etc/wilson/container/log/service.log"
     # 日志文件最大容量,单位m
     maxSize: 1
     # 日志文件最多保存个数
@@ -66,16 +66,16 @@ database:
     connect:
       username: "root"
       password: "123456"
-      host: "192.168.153.130"
+      host: "127.0.0.1"
       port: 3306
       dbName: "container"
       option: "?charset=utf8mb4&parseTime=True&loc=Local"
     # 数据库配置项
     config:
       initializer:
-        enable: true
+        enable: false
         # 数据库初始化脚本
-        path: "deploy/data.sql"
+        path: "/etc/wilson/container/deploy/data.sql"
       # 外键错误格式化
       transformError:
         enable: true
@@ -94,6 +94,6 @@ database:
 redis:
   cache:
     enable: true
-    host: "192.168.153.130:6379"
+    host: "127.0.0.1:6379"
     username: ""
     password: "123456"
