@@ -3,19 +3,12 @@ package service
 import (
 	"google.golang.org/protobuf/proto"
 
-	"github.com/dstgo/wilson/framework/kratosx"
-	"github.com/dstgo/wilson/framework/pkg/tree"
-
 	"github.com/dstgo/wilson/api/gen/errors"
+	"github.com/dstgo/wilson/framework/kratosx"
 	"github.com/dstgo/wilson/service/manager/internal/conf"
 	"github.com/dstgo/wilson/service/manager/internal/domain/entity"
 	"github.com/dstgo/wilson/service/manager/internal/domain/repository"
 	"github.com/dstgo/wilson/service/manager/internal/types"
-)
-
-const (
-	dataTypeList = "list"
-	dataTypeTree = "tree"
 )
 
 type Dictionary struct {
@@ -67,28 +60,12 @@ func (u *Dictionary) DeleteDictionary(ctx kratosx.Context, id uint32) error {
 
 // ListDictionaryValue 获取字典值目录列表
 func (u *Dictionary) ListDictionaryValue(ctx kratosx.Context, req *types.ListDictionaryValueRequest) ([]*entity.DictionaryValue, uint32, error) {
-	// 获取任务数据类型
-	task, err := u.repo.GetDictionary(ctx, req.DictionaryId)
-	if err != nil {
-		return nil, 0, errors.ListErrorWrap(err)
-	}
-	if task.Type == dataTypeList {
-		list, total, err := u.repo.ListDictionaryValue(ctx, req)
-		if err != nil {
-			ctx.Logger().Warnw("msg", "list dictionary error", "err", err.Error())
-			return nil, 0, errors.ListErrorWrap(err)
-		}
-		return list, total, nil
-	}
-	list, err := u.repo.AllDictionaryValue(ctx, &types.AllDictionaryValueRequest{
-		DictionaryId: req.DictionaryId,
-	})
+	list, total, err := u.repo.ListDictionaryValue(ctx, req)
 	if err != nil {
 		ctx.Logger().Warnw("msg", "list dictionary error", "err", err.Error())
 		return nil, 0, errors.ListErrorWrap(err)
 	}
-	total := uint32(len(list))
-	return tree.BuildArrayTree(list), total, nil
+	return list, total, nil
 }
 
 // CreateDictionaryValue 创建字典值目录
@@ -103,17 +80,6 @@ func (u *Dictionary) CreateDictionaryValue(ctx kratosx.Context, req *entity.Dict
 
 // UpdateDictionaryValue 更新字典值目录
 func (u *Dictionary) UpdateDictionaryValue(ctx kratosx.Context, dictValue *entity.DictionaryValue) error {
-	// 获取字典是否为树
-	dictionary, err := u.repo.GetDictionary(ctx, dictValue.DictionaryId)
-	if err != nil {
-		return err
-	}
-
-	// 是数的情况下，不能选择自己作为父节点
-	if dictionary.Type == "tree" && dictValue.Id == dictValue.ParentId {
-		return errors.UpdateErrorf("不能选择自己作为父节点")
-	}
-
 	if err := u.repo.UpdateDictionaryValue(ctx, dictValue); err != nil {
 		ctx.Logger().Warnw("msg", "update dictionary error", "err", err.Error())
 		return errors.UpdateErrorWrap(err)
@@ -131,39 +97,9 @@ func (u *Dictionary) UpdateDictionaryValueStatus(ctx kratosx.Context, id uint32,
 		return nil
 	}
 
-	// 获取值所属字典id
-	oldValue, err := u.repo.GetDictionaryValue(ctx, id)
-	if err != nil {
+	if err := u.repo.UpdateDictionaryValueStatus(ctx, id, status); err != nil {
+		ctx.Logger().Warnw("msg", "update dictionary value error", "err", err.Error())
 		return errors.UpdateErrorWrap(err)
-	}
-
-	// 获取字典信息
-	dictionary, err := u.repo.GetDictionary(ctx, oldValue.DictionaryId)
-	if err != nil {
-		return errors.UpdateErrorWrap(err)
-	}
-
-	// 如果是列表直接更新
-	if dictionary.Type == dataTypeList {
-		if err := u.repo.UpdateDictionaryValueStatus(ctx, id, status); err != nil {
-			ctx.Logger().Warnw("msg", "update dictionary value error", "err", err.Error())
-			return errors.UpdateErrorWrap(err)
-		}
-		return nil
-	}
-
-	list, err := u.repo.AllDictionaryValue(ctx, &types.AllDictionaryValueRequest{DictionaryId: oldValue.DictionaryId})
-	if err != nil {
-		return errors.UpdateErrorWrap(err)
-	}
-	// 如果是树，则更新下属所有节点状态
-	td := tree.BuildTreeByID(list, oldValue.Id)
-	ids := tree.GetTreeID(td)
-	for _, iid := range ids {
-		if err := u.repo.UpdateDictionaryValueStatus(ctx, iid, status); err != nil {
-			ctx.Logger().Warnw("msg", "update dictionary value error", "err", err.Error())
-			return errors.UpdateErrorWrap(err)
-		}
 	}
 	return nil
 }
@@ -218,11 +154,7 @@ func (u *Dictionary) GetDictionaryValues(ctx kratosx.Context, keywords []string)
 			continue
 		}
 
-		if dictionary.Type == dataTypeTree {
-			reply[key] = tree.BuildArrayTree(values)
-		} else {
-			reply[key] = values
-		}
+		reply[key] = values
 	}
 	return reply, nil
 }

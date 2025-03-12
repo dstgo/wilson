@@ -59,7 +59,6 @@ message CreateDictionaryValueRequest {
   uint32 dictionaryId = 1[(validate.rules).uint32 = {gte: 1}];
   string label = 2[(validate.rules).string = {min_len: 1}];
   string value = 3[(validate.rules).string = {min_len: 1}];
-  uint32 parentId = 4;
   optional bool status = 5;
   optional int32 weight = 6;
   optional string type = 7;
@@ -76,7 +75,6 @@ message UpdateDictionaryValueRequest {
   uint32 dictionaryId = 2[(validate.rules).uint32 = {gte: 1}];
   string label = 3[(validate.rules).string = {min_len: 1}];
   string value = 4[(validate.rules).string = {min_len: 1}];
-  uint32 parentId = 5;
   optional int32 weight = 6;
   optional string type = 7;
   optional string extra = 8;

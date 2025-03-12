@@ -20,6 +20,7 @@ service User {
   rpc RefreshToken(RefreshTokenRequest) returns(RefreshTokenReply){
     option (google.api.http) = {
       post: "/configure/api/v1/token/refresh",
+      body: "*"
     };
   }
 }
