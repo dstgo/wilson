@@ -5,11 +5,11 @@ import (
 )
 
 const (
-	MenuRoot  = "R"
-	MenuApi   = "A"
-	MenuPage  = "M"
-	MenuGroup = "G"
-	MenuBasic = "BA"
+	MenuRoot     = "R"
+	MenuApi      = "A"
+	MenuBasicApi = "BA"
+	MenuPage     = "M"
+	MenuGroup    = "G"
 )
 
 type Menu struct {

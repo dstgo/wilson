@@ -75,7 +75,7 @@ func (u *Menu) CreateMenu(ctx kratosx.Context, menu *entity.Menu) (uint32, error
 		}
 
 		// 添加到白名单
-		if menu.Type == entity.MenuBasic {
+		if menu.Type == entity.MenuBasicApi {
 			ctx.Authentication().AddWhitelist(*menu.Api, *menu.Method)
 		}
 
@@ -122,11 +122,11 @@ func (u *Menu) UpdateMenu(ctx kratosx.Context, menu *entity.Menu) error {
 			}
 		}
 
-		if old.Type == entity.MenuBasic {
+		if old.Type == entity.MenuBasicApi {
 			ctx.Authentication().RemoveWhitelist(*old.Api, *old.Method)
 		}
 
-		if menu.Type == entity.MenuBasic {
+		if menu.Type == entity.MenuBasicApi {
 			ctx.Authentication().AddWhitelist(*menu.Api, *menu.Method)
 		}
 
@@ -150,7 +150,7 @@ func (u *Menu) DeleteMenu(ctx kratosx.Context, id uint32) error {
 	if err := ctx.Transaction(func(ctx kratosx.Context) error {
 		for _, item := range apis {
 			// 移除白名单
-			if item.Type == entity.MenuBasic {
+			if item.Type == entity.MenuBasicApi {
 				ctx.Authentication().RemoveWhitelist(*item.Api, *item.Method)
 			}
 
