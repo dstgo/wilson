@@ -177,7 +177,7 @@ jwt:
   # 使用的 Redis 实例
   redis: "cache"
   # JWT 密钥
-  secret: "limeschool"
+  secret: "dstgo-panel"
   # JWT 过期时间
   expire: 2h
   # JWT 续期时间

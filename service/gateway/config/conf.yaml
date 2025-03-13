@@ -71,25 +71,6 @@ endpoints:
           url: "http://localhost:7080/usercenter/client/v1/auth"
           method: "POST"
 
-  - path: "/usercenter/api/v1/*"
-    timeout: "60s"
-    protocol: "HTTP"
-    responseFormat: true
-    backends:
-      - target: "127.0.0.1:7004"
-    middlewares:
-      - name: "auth"
-        options:
-          url: "http://localhost:7080/manager/api/v1/auth"
-          method: "POST"
-
-  - path: "/usercenter/client/v1/*"
-    timeout: "60s"
-    protocol: "HTTP"
-    responseFormat: true
-    backends:
-      - target: "127.0.0.1:7004"
-
   - path: "/configure/api/v1/*"
     timeout: "60s"
     protocol: "HTTP"

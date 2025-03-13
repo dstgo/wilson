@@ -104,7 +104,7 @@ loader:
 
 # JWT配置
 jwt:
-  secret: "8f3X$p9K#mL7qR2Z@vN5tY6wE1cB4uA0"
+  secret: "dstgo-panel"
   expire: "2h"
   renewal: "600s"
   whitelist:
