@@ -91,12 +91,6 @@ func (s *User) CreateUser(c context.Context, req *pb.CreateUserRequest) (*pb.Cre
 		})
 	}
 
-	for _, id := range req.JobIds {
-		ent.UserJobs = append(ent.UserJobs, &entity.UserJob{
-			JobId: id,
-		})
-	}
-
 	id, err := s.srv.CreateUser(ctx, &ent)
 	if err != nil {
 		return nil, err
@@ -120,12 +114,6 @@ func (s *User) UpdateUser(c context.Context, req *pb.UpdateUserRequest) (*pb.Upd
 	for _, id := range req.RoleIds {
 		ent.UserRoles = append(ent.UserRoles, &entity.UserRole{
 			RoleId: id,
-		})
-	}
-
-	for _, id := range req.JobIds {
-		ent.UserJobs = append(ent.UserJobs, &entity.UserJob{
-			JobId: id,
 		})
 	}
 

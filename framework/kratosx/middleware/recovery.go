@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/middleware"
@@ -14,7 +15,7 @@ func Recovery() middleware.Middleware {
 		if ok {
 			return e
 		}
-		return recovery.ErrUnknownRequest
+		return errors.InternalServer("internal server error", fmt.Sprintf("%+v", err))
 	}
 
 	return recovery.Recovery(recovery.WithHandler(handler))
