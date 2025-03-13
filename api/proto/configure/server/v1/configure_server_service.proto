@@ -9,14 +9,14 @@ import "google/api/annotations.proto";
 
 service Server{
 
-  // ListServer 获取服务信息列表
+  // ListServer
   rpc ListServer (ListServerRequest) returns (ListServerReply) {
     option (google.api.http) = {
       get: "/configure/api/v1/servers",
     };
   }
 
-  // CreateServer 创建服务信息
+  // CreateServer
   rpc CreateServer (CreateServerRequest) returns (CreateServerReply) {
     option (google.api.http) = {
       post: "/configure/api/v1/server",
@@ -24,7 +24,7 @@ service Server{
     };
   }
 
-  // UpdateServer 更新服务信息
+  // UpdateServer
   rpc UpdateServer (UpdateServerRequest) returns (UpdateServerReply) {
     option (google.api.http) = {
       put: "/configure/api/v1/server",
@@ -32,7 +32,7 @@ service Server{
     };
   }
 
-  // DeleteServer 删除服务信息
+  // DeleteServer
   rpc DeleteServer (DeleteServerRequest) returns (DeleteServerReply) {
     option (google.api.http) = {
       delete: "/configure/api/v1/server",

@@ -99,9 +99,10 @@ func (u *Role) CreateRole(ctx kratosx.Context, req *entity.Role) (uint32, error)
 
 // UpdateRole 更新角色信息 fixed code
 func (u *Role) UpdateRole(ctx kratosx.Context, req *entity.Role) error {
-	// 系统数据不允许修改
-	if req.Id == 1 {
-		return errors.EditSystemDataError()
+	if req.Id == 1 && req.ParentId > 0 {
+		return errors.InvalidParentIdErrorf("root role dosen't need parent role")
+	} else if req.Id > 1 && req.ParentId == 0 {
+		return errors.InvalidParentIdErrorf("parent role is required")
 	}
 
 	// 获取是否具有父级角色权限

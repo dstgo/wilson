@@ -26,7 +26,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SystemClient interface {
-	// GetSystemSetting 获取系统设置
+	// GetSystemSetting
 	GetSystemSetting(ctx context.Context, in *GetSystemSettingRequest, opts ...grpc.CallOption) (*GetSystemSettingReply, error)
 }
 
@@ -52,7 +52,7 @@ func (c *systemClient) GetSystemSetting(ctx context.Context, in *GetSystemSettin
 // All implementations must embed UnimplementedSystemServer
 // for forward compatibility.
 type SystemServer interface {
-	// GetSystemSetting 获取系统设置
+	// GetSystemSetting
 	GetSystemSetting(context.Context, *GetSystemSettingRequest) (*GetSystemSettingReply, error)
 	mustEmbedUnimplementedSystemServer()
 }

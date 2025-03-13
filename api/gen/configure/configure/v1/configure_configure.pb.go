@@ -21,7 +21,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// 查询指定模板
 type GetConfigureRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ServerId      uint32                 `protobuf:"varint,1,opt,name=serverId,proto3" json:"serverId,omitempty"`
@@ -174,7 +173,6 @@ func (x *GetConfigureReply) GetCreatedAt() uint32 {
 	return 0
 }
 
-// 对比配置
 type CompareConfigureRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ServerId      uint32                 `protobuf:"varint,1,opt,name=serverId,proto3" json:"serverId,omitempty"`
@@ -227,7 +225,6 @@ func (x *CompareConfigureRequest) GetEnvId() uint32 {
 	return 0
 }
 
-// 对比配置详情
 type Compare struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Type          string                 `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
@@ -340,7 +337,6 @@ func (x *CompareConfigureReply) GetList() []*Compare {
 	return nil
 }
 
-// 修改配置
 type UpdateConfigureRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ServerId      uint32                 `protobuf:"varint,1,opt,name=serverId,proto3" json:"serverId,omitempty"`
@@ -437,7 +433,6 @@ func (*UpdateConfigureReply) Descriptor() ([]byte, []int) {
 	return file_configure_configure_v1_configure_configure_proto_rawDescGZIP(), []int{6}
 }
 
-// 监听获取配置
 type WatchConfigureRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Server        string                 `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`

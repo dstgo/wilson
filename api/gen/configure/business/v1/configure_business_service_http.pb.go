@@ -27,17 +27,17 @@ const OperationBusinessUpdateBusiness = "/wilson.api.configure.business.v1.Busin
 const OperationBusinessUpdateBusinessValue = "/wilson.api.configure.business.v1.Business/UpdateBusinessValue"
 
 type BusinessHTTPServer interface {
-	// CreateBusiness CreateBusiness 创建业务配置信息
+	// CreateBusiness CreateBusiness
 	CreateBusiness(context.Context, *CreateBusinessRequest) (*CreateBusinessReply, error)
-	// DeleteBusiness DeleteBusiness 删除业务配置信息
+	// DeleteBusiness DeleteBusiness
 	DeleteBusiness(context.Context, *DeleteBusinessRequest) (*DeleteBusinessReply, error)
-	// ListBusiness ListBusiness 获取业务配置信息列表
+	// ListBusiness ListBusiness
 	ListBusiness(context.Context, *ListBusinessRequest) (*ListBusinessReply, error)
-	// ListBusinessValue ListBusinessValue 获取业务配置值信息列表
+	// ListBusinessValue ListBusinessValue
 	ListBusinessValue(context.Context, *ListBusinessValueRequest) (*ListBusinessValueReply, error)
-	// UpdateBusiness UpdateBusiness 更新业务配置信息
+	// UpdateBusiness UpdateBusiness
 	UpdateBusiness(context.Context, *UpdateBusinessRequest) (*UpdateBusinessReply, error)
-	// UpdateBusinessValue UpdateBusinessValue 更新业务配置值信息
+	// UpdateBusinessValue UpdateBusinessValue
 	UpdateBusinessValue(context.Context, *UpdateBusinessValueRequest) (*UpdateBusinessValueReply, error)
 }
 

@@ -26,15 +26,15 @@ const OperationFilePrepareUploadFile = "/wilson.api.resource.file.v1.File/Prepar
 const OperationFileUpdateFile = "/wilson.api.resource.file.v1.File/UpdateFile"
 
 type FileHTTPServer interface {
-	// DeleteFile DeleteFile 删除文件信息
+	// DeleteFile DeleteFile
 	DeleteFile(context.Context, *DeleteFileRequest) (*DeleteFileReply, error)
-	// GetFile GetFile 获取指定的文件信息
+	// GetFile GetFile
 	GetFile(context.Context, *GetFileRequest) (*GetFileReply, error)
-	// ListFile ListFile 获取文件信息列表
+	// ListFile ListFile
 	ListFile(context.Context, *ListFileRequest) (*ListFileReply, error)
-	// PrepareUploadFile PrepareUploadFile 预上传文件信息
+	// PrepareUploadFile PrepareUploadFile
 	PrepareUploadFile(context.Context, *PrepareUploadFileRequest) (*PrepareUploadFileReply, error)
-	// UpdateFile UpdateFile 更新文件信息
+	// UpdateFile UpdateFile
 	UpdateFile(context.Context, *UpdateFileRequest) (*UpdateFileReply, error)
 }
 

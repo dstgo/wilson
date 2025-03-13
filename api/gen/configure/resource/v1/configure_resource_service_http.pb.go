@@ -28,19 +28,19 @@ const OperationResourceUpdateResource = "/wilson.api.configure.resource.v1.Resou
 const OperationResourceUpdateResourceValue = "/wilson.api.configure.resource.v1.Resource/UpdateResourceValue"
 
 type ResourceHTTPServer interface {
-	// CreateResource CreateResource 创建资源配置信息
+	// CreateResource CreateResource
 	CreateResource(context.Context, *CreateResourceRequest) (*CreateResourceReply, error)
-	// DeleteResource DeleteResource 删除资源配置信息
+	// DeleteResource DeleteResource
 	DeleteResource(context.Context, *DeleteResourceRequest) (*DeleteResourceReply, error)
-	// GetResource GetResource 获取指定的资源配置信息
+	// GetResource GetResource
 	GetResource(context.Context, *GetResourceRequest) (*GetResourceReply, error)
-	// ListResource ListResource 获取资源配置信息列表
+	// ListResource ListResource
 	ListResource(context.Context, *ListResourceRequest) (*ListResourceReply, error)
-	// ListResourceValue ListResourceValue 获取业务配置值信息列表
+	// ListResourceValue ListResourceValue
 	ListResourceValue(context.Context, *ListResourceValueRequest) (*ListResourceValueReply, error)
-	// UpdateResource UpdateResource 更新资源配置信息
+	// UpdateResource UpdateResource
 	UpdateResource(context.Context, *UpdateResourceRequest) (*UpdateResourceReply, error)
-	// UpdateResourceValue UpdateResourceValue 更新业务配置值信息
+	// UpdateResourceValue UpdateResourceValue
 	UpdateResourceValue(context.Context, *UpdateResourceValueRequest) (*UpdateResourceValueReply, error)
 }
 

@@ -43,7 +43,7 @@ type yiBanAuthInfo struct {
 }
 
 func (y yb) Name() string {
-	return "易班"
+	return "yiban"
 }
 
 func (y yb) GetAccessToken(ctx kratosx.Context, req GetAccessTokenRequest) (*GetAccessTokenReply, error) {

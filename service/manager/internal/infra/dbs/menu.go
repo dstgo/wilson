@@ -116,7 +116,7 @@ func (infra *Menu) UpdateMenu(ctx kratosx.Context, menu *entity.Menu) error {
 	}()
 
 	if menu.Id == menu.ParentId {
-		return errors.New("父级不能为自己")
+		return errors.New("cannot assign self as parent")
 	}
 
 	// 获取之前的菜单信息

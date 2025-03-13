@@ -29,21 +29,21 @@ const OperationRoleUpdateRoleMenu = "/wilson.api.manager.role.v1.Role/UpdateRole
 const OperationRoleUpdateRoleStatus = "/wilson.api.manager.role.v1.Role/UpdateRoleStatus"
 
 type RoleHTTPServer interface {
-	// CreateRole CreateRole 创建角色信息
+	// CreateRole CreateRole
 	CreateRole(context.Context, *CreateRoleRequest) (*CreateRoleReply, error)
-	// DeleteRole DeleteRole 删除角色信息
+	// DeleteRole DeleteRole
 	DeleteRole(context.Context, *DeleteRoleRequest) (*DeleteRoleReply, error)
-	// GetRole GetRole 获取指定的角色信息
+	// GetRole GetRole
 	GetRole(context.Context, *GetRoleRequest) (*GetRoleReply, error)
-	// GetRoleMenuIds GetRoleMenuIds 获取指定角色的菜单id列表
+	// GetRoleMenuIds GetRoleMenuIds
 	GetRoleMenuIds(context.Context, *GetRoleMenuIdsRequest) (*GetRoleMenuIdsReply, error)
-	// ListRole ListRole 获取角色信息列表
+	// ListRole ListRole
 	ListRole(context.Context, *ListRoleRequest) (*ListRoleReply, error)
-	// UpdateRole UpdateRole 更新角色信息
+	// UpdateRole UpdateRole
 	UpdateRole(context.Context, *UpdateRoleRequest) (*UpdateRoleReply, error)
-	// UpdateRoleMenu UpdateRole 更新角色信息
+	// UpdateRoleMenu UpdateRole
 	UpdateRoleMenu(context.Context, *UpdateRoleMenuRequest) (*UpdateRoleMenuReply, error)
-	// UpdateRoleStatus UpdateRoleStatus 更新角色信息状态
+	// UpdateRoleStatus UpdateRoleStatus
 	UpdateRoleStatus(context.Context, *UpdateRoleStatusRequest) (*UpdateRoleStatusReply, error)
 }
 

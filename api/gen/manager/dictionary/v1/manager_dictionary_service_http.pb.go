@@ -32,27 +32,27 @@ const OperationDictionaryUpdateDictionaryValue = "/wilson.api.manager.dictionary
 const OperationDictionaryUpdateDictionaryValueStatus = "/wilson.api.manager.dictionary.v1.Dictionary/UpdateDictionaryValueStatus"
 
 type DictionaryHTTPServer interface {
-	// CreateDictionary CreateDictionary 创建字典目录
+	// CreateDictionary CreateDictionary
 	CreateDictionary(context.Context, *CreateDictionaryRequest) (*CreateDictionaryReply, error)
-	// CreateDictionaryValue CreateDictionaryValue 创建字典值目录
+	// CreateDictionaryValue CreateDictionaryValue
 	CreateDictionaryValue(context.Context, *CreateDictionaryValueRequest) (*CreateDictionaryValueReply, error)
-	// DeleteDictionary DeleteDictionary 删除字典目录
+	// DeleteDictionary DeleteDictionary
 	DeleteDictionary(context.Context, *DeleteDictionaryRequest) (*DeleteDictionaryReply, error)
-	// DeleteDictionaryValue DeleteDictionaryValue 删除字典值目录
+	// DeleteDictionaryValue DeleteDictionaryValue
 	DeleteDictionaryValue(context.Context, *DeleteDictionaryValueRequest) (*DeleteDictionaryValueReply, error)
-	// GetDictionary GetDictionary 获取指定的字典目录
+	// GetDictionary GetDictionary
 	GetDictionary(context.Context, *GetDictionaryRequest) (*GetDictionaryReply, error)
-	// GetDictionaryValues GetDictionaryValues 获取指定keys的所有值
+	// GetDictionaryValues GetDictionaryValues
 	GetDictionaryValues(context.Context, *GetDictionaryValuesRequest) (*GetDictionaryValuesReply, error)
-	// ListDictionary ListDictionary 获取字典目录列表
+	// ListDictionary ListDictionary
 	ListDictionary(context.Context, *ListDictionaryRequest) (*ListDictionaryReply, error)
-	// ListDictionaryValue ListDictionaryValue 获取字典值目录列表
+	// ListDictionaryValue ListDictionaryValue
 	ListDictionaryValue(context.Context, *ListDictionaryValueRequest) (*ListDictionaryValueReply, error)
-	// UpdateDictionary UpdateDictionary 更新字典目录
+	// UpdateDictionary UpdateDictionary
 	UpdateDictionary(context.Context, *UpdateDictionaryRequest) (*UpdateDictionaryReply, error)
-	// UpdateDictionaryValue UpdateDictionaryValue 更新字典值目录
+	// UpdateDictionaryValue UpdateDictionaryValue
 	UpdateDictionaryValue(context.Context, *UpdateDictionaryValueRequest) (*UpdateDictionaryValueReply, error)
-	// UpdateDictionaryValueStatus UpdateDictionaryValueStatus 更新字典值目录状态
+	// UpdateDictionaryValueStatus UpdateDictionaryValueStatus
 	UpdateDictionaryValueStatus(context.Context, *UpdateDictionaryValueStatusRequest) (*UpdateDictionaryValueStatusReply, error)
 }
 

@@ -30,15 +30,15 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DepartmentClient interface {
-	// ListDepartment 获取部门信息列表
+	// ListDepartment
 	ListDepartment(ctx context.Context, in *ListDepartmentRequest, opts ...grpc.CallOption) (*ListDepartmentReply, error)
-	// CreateDepartment 创建部门信息
+	// CreateDepartment
 	CreateDepartment(ctx context.Context, in *CreateDepartmentRequest, opts ...grpc.CallOption) (*CreateDepartmentReply, error)
-	// UpdateDepartment 更新部门信息
+	// UpdateDepartment
 	UpdateDepartment(ctx context.Context, in *UpdateDepartmentRequest, opts ...grpc.CallOption) (*UpdateDepartmentReply, error)
-	// DeleteDepartment 删除部门信息
+	// DeleteDepartment
 	DeleteDepartment(ctx context.Context, in *DeleteDepartmentRequest, opts ...grpc.CallOption) (*DeleteDepartmentReply, error)
-	// GetDepartment 获取指定的部门信息
+	// GetDepartment
 	GetDepartment(ctx context.Context, in *GetDepartmentRequest, opts ...grpc.CallOption) (*GetDepartmentReply, error)
 }
 
@@ -104,15 +104,15 @@ func (c *departmentClient) GetDepartment(ctx context.Context, in *GetDepartmentR
 // All implementations must embed UnimplementedDepartmentServer
 // for forward compatibility.
 type DepartmentServer interface {
-	// ListDepartment 获取部门信息列表
+	// ListDepartment
 	ListDepartment(context.Context, *ListDepartmentRequest) (*ListDepartmentReply, error)
-	// CreateDepartment 创建部门信息
+	// CreateDepartment
 	CreateDepartment(context.Context, *CreateDepartmentRequest) (*CreateDepartmentReply, error)
-	// UpdateDepartment 更新部门信息
+	// UpdateDepartment
 	UpdateDepartment(context.Context, *UpdateDepartmentRequest) (*UpdateDepartmentReply, error)
-	// DeleteDepartment 删除部门信息
+	// DeleteDepartment
 	DeleteDepartment(context.Context, *DeleteDepartmentRequest) (*DeleteDepartmentReply, error)
-	// GetDepartment 获取指定的部门信息
+	// GetDepartment
 	GetDepartment(context.Context, *GetDepartmentRequest) (*GetDepartmentReply, error)
 	mustEmbedUnimplementedDepartmentServer()
 }

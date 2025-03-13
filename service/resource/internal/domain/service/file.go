@@ -228,10 +228,10 @@ func (u *File) PrepareUploadFile(ctx kratosx.Context, req *types.PrepareUploadFi
 func (u *File) UploadFile(ctx kratosx.Context, req *types.UploadFileRequest) (*types.UploadFileReply, error) {
 	file, err := u.repo.GetFileByUploadId(ctx, req.UploadId)
 	if err != nil {
-		return nil, errors.UpdateErrorf("不存在上传任务")
+		return nil, errors.UpdateErrorf("no upload tasks")
 	}
 	if file.Status == STATUS_COMPLETED {
-		return nil, errors.UpdateErrorf("请勿重复上传")
+		return nil, errors.UpdateErrorf("no repeated uploads")
 	}
 
 	if err != nil {

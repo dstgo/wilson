@@ -59,7 +59,7 @@ func Authentication(conf *ec.Authentication) middleware.Middleware {
 			}
 
 			if !author.Auth(role, path, method) {
-				return nil, errors.Forbidden(reason, "无接口权限")
+				return nil, errors.Forbidden(reason, "no api permissions")
 			}
 			return handler(ctx, req)
 		}

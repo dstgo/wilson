@@ -134,14 +134,14 @@ func (c *captcha) generate(tp, ip, tpe string, sender Sender) (Response, error) 
 	// 判断ip是否限制次数
 	if conf.IpLimit != 0 {
 		if count, _ := cache.Get(context.Background(), countKey).Int(); count > conf.IpLimit {
-			return nil, errors.New("当前IP已超过最大验证次数")
+			return nil, errors.New("current IP exceeded max captcha attempts")
 		}
 	}
 
 	// 清除上一次生成的结果,防止同时造成大量生成请求占用内存
 	if uid, _ := cache.Get(context.Background(), clientKey).Result(); uid != "" {
 		if !conf.Refresh {
-			return nil, errors.New("请勿重复请求验证码")
+			return nil, errors.New("no repeated captcha requests")
 		}
 		cache.Del(context.Background(), uid)
 	}

@@ -314,7 +314,7 @@ func (ep *ErrorPlugin) findForeignInfo(input string) (*ForeignError, error) {
 	}
 
 	if len(result) != 6 {
-		return nil, errors.New("字段获取出错")
+		return nil, errors.New("get fields error")
 	}
 
 	return &ForeignError{

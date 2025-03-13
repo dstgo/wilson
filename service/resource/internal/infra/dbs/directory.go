@@ -87,7 +87,7 @@ func (r Directory) CreateDirectory(ctx kratosx.Context, directory *entity.Direct
 // UpdateDirectory 更新数据
 func (r Directory) UpdateDirectory(ctx kratosx.Context, directory *entity.Directory) error {
 	if directory.Id == directory.ParentId {
-		return errors.New("父级不能为自己")
+		return errors.New("cannot assign self as parent")
 	}
 	old, err := r.GetDirectory(ctx, directory.Id)
 	if err != nil {

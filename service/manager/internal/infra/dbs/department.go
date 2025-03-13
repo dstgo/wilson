@@ -90,7 +90,7 @@ func (infra *Department) CreateDepartment(ctx kratosx.Context, req *entity.Depar
 // UpdateDepartment 更新数据
 func (infra *Department) UpdateDepartment(ctx kratosx.Context, req *entity.Department) error {
 	if req.Id == req.ParentId {
-		return errors.New("父级不能为自己")
+		return errors.New("cannot assign self as parent")
 	}
 	old, err := infra.GetDepartment(ctx, req.Id)
 	if err != nil {

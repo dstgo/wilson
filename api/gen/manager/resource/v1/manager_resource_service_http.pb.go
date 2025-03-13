@@ -23,9 +23,9 @@ const OperationResourceGetResource = "/wilson.api.manager.resource.v1.Resource/G
 const OperationResourceUpdateResource = "/wilson.api.manager.resource.v1.Resource/UpdateResource"
 
 type ResourceHTTPServer interface {
-	// GetResource GetResource 获取资源权限
+	// GetResource GetResource
 	GetResource(context.Context, *GetResourceRequest) (*GetResourceReply, error)
-	// UpdateResource UpdateResource 更新资源权限
+	// UpdateResource UpdateResource
 	UpdateResource(context.Context, *UpdateResourceRequest) (*UpdateResourceReply, error)
 }
 

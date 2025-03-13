@@ -44,41 +44,41 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
-	// GetUser 获取指定的用户信息
+	// GetUser
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error)
-	// ListUser 获取用户信息列表
+	// ListUser
 	ListUser(ctx context.Context, in *ListUserRequest, opts ...grpc.CallOption) (*ListUserReply, error)
-	// CreateUser 创建用户信息
+	// CreateUser
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserReply, error)
-	// UpdateUser 更新用户信息
+	// UpdateUser
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserReply, error)
-	// UpdateUserStatus 更新用户信息状态
+	// UpdateUserStatus
 	UpdateUserStatus(ctx context.Context, in *UpdateUserStatusRequest, opts ...grpc.CallOption) (*UpdateUserStatusReply, error)
-	// DeleteUser 删除用户信息
+	// DeleteUser
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserReply, error)
-	// GetCurrentUser 获取当前用户信息
+	// GetCurrentUser
 	GetCurrentUser(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetUserReply, error)
-	// ResetUserPassword 重置用户密码
+	// ResetUserPassword
 	ResetUserPassword(ctx context.Context, in *ResetUserPasswordRequest, opts ...grpc.CallOption) (*ResetUserPasswordReply, error)
-	// UpdateCurrentUser 更新当前用户信息
+	// UpdateCurrentUser
 	UpdateCurrentUser(ctx context.Context, in *UpdateCurrentUserRequest, opts ...grpc.CallOption) (*UpdateCurrentUserReply, error)
-	// UpdateCurrentUserRole 切换用户当前角色
+	// UpdateCurrentUserRole
 	UpdateCurrentUserRole(ctx context.Context, in *UpdateCurrentUserRoleRequest, opts ...grpc.CallOption) (*UpdateCurrentUserRoleReply, error)
-	// UpdateCurrentUserPassword 用户修改密码
+	// UpdateCurrentUserPassword
 	UpdateCurrentUserPassword(ctx context.Context, in *UpdateCurrentUserPasswordRequest, opts ...grpc.CallOption) (*UpdateCurrentUserPasswordReply, error)
-	// UpdateCurrentUserSetting 用户设置保存
+	// UpdateCurrentUserSetting
 	UpdateCurrentUserSetting(ctx context.Context, in *UpdateCurrentUserSettingRequest, opts ...grpc.CallOption) (*UpdateCurrentUserSettingReply, error)
-	// SendCurrentUserCaptcha 发送用户验证吗
+	// SendCurrentUserCaptcha
 	SendCurrentUserCaptcha(ctx context.Context, in *SendCurrentUserCaptchaRequest, opts ...grpc.CallOption) (*SendCurrentUserCaptchaReply, error)
-	// GetUserLoginCaptcha 获取用户登陆验证吗
+	// GetUserLoginCaptcha
 	GetUserLoginCaptcha(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetUserLoginCaptchaReply, error)
-	// UserLogin 用户登陆
+	// UserLogin
 	UserLogin(ctx context.Context, in *UserLoginRequest, opts ...grpc.CallOption) (*UserLoginReply, error)
-	// UserLogout 用户退出
+	// UserLogout
 	UserLogout(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	// UserRefreshToken 用户刷新token
+	// UserRefreshToken
 	UserRefreshToken(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*UserRefreshTokenReply, error)
-	// ListLoginLog 获取用户登陆信息列表
+	// ListLoginLog
 	ListLoginLog(ctx context.Context, in *ListLoginLogRequest, opts ...grpc.CallOption) (*ListLoginLogReply, error)
 }
 
@@ -274,41 +274,41 @@ func (c *userClient) ListLoginLog(ctx context.Context, in *ListLoginLogRequest, 
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility.
 type UserServer interface {
-	// GetUser 获取指定的用户信息
+	// GetUser
 	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
-	// ListUser 获取用户信息列表
+	// ListUser
 	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
-	// CreateUser 创建用户信息
+	// CreateUser
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
-	// UpdateUser 更新用户信息
+	// UpdateUser
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserReply, error)
-	// UpdateUserStatus 更新用户信息状态
+	// UpdateUserStatus
 	UpdateUserStatus(context.Context, *UpdateUserStatusRequest) (*UpdateUserStatusReply, error)
-	// DeleteUser 删除用户信息
+	// DeleteUser
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserReply, error)
-	// GetCurrentUser 获取当前用户信息
+	// GetCurrentUser
 	GetCurrentUser(context.Context, *emptypb.Empty) (*GetUserReply, error)
-	// ResetUserPassword 重置用户密码
+	// ResetUserPassword
 	ResetUserPassword(context.Context, *ResetUserPasswordRequest) (*ResetUserPasswordReply, error)
-	// UpdateCurrentUser 更新当前用户信息
+	// UpdateCurrentUser
 	UpdateCurrentUser(context.Context, *UpdateCurrentUserRequest) (*UpdateCurrentUserReply, error)
-	// UpdateCurrentUserRole 切换用户当前角色
+	// UpdateCurrentUserRole
 	UpdateCurrentUserRole(context.Context, *UpdateCurrentUserRoleRequest) (*UpdateCurrentUserRoleReply, error)
-	// UpdateCurrentUserPassword 用户修改密码
+	// UpdateCurrentUserPassword
 	UpdateCurrentUserPassword(context.Context, *UpdateCurrentUserPasswordRequest) (*UpdateCurrentUserPasswordReply, error)
-	// UpdateCurrentUserSetting 用户设置保存
+	// UpdateCurrentUserSetting
 	UpdateCurrentUserSetting(context.Context, *UpdateCurrentUserSettingRequest) (*UpdateCurrentUserSettingReply, error)
-	// SendCurrentUserCaptcha 发送用户验证吗
+	// SendCurrentUserCaptcha
 	SendCurrentUserCaptcha(context.Context, *SendCurrentUserCaptchaRequest) (*SendCurrentUserCaptchaReply, error)
-	// GetUserLoginCaptcha 获取用户登陆验证吗
+	// GetUserLoginCaptcha
 	GetUserLoginCaptcha(context.Context, *emptypb.Empty) (*GetUserLoginCaptchaReply, error)
-	// UserLogin 用户登陆
+	// UserLogin
 	UserLogin(context.Context, *UserLoginRequest) (*UserLoginReply, error)
-	// UserLogout 用户退出
+	// UserLogout
 	UserLogout(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	// UserRefreshToken 用户刷新token
+	// UserRefreshToken
 	UserRefreshToken(context.Context, *emptypb.Empty) (*UserRefreshTokenReply, error)
-	// ListLoginLog 获取用户登陆信息列表
+	// ListLoginLog
 	ListLoginLog(context.Context, *ListLoginLogRequest) (*ListLoginLogReply, error)
 	mustEmbedUnimplementedUserServer()
 }

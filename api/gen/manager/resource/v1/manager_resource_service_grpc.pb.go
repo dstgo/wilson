@@ -28,11 +28,11 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ResourceClient interface {
-	// GetCurrentResourceScopes 获取指定用户的资源列表
+	// GetCurrentResourceScopes
 	GetResourceScopes(ctx context.Context, in *GetResourceScopesRequest, opts ...grpc.CallOption) (*GetResourceScopesReply, error)
-	// GetResource 获取资源权限
+	// GetResource
 	GetResource(ctx context.Context, in *GetResourceRequest, opts ...grpc.CallOption) (*GetResourceReply, error)
-	// UpdateResource 更新资源权限
+	// UpdateResource
 	UpdateResource(ctx context.Context, in *UpdateResourceRequest, opts ...grpc.CallOption) (*UpdateResourceReply, error)
 }
 
@@ -78,11 +78,11 @@ func (c *resourceClient) UpdateResource(ctx context.Context, in *UpdateResourceR
 // All implementations must embed UnimplementedResourceServer
 // for forward compatibility.
 type ResourceServer interface {
-	// GetCurrentResourceScopes 获取指定用户的资源列表
+	// GetCurrentResourceScopes
 	GetResourceScopes(context.Context, *GetResourceScopesRequest) (*GetResourceScopesReply, error)
-	// GetResource 获取资源权限
+	// GetResource
 	GetResource(context.Context, *GetResourceRequest) (*GetResourceReply, error)
-	// UpdateResource 更新资源权限
+	// UpdateResource
 	UpdateResource(context.Context, *UpdateResourceRequest) (*UpdateResourceReply, error)
 	mustEmbedUnimplementedResourceServer()
 }

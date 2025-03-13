@@ -141,7 +141,7 @@ func (u *Resource) UpdateResourceValue(ctx kratosx.Context, list []*entity.Resou
 		value := item.Value
 		m := make(map[string]any)
 		if err := json.Unmarshal([]byte(value), &m); err != nil || len(m) == 0 {
-			return errors.ResourceValueTypeErrorf("字段类型必须是对象")
+			return errors.ResourceValueTypeErrorf("field type must object")
 		}
 		for _, key := range fields {
 			if m[key] == nil {

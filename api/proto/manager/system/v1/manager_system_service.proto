@@ -8,7 +8,7 @@ import "google/api/annotations.proto";
 
 service System{
 
-  // GetSystemSetting 获取系统设置
+  // GetSystemSetting
   rpc GetSystemSetting (GetSystemSettingRequest) returns (GetSystemSettingReply) {
     option (google.api.http) = {
       get: "/manager/api/v1/system/setting",

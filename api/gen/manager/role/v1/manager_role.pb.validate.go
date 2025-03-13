@@ -1080,10 +1080,10 @@ func (m *UpdateRoleRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetParentId() < 1 {
+	if m.GetParentId() < 0 {
 		err := UpdateRoleRequestValidationError{
 			field:  "ParentId",
-			reason: "value must be greater than or equal to 1",
+			reason: "value must be greater than or equal to 0",
 		}
 		if !all {
 			return err

@@ -22,7 +22,7 @@ const _ = http.SupportPackageIsVersion1
 const OperationAuthAuth = "/wilson.api.manager.auth.v1.Auth/Auth"
 
 type AuthHTTPServer interface {
-	// Auth Auth 接口鉴权
+	// Auth Auth
 	Auth(context.Context, *AuthRequest) (*AuthReply, error)
 }
 

@@ -16,7 +16,7 @@ func init() {
 }
 
 func (w wx) Name() string {
-	return "微信"
+	return "weixin"
 }
 
 func (w wx) GetAccessToken(ctx kratosx.Context, req GetAccessTokenRequest) (*GetAccessTokenReply, error) {

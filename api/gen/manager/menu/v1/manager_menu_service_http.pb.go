@@ -26,15 +26,15 @@ const OperationMenuListMenuByCurRole = "/wilson.api.manager.menu.v1.Menu/ListMen
 const OperationMenuUpdateMenu = "/wilson.api.manager.menu.v1.Menu/UpdateMenu"
 
 type MenuHTTPServer interface {
-	// CreateMenu CreateMenu 创建菜单信息
+	// CreateMenu CreateMenu
 	CreateMenu(context.Context, *CreateMenuRequest) (*CreateMenuReply, error)
-	// DeleteMenu DeleteMenu 删除菜单信息
+	// DeleteMenu DeleteMenu
 	DeleteMenu(context.Context, *DeleteMenuRequest) (*DeleteMenuReply, error)
-	// ListMenu ListMenu 获取菜单信息列表
+	// ListMenu ListMenu
 	ListMenu(context.Context, *ListMenuRequest) (*ListMenuReply, error)
-	// ListMenuByCurRole ListMenuByCurRole 获取菜单信息列表
+	// ListMenuByCurRole ListMenuByCurRole
 	ListMenuByCurRole(context.Context, *ListMenuByCurRoleRequest) (*ListMenuByCurRoleReply, error)
-	// UpdateMenu UpdateMenu 更新菜单信息
+	// UpdateMenu UpdateMenu
 	UpdateMenu(context.Context, *UpdateMenuRequest) (*UpdateMenuReply, error)
 }
 

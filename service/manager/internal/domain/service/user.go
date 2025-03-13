@@ -446,7 +446,7 @@ func (u *Use) UpdateCurrentUserPassword(ctx kratosx.Context, req *types.UpdateCu
 			return errors.PasswordError()
 		}
 	default:
-		return errors.SystemErrorf("验证方式配置错误")
+		return errors.SystemErrorf("verification method config error")
 	}
 
 	nu := entity.User{
@@ -493,7 +493,7 @@ func (u *Use) UserLogin(ctx kratosx.Context, in *types.UserLoginRequest) (token 
 			ip   = ctx.ClientIP()
 			ug   = ua.Parse(header.RequestHeader().Get("User-Agent"))
 			code = 200
-			desc = "登陆成功"
+			desc = "login success"
 		)
 
 		if rerr != nil {

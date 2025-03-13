@@ -25,13 +25,13 @@ const OperationServerListServer = "/wilson.api.configure.server.v1.Server/ListSe
 const OperationServerUpdateServer = "/wilson.api.configure.server.v1.Server/UpdateServer"
 
 type ServerHTTPServer interface {
-	// CreateServer CreateServer 创建服务信息
+	// CreateServer CreateServer
 	CreateServer(context.Context, *CreateServerRequest) (*CreateServerReply, error)
-	// DeleteServer DeleteServer 删除服务信息
+	// DeleteServer DeleteServer
 	DeleteServer(context.Context, *DeleteServerRequest) (*DeleteServerReply, error)
-	// ListServer ListServer 获取服务信息列表
+	// ListServer ListServer
 	ListServer(context.Context, *ListServerRequest) (*ListServerReply, error)
-	// UpdateServer UpdateServer 更新服务信息
+	// UpdateServer UpdateServer
 	UpdateServer(context.Context, *UpdateServerRequest) (*UpdateServerReply, error)
 }
 

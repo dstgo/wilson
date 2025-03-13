@@ -69,7 +69,7 @@ func (infra *Role) CreateRole(ctx kratosx.Context, role *entity.Role) (uint32, e
 // UpdateRole 更新数据
 func (infra *Role) UpdateRole(ctx kratosx.Context, req *entity.Role) error {
 	if req.Id == req.ParentId {
-		return errors.New("父级不能为自己")
+		return errors.New("cannot assign self as parent")
 	}
 	old, err := infra.GetRole(ctx, req.Id)
 	if err != nil {

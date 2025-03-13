@@ -23,9 +23,9 @@ const OperationUserLogin = "/wilson.api.configure.user.v1.User/Login"
 const OperationUserRefreshToken = "/wilson.api.configure.user.v1.User/RefreshToken"
 
 type UserHTTPServer interface {
-	// Login 用户登录
+	// Login
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
-	// RefreshToken RefreshToken 刷新token
+	// RefreshToken RefreshToken
 	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenReply, error)
 }
 

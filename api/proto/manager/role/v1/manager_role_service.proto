@@ -9,21 +9,21 @@ import "google/api/annotations.proto";
 
 service Role{
 
-  // GetRoleMenuIds 获取指定角色的菜单id列表
+  // GetRoleMenuIds
   rpc GetRoleMenuIds (GetRoleMenuIdsRequest) returns (GetRoleMenuIdsReply) {
     option (google.api.http) = {
       get: "/manager/api/v1/role/menu_ids",
     };
   }
 
-  // ListRole 获取角色信息列表
+  // ListRole
   rpc ListRole (ListRoleRequest) returns (ListRoleReply) {
     option (google.api.http) = {
       get: "/manager/api/v1/roles",
     };
   }
 
-  // CreateRole 创建角色信息
+  // CreateRole
   rpc CreateRole (CreateRoleRequest) returns (CreateRoleReply) {
     option (google.api.http) = {
       post: "/manager/api/v1/role",
@@ -31,7 +31,7 @@ service Role{
     };
   }
 
-  // UpdateRole 更新角色信息
+  // UpdateRole
   rpc UpdateRole (UpdateRoleRequest) returns (UpdateRoleReply) {
     option (google.api.http) = {
       put: "/manager/api/v1/role",
@@ -39,7 +39,7 @@ service Role{
     };
   }
 
-  // UpdateRole 更新角色信息
+  // UpdateRole
   rpc UpdateRoleMenu (UpdateRoleMenuRequest) returns (UpdateRoleMenuReply) {
     option (google.api.http) = {
       put: "/manager/api/v1/role/menu",
@@ -47,7 +47,7 @@ service Role{
     };
   }
 
-  // UpdateRoleStatus 更新角色信息状态
+  // UpdateRoleStatus
   rpc UpdateRoleStatus (UpdateRoleStatusRequest) returns (UpdateRoleStatusReply) {
     option (google.api.http) = {
       put: "/manager/api/v1/role/status",
@@ -55,14 +55,14 @@ service Role{
     };
   }
 
-  // DeleteRole 删除角色信息
+  // DeleteRole
   rpc DeleteRole (DeleteRoleRequest) returns (DeleteRoleReply) {
     option (google.api.http) = {
       delete: "/manager/api/v1/role",
     };
   }
 
-  // GetRole 获取指定的角色信息
+  // GetRole
   rpc GetRole (GetRoleRequest) returns (GetRoleReply) {
     option (google.api.http) = {
       get: "/manager/api/v1/role",

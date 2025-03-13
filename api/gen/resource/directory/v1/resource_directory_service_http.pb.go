@@ -26,15 +26,15 @@ const OperationDirectoryListDirectory = "/wilson.api.resource.directory.v1.Direc
 const OperationDirectoryUpdateDirectory = "/wilson.api.resource.directory.v1.Directory/UpdateDirectory"
 
 type DirectoryHTTPServer interface {
-	// CreateDirectory CreateDirectory 创建文件目录信息
+	// CreateDirectory CreateDirectory
 	CreateDirectory(context.Context, *CreateDirectoryRequest) (*CreateDirectoryReply, error)
-	// DeleteDirectory DeleteDirectory 删除文件目录信息
+	// DeleteDirectory DeleteDirectory
 	DeleteDirectory(context.Context, *DeleteDirectoryRequest) (*DeleteDirectoryReply, error)
-	// GetDirectory GetDirectory 获取指定的文件目录信息
+	// GetDirectory GetDirectory
 	GetDirectory(context.Context, *GetDirectoryRequest) (*GetDirectoryReply, error)
-	// ListDirectory ListDirectory 获取文件目录信息列表
+	// ListDirectory ListDirectory
 	ListDirectory(context.Context, *ListDirectoryRequest) (*ListDirectoryReply, error)
-	// UpdateDirectory UpdateDirectory 更新文件目录信息
+	// UpdateDirectory UpdateDirectory
 	UpdateDirectory(context.Context, *UpdateDirectoryRequest) (*UpdateDirectoryReply, error)
 }
 

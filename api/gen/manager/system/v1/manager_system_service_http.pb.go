@@ -22,7 +22,7 @@ const _ = http.SupportPackageIsVersion1
 const OperationSystemGetSystemSetting = "/wilson.api.manager.system.v1.System/GetSystemSetting"
 
 type SystemHTTPServer interface {
-	// GetSystemSetting GetSystemSetting 获取系统设置
+	// GetSystemSetting GetSystemSetting
 	GetSystemSetting(context.Context, *GetSystemSettingRequest) (*GetSystemSettingReply, error)
 }
 

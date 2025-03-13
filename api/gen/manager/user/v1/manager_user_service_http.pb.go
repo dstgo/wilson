@@ -40,41 +40,41 @@ const OperationUserUserLogout = "/wilson.api.manager.user.v1.User/UserLogout"
 const OperationUserUserRefreshToken = "/wilson.api.manager.user.v1.User/UserRefreshToken"
 
 type UserHTTPServer interface {
-	// CreateUser CreateUser 创建用户信息
+	// CreateUser CreateUser
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
-	// DeleteUser DeleteUser 删除用户信息
+	// DeleteUser DeleteUser
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserReply, error)
-	// GetCurrentUser GetCurrentUser 获取当前用户信息
+	// GetCurrentUser GetCurrentUser
 	GetCurrentUser(context.Context, *emptypb.Empty) (*GetUserReply, error)
-	// GetUser GetUser 获取指定的用户信息
+	// GetUser GetUser
 	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
-	// GetUserLoginCaptcha GetUserLoginCaptcha 获取用户登陆验证吗
+	// GetUserLoginCaptcha GetUserLoginCaptcha
 	GetUserLoginCaptcha(context.Context, *emptypb.Empty) (*GetUserLoginCaptchaReply, error)
-	// ListLoginLog ListLoginLog 获取用户登陆信息列表
+	// ListLoginLog ListLoginLog
 	ListLoginLog(context.Context, *ListLoginLogRequest) (*ListLoginLogReply, error)
-	// ListUser ListUser 获取用户信息列表
+	// ListUser ListUser
 	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
-	// ResetUserPassword ResetUserPassword 重置用户密码
+	// ResetUserPassword ResetUserPassword
 	ResetUserPassword(context.Context, *ResetUserPasswordRequest) (*ResetUserPasswordReply, error)
-	// SendCurrentUserCaptcha SendCurrentUserCaptcha 发送用户验证吗
+	// SendCurrentUserCaptcha SendCurrentUserCaptcha
 	SendCurrentUserCaptcha(context.Context, *SendCurrentUserCaptchaRequest) (*SendCurrentUserCaptchaReply, error)
-	// UpdateCurrentUser UpdateCurrentUser 更新当前用户信息
+	// UpdateCurrentUser UpdateCurrentUser
 	UpdateCurrentUser(context.Context, *UpdateCurrentUserRequest) (*UpdateCurrentUserReply, error)
-	// UpdateCurrentUserPassword UpdateCurrentUserPassword 用户修改密码
+	// UpdateCurrentUserPassword UpdateCurrentUserPassword
 	UpdateCurrentUserPassword(context.Context, *UpdateCurrentUserPasswordRequest) (*UpdateCurrentUserPasswordReply, error)
-	// UpdateCurrentUserRole UpdateCurrentUserRole 切换用户当前角色
+	// UpdateCurrentUserRole UpdateCurrentUserRole
 	UpdateCurrentUserRole(context.Context, *UpdateCurrentUserRoleRequest) (*UpdateCurrentUserRoleReply, error)
-	// UpdateCurrentUserSetting UpdateCurrentUserSetting 用户设置保存
+	// UpdateCurrentUserSetting UpdateCurrentUserSetting
 	UpdateCurrentUserSetting(context.Context, *UpdateCurrentUserSettingRequest) (*UpdateCurrentUserSettingReply, error)
-	// UpdateUser UpdateUser 更新用户信息
+	// UpdateUser UpdateUser
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserReply, error)
-	// UpdateUserStatus UpdateUserStatus 更新用户信息状态
+	// UpdateUserStatus UpdateUserStatus
 	UpdateUserStatus(context.Context, *UpdateUserStatusRequest) (*UpdateUserStatusReply, error)
-	// UserLogin UserLogin 用户登陆
+	// UserLogin UserLogin
 	UserLogin(context.Context, *UserLoginRequest) (*UserLoginReply, error)
-	// UserLogout UserLogout 用户退出
+	// UserLogout UserLogout
 	UserLogout(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	// UserRefreshToken UserRefreshToken 用户刷新token
+	// UserRefreshToken UserRefreshToken
 	UserRefreshToken(context.Context, *emptypb.Empty) (*UserRefreshTokenReply, error)
 }
 

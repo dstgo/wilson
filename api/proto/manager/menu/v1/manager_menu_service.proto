@@ -9,21 +9,21 @@ import "google/api/annotations.proto";
 
 service Menu{
 
-  // ListMenu 获取菜单信息列表
+  // ListMenu
   rpc ListMenu (ListMenuRequest) returns (ListMenuReply) {
     option (google.api.http) = {
       get: "/manager/api/v1/menus",
     };
   }
 
-  // ListMenuByCurRole 获取菜单信息列表
+  // ListMenuByCurRole
   rpc ListMenuByCurRole (ListMenuByCurRoleRequest) returns (ListMenuByCurRoleReply) {
     option (google.api.http) = {
       get: "/manager/api/v1/menus/by/cur_role",
     };
   }
 
-  // CreateMenu 创建菜单信息
+  // CreateMenu
   rpc CreateMenu (CreateMenuRequest) returns (CreateMenuReply) {
     option (google.api.http) = {
       post: "/manager/api/v1/menu",
@@ -31,7 +31,7 @@ service Menu{
     };
   }
 
-  // UpdateMenu 更新菜单信息
+  // UpdateMenu
   rpc UpdateMenu (UpdateMenuRequest) returns (UpdateMenuReply) {
     option (google.api.http) = {
       put: "/manager/api/v1/menu",
@@ -39,7 +39,7 @@ service Menu{
     };
   }
 
-  // DeleteMenu 删除菜单信息
+  // DeleteMenu
   rpc DeleteMenu (DeleteMenuRequest) returns (DeleteMenuReply) {
     option (google.api.http) = {
       delete: "/manager/api/v1/menu",

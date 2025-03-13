@@ -7,7 +7,7 @@ option go_package = "configure/configure/v1;v1";
 import "validate/validate.proto";
 
 
-// 查询指定模板
+//
 message GetConfigureRequest{
   uint32 serverId = 1[(validate.rules).uint32 = {gt: 0}];
   uint32 envId = 2[(validate.rules).uint32 = {gt: 0}];
@@ -24,13 +24,13 @@ message GetConfigureReply{
   uint32 createdAt = 8;
 }
 
-// 对比配置
+//
 message CompareConfigureRequest {
   uint32 serverId = 1[(validate.rules).uint32 = {gt: 0}];
   uint32 envId = 2[(validate.rules).uint32 = {gt: 0}];
 }
 
-// 对比配置详情
+//
 message Compare {
   string type = 1;
   string key = 2;
@@ -42,7 +42,7 @@ message CompareConfigureReply {
   repeated Compare list = 1;
 }
 
-// 修改配置
+//
 message UpdateConfigureRequest {
   uint32 serverId = 1[(validate.rules).uint32 = {gt: 0}];
   uint32 envId = 2[(validate.rules).uint32 = {gt: 0}];
@@ -50,7 +50,7 @@ message UpdateConfigureRequest {
 }
 message UpdateConfigureReply{}
 
-// 监听获取配置
+//
 message WatchConfigureRequest {
   string server = 1[(validate.rules).string = {min_len: 1}];
   string token = 2[(validate.rules).string = {min_len: 1}];
