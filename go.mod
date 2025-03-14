@@ -32,7 +32,6 @@ require (
 	github.com/mojocn/base64Captcha v1.3.6
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/panjf2000/ants/v2 v2.9.1
-	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.18.0
 	github.com/samber/lo v1.47.0
 	github.com/spf13/cast v1.3.0
@@ -49,11 +48,11 @@ require (
 	go.opentelemetry.io/otel/trace v1.31.0
 	go.uber.org/automaxprocs v1.5.3
 	go.uber.org/zap v1.27.0
-	golang.org/x/crypto v0.31.0
+	golang.org/x/crypto v0.35.0
 	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f
 	golang.org/x/image v0.23.0
-	golang.org/x/net v0.33.0
-	golang.org/x/text v0.21.0
+	golang.org/x/net v0.36.0
+	golang.org/x/text v0.22.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20250102185135-69823020774d
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241223144023-3abc09e42ca8
 	google.golang.org/grpc v1.69.2
@@ -134,6 +133,7 @@ require (
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/paulmach/orb v0.11.1 // indirect
 	github.com/pierrec/lz4/v4 v4.1.21 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
 	github.com/prometheus/client_model v0.5.0 // indirect
@@ -157,8 +157,8 @@ require (
 	go.opentelemetry.io/proto/otlp v1.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
-	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
