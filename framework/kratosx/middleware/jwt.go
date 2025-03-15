@@ -30,19 +30,13 @@ func Jwt(conf *config.JWT) middleware.Middleware {
 		jwtIns := jwt.Instance()
 		var path, method string
 
-		if transporter, ok := transport.FromServerContext(ctx); ok {
-			switch transporter.Kind() {
-			case transport.KindGRPC:
-				path = transporter.Operation()
-				method = transport.KindGRPC.String()
-			case transport.KindHTTP:
-				if httpRequest, ok := http.RequestFromServerContext(ctx); ok {
-					path = httpRequest.URL.Path
-					method = httpRequest.Method
-				}
-			default:
-				return false
-			}
+		if tr, ok := transport.FromServerContext(ctx); ok {
+			path = tr.Operation()
+			method = transport.KindGRPC.String()
+		}
+		if h, is := http.RequestFromServerContext(ctx); is {
+			path = h.URL.Path
+			method = h.Method
 		}
 
 		return jwtIns.IsWhitelist(path, method)
