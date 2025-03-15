@@ -9,6 +9,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/metadata"
 	md "github.com/go-kratos/kratos/v2/metadata"
+	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-redis/redis/v8"
 	"github.com/go-resty/resty/v2"
 	"google.golang.org/grpc"
@@ -206,6 +207,18 @@ func (c *ctx) GrpcConn(srvName string) (*grpc.ClientConn, error) {
 
 func (c *ctx) Clone() Context {
 	return MustContext(context.WithoutCancel(c.Context))
+}
+
+// TraceID 获取trace id
+func (c *ctx) TraceID() string {
+	t, _ := tracing.TraceID()(c.Context).(string)
+	return t
+}
+
+// SpanID 获取span id
+func (c *ctx) SpanID() string {
+	t, _ := tracing.SpanID()(c.Context).(string)
+	return t
 }
 
 // Env 获取配置环境
