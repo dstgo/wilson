@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/dstgo/wilson/framework/kratosx"
+	"github.com/dstgo/wilson/framework/pkg/strs"
 	"github.com/dstgo/wilson/service/gateway/config"
 	gtmiddleware "github.com/dstgo/wilson/service/gateway/middleware"
 	"github.com/dstgo/wilson/service/gateway/proxy"
@@ -92,15 +93,11 @@ func Middleware(c *config.Middleware) (gtmiddleware.Middleware, error) {
 			}
 			byteBody, _ := json.Marshal(body)
 			request, err := http.NewRequest(auth.Method, auth.URL, bytes.NewReader(byteBody))
-			//
-			// jsonHeader := http.Header{}
-			// jsonHeader.Add("Content-Type", auth.ContentType)
 			if err != nil {
 				return &http.Response{
 					Status:     http.StatusText(http.StatusUnauthorized),
 					StatusCode: http.StatusUnauthorized,
 					Body:       _nopBody,
-					// Header:     jsonHeader,
 				}, nil
 			}
 
@@ -114,7 +111,6 @@ func Middleware(c *config.Middleware) (gtmiddleware.Middleware, error) {
 					Status:     http.StatusText(http.StatusUnauthorized),
 					StatusCode: http.StatusUnauthorized,
 					Body:       _nopBody,
-					// Header:     jsonHeader,
 				}, nil
 			}
 
@@ -123,13 +119,21 @@ func Middleware(c *config.Middleware) (gtmiddleware.Middleware, error) {
 					Status:     http.StatusText(response.StatusCode),
 					StatusCode: response.StatusCode,
 					Body:       response.Body,
-					// Header:     jsonHeader,
 				}, nil
 			}
 
-			kratosx.MustContext(req.Context()).
+			respBody := proxy.GetData(response)
+
+			err = kratosx.MustContext(req.Context()).
 				Authentication().
-				SetAuth(req, string(proxy.GetData(response)))
+				SetAuth(req, strs.BytesToString(respBody))
+			if err != nil {
+				return &http.Response{
+					Status:     http.StatusText(http.StatusInternalServerError),
+					StatusCode: http.StatusInternalServerError,
+					Body:       _nopBody,
+				}, nil
+			}
 
 			return next.RoundTrip(req)
 		})

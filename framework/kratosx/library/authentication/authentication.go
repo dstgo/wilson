@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"strings"
 	"sync"
 
@@ -22,6 +23,7 @@ import (
 	"github.com/dstgo/wilson/framework/kratosx/config"
 	"github.com/dstgo/wilson/framework/kratosx/library/db"
 	rd "github.com/dstgo/wilson/framework/kratosx/library/redis"
+	"github.com/dstgo/wilson/framework/pkg/strs"
 )
 
 type Authentication interface {
@@ -32,8 +34,9 @@ type Authentication interface {
 	GetRole(ctx context.Context) (string, error)
 	Enforce() *casbin.Enforcer
 	IsSkipRole(role string) bool
-	SetAuth(req *http.Request, data string)
-	ParseAuth(req context.Context, dst any) error
+	SetAuth(req *http.Request, data any) error
+	SetAuthMD(ctx context.Context, data any) (context.Context, error)
+	ParseAuthFromMD(ctx context.Context, dst any) error
 }
 
 type authentication struct {
@@ -157,14 +160,37 @@ func (a *authentication) initSkipRole(skips []string) {
 	}
 }
 
-func (a *authentication) SetAuth(req *http.Request, data string) {
-	if data == "" {
-		return
+func (a *authentication) SetAuth(req *http.Request, data any) error {
+	switch reflect.TypeOf(data).Kind() {
+	case reflect.Map, reflect.Struct, reflect.Array, reflect.Slice:
+		marshal, err := json.Marshal(data)
+		if err != nil {
+			return errors.New("auth info format error:" + err.Error())
+		}
+		req.Header.Set(authMdKey, strs.BytesToString(marshal))
+	default:
+		req.Header.Set(authMdKey, fmt.Sprintf("%s", data))
 	}
-	req.Header.Set(authMdKey, data)
+
+	return nil
 }
 
-func (a *authentication) ParseAuth(ctx context.Context, dst any) error {
+func (a *authentication) SetAuthMD(ctx context.Context, data any) (context.Context, error) {
+	switch reflect.TypeOf(data).Kind() {
+	case reflect.Pointer:
+		return a.SetAuthMD(ctx, reflect.ValueOf(data).Elem().Interface())
+	case reflect.Map, reflect.Struct, reflect.Array, reflect.Slice:
+		marshal, err := json.Marshal(data)
+		if err != nil {
+			return nil, errors.New("auth info format error:" + err.Error())
+		}
+		return metadata.AppendToClientContext(ctx, authMdKey, strs.BytesToString(marshal)), nil
+	default:
+		return metadata.AppendToClientContext(ctx, authMdKey, fmt.Sprintf("%s", data)), nil
+	}
+}
+
+func (a *authentication) ParseAuthFromMD(ctx context.Context, dst any) error {
 	if md, ok := metadata.FromServerContext(ctx); ok {
 		body := md.Get(authMdKey)
 		if err := json.Unmarshal([]byte(body), dst); err != nil {

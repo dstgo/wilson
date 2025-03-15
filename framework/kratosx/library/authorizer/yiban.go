@@ -70,7 +70,7 @@ func (y yb) GetAccessToken(ctx kratosx.Context, req GetAccessTokenRequest) (*Get
 
 func (y yb) GetAuthInfo(ctx kratosx.Context, req GetAuthInfoRequest) (*GetAuthInfoReply, error) {
 	url := "https://openapi.yiban.cn/user/me?access_token=" + req.Token
-	resp, err := ctx.Http().Get(url)
+	resp, err := ctx.HTTPRequest().Get(url)
 	if err != nil {
 		return nil, err
 	}
