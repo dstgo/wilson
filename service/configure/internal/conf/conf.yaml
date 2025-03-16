@@ -26,7 +26,7 @@ client:
   - server: "Manager"
     type: "direct"
     backends:
-      - target: "127.0.0.1:7002"
+      - target: "127.0.0.1:8010"
 
 # 日志配置
 log:

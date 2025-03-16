@@ -57,9 +57,10 @@ func Init(hc *config.Http, watcher config.Watcher) {
 	watcher("http", func(value config.Value) {
 		err := value.Scan(hc)
 		if err != nil {
-			log.Errorf("http configuration watch scan failed: %v", err.Error())
+			log.Errorf("watch http client config failed: %s", err.Error())
 			return
 		}
+		log.Infof("watch http client config successfully")
 	})
 
 	httpClient = client

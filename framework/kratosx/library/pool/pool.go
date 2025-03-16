@@ -54,9 +54,10 @@ func Init(conf *config.Pool, watcher config.Watcher) {
 	watcher("pool.size", func(value config.Value) {
 		size, err := value.Int()
 		if err != nil {
-			log.Errorf("Pool配置变更失败：%s", err.Error())
+			log.Errorf("watch pool.size config failed: %s", err.Error())
 			return
 		}
+		log.Infof("watch pool.size config successfully")
 		if size != 0 {
 			ins.pf.Tune(int(size))
 		}

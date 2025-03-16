@@ -122,18 +122,20 @@ func Init(conf *config.Authentication, watcher config.Watcher) {
 	whs := map[string]bool{}
 	watcher("authentication.whitelist", func(value config.Value) {
 		if err := value.Scan(&whs); err != nil {
-			log.Errorf("Authentication Whitelist 配置变更失败：%s", err.Error())
+			log.Errorf("watch authentication.whitelist config failed: %s", err.Error())
 			return
 		}
+		log.Infof("watch authentication.whitelist config successfully")
 		instance.initWhitelist(whs)
 	})
 
 	skips := make([]string, 0)
 	watcher("authentication.whitelist", func(value config.Value) {
 		if err := value.Scan(&skips); err != nil {
-			log.Errorf("Authentication SkipRole 配置变更失败：%s", err.Error())
+			log.Errorf("watch authentication.whitelist config failed: %s", err.Error())
 			return
 		}
+		log.Infof("watch authentication.whitelist config successfully")
 		instance.initSkipRole(skips)
 	})
 }

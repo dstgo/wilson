@@ -1,9 +1,11 @@
 package cli
 
 import (
+	"errors"
 	"fmt"
 	"runtime"
 
+	kratosConfig "github.com/go-kratos/kratos/v2/config"
 	"github.com/spf13/cobra"
 )
 
@@ -32,10 +34,19 @@ func runVersionCmd(opts *Options) func(cmd *cobra.Command, args []string) error 
 
 func runStartCmd(opts *Options) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		configLoader := configureLoader(opts)
+
+		var configLoader func() kratosConfig.Source
+
+		if opts.ConfigHost != "" && opts.ConfigToken != "" {
+			configLoader = configureLoader(opts)
+		}
 
 		if opts.ConfigFile != "" {
 			configLoader = fileLoader(opts)
+		}
+
+		if configLoader == nil {
+			return errors.New("no config source provided")
 		}
 
 		startOpts := &StartOptions{

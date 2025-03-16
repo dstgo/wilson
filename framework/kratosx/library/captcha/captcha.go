@@ -63,9 +63,10 @@ func Init(cfs map[string]*config.Captcha, watcher config.Watcher) {
 
 		watcher("captcha."+key, func(value config.Value) {
 			if err := value.Scan(conf); err != nil {
-				log.Errorf("Captcha 配置变更失败：%s", err.Error())
+				log.Errorf("watch captcha config failed: %s", err.Error())
 				return
 			}
+			log.Infof("watch captcha config successfully")
 			instance.initFactory(key, conf)
 		})
 	}

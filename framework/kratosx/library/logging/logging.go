@@ -36,9 +36,10 @@ func Init(ec *config.Logging, watcher config.Watcher) {
 	newConf := map[string]bool{}
 	watcher("logging.whitelist", func(value config.Value) {
 		if err := value.Scan(&newConf); err != nil {
-			log.Errorf("Logging 配置变更失败：%s", err.Error())
+			log.Errorf("watch logging.whitelist config failed: %s", err.Error())
 			return
 		}
+		log.Infof("watch logging.whitelist config successfully")
 
 		instance.mu.Lock()
 		instance.set = newConf

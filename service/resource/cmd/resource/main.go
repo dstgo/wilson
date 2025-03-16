@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/go-kratos/kratos/v2"
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	_ "go.uber.org/automaxprocs"
@@ -64,8 +65,9 @@ func RegisterServer(c config.Config, hs *http.Server, gs *grpc.Server) {
 	cfg := &conf.Config{}
 	c.ScanWatch("resource", func(value config.Value) {
 		if err := value.Scan(&cfg); err != nil {
-			panic("resource config format error: " + err.Error())
+			panic("watch resource config format error: " + err.Error())
 		}
+		log.Infof("watch resource config change updated")
 	})
 
 	if cfg.Export.LocalDir != "" {

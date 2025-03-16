@@ -97,6 +97,7 @@ func NewServer(conf *config.Config) (transport.Server, error) {
 		if er := pxy.Update(c); er != nil {
 			log.Errorf("failed to update gateway config: %v", err)
 		}
+		log.Infof("watch endpoints config change updated")
 	})
 
 	handler := http.Handler(pxy)

@@ -44,11 +44,12 @@ func Init(cfs map[string]*config.Redis, watcher config.Watcher) {
 
 		watcher("redis."+key, func(value config.Value) {
 			if err := value.Scan(conf); err != nil {
-				log.Errorf("Redis配置变更失败：%s", err.Error())
+				log.Errorf("watch redis.%s config failed: %s", key, err.Error())
 				return
 			}
+			log.Infof("watch redis.%s config successfully", key)
 			if err := instance.initFactory(key, conf); err != nil {
-				log.Errorf("Redis变更重载失败：%s", err.Error())
+				log.Errorf("reload redis.%s config failed: %s", key, err.Error())
 			}
 		})
 	}

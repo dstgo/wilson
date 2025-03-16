@@ -42,16 +42,17 @@ func Init(conf *config.Email, watcher config.Watcher) {
 	// 遍历初始化模板
 	for key, tpc := range conf.Template {
 		if err := instance.initFactory(key, tpc); err != nil {
-			panic("Email 初始化失败 :" + err.Error())
+			panic("init email.template config failed: " + err.Error())
 		}
 
 		watcher("email.template."+key, func(value config.Value) {
 			if err := value.Scan(&tpc); err != nil {
-				log.Errorf("Email Template 配置变更失败：%s", err.Error())
+				log.Errorf("watch email.template.%s config failed: %s", key, err.Error())
 				return
 			}
+			log.Infof("watch email.template.%s config successfully", key)
 			if err := instance.initFactory(key, tpc); err != nil {
-				log.Errorf("Email Template 变更重载失败:%s", err.Error())
+				log.Errorf("reload email.template config failed: %s", err.Error())
 			}
 		})
 	}

@@ -44,9 +44,10 @@ func Init(conf map[string]string, watcher config.Watcher) {
 
 		watcher("loader."+key, func(value config.Value) {
 			if err := value.Scan(&conf); err != nil {
-				log.Errorf("Loader配置变更失败：%s", err.Error())
+				log.Errorf("watch loader.%s config failed: %s", key, err.Error())
 				return
 			}
+			log.Infof("watch loader.%s config successfully", key)
 			if err := instance.initFactory(key, path); err != nil {
 				log.Errorf("Loader变更重载失败:%s", err.Error())
 			}
