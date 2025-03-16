@@ -10,14 +10,14 @@ import "configure/business/v1/configure_business_value.proto";
 
 service Business{
 
-  // ListBusiness 获取业务配置信息列表
+  // ListBusiness
   rpc ListBusiness (ListBusinessRequest) returns (ListBusinessReply) {
     option (google.api.http) = {
       get: "/configure/api/v1/businesses",
     };
   }
 
-  // CreateBusiness 创建业务配置信息
+  // CreateBusiness
   rpc CreateBusiness (CreateBusinessRequest) returns (CreateBusinessReply) {
     option (google.api.http) = {
       post: "/configure/api/v1/business",
@@ -25,7 +25,7 @@ service Business{
     };
   }
 
-  // UpdateBusiness 更新业务配置信息
+  // UpdateBusiness
   rpc UpdateBusiness (UpdateBusinessRequest) returns (UpdateBusinessReply) {
     option (google.api.http) = {
       put: "/configure/api/v1/business",
@@ -33,21 +33,21 @@ service Business{
     };
   }
 
-  // DeleteBusiness 删除业务配置信息
+  // DeleteBusiness
   rpc DeleteBusiness (DeleteBusinessRequest) returns (DeleteBusinessReply) {
     option (google.api.http) = {
       delete: "/configure/api/v1/business",
     };
   }
 
-  // ListBusinessValue 获取业务配置值信息列表
+  // ListBusinessValue
   rpc ListBusinessValue (ListBusinessValueRequest) returns (ListBusinessValueReply) {
     option (google.api.http) = {
       get: "/configure/api/v1/business/values",
     };
   }
 
-  // UpdateBusinessValue 更新业务配置值信息
+  // UpdateBusinessValue
   rpc UpdateBusinessValue (UpdateBusinessValueRequest) returns (UpdateBusinessValueReply) {
     option (google.api.http) = {
       put: "/configure/api/v1/business/values",

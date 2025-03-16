@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"strings"
 	"sync"
 
@@ -19,9 +20,11 @@ import (
 	"github.com/go-redis/redis/v8"
 	jwtv5 "github.com/golang-jwt/jwt/v5"
 
+	"github.com/dstgo/wilson/framework/constants"
 	"github.com/dstgo/wilson/framework/kratosx/config"
 	"github.com/dstgo/wilson/framework/kratosx/library/db"
 	rd "github.com/dstgo/wilson/framework/kratosx/library/redis"
+	"github.com/dstgo/wilson/framework/pkg/strs"
 )
 
 type Authentication interface {
@@ -32,8 +35,9 @@ type Authentication interface {
 	GetRole(ctx context.Context) (string, error)
 	Enforce() *casbin.Enforcer
 	IsSkipRole(role string) bool
-	SetAuth(req *http.Request, data string)
-	ParseAuth(req context.Context, dst any) error
+	SetAuth(req *http.Request, data any) error
+	SetAuthMD(ctx context.Context, data any) (context.Context, error)
+	ParseAuthFromMD(ctx context.Context, dst any) error
 }
 
 type authentication struct {
@@ -49,7 +53,7 @@ var instance *authentication
 
 const (
 	redisKey  = "rbac_authentication"
-	authMdKey = "x-md-global-auth"
+	authMdKey = constants.GlobalAuthMD
 )
 
 func Instance() Authentication {
@@ -118,18 +122,20 @@ func Init(conf *config.Authentication, watcher config.Watcher) {
 	whs := map[string]bool{}
 	watcher("authentication.whitelist", func(value config.Value) {
 		if err := value.Scan(&whs); err != nil {
-			log.Errorf("Authentication Whitelist 配置变更失败：%s", err.Error())
+			log.Errorf("watch authentication.whitelist config failed: %s", err.Error())
 			return
 		}
+		log.Infof("watch authentication.whitelist config successfully")
 		instance.initWhitelist(whs)
 	})
 
 	skips := make([]string, 0)
 	watcher("authentication.whitelist", func(value config.Value) {
 		if err := value.Scan(&skips); err != nil {
-			log.Errorf("Authentication SkipRole 配置变更失败：%s", err.Error())
+			log.Errorf("watch authentication.whitelist config failed: %s", err.Error())
 			return
 		}
+		log.Infof("watch authentication.whitelist config successfully")
 		instance.initSkipRole(skips)
 	})
 }
@@ -157,14 +163,37 @@ func (a *authentication) initSkipRole(skips []string) {
 	}
 }
 
-func (a *authentication) SetAuth(req *http.Request, data string) {
-	if data == "" {
-		return
+func (a *authentication) SetAuth(req *http.Request, data any) error {
+	switch reflect.TypeOf(data).Kind() {
+	case reflect.Map, reflect.Struct, reflect.Array, reflect.Slice:
+		marshal, err := json.Marshal(data)
+		if err != nil {
+			return errors.New("auth info format error:" + err.Error())
+		}
+		req.Header.Set(authMdKey, strs.BytesToString(marshal))
+	default:
+		req.Header.Set(authMdKey, fmt.Sprintf("%s", data))
 	}
-	req.Header.Set(authMdKey, data)
+
+	return nil
 }
 
-func (a *authentication) ParseAuth(ctx context.Context, dst any) error {
+func (a *authentication) SetAuthMD(ctx context.Context, data any) (context.Context, error) {
+	switch reflect.TypeOf(data).Kind() {
+	case reflect.Pointer:
+		return a.SetAuthMD(ctx, reflect.ValueOf(data).Elem().Interface())
+	case reflect.Map, reflect.Struct, reflect.Array, reflect.Slice:
+		marshal, err := json.Marshal(data)
+		if err != nil {
+			return nil, errors.New("auth info format error:" + err.Error())
+		}
+		return metadata.AppendToClientContext(ctx, authMdKey, strs.BytesToString(marshal)), nil
+	default:
+		return metadata.AppendToClientContext(ctx, authMdKey, fmt.Sprintf("%s", data)), nil
+	}
+}
+
+func (a *authentication) ParseAuthFromMD(ctx context.Context, dst any) error {
 	if md, ok := metadata.FromServerContext(ctx); ok {
 		body := md.Get(authMdKey)
 		if err := json.Unmarshal([]byte(body), dst); err != nil {
@@ -196,7 +225,7 @@ func (a *authentication) RemoveWhitelist(path, method string) {
 }
 
 func (a *authentication) IsWhitelist(path, method string) bool {
-	if !a.conf.EnableGrpc && method == "GRPC" {
+	if !a.conf.EnableGrpc && method == constants.GRPC {
 		return true
 	}
 	is, _ := a.redis.HGet(context.Background(), redisKey, a.path(path, method)).Bool()

@@ -83,9 +83,10 @@ func Init(ec *config.Signature, watcher config.Watcher) {
 	watcher("signature", func(value config.Value) {
 		nec := config.Signature{}
 		if err := value.Scan(&nec); err != nil {
-			log.Errorf("Signature 配置变更失败：%s", err.Error())
+			log.Errorf("watch signature config failed: %s", err.Error())
 			return
 		}
+		log.Infof("watch signature config successfully")
 		if nec.Expire == 0 {
 			nec.Expire = defaultTime
 		}

@@ -80,6 +80,7 @@ enum ErrorReason {
   ParseTokenError = 3015 [(errors.message) = "failed to parse token"];
   ForbiddenError = 3016 [(errors.code) = 403, (errors.message) = "no interface permission"];
   NotPermissionError = 3017 [(errors.message) = "no resource permission"];
+  InvalidParentIdError = 3018 [(errors.message) = "invalid parent id"];
 
   // Usercenter errors (4000-4999)
   UserServiceError = 4000 [(errors.message) = "user service error"];

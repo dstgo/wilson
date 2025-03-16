@@ -9,17 +9,17 @@ import "manager/resource/v1/manager_resource.proto";
 
 
 service Resource {
-  // GetCurrentResourceScopes 获取指定用户的资源列表
+  // GetCurrentResourceScopes
   rpc GetResourceScopes(GetResourceScopesRequest) returns(GetResourceScopesReply){}
 
-  // GetResource 获取资源权限
+  // GetResource
   rpc GetResource(GetResourceRequest) returns(GetResourceReply){
     option (google.api.http) = {
       get: "/manager/api/v1/resource",
     };
   }
 
-  // UpdateResource 更新资源权限
+  // UpdateResource
   rpc UpdateResource(UpdateResourceRequest) returns(UpdateResourceReply){
     option (google.api.http) = {
       put: "/manager/api/v1/resource/{keyword}",

@@ -103,12 +103,12 @@ func (c *config) Watch(key string, handler WatchHandleFunc) {
 	if err := c.ins.Watch(key, func(_ string, value kratosConfig.Value) {
 		defer func() {
 			if p := recover(); p != nil {
-				log.Errorf("监听配置失败: %v", p)
+				log.Errorf("watch config failed: %v", p)
 			}
 		}()
 		handler(c.transformValue(value))
 	}); err != nil {
-		log.Error(key+"监听配置失败", err.Error())
+		log.Error(key+"watch config failed", err.Error())
 	}
 }
 

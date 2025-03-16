@@ -56,7 +56,7 @@ message CreateDepartmentReply {
 
 message UpdateDepartmentRequest {
   uint32 id = 1[(validate.rules).uint32 = {gte: 1}];
-  uint32 parentId = 2[(validate.rules).uint32 = {gte: 1}];
+  uint32 parentId = 2[(validate.rules).uint32 = {gte: 0}];
   string name = 3[(validate.rules).string = {min_len: 1}];
   optional string description = 4;
 }

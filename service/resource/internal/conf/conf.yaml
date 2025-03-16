@@ -30,7 +30,7 @@ log:
     - file
   file:
     # 日志文件路径
-    name: "log/resource.log"
+    name: "/etc/wilson/resource/log/resource.log"
     # 单个日志文件最大大小（MB）
     maxSize: 50
     # 最大保留的旧日志文件数量
@@ -53,7 +53,7 @@ database:
       # 数据库用户名
       username: "root"
       # 数据库密码
-      password: "root"
+      password: "123456"
       # 数据库主机地址
       host: "127.0.0.1"
       # 数据库端口
@@ -65,9 +65,9 @@ database:
     config:
       initializer:
         # 是否启用初始化器
-        enable: true
+        enable: false
         # 初始化 SQL 文件路径
-        path: "deploy/data.sql"
+        path: "/etc/wilson/resource/deploy/data.sql"
       transformError:
         # 是否启用错误转换
         enable: true
@@ -92,7 +92,7 @@ redis:
     # Redis 用户名
     username: ""
     # Redis 密码
-    password: ""
+    password: "123456"
 
 # 资源配置
 resource:
@@ -114,11 +114,11 @@ resource:
     # 静态资源服务 URL
     serverUrl: "http://127.0.0.1:7003/resource/api/v1/static"
     # 本地存储目录
-    localDir: "static"
+    localDir: "/etc/wilson/resource/static"
     # 临时文件过期时间
     temporaryExpire: 600s
   export:
     # 下载服务 URL
     serverUrl: "http://127.0.0.1:7003/resource/api/v1/download"
     # 导出文件本地存储目录
-    localDir: "static/export"
+    localDir: "/etc/wilson/resource/static/export"

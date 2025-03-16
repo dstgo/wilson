@@ -40,9 +40,8 @@ func grpcServer(c *config.GrpcService, count int, so []grpc.ServerOption) *grpc.
 		opts = append(opts, grpc.Address(c.Addr))
 	}
 
-	if c.Timeout != 0 {
-		opts = append(opts, grpc.Timeout(c.Timeout))
-	}
+	// see framework/kratosx/middleware/timeout.go:15
+	opts = append(opts, grpc.Timeout(-1))
 	return grpc.NewServer(opts...)
 }
 
@@ -68,9 +67,8 @@ func httpServer(c *config.HttpService, count int, so []http.ServerOption) *http.
 		}
 		opts = append(opts, http.Address(c.Addr))
 	}
-	if c.Timeout != 0 {
-		opts = append(opts, http.Timeout(c.Timeout))
-	}
+	// see framework/kratosx/middleware/timeout.go:15
+	opts = append(opts, http.Timeout(-1))
 	if c.FormatResponse {
 		opts = append(opts, httpencoder.HttpEncoder()...)
 	}

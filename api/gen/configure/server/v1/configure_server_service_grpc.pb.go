@@ -29,13 +29,13 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServerClient interface {
-	// ListServer 获取服务信息列表
+	// ListServer
 	ListServer(ctx context.Context, in *ListServerRequest, opts ...grpc.CallOption) (*ListServerReply, error)
-	// CreateServer 创建服务信息
+	// CreateServer
 	CreateServer(ctx context.Context, in *CreateServerRequest, opts ...grpc.CallOption) (*CreateServerReply, error)
-	// UpdateServer 更新服务信息
+	// UpdateServer
 	UpdateServer(ctx context.Context, in *UpdateServerRequest, opts ...grpc.CallOption) (*UpdateServerReply, error)
-	// DeleteServer 删除服务信息
+	// DeleteServer
 	DeleteServer(ctx context.Context, in *DeleteServerRequest, opts ...grpc.CallOption) (*DeleteServerReply, error)
 }
 
@@ -91,13 +91,13 @@ func (c *serverClient) DeleteServer(ctx context.Context, in *DeleteServerRequest
 // All implementations must embed UnimplementedServerServer
 // for forward compatibility.
 type ServerServer interface {
-	// ListServer 获取服务信息列表
+	// ListServer
 	ListServer(context.Context, *ListServerRequest) (*ListServerReply, error)
-	// CreateServer 创建服务信息
+	// CreateServer
 	CreateServer(context.Context, *CreateServerRequest) (*CreateServerReply, error)
-	// UpdateServer 更新服务信息
+	// UpdateServer
 	UpdateServer(context.Context, *UpdateServerRequest) (*UpdateServerReply, error)
-	// DeleteServer 删除服务信息
+	// DeleteServer
 	DeleteServer(context.Context, *DeleteServerRequest) (*DeleteServerReply, error)
 	mustEmbedUnimplementedServerServer()
 }

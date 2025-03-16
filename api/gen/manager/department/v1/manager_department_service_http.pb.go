@@ -26,15 +26,15 @@ const OperationDepartmentListDepartment = "/wilson.api.manager.department.v1.Dep
 const OperationDepartmentUpdateDepartment = "/wilson.api.manager.department.v1.Department/UpdateDepartment"
 
 type DepartmentHTTPServer interface {
-	// CreateDepartment CreateDepartment 创建部门信息
+	// CreateDepartment CreateDepartment
 	CreateDepartment(context.Context, *CreateDepartmentRequest) (*CreateDepartmentReply, error)
-	// DeleteDepartment DeleteDepartment 删除部门信息
+	// DeleteDepartment DeleteDepartment
 	DeleteDepartment(context.Context, *DeleteDepartmentRequest) (*DeleteDepartmentReply, error)
-	// GetDepartment GetDepartment 获取指定的部门信息
+	// GetDepartment GetDepartment
 	GetDepartment(context.Context, *GetDepartmentRequest) (*GetDepartmentReply, error)
-	// ListDepartment ListDepartment 获取部门信息列表
+	// ListDepartment ListDepartment
 	ListDepartment(context.Context, *ListDepartmentRequest) (*ListDepartmentReply, error)
-	// UpdateDepartment UpdateDepartment 更新部门信息
+	// UpdateDepartment UpdateDepartment
 	UpdateDepartment(context.Context, *UpdateDepartmentRequest) (*UpdateDepartmentReply, error)
 }
 

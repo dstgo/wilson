@@ -10,21 +10,21 @@ import "google/api/annotations.proto";
 
 service Resource{
 
-  // GetResource 获取指定的资源配置信息
+  // GetResource
   rpc GetResource (GetResourceRequest) returns (GetResourceReply) {
     option (google.api.http) = {
       get: "/configure/api/v1/resource",
     };
   }
 
-  // ListResource 获取资源配置信息列表
+  // ListResource
   rpc ListResource (ListResourceRequest) returns (ListResourceReply) {
     option (google.api.http) = {
       get: "/configure/api/v1/resources",
     };
   }
 
-  // CreateResource 创建资源配置信息
+  // CreateResource
   rpc CreateResource (CreateResourceRequest) returns (CreateResourceReply) {
     option (google.api.http) = {
       post: "/configure/api/v1/resource",
@@ -32,7 +32,7 @@ service Resource{
     };
   }
 
-  // UpdateResource 更新资源配置信息
+  // UpdateResource
   rpc UpdateResource (UpdateResourceRequest) returns (UpdateResourceReply) {
     option (google.api.http) = {
       put: "/configure/api/v1/resource",
@@ -40,21 +40,21 @@ service Resource{
     };
   }
 
-  // DeleteResource 删除资源配置信息
+  // DeleteResource
   rpc DeleteResource (DeleteResourceRequest) returns (DeleteResourceReply) {
     option (google.api.http) = {
       delete: "/configure/api/v1/resource",
     };
   }
 
-  // ListResourceValue 获取业务配置值信息列表
+  // ListResourceValue
   rpc ListResourceValue (ListResourceValueRequest) returns (ListResourceValueReply) {
     option (google.api.http) = {
       get: "/configure/api/v1/resource/values",
     };
   }
 
-  // UpdateResourceValue 更新业务配置值信息
+  // UpdateResourceValue
   rpc UpdateResourceValue (UpdateResourceValueRequest) returns (UpdateResourceValueReply) {
     option (google.api.http) = {
       put: "/configure/api/v1/resource/values",

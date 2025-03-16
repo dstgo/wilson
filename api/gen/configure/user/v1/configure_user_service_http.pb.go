@@ -23,9 +23,9 @@ const OperationUserLogin = "/wilson.api.configure.user.v1.User/Login"
 const OperationUserRefreshToken = "/wilson.api.configure.user.v1.User/RefreshToken"
 
 type UserHTTPServer interface {
-	// Login 用户登录
+	// Login
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
-	// RefreshToken RefreshToken 刷新token
+	// RefreshToken RefreshToken
 	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenReply, error)
 }
 
@@ -60,6 +60,9 @@ func _User_Login0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error 
 func _User_RefreshToken0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in RefreshTokenRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -105,10 +108,10 @@ func (c *UserHTTPClientImpl) Login(ctx context.Context, in *LoginRequest, opts .
 func (c *UserHTTPClientImpl) RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...http.CallOption) (*RefreshTokenReply, error) {
 	var out RefreshTokenReply
 	pattern := "/configure/api/v1/token/refresh"
-	path := binding.EncodeURL(pattern, in, true)
+	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationUserRefreshToken))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

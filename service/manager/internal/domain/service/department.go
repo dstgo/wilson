@@ -74,8 +74,10 @@ func (u *Department) CreateDepartment(ctx kratosx.Context, req *entity.Departmen
 
 // UpdateDepartment 更新部门信息
 func (u *Department) UpdateDepartment(ctx kratosx.Context, req *entity.Department) error {
-	if req.Id == 1 {
-		return errors.EditSystemDataError()
+	if req.Id == 1 && req.ParentId > 0 {
+		return errors.InvalidParentIdErrorf("root department dosen't need parent department")
+	} else if req.Id > 1 && req.ParentId == 0 {
+		return errors.InvalidParentIdErrorf("parent department is required")
 	}
 
 	// 是否具有父级部门权限

@@ -14,6 +14,8 @@ func New(conf config.Config) []middleware.Middleware {
 
 	mds := []middleware.Middleware{
 		Recovery(),
+		// 超时
+		Timeout(app.Server.Grpc, app.Server.Http),
 		// 限流
 		RateLimit(app.RateLimit),
 		// 监控
@@ -27,6 +29,7 @@ func New(conf config.Config) []middleware.Middleware {
 		// 请求日志
 		Logging(app.Logging),
 		// 参数校验
+		//nolint:staticcheck
 		validate.Validator(),
 		// ip
 		IP(),

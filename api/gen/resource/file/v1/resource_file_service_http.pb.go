@@ -26,49 +26,28 @@ const OperationFilePrepareUploadFile = "/wilson.api.resource.file.v1.File/Prepar
 const OperationFileUpdateFile = "/wilson.api.resource.file.v1.File/UpdateFile"
 
 type FileHTTPServer interface {
-	// DeleteFile DeleteFile 删除文件信息
+	// DeleteFile DeleteFile
 	DeleteFile(context.Context, *DeleteFileRequest) (*DeleteFileReply, error)
-	// GetFile GetFile 获取指定的文件信息
+	// GetFile GetFile
 	GetFile(context.Context, *GetFileRequest) (*GetFileReply, error)
-	// ListFile ListFile 获取文件信息列表
+	// ListFile ListFile
 	ListFile(context.Context, *ListFileRequest) (*ListFileReply, error)
-	// PrepareUploadFile PrepareUploadFile 预上传文件信息
+	// PrepareUploadFile PrepareUploadFile
 	PrepareUploadFile(context.Context, *PrepareUploadFileRequest) (*PrepareUploadFileReply, error)
-	// UpdateFile UpdateFile 更新文件信息
+	// UpdateFile UpdateFile
 	UpdateFile(context.Context, *UpdateFileRequest) (*UpdateFileReply, error)
 }
 
 func RegisterFileHTTPServer(s *http.Server, srv FileHTTPServer) {
 	r := s.Route("/")
-	r.GET("/resource/client/v1/file", _File_GetFile0_HTTP_Handler(srv))
-	r.GET("/resource/api/v1/file", _File_GetFile1_HTTP_Handler(srv))
+	r.GET("/resource/api/v1/file", _File_GetFile0_HTTP_Handler(srv))
 	r.GET("/resource/api/v1/files", _File_ListFile0_HTTP_Handler(srv))
-	r.POST("/resource/client/v1/file/prepare_upload", _File_PrepareUploadFile0_HTTP_Handler(srv))
-	r.POST("/resource/api/v1/file/prepare_upload", _File_PrepareUploadFile1_HTTP_Handler(srv))
+	r.POST("/resource/api/v1/file/prepare_upload", _File_PrepareUploadFile0_HTTP_Handler(srv))
 	r.PUT("/resource/api/v1/file", _File_UpdateFile0_HTTP_Handler(srv))
 	r.DELETE("/resource/api/v1/file", _File_DeleteFile0_HTTP_Handler(srv))
 }
 
 func _File_GetFile0_HTTP_Handler(srv FileHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in GetFileRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationFileGetFile)
-		h := ctx.Middleware(func(ctx context.Context, req any) (any, error) {
-			return srv.GetFile(ctx, req.(*GetFileRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*GetFileReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _File_GetFile1_HTTP_Handler(srv FileHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetFileRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -107,28 +86,6 @@ func _File_ListFile0_HTTP_Handler(srv FileHTTPServer) func(ctx http.Context) err
 }
 
 func _File_PrepareUploadFile0_HTTP_Handler(srv FileHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in PrepareUploadFileRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationFilePrepareUploadFile)
-		h := ctx.Middleware(func(ctx context.Context, req any) (any, error) {
-			return srv.PrepareUploadFile(ctx, req.(*PrepareUploadFileRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*PrepareUploadFileReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _File_PrepareUploadFile1_HTTP_Handler(srv FileHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PrepareUploadFileRequest
 		if err := ctx.Bind(&in); err != nil {

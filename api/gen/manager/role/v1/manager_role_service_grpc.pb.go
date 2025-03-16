@@ -33,21 +33,21 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RoleClient interface {
-	// GetRoleMenuIds 获取指定角色的菜单id列表
+	// GetRoleMenuIds
 	GetRoleMenuIds(ctx context.Context, in *GetRoleMenuIdsRequest, opts ...grpc.CallOption) (*GetRoleMenuIdsReply, error)
-	// ListRole 获取角色信息列表
+	// ListRole
 	ListRole(ctx context.Context, in *ListRoleRequest, opts ...grpc.CallOption) (*ListRoleReply, error)
-	// CreateRole 创建角色信息
+	// CreateRole
 	CreateRole(ctx context.Context, in *CreateRoleRequest, opts ...grpc.CallOption) (*CreateRoleReply, error)
-	// UpdateRole 更新角色信息
+	// UpdateRole
 	UpdateRole(ctx context.Context, in *UpdateRoleRequest, opts ...grpc.CallOption) (*UpdateRoleReply, error)
-	// UpdateRole 更新角色信息
+	// UpdateRole
 	UpdateRoleMenu(ctx context.Context, in *UpdateRoleMenuRequest, opts ...grpc.CallOption) (*UpdateRoleMenuReply, error)
-	// UpdateRoleStatus 更新角色信息状态
+	// UpdateRoleStatus
 	UpdateRoleStatus(ctx context.Context, in *UpdateRoleStatusRequest, opts ...grpc.CallOption) (*UpdateRoleStatusReply, error)
-	// DeleteRole 删除角色信息
+	// DeleteRole
 	DeleteRole(ctx context.Context, in *DeleteRoleRequest, opts ...grpc.CallOption) (*DeleteRoleReply, error)
-	// GetRole 获取指定的角色信息
+	// GetRole
 	GetRole(ctx context.Context, in *GetRoleRequest, opts ...grpc.CallOption) (*GetRoleReply, error)
 }
 
@@ -143,21 +143,21 @@ func (c *roleClient) GetRole(ctx context.Context, in *GetRoleRequest, opts ...gr
 // All implementations must embed UnimplementedRoleServer
 // for forward compatibility.
 type RoleServer interface {
-	// GetRoleMenuIds 获取指定角色的菜单id列表
+	// GetRoleMenuIds
 	GetRoleMenuIds(context.Context, *GetRoleMenuIdsRequest) (*GetRoleMenuIdsReply, error)
-	// ListRole 获取角色信息列表
+	// ListRole
 	ListRole(context.Context, *ListRoleRequest) (*ListRoleReply, error)
-	// CreateRole 创建角色信息
+	// CreateRole
 	CreateRole(context.Context, *CreateRoleRequest) (*CreateRoleReply, error)
-	// UpdateRole 更新角色信息
+	// UpdateRole
 	UpdateRole(context.Context, *UpdateRoleRequest) (*UpdateRoleReply, error)
-	// UpdateRole 更新角色信息
+	// UpdateRole
 	UpdateRoleMenu(context.Context, *UpdateRoleMenuRequest) (*UpdateRoleMenuReply, error)
-	// UpdateRoleStatus 更新角色信息状态
+	// UpdateRoleStatus
 	UpdateRoleStatus(context.Context, *UpdateRoleStatusRequest) (*UpdateRoleStatusReply, error)
-	// DeleteRole 删除角色信息
+	// DeleteRole
 	DeleteRole(context.Context, *DeleteRoleRequest) (*DeleteRoleReply, error)
-	// GetRole 获取指定的角色信息
+	// GetRole
 	GetRole(context.Context, *GetRoleRequest) (*GetRoleReply, error)
 	mustEmbedUnimplementedRoleServer()
 }

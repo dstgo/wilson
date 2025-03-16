@@ -94,7 +94,7 @@ func (t *Template) CreateTemplate(ctx kratosx.Context, template *entity.Template
 	otc := map[string]any{}
 	oe := encoding.GetCodec(template.Format)
 	if err := oe.Unmarshal([]byte(template.Content), &otc); err != nil {
-		return 0, errors.RenderTemplateErrorWrap(err)
+		return 0, errors.RenderTemplateError()
 	}
 
 	// 当前的版本

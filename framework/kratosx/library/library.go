@@ -7,6 +7,7 @@ import (
 	"github.com/dstgo/wilson/framework/kratosx/library/configure"
 	"github.com/dstgo/wilson/framework/kratosx/library/db"
 	"github.com/dstgo/wilson/framework/kratosx/library/email"
+	"github.com/dstgo/wilson/framework/kratosx/library/http"
 	"github.com/dstgo/wilson/framework/kratosx/library/jwt"
 	"github.com/dstgo/wilson/framework/kratosx/library/loader"
 	"github.com/dstgo/wilson/framework/kratosx/library/logger"
@@ -20,6 +21,9 @@ import (
 func Init(conf config.Config, fs logger.LogField) {
 	// 初始化全局日志
 	logger.Init(conf.App().Log, conf.Watch, fs)
+
+	// http client
+	http.Init(conf.App().Http, conf.Watch)
 
 	// 初始化数据库
 	db.Init(conf.App().Database, conf.Watch)

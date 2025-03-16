@@ -349,17 +349,6 @@ func (m *CreateDictionaryRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetType()) < 1 {
-		err := CreateDictionaryRequestValidationError{
-			field:  "Type",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if m.Description != nil {
 		// no validation rules for Description
 	}
@@ -584,8 +573,6 @@ func (m *UpdateDictionaryRequest) validate(all bool) error {
 	// no validation rules for Keyword
 
 	// no validation rules for Name
-
-	// no validation rules for Type
 
 	if m.Description != nil {
 		// no validation rules for Description

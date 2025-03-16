@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<script>self["MonacoEnvironment"] = (function (paths) {
+<head>
+  <script>self["MonacoEnvironment"] = (function (paths) {
           return {
             globalAPI: false,
             getWorkerUrl : function (moduleId, label) {
@@ -31,25 +31,159 @@
   "razor": "/monacoeditorwork/html.worker.bundle.js"
 });</script>
 
-		<meta charset="UTF-8" />
-		<link rel="shortcut icon" type="image/x-icon" href="https://unpkg.byted-static.com/latest/byted/arco-config/assets/favicon.ico" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>配置中心</title>
-        <script>
-            window.ApiConfig = {
-                Port: {{ .Port }}
+    <meta charset="UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon"
+          href="/favicon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>加载中...</title>
+    <style data-app-loading="inject-css">
+        html {
+            line-height: 1.15;
+        }
+
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f4f7f9;
+
+            /* transition: all 0.8s ease-out; */
+        }
+
+        .loading.hidden {
+            pointer-events: none;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.8s ease-out;
+        }
+
+        .dark .loading {
+            background: #0d0d10;
+        }
+
+        .loading-title {
+            margin-top: 66px;
+            font-size: 20px;
+            font-weight: 600;
+            color: rgb(0 0 0 / 85%);
+        }
+
+        .dark .loading-title {
+            color: #fff;
+        }
+
+        .loader {
+            position: relative;
+            width: 48px;
+            height: 48px;
+        }
+
+        .loader::before {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 48px;
+            height: 5px;
+            content: '';
+            background: hsl(var(--primary, 210 100% 50%) / 50%);
+            border-radius: 50%;
+            animation: shadow-ani 0.5s linear infinite;
+        }
+
+        .loader::after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            content: '';
+            background: hsl(var(--primary, 210 100% 50%));
+            border-radius: 4px;
+            animation: jump-ani 0.5s linear infinite;
+        }
+
+        @keyframes jump-ani {
+            15% {
+                border-bottom-right-radius: 3px;
             }
-        </script>
-		<script type="module" crossorigin src="/assets/index.d44c7abf.js"></script>
-		<link rel="modulepreload" crossorigin href="/assets/arco.96dc0c0a.js">
-		<link rel="modulepreload" crossorigin href="/assets/chart.53dcd0fe.js">
-		<link rel="modulepreload" crossorigin href="/assets/vue.a606b137.js">
-		<link rel="stylesheet" href="/assets/index.642f7884.css">
-	</head>
-	<body>
-		<div id="app"></div>
-		
-		<script>
-		</script>
-	</body>
+
+            25% {
+                transform: translateY(9px) rotate(22.5deg);
+            }
+
+            50% {
+                border-bottom-right-radius: 40px;
+                transform: translateY(18px) scale(1, 0.9) rotate(45deg);
+            }
+
+            75% {
+                transform: translateY(9px) rotate(67.5deg);
+            }
+
+            100% {
+                transform: translateY(0) rotate(90deg);
+            }
+        }
+
+        @keyframes shadow-ani {
+            0%,
+            100% {
+                transform: scale(1, 1);
+            }
+
+            50% {
+                transform: scale(1.2, 1);
+            }
+        }
+    </style>
+  <script type="module" crossorigin src="/assets/index.819b1795.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/arco.1d3b24cf.js">
+  <link rel="modulepreload" crossorigin href="/assets/chart.2c91a5c5.js">
+  <link rel="modulepreload" crossorigin href="/assets/vue.2f04a2ac.js">
+  <link rel="stylesheet" href="/assets/index.6d1fb9a0.css">
+</head>
+<body>
+<div id="app"></div>
+<div class="loading" id="__app-loading__">
+    <div class="loader"></div>
+    <div class="loading-title">加载中...</div>
+</div>
+<script>
+    window.ApiConfig = {
+        Port: {{ .Port }}
+    }
+
+    const appLoading = document.getElementById('__app-loading__');
+
+    function showLoading() {
+        appLoading.classList.remove('hidden');
+    }
+
+    function hideLoading() {
+        appLoading.classList.add('hidden');
+    }
+
+    // global method
+    window.appLoading = {
+        show: showLoading,
+        hide: hideLoading
+    };
+
+    window.addEventListener('load', function () {
+        // hide smoothly
+        setTimeout(hideLoading, 100);
+    });
+
+    showLoading();
+</script>
+
+</body>
 </html>

@@ -27,9 +27,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
-	// 用户登录
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error)
-	// RefreshToken 刷新token
+	// RefreshToken
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenReply, error)
 }
 
@@ -65,9 +64,8 @@ func (c *userClient) RefreshToken(ctx context.Context, in *RefreshTokenRequest, 
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility.
 type UserServer interface {
-	// 用户登录
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
-	// RefreshToken 刷新token
+	// RefreshToken
 	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenReply, error)
 	mustEmbedUnimplementedUserServer()
 }

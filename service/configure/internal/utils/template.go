@@ -49,7 +49,7 @@ func (t *templateParser) CheckTemplate(keys []string, template string) error {
 	// 进行参数判断
 	for _, key := range tempKeys {
 		if !bucket[key] {
-			return errors.New("非法字段：" + key)
+			return errors.New("invalid field：" + key)
 		}
 	}
 	return nil
@@ -131,7 +131,7 @@ func (t *templateParser) RenderTemplate(bvs []*entity.BusinessValue, rvs []*enti
 	tempKeys := reg.FindAllString(content, -1)
 	for _, key := range tempKeys {
 		if val, ok := values[key]; !ok {
-			return "", errors.New("非法字段：" + key)
+			return "", errors.New("invalid field：" + key)
 		} else {
 			if format == "json" {
 				content = t.replaceByFormatJson(content, key, val)

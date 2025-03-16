@@ -9,7 +9,7 @@ import "manager/auth/v1/manager_auth.proto";
 
 
 service Auth {
-  // Auth 接口鉴权
+  // Auth
   rpc Auth(AuthRequest) returns(AuthReply){
     option (google.api.http) = {
       post: "/manager/api/v1/auth",

@@ -258,40 +258,6 @@ func (m *GetUserReply) validate(all bool) error {
 
 	}
 
-	for idx, item := range m.GetJobs() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, GetUserReplyValidationError{
-						field:  fmt.Sprintf("Jobs[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, GetUserReplyValidationError{
-						field:  fmt.Sprintf("Jobs[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return GetUserReplyValidationError{
-					field:  fmt.Sprintf("Jobs[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
 	if m.Avatar != nil {
 		// no validation rules for Avatar
 	}
@@ -806,38 +772,6 @@ func (m *CreateUserRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if len(m.GetJobIds()) < 1 {
-		err := CreateUserRequestValidationError{
-			field:  "JobIds",
-			reason: "value must contain at least 1 item(s)",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_CreateUserRequest_JobIds_Unique := make(map[uint32]struct{}, len(m.GetJobIds()))
-
-	for idx, item := range m.GetJobIds() {
-		_, _ = idx, item
-
-		if _, exists := _CreateUserRequest_JobIds_Unique[item]; exists {
-			err := CreateUserRequestValidationError{
-				field:  fmt.Sprintf("JobIds[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_CreateUserRequest_JobIds_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for JobIds[idx]
-	}
-
 	if len(m.GetRoleIds()) < 1 {
 		err := CreateUserRequestValidationError{
 			field:  "RoleIds",
@@ -1138,38 +1072,6 @@ func (m *UpdateUserRequest) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
-	}
-
-	if len(m.GetJobIds()) < 1 {
-		err := UpdateUserRequestValidationError{
-			field:  "JobIds",
-			reason: "value must contain at least 1 item(s)",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_UpdateUserRequest_JobIds_Unique := make(map[uint32]struct{}, len(m.GetJobIds()))
-
-	for idx, item := range m.GetJobIds() {
-		_, _ = idx, item
-
-		if _, exists := _UpdateUserRequest_JobIds_Unique[item]; exists {
-			err := UpdateUserRequestValidationError{
-				field:  fmt.Sprintf("JobIds[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_UpdateUserRequest_JobIds_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for JobIds[idx]
 	}
 
 	if len(m.GetRoleIds()) < 1 {
@@ -3994,112 +3896,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetUserReply_RoleValidationError{}
-
-// Validate checks the field values on GetUserReply_Job with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *GetUserReply_Job) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetUserReply_Job with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetUserReply_JobMultiError, or nil if none found.
-func (m *GetUserReply_Job) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetUserReply_Job) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Id
-
-	// no validation rules for Name
-
-	// no validation rules for Keyword
-
-	if len(errors) > 0 {
-		return GetUserReply_JobMultiError(errors)
-	}
-
-	return nil
-}
-
-// GetUserReply_JobMultiError is an error wrapping multiple validation errors
-// returned by GetUserReply_Job.ValidateAll() if the designated constraints
-// aren't met.
-type GetUserReply_JobMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetUserReply_JobMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetUserReply_JobMultiError) AllErrors() []error { return m }
-
-// GetUserReply_JobValidationError is the validation error returned by
-// GetUserReply_Job.Validate if the designated constraints aren't met.
-type GetUserReply_JobValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e GetUserReply_JobValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e GetUserReply_JobValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e GetUserReply_JobValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e GetUserReply_JobValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e GetUserReply_JobValidationError) ErrorName() string { return "GetUserReply_JobValidationError" }
-
-// Error satisfies the builtin error interface
-func (e GetUserReply_JobValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sGetUserReply_Job.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = GetUserReply_JobValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = GetUserReply_JobValidationError{}
 
 // Validate checks the field values on GetUserReply_Department with the rules
 // defined in the proto definition for this message. If any rules are

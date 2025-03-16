@@ -9,21 +9,21 @@ import "google/api/annotations.proto";
 
 service Export{
 
-  // GetExport 获取指定的导出信息
+  // GetExport
   rpc GetExport (GetExportRequest) returns (GetExportReply) {
     option (google.api.http) = {
       get: "/resource/api/v1/export",
     };
   }
 
-  // ListExport 获取导出信息列表
+  // ListExport
   rpc ListExport (ListExportRequest) returns (ListExportReply) {
     option (google.api.http) = {
       get: "/resource/api/v1/exports",
     };
   }
 
-  // ExportFile 创建导出信息
+  // ExportFile
   rpc ExportFile (ExportFileRequest) returns (ExportFileReply) {
     option (google.api.http) = {
       post: "/resource/api/v1/export/file",
@@ -31,7 +31,7 @@ service Export{
     };
   }
 
-  // ExportExcel 创建导出表格信息
+  // ExportExcel
   rpc ExportExcel (ExportExcelRequest) returns (ExportExcelReply) {
     option (google.api.http) = {
       post: "/resource/api/v1/export/excel",
@@ -39,7 +39,7 @@ service Export{
     };
   }
 
-  // DeleteExport 删除导出信息
+  // DeleteExport
   rpc DeleteExport (DeleteExportRequest) returns (DeleteExportReply) {
     option (google.api.http) = {
       delete: "/resource/api/v1/export",

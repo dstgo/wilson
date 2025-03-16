@@ -26,7 +26,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthClient interface {
-	// Auth 接口鉴权
+	// Auth
 	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*AuthReply, error)
 }
 
@@ -52,7 +52,7 @@ func (c *authClient) Auth(ctx context.Context, in *AuthRequest, opts ...grpc.Cal
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility.
 type AuthServer interface {
-	// Auth 接口鉴权
+	// Auth
 	Auth(context.Context, *AuthRequest) (*AuthReply, error)
 	mustEmbedUnimplementedAuthServer()
 }

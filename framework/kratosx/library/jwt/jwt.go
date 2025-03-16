@@ -13,6 +13,7 @@ import (
 	jwtv5 "github.com/golang-jwt/jwt/v5"
 	json "github.com/json-iterator/go"
 
+	"github.com/dstgo/wilson/framework/constants"
 	"github.com/dstgo/wilson/framework/kratosx/config"
 	"github.com/dstgo/wilson/framework/kratosx/library/redis"
 )
@@ -60,9 +61,10 @@ func Init(conf *config.JWT, watcher config.Watcher) {
 
 	watcher("jwt", func(value config.Value) {
 		if err := value.Scan(conf); err != nil {
-			log.Errorf("JWT 配置变更失败：%s", err.Error())
+			log.Errorf("watch jwt config failed: %s", err.Error())
 			return
 		}
+		log.Infof("watch jwt config successfully")
 
 		instance.rw.Lock()
 		defer instance.rw.Unlock()
@@ -197,7 +199,7 @@ func (j *jwt) IsWhitelist(path, method string) bool {
 	j.rw.RLock()
 	defer j.rw.RUnlock()
 
-	if !j.conf.EnableGrpc && method == "GRPC" {
+	if !j.conf.EnableGrpc && method == constants.GRPC {
 		return true
 	}
 

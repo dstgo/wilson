@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v2"
+	"github.com/go-kratos/kratos/v2/log"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -60,8 +61,9 @@ func RegisterServer(c config.Config, hs *http.Server, gs *grpc.Server) {
 	cfg := &conf.Config{}
 	c.ScanWatch("manager", func(value config.Value) {
 		if err := value.Scan(cfg); err != nil {
-			panic("manager config format error: " + err.Error())
+			panic("watch manager config format error: " + err.Error())
 		}
+		log.Infof("watch manager config change updated")
 	})
 
 	app.New(cfg, hs, gs)

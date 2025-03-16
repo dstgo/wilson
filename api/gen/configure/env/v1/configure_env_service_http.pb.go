@@ -27,17 +27,17 @@ const OperationEnvResetEnvToken = "/wilson.api.configure.env.v1.Env/ResetEnvToke
 const OperationEnvUpdateEnv = "/wilson.api.configure.env.v1.Env/UpdateEnv"
 
 type EnvHTTPServer interface {
-	// CreateEnv CreateEnv 创建环境信息
+	// CreateEnv CreateEnv
 	CreateEnv(context.Context, *CreateEnvRequest) (*CreateEnvReply, error)
-	// DeleteEnv DeleteEnv 删除环境信息
+	// DeleteEnv DeleteEnv
 	DeleteEnv(context.Context, *DeleteEnvRequest) (*DeleteEnvReply, error)
-	// GetEnvToken GetEnvToken 获取环境token
+	// GetEnvToken GetEnvToken
 	GetEnvToken(context.Context, *GetEnvTokenRequest) (*GetEnvTokenReply, error)
-	// ListEnv ListEnv 获取环境信息列表
+	// ListEnv ListEnv
 	ListEnv(context.Context, *ListEnvRequest) (*ListEnvReply, error)
-	// ResetEnvToken ResetEnvToken 重置环境token
+	// ResetEnvToken ResetEnvToken
 	ResetEnvToken(context.Context, *ResetEnvTokenRequest) (*ResetEnvTokenReply, error)
-	// UpdateEnv UpdateEnv 更新环境信息
+	// UpdateEnv UpdateEnv
 	UpdateEnv(context.Context, *UpdateEnvRequest) (*UpdateEnvReply, error)
 }
 

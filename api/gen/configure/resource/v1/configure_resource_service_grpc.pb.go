@@ -32,19 +32,19 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ResourceClient interface {
-	// GetResource 获取指定的资源配置信息
+	// GetResource
 	GetResource(ctx context.Context, in *GetResourceRequest, opts ...grpc.CallOption) (*GetResourceReply, error)
-	// ListResource 获取资源配置信息列表
+	// ListResource
 	ListResource(ctx context.Context, in *ListResourceRequest, opts ...grpc.CallOption) (*ListResourceReply, error)
-	// CreateResource 创建资源配置信息
+	// CreateResource
 	CreateResource(ctx context.Context, in *CreateResourceRequest, opts ...grpc.CallOption) (*CreateResourceReply, error)
-	// UpdateResource 更新资源配置信息
+	// UpdateResource
 	UpdateResource(ctx context.Context, in *UpdateResourceRequest, opts ...grpc.CallOption) (*UpdateResourceReply, error)
-	// DeleteResource 删除资源配置信息
+	// DeleteResource
 	DeleteResource(ctx context.Context, in *DeleteResourceRequest, opts ...grpc.CallOption) (*DeleteResourceReply, error)
-	// ListResourceValue 获取业务配置值信息列表
+	// ListResourceValue
 	ListResourceValue(ctx context.Context, in *ListResourceValueRequest, opts ...grpc.CallOption) (*ListResourceValueReply, error)
-	// UpdateResourceValue 更新业务配置值信息
+	// UpdateResourceValue
 	UpdateResourceValue(ctx context.Context, in *UpdateResourceValueRequest, opts ...grpc.CallOption) (*UpdateResourceValueReply, error)
 }
 
@@ -130,19 +130,19 @@ func (c *resourceClient) UpdateResourceValue(ctx context.Context, in *UpdateReso
 // All implementations must embed UnimplementedResourceServer
 // for forward compatibility.
 type ResourceServer interface {
-	// GetResource 获取指定的资源配置信息
+	// GetResource
 	GetResource(context.Context, *GetResourceRequest) (*GetResourceReply, error)
-	// ListResource 获取资源配置信息列表
+	// ListResource
 	ListResource(context.Context, *ListResourceRequest) (*ListResourceReply, error)
-	// CreateResource 创建资源配置信息
+	// CreateResource
 	CreateResource(context.Context, *CreateResourceRequest) (*CreateResourceReply, error)
-	// UpdateResource 更新资源配置信息
+	// UpdateResource
 	UpdateResource(context.Context, *UpdateResourceRequest) (*UpdateResourceReply, error)
-	// DeleteResource 删除资源配置信息
+	// DeleteResource
 	DeleteResource(context.Context, *DeleteResourceRequest) (*DeleteResourceReply, error)
-	// ListResourceValue 获取业务配置值信息列表
+	// ListResourceValue
 	ListResourceValue(context.Context, *ListResourceValueRequest) (*ListResourceValueReply, error)
-	// UpdateResourceValue 更新业务配置值信息
+	// UpdateResourceValue
 	UpdateResourceValue(context.Context, *UpdateResourceValueRequest) (*UpdateResourceValueReply, error)
 	mustEmbedUnimplementedResourceServer()
 }

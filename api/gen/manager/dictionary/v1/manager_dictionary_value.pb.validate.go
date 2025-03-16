@@ -648,8 +648,6 @@ func (m *CreateDictionaryValueRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for ParentId
-
 	if m.Status != nil {
 		// no validation rules for Status
 	}
@@ -920,8 +918,6 @@ func (m *UpdateDictionaryValueRequest) validate(all bool) error {
 		}
 		errors = append(errors, err)
 	}
-
-	// no validation rules for ParentId
 
 	if m.Weight != nil {
 		// no validation rules for Weight

@@ -12,6 +12,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	jwtv5 "github.com/golang-jwt/jwt/v5"
 
+	"github.com/dstgo/wilson/framework/constants"
 	"github.com/dstgo/wilson/framework/kratosx/config"
 	"github.com/dstgo/wilson/framework/kratosx/library/jwt"
 )
@@ -32,14 +33,13 @@ func Jwt(conf *config.JWT) middleware.Middleware {
 
 		if tr, ok := transport.FromServerContext(ctx); ok {
 			path = tr.Operation()
+			method = constants.GRPC
 		}
-		h, is := http.RequestFromServerContext(ctx)
-		if is {
+		if h, is := http.RequestFromServerContext(ctx); is {
 			path = h.URL.Path
 			method = h.Method
-		} else {
-			method = "GRPC"
 		}
+
 		return jwtIns.IsWhitelist(path, method)
 	}
 

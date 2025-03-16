@@ -3,7 +3,7 @@ package app
 import (
 	"context"
 
-	"github.com/dstgo/wilson/api/rpc/manager"
+	"github.com/dstgo/wilson/client/rpc/manager"
 	ktypes "github.com/dstgo/wilson/framework/kratosx/types"
 	"github.com/dstgo/wilson/framework/pkg/valx"
 

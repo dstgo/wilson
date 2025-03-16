@@ -31,17 +31,17 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BusinessClient interface {
-	// ListBusiness 获取业务配置信息列表
+	// ListBusiness
 	ListBusiness(ctx context.Context, in *ListBusinessRequest, opts ...grpc.CallOption) (*ListBusinessReply, error)
-	// CreateBusiness 创建业务配置信息
+	// CreateBusiness
 	CreateBusiness(ctx context.Context, in *CreateBusinessRequest, opts ...grpc.CallOption) (*CreateBusinessReply, error)
-	// UpdateBusiness 更新业务配置信息
+	// UpdateBusiness
 	UpdateBusiness(ctx context.Context, in *UpdateBusinessRequest, opts ...grpc.CallOption) (*UpdateBusinessReply, error)
-	// DeleteBusiness 删除业务配置信息
+	// DeleteBusiness
 	DeleteBusiness(ctx context.Context, in *DeleteBusinessRequest, opts ...grpc.CallOption) (*DeleteBusinessReply, error)
-	// ListBusinessValue 获取业务配置值信息列表
+	// ListBusinessValue
 	ListBusinessValue(ctx context.Context, in *ListBusinessValueRequest, opts ...grpc.CallOption) (*ListBusinessValueReply, error)
-	// UpdateBusinessValue 更新业务配置值信息
+	// UpdateBusinessValue
 	UpdateBusinessValue(ctx context.Context, in *UpdateBusinessValueRequest, opts ...grpc.CallOption) (*UpdateBusinessValueReply, error)
 }
 
@@ -117,17 +117,17 @@ func (c *businessClient) UpdateBusinessValue(ctx context.Context, in *UpdateBusi
 // All implementations must embed UnimplementedBusinessServer
 // for forward compatibility.
 type BusinessServer interface {
-	// ListBusiness 获取业务配置信息列表
+	// ListBusiness
 	ListBusiness(context.Context, *ListBusinessRequest) (*ListBusinessReply, error)
-	// CreateBusiness 创建业务配置信息
+	// CreateBusiness
 	CreateBusiness(context.Context, *CreateBusinessRequest) (*CreateBusinessReply, error)
-	// UpdateBusiness 更新业务配置信息
+	// UpdateBusiness
 	UpdateBusiness(context.Context, *UpdateBusinessRequest) (*UpdateBusinessReply, error)
-	// DeleteBusiness 删除业务配置信息
+	// DeleteBusiness
 	DeleteBusiness(context.Context, *DeleteBusinessRequest) (*DeleteBusinessReply, error)
-	// ListBusinessValue 获取业务配置值信息列表
+	// ListBusinessValue
 	ListBusinessValue(context.Context, *ListBusinessValueRequest) (*ListBusinessValueReply, error)
-	// UpdateBusinessValue 更新业务配置值信息
+	// UpdateBusinessValue
 	UpdateBusinessValue(context.Context, *UpdateBusinessValueRequest) (*UpdateBusinessValueReply, error)
 	mustEmbedUnimplementedBusinessServer()
 }

@@ -36,27 +36,27 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DictionaryClient interface {
-	// ListDictionary 获取字典目录列表
+	// ListDictionary
 	ListDictionary(ctx context.Context, in *ListDictionaryRequest, opts ...grpc.CallOption) (*ListDictionaryReply, error)
-	// CreateDictionary 创建字典目录
+	// CreateDictionary
 	CreateDictionary(ctx context.Context, in *CreateDictionaryRequest, opts ...grpc.CallOption) (*CreateDictionaryReply, error)
-	// UpdateDictionary 更新字典目录
+	// UpdateDictionary
 	UpdateDictionary(ctx context.Context, in *UpdateDictionaryRequest, opts ...grpc.CallOption) (*UpdateDictionaryReply, error)
-	// DeleteDictionary 删除字典目录
+	// DeleteDictionary
 	DeleteDictionary(ctx context.Context, in *DeleteDictionaryRequest, opts ...grpc.CallOption) (*DeleteDictionaryReply, error)
-	// GetDictionaryValues 获取指定keys的所有值
+	// GetDictionaryValues
 	GetDictionaryValues(ctx context.Context, in *GetDictionaryValuesRequest, opts ...grpc.CallOption) (*GetDictionaryValuesReply, error)
-	// ListDictionaryValue 获取字典值目录列表
+	// ListDictionaryValue
 	ListDictionaryValue(ctx context.Context, in *ListDictionaryValueRequest, opts ...grpc.CallOption) (*ListDictionaryValueReply, error)
-	// CreateDictionaryValue 创建字典值目录
+	// CreateDictionaryValue
 	CreateDictionaryValue(ctx context.Context, in *CreateDictionaryValueRequest, opts ...grpc.CallOption) (*CreateDictionaryValueReply, error)
-	// UpdateDictionaryValue 更新字典值目录
+	// UpdateDictionaryValue
 	UpdateDictionaryValue(ctx context.Context, in *UpdateDictionaryValueRequest, opts ...grpc.CallOption) (*UpdateDictionaryValueReply, error)
-	// UpdateDictionaryValueStatus 更新字典值目录状态
+	// UpdateDictionaryValueStatus
 	UpdateDictionaryValueStatus(ctx context.Context, in *UpdateDictionaryValueStatusRequest, opts ...grpc.CallOption) (*UpdateDictionaryValueStatusReply, error)
-	// DeleteDictionaryValue 删除字典值目录
+	// DeleteDictionaryValue
 	DeleteDictionaryValue(ctx context.Context, in *DeleteDictionaryValueRequest, opts ...grpc.CallOption) (*DeleteDictionaryValueReply, error)
-	// GetDictionary 获取指定的字典目录
+	// GetDictionary
 	GetDictionary(ctx context.Context, in *GetDictionaryRequest, opts ...grpc.CallOption) (*GetDictionaryReply, error)
 }
 
@@ -182,27 +182,27 @@ func (c *dictionaryClient) GetDictionary(ctx context.Context, in *GetDictionaryR
 // All implementations must embed UnimplementedDictionaryServer
 // for forward compatibility.
 type DictionaryServer interface {
-	// ListDictionary 获取字典目录列表
+	// ListDictionary
 	ListDictionary(context.Context, *ListDictionaryRequest) (*ListDictionaryReply, error)
-	// CreateDictionary 创建字典目录
+	// CreateDictionary
 	CreateDictionary(context.Context, *CreateDictionaryRequest) (*CreateDictionaryReply, error)
-	// UpdateDictionary 更新字典目录
+	// UpdateDictionary
 	UpdateDictionary(context.Context, *UpdateDictionaryRequest) (*UpdateDictionaryReply, error)
-	// DeleteDictionary 删除字典目录
+	// DeleteDictionary
 	DeleteDictionary(context.Context, *DeleteDictionaryRequest) (*DeleteDictionaryReply, error)
-	// GetDictionaryValues 获取指定keys的所有值
+	// GetDictionaryValues
 	GetDictionaryValues(context.Context, *GetDictionaryValuesRequest) (*GetDictionaryValuesReply, error)
-	// ListDictionaryValue 获取字典值目录列表
+	// ListDictionaryValue
 	ListDictionaryValue(context.Context, *ListDictionaryValueRequest) (*ListDictionaryValueReply, error)
-	// CreateDictionaryValue 创建字典值目录
+	// CreateDictionaryValue
 	CreateDictionaryValue(context.Context, *CreateDictionaryValueRequest) (*CreateDictionaryValueReply, error)
-	// UpdateDictionaryValue 更新字典值目录
+	// UpdateDictionaryValue
 	UpdateDictionaryValue(context.Context, *UpdateDictionaryValueRequest) (*UpdateDictionaryValueReply, error)
-	// UpdateDictionaryValueStatus 更新字典值目录状态
+	// UpdateDictionaryValueStatus
 	UpdateDictionaryValueStatus(context.Context, *UpdateDictionaryValueStatusRequest) (*UpdateDictionaryValueStatusReply, error)
-	// DeleteDictionaryValue 删除字典值目录
+	// DeleteDictionaryValue
 	DeleteDictionaryValue(context.Context, *DeleteDictionaryValueRequest) (*DeleteDictionaryValueReply, error)
-	// GetDictionary 获取指定的字典目录
+	// GetDictionary
 	GetDictionary(context.Context, *GetDictionaryRequest) (*GetDictionaryReply, error)
 	mustEmbedUnimplementedDictionaryServer()
 }

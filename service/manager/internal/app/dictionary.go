@@ -51,7 +51,6 @@ func (s *Dictionary) GetDictionary(c context.Context, req *pb.GetDictionaryReque
 		Id:          result.Id,
 		Keyword:     result.Keyword,
 		Name:        result.Name,
-		Type:        result.Type,
 		Description: result.Description,
 		CreatedAt:   uint32(result.CreatedAt),
 		UpdatedAt:   uint32(result.UpdatedAt),
@@ -76,7 +75,6 @@ func (s *Dictionary) ListDictionary(c context.Context, req *pb.ListDictionaryReq
 		reply.List = append(reply.List, &pb.ListDictionaryReply_Dictionary{
 			Id:          item.Id,
 			Keyword:     item.Keyword,
-			Type:        item.Type,
 			Name:        item.Name,
 			Description: item.Description,
 			CreatedAt:   uint32(item.CreatedAt),
@@ -91,7 +89,6 @@ func (s *Dictionary) CreateDictionary(c context.Context, req *pb.CreateDictionar
 	id, err := s.srv.CreateDictionary(kratosx.MustContext(c), &entity.Dictionary{
 		Keyword:     req.Keyword,
 		Name:        req.Name,
-		Type:        req.Type,
 		Description: req.Description,
 	})
 	if err != nil {
@@ -106,7 +103,6 @@ func (s *Dictionary) UpdateDictionary(c context.Context, req *pb.UpdateDictionar
 		BaseModel:   ktypes.BaseModel{Id: req.Id},
 		Keyword:     req.Keyword,
 		Name:        req.Name,
-		Type:        req.Type,
 		Description: req.Description,
 	}); err != nil {
 		return nil, err
@@ -146,7 +142,6 @@ func (s *Dictionary) ListDictionaryValue(c context.Context, req *pb.ListDictiona
 func (s *Dictionary) CreateDictionaryValue(c context.Context, req *pb.CreateDictionaryValueRequest) (*pb.CreateDictionaryValueReply, error) {
 	id, err := s.srv.CreateDictionaryValue(kratosx.MustContext(c), &entity.DictionaryValue{
 		DictionaryId: req.DictionaryId,
-		ParentId:     req.ParentId,
 		Label:        req.Label,
 		Value:        req.Value,
 		Status:       req.Status,
@@ -166,7 +161,6 @@ func (s *Dictionary) UpdateDictionaryValue(c context.Context, req *pb.UpdateDict
 	if err := s.srv.UpdateDictionaryValue(kratosx.MustContext(c), &entity.DictionaryValue{
 		BaseModel:    ktypes.BaseModel{Id: req.Id},
 		DictionaryId: req.DictionaryId,
-		ParentId:     req.ParentId,
 		Label:        req.Label,
 		Value:        req.Value,
 		Weight:       req.Weight,

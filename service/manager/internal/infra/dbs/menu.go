@@ -27,7 +27,7 @@ func NewMenu() *Menu {
 
 func (infra *Menu) InitBasicMenu(ctx kratosx.Context) {
 	var list []*entity.Menu
-	if err := ctx.DB().Model(entity.Menu{}).Find(&list, "type=?", entity.MenuBasic).Error; err != nil {
+	if err := ctx.DB().Model(entity.Menu{}).Find(&list, "type=?", entity.MenuBasicApi).Error; err != nil {
 		ctx.Logger().Errorf("init basic api error %s", err.Error())
 		return
 	}
@@ -60,7 +60,7 @@ func (infra *Menu) ListMenuByRoleId(ctx kratosx.Context, id uint32) ([]*entity.M
 		fs = []string{"*"}
 	)
 
-	db := ctx.DB().Model(entity.Menu{}).Select(fs).Where("type!=?", entity.MenuBasic)
+	db := ctx.DB().Model(entity.Menu{}).Select(fs).Where("type!=?", entity.MenuBasicApi)
 	if id != 1 {
 		var ids []uint32
 		if err := ctx.DB().Model(entity.RoleMenu{}).
@@ -116,7 +116,7 @@ func (infra *Menu) UpdateMenu(ctx kratosx.Context, menu *entity.Menu) error {
 	}()
 
 	if menu.Id == menu.ParentId {
-		return errors.New("父级不能为自己")
+		return errors.New("cannot assign self as parent")
 	}
 
 	// 获取之前的菜单信息

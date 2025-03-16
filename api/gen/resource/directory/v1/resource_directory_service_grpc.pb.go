@@ -30,15 +30,15 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DirectoryClient interface {
-	// GetDirectory 获取指定的文件目录信息
+	// GetDirectory
 	GetDirectory(ctx context.Context, in *GetDirectoryRequest, opts ...grpc.CallOption) (*GetDirectoryReply, error)
-	// ListDirectory 获取文件目录信息列表
+	// ListDirectory
 	ListDirectory(ctx context.Context, in *ListDirectoryRequest, opts ...grpc.CallOption) (*ListDirectoryReply, error)
-	// CreateDirectory 创建文件目录信息
+	// CreateDirectory
 	CreateDirectory(ctx context.Context, in *CreateDirectoryRequest, opts ...grpc.CallOption) (*CreateDirectoryReply, error)
-	// UpdateDirectory 更新文件目录信息
+	// UpdateDirectory
 	UpdateDirectory(ctx context.Context, in *UpdateDirectoryRequest, opts ...grpc.CallOption) (*UpdateDirectoryReply, error)
-	// DeleteDirectory 删除文件目录信息
+	// DeleteDirectory
 	DeleteDirectory(ctx context.Context, in *DeleteDirectoryRequest, opts ...grpc.CallOption) (*DeleteDirectoryReply, error)
 }
 
@@ -104,15 +104,15 @@ func (c *directoryClient) DeleteDirectory(ctx context.Context, in *DeleteDirecto
 // All implementations must embed UnimplementedDirectoryServer
 // for forward compatibility.
 type DirectoryServer interface {
-	// GetDirectory 获取指定的文件目录信息
+	// GetDirectory
 	GetDirectory(context.Context, *GetDirectoryRequest) (*GetDirectoryReply, error)
-	// ListDirectory 获取文件目录信息列表
+	// ListDirectory
 	ListDirectory(context.Context, *ListDirectoryRequest) (*ListDirectoryReply, error)
-	// CreateDirectory 创建文件目录信息
+	// CreateDirectory
 	CreateDirectory(context.Context, *CreateDirectoryRequest) (*CreateDirectoryReply, error)
-	// UpdateDirectory 更新文件目录信息
+	// UpdateDirectory
 	UpdateDirectory(context.Context, *UpdateDirectoryRequest) (*UpdateDirectoryReply, error)
-	// DeleteDirectory 删除文件目录信息
+	// DeleteDirectory
 	DeleteDirectory(context.Context, *DeleteDirectoryRequest) (*DeleteDirectoryReply, error)
 	mustEmbedUnimplementedDirectoryServer()
 }

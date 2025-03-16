@@ -13,7 +13,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/net/http2"
 
-	"github.com/dstgo/wilson/service/gateway/consts"
+	"github.com/dstgo/wilson/framework/constants"
 	"github.com/dstgo/wilson/service/gateway/middleware"
 )
 
@@ -102,7 +102,7 @@ func newNode(addr string, protocol string, weight *int64, md map[string]string, 
 		version:  version,
 		name:     name,
 	}
-	if protocol == consts.GRPC {
+	if protocol == constants.GRPC {
 		node.client = _globalH2Client
 	} else {
 		node.client = _globalClient

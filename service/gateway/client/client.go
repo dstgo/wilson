@@ -8,10 +8,11 @@ import (
 
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/selector"
+	"github.com/go-kratos/kratos/v2/transport"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
 
-	"github.com/dstgo/wilson/service/gateway/consts"
+	"github.com/dstgo/wilson/framework/constants"
 	"github.com/dstgo/wilson/service/gateway/middleware"
 )
 
@@ -50,7 +51,7 @@ func (c *client) RoundTrip(req *http.Request) (*http.Response, error) {
 	addr := n.Address()
 	reqOpt.Backends = append(reqOpt.Backends, addr)
 	req.URL.Host = addr
-	req.URL.Scheme = "http"
+	req.URL.Scheme = transport.KindHTTP.String()
 	req.RequestURI = ""
 	startAt := time.Now()
 
@@ -71,7 +72,7 @@ func (c *client) RoundTrip(req *http.Request) (*http.Response, error) {
 	if !ok {
 		panic(fmt.Sprintf("invalid traceId type, expected string, got %T", val))
 	}
-	resp.Header.Set(consts.TRACE_ID, traceId)
+	resp.Header.Set(constants.TraceID, traceId)
 
 	reqOpt.UpstreamStatusCode = append(reqOpt.UpstreamStatusCode, resp.StatusCode)
 	reqOpt.DoneFunc = done

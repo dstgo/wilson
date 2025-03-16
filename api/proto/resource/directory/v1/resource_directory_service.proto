@@ -9,21 +9,21 @@ import "google/api/annotations.proto";
 
 service Directory{
 
-  // GetDirectory 获取指定的文件目录信息
+  // GetDirectory
   rpc GetDirectory (GetDirectoryRequest) returns (GetDirectoryReply) {
     option (google.api.http) = {
       get: "/resource/api/v1/directory",
     };
   }
 
-  // ListDirectory 获取文件目录信息列表
+  // ListDirectory
   rpc ListDirectory (ListDirectoryRequest) returns (ListDirectoryReply) {
     option (google.api.http) = {
       get: "/resource/api/v1/directories",
     };
   }
 
-  // CreateDirectory 创建文件目录信息
+  // CreateDirectory
   rpc CreateDirectory (CreateDirectoryRequest) returns (CreateDirectoryReply) {
     option (google.api.http) = {
       post: "/resource/api/v1/directory",
@@ -31,7 +31,7 @@ service Directory{
     };
   }
 
-  // UpdateDirectory 更新文件目录信息
+  // UpdateDirectory
   rpc UpdateDirectory (UpdateDirectoryRequest) returns (UpdateDirectoryReply) {
     option (google.api.http) = {
       put: "/resource/api/v1/directory",
@@ -39,7 +39,7 @@ service Directory{
     };
   }
 
-  // DeleteDirectory 删除文件目录信息
+  // DeleteDirectory
   rpc DeleteDirectory (DeleteDirectoryRequest) returns (DeleteDirectoryReply) {
     option (google.api.http) = {
       delete: "/resource/api/v1/directory",

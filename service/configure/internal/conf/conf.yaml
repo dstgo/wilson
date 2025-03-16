@@ -1,0 +1,122 @@
+# 环境设置
+env: "PROD"
+
+# 服务器配置
+server:
+  http:
+    host: "0.0.0.0"
+    port: 6081
+    timeout: "10s"
+    cors:
+      allowCredentials: true
+      allowOrigins: [ "*" ]
+      allowMethods: [ "GET","POST","PUT","DELETE","OPTIONS" ]
+      AllowHeaders: [ "Content-Type", "Content-Length", "Authorization" ]
+      ExposeHeaders: [ "Content-Length", "Access-Control-Allow-Headers" ]
+    marshal:
+      emitUnpopulated: true
+      useProtoNames: true
+  grpc:
+    host: "0.0.0.0"
+    port: 6082
+    timeout: "10s"
+
+# 客户端配置
+client:
+  - server: "Manager"
+    type: "direct"
+    backends:
+      - target: "127.0.0.1:8010"
+
+# 日志配置
+log:
+  # 日志输出等级
+  level: debug
+  encode: json
+  caller: true
+  output:
+    # stdout:控制台输出，k8s日志收集
+    - "stdout"
+    # file:输出到文件
+    - "file"
+  # output存在file时此配置才可生效
+  file:
+    # 日志存放地址
+    name: "/etc/wilson/configure/log/service.log"
+    # 日志文件最大容量,单位m
+    maxSize: 1
+    # 日志文件最多保存个数
+    maxBackup: 5
+    # 保留旧文件的最大天数,单位天
+    maxAge: 1
+    # 是否进行压缩归档
+    compress: false
+
+# 数据库实例配置
+database:
+  # 数据库实例名称,如有多个数据库可新增
+  system:
+    # 是否启用数据库
+    enable: true
+    # 数据库类型，仅支持Gorm支持的数据库类型
+    drive: "mysql"
+    # 是否自动创建数据库
+    autoCreate: true
+    # 数据库连接配置
+    connect:
+      username: "root"
+      password: "123456"
+      host: "127.0.0.1"
+      port: 3306
+      dbName: "configure"
+      option: "?charset=utf8mb4&parseTime=True&loc=Local"
+    # 数据库配置项
+    config:
+      initializer:
+        enable: false
+        # 数据库初始化脚本
+        path: "/etc/wilson/configure/deploy/data.sql"
+      # 外键错误格式化
+      transformError:
+        enable: true
+      # 最大生存时间
+      maxLifetime: "2h"
+      # 最大连接数量
+      maxOpenConn: 20
+      # 最大空闲数量
+      maxIdleConn: 10
+      # 日志等级
+      logLevel: 4
+      # 慢sql阈值
+      slowThreshold: "2s"
+
+# Redis配置
+redis:
+  cache:
+    enable: true
+    host: "127.0.0.1:6379"
+    username: ""
+    password: "123456"
+
+# 证书配置
+loader:
+  login: "/etc/wilson/configure/static/cert/login.pem"
+
+# JWT配置
+jwt:
+  secret: "dstgo-panel"
+  expire: "2h"
+  renewal: "600s"
+  whitelist:
+    "POST:/configure/api/v1/login": true
+    "POST:/configure/api/v1/token/refresh": true
+
+# 服务配置
+configure:
+  webui:
+    enable: true
+    dist: "/etc/wilson/configure/static/web/dist"
+    addr: ":6080"
+  author:
+    adminUser: "admin@dstgo.cn"
+    adminPassword: "12345678"

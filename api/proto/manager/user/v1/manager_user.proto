@@ -18,11 +18,6 @@ message GetUserReply {
     string name = 2;
     string keyword = 3;
   }
-  message Job {
-    uint32 id = 1;
-    string name = 2;
-    string keyword = 3;
-  }
   message Department {
     uint32 id = 1;
     string name = 2;
@@ -43,7 +38,6 @@ message GetUserReply {
   uint32 createdAt = 13;
   uint32 updatedAt = 14;
   repeated Role roles = 15;
-  repeated Job jobs = 16;
   optional Department department = 17;
   optional Role role = 18;
 }
@@ -98,7 +92,6 @@ message CreateUserRequest {// fixed code
   string gender = 3[(validate.rules).string = {min_len: 1}];
   string phone = 4[(validate.rules).string = {min_len: 1}];
   string email = 5[(validate.rules).string = {min_len: 1}];
-  repeated uint32 jobIds = 6[(validate.rules).repeated = {min_items: 1,unique: true}];
   repeated uint32 roleIds = 7[(validate.rules).repeated = {min_items: 1,unique: true}];
 }
 
@@ -113,7 +106,6 @@ message UpdateUserRequest {// fixed code
   string gender = 4[(validate.rules).string = {min_len: 1}];
   string phone = 5[(validate.rules).string = {min_len: 1}];
   string email = 6[(validate.rules).string = {min_len: 1}];
-  repeated uint32 jobIds = 7[(validate.rules).repeated = {min_items: 1,unique: true}];
   repeated uint32 roleIds = 8[(validate.rules).repeated = {min_items: 1,unique: true}];
 }
 

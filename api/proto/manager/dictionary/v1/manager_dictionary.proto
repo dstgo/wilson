@@ -31,7 +31,6 @@ message ListDictionaryReply {
 message CreateDictionaryRequest {
   string keyword = 1[(validate.rules).string = {min_len: 1}];
   string name = 2[(validate.rules).string = {min_len: 1}];
-  string type = 3[(validate.rules).string = {min_len: 1}];
   optional string description = 4;
 }
 
@@ -43,7 +42,6 @@ message UpdateDictionaryRequest {
   uint32 id = 1[(validate.rules).uint32 = {gte: 1}];
   string keyword = 2;
   string name = 3;
-  string type = 4;
   optional string description = 5;
 }
 

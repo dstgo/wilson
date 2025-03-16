@@ -41,7 +41,6 @@ func init() {
 		cr := hs.Route("/")
 		cr.GET("/resource/api/v1/static/{expire}/{sign}/{src}", app.srv.SrcBlob())
 		cr.POST("/resource/api/v1/upload", app.Upload())
-		cr.POST("/resource/client/v1/upload", app.Upload())
 	})
 }
 

@@ -133,7 +133,6 @@ func (x *ListTemplateReply) GetList() []*ListTemplateReply_Template {
 	return nil
 }
 
-// 查询指定模板
 type CurrentTemplateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ServerId      uint32                 `protobuf:"varint,1,opt,name=serverId,proto3" json:"serverId,omitempty"`
@@ -286,7 +285,6 @@ func (x *CurrentTemplateReply) GetCreatedAt() uint32 {
 	return 0
 }
 
-// 查询指定模板
 type GetTemplateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -439,7 +437,6 @@ func (x *GetTemplateReply) GetCreatedAt() uint32 {
 	return 0
 }
 
-// 新增模板
 type CreateTemplateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ServerId      uint32                 `protobuf:"varint,1,opt,name=serverId,proto3" json:"serverId,omitempty"`
@@ -552,7 +549,6 @@ func (x *CreateTemplateReply) GetId() uint32 {
 	return 0
 }
 
-// 切换模板
 type SwitchTemplateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -641,7 +637,6 @@ func (*SwitchTemplateReply) Descriptor() ([]byte, []int) {
 	return file_configure_template_v1_configure_template_proto_rawDescGZIP(), []int{9}
 }
 
-// 预览配置
 type PreviewTemplateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EnvId         uint32                 `protobuf:"varint,1,opt,name=envId,proto3" json:"envId,omitempty"`
@@ -754,7 +749,6 @@ func (x *PreviewTemplateReply) GetContent() string {
 	return ""
 }
 
-// 解析配置
 type ParseTemplateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ServerId      uint32                 `protobuf:"varint,1,opt,name=serverId,proto3" json:"serverId,omitempty"`

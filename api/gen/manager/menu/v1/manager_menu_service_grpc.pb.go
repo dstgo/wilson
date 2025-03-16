@@ -30,15 +30,15 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MenuClient interface {
-	// ListMenu 获取菜单信息列表
+	// ListMenu
 	ListMenu(ctx context.Context, in *ListMenuRequest, opts ...grpc.CallOption) (*ListMenuReply, error)
-	// ListMenuByCurRole 获取菜单信息列表
+	// ListMenuByCurRole
 	ListMenuByCurRole(ctx context.Context, in *ListMenuByCurRoleRequest, opts ...grpc.CallOption) (*ListMenuByCurRoleReply, error)
-	// CreateMenu 创建菜单信息
+	// CreateMenu
 	CreateMenu(ctx context.Context, in *CreateMenuRequest, opts ...grpc.CallOption) (*CreateMenuReply, error)
-	// UpdateMenu 更新菜单信息
+	// UpdateMenu
 	UpdateMenu(ctx context.Context, in *UpdateMenuRequest, opts ...grpc.CallOption) (*UpdateMenuReply, error)
-	// DeleteMenu 删除菜单信息
+	// DeleteMenu
 	DeleteMenu(ctx context.Context, in *DeleteMenuRequest, opts ...grpc.CallOption) (*DeleteMenuReply, error)
 }
 
@@ -104,15 +104,15 @@ func (c *menuClient) DeleteMenu(ctx context.Context, in *DeleteMenuRequest, opts
 // All implementations must embed UnimplementedMenuServer
 // for forward compatibility.
 type MenuServer interface {
-	// ListMenu 获取菜单信息列表
+	// ListMenu
 	ListMenu(context.Context, *ListMenuRequest) (*ListMenuReply, error)
-	// ListMenuByCurRole 获取菜单信息列表
+	// ListMenuByCurRole
 	ListMenuByCurRole(context.Context, *ListMenuByCurRoleRequest) (*ListMenuByCurRoleReply, error)
-	// CreateMenu 创建菜单信息
+	// CreateMenu
 	CreateMenu(context.Context, *CreateMenuRequest) (*CreateMenuReply, error)
-	// UpdateMenu 更新菜单信息
+	// UpdateMenu
 	UpdateMenu(context.Context, *UpdateMenuRequest) (*UpdateMenuReply, error)
-	// DeleteMenu 删除菜单信息
+	// DeleteMenu
 	DeleteMenu(context.Context, *DeleteMenuRequest) (*DeleteMenuReply, error)
 	mustEmbedUnimplementedMenuServer()
 }

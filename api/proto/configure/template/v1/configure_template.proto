@@ -28,7 +28,7 @@ message ListTemplateReply {
   repeated Template list = 2;
 }
 
-// 查询指定模板
+//
 message CurrentTemplateRequest{
   uint32 serverId = 1[(validate.rules).uint32 = {gt: 0}];
 }
@@ -45,7 +45,7 @@ message CurrentTemplateReply{
   uint32 createdAt = 9;
 }
 
-// 查询指定模板
+//
 message GetTemplateRequest{
   uint32 id = 1[(validate.rules).uint32 = {gt: 0}];
 }
@@ -62,7 +62,7 @@ message GetTemplateReply{
   uint32 createdAt = 9;
 }
 
-// 新增模板
+//
 message CreateTemplateRequest {
   uint32 serverId = 1[(validate.rules).uint32 = {gt: 0}];
   string content = 2[(validate.rules).string = {min_len: 3}];
@@ -74,7 +74,7 @@ message CreateTemplateReply{
   uint32 id = 1;
 }
 
-// 切换模板
+//
 message SwitchTemplateRequest {
   uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];
   uint32 serverId = 2[(validate.rules).uint32 = {gt: 0}];
@@ -82,7 +82,7 @@ message SwitchTemplateRequest {
 
 message SwitchTemplateReply{}
 
-// 预览配置
+//
 message PreviewTemplateRequest {
   uint32 envId = 1[(validate.rules).uint32 = {gt: 0}];
   uint32 serverId = 2[(validate.rules).uint32 = {gt: 0}];
@@ -94,7 +94,7 @@ message PreviewTemplateReply {
   string content = 1;
 }
 
-// 解析配置
+//
 message ParseTemplateRequest {
   uint32 serverId = 1[(validate.rules).uint32 = {gt: 0}];
   uint32 envId = 2[(validate.rules).uint32 = {gt: 0}];

@@ -31,17 +31,17 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FileClient interface {
-	// GetFile 获取指定的文件信息
+	// GetFile
 	GetFile(ctx context.Context, in *GetFileRequest, opts ...grpc.CallOption) (*GetFileReply, error)
-	// ListFile 获取文件信息列表
+	// ListFile
 	ListFile(ctx context.Context, in *ListFileRequest, opts ...grpc.CallOption) (*ListFileReply, error)
-	// PrepareUploadFile 预上传文件信息
+	// PrepareUploadFile
 	PrepareUploadFile(ctx context.Context, in *PrepareUploadFileRequest, opts ...grpc.CallOption) (*PrepareUploadFileReply, error)
-	// UploadFile 上传文件
+	// UploadFile
 	UploadFile(ctx context.Context, in *UploadFileRequest, opts ...grpc.CallOption) (*UploadFileReply, error)
-	// UpdateFile 更新文件信息
+	// UpdateFile
 	UpdateFile(ctx context.Context, in *UpdateFileRequest, opts ...grpc.CallOption) (*UpdateFileReply, error)
-	// DeleteFile 删除文件信息
+	// DeleteFile
 	DeleteFile(ctx context.Context, in *DeleteFileRequest, opts ...grpc.CallOption) (*DeleteFileReply, error)
 }
 
@@ -117,17 +117,17 @@ func (c *fileClient) DeleteFile(ctx context.Context, in *DeleteFileRequest, opts
 // All implementations must embed UnimplementedFileServer
 // for forward compatibility.
 type FileServer interface {
-	// GetFile 获取指定的文件信息
+	// GetFile
 	GetFile(context.Context, *GetFileRequest) (*GetFileReply, error)
-	// ListFile 获取文件信息列表
+	// ListFile
 	ListFile(context.Context, *ListFileRequest) (*ListFileReply, error)
-	// PrepareUploadFile 预上传文件信息
+	// PrepareUploadFile
 	PrepareUploadFile(context.Context, *PrepareUploadFileRequest) (*PrepareUploadFileReply, error)
-	// UploadFile 上传文件
+	// UploadFile
 	UploadFile(context.Context, *UploadFileRequest) (*UploadFileReply, error)
-	// UpdateFile 更新文件信息
+	// UpdateFile
 	UpdateFile(context.Context, *UpdateFileRequest) (*UpdateFileReply, error)
-	// DeleteFile 删除文件信息
+	// DeleteFile
 	DeleteFile(context.Context, *DeleteFileRequest) (*DeleteFileReply, error)
 	mustEmbedUnimplementedFileServer()
 }

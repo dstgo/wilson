@@ -31,17 +31,17 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type EnvClient interface {
-	// ListEnv 获取环境信息列表
+	// ListEnv
 	ListEnv(ctx context.Context, in *ListEnvRequest, opts ...grpc.CallOption) (*ListEnvReply, error)
-	// CreateEnv 创建环境信息
+	// CreateEnv
 	CreateEnv(ctx context.Context, in *CreateEnvRequest, opts ...grpc.CallOption) (*CreateEnvReply, error)
-	// UpdateEnv 更新环境信息
+	// UpdateEnv
 	UpdateEnv(ctx context.Context, in *UpdateEnvRequest, opts ...grpc.CallOption) (*UpdateEnvReply, error)
-	// DeleteEnv 删除环境信息
+	// DeleteEnv
 	DeleteEnv(ctx context.Context, in *DeleteEnvRequest, opts ...grpc.CallOption) (*DeleteEnvReply, error)
-	// GetEnvToken 获取环境token
+	// GetEnvToken
 	GetEnvToken(ctx context.Context, in *GetEnvTokenRequest, opts ...grpc.CallOption) (*GetEnvTokenReply, error)
-	// ResetEnvToken 重置环境token
+	// ResetEnvToken
 	ResetEnvToken(ctx context.Context, in *ResetEnvTokenRequest, opts ...grpc.CallOption) (*ResetEnvTokenReply, error)
 }
 
@@ -117,17 +117,17 @@ func (c *envClient) ResetEnvToken(ctx context.Context, in *ResetEnvTokenRequest,
 // All implementations must embed UnimplementedEnvServer
 // for forward compatibility.
 type EnvServer interface {
-	// ListEnv 获取环境信息列表
+	// ListEnv
 	ListEnv(context.Context, *ListEnvRequest) (*ListEnvReply, error)
-	// CreateEnv 创建环境信息
+	// CreateEnv
 	CreateEnv(context.Context, *CreateEnvRequest) (*CreateEnvReply, error)
-	// UpdateEnv 更新环境信息
+	// UpdateEnv
 	UpdateEnv(context.Context, *UpdateEnvRequest) (*UpdateEnvReply, error)
-	// DeleteEnv 删除环境信息
+	// DeleteEnv
 	DeleteEnv(context.Context, *DeleteEnvRequest) (*DeleteEnvReply, error)
-	// GetEnvToken 获取环境token
+	// GetEnvToken
 	GetEnvToken(context.Context, *GetEnvTokenRequest) (*GetEnvTokenReply, error)
-	// ResetEnvToken 重置环境token
+	// ResetEnvToken
 	ResetEnvToken(context.Context, *ResetEnvTokenRequest) (*ResetEnvTokenReply, error)
 	mustEmbedUnimplementedEnvServer()
 }

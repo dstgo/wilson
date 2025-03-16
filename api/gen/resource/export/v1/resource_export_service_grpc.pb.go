@@ -30,15 +30,15 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ExportClient interface {
-	// GetExport 获取指定的导出信息
+	// GetExport
 	GetExport(ctx context.Context, in *GetExportRequest, opts ...grpc.CallOption) (*GetExportReply, error)
-	// ListExport 获取导出信息列表
+	// ListExport
 	ListExport(ctx context.Context, in *ListExportRequest, opts ...grpc.CallOption) (*ListExportReply, error)
-	// ExportFile 创建导出信息
+	// ExportFile
 	ExportFile(ctx context.Context, in *ExportFileRequest, opts ...grpc.CallOption) (*ExportFileReply, error)
-	// ExportExcel 创建导出表格信息
+	// ExportExcel
 	ExportExcel(ctx context.Context, in *ExportExcelRequest, opts ...grpc.CallOption) (*ExportExcelReply, error)
-	// DeleteExport 删除导出信息
+	// DeleteExport
 	DeleteExport(ctx context.Context, in *DeleteExportRequest, opts ...grpc.CallOption) (*DeleteExportReply, error)
 }
 
@@ -104,15 +104,15 @@ func (c *exportClient) DeleteExport(ctx context.Context, in *DeleteExportRequest
 // All implementations must embed UnimplementedExportServer
 // for forward compatibility.
 type ExportServer interface {
-	// GetExport 获取指定的导出信息
+	// GetExport
 	GetExport(context.Context, *GetExportRequest) (*GetExportReply, error)
-	// ListExport 获取导出信息列表
+	// ListExport
 	ListExport(context.Context, *ListExportRequest) (*ListExportReply, error)
-	// ExportFile 创建导出信息
+	// ExportFile
 	ExportFile(context.Context, *ExportFileRequest) (*ExportFileReply, error)
-	// ExportExcel 创建导出表格信息
+	// ExportExcel
 	ExportExcel(context.Context, *ExportExcelRequest) (*ExportExcelReply, error)
-	// DeleteExport 删除导出信息
+	// DeleteExport
 	DeleteExport(context.Context, *DeleteExportRequest) (*DeleteExportReply, error)
 	mustEmbedUnimplementedExportServer()
 }

@@ -5,14 +5,12 @@ import "github.com/dstgo/wilson/framework/kratosx/types"
 type Dictionary struct {
 	Keyword     string  `json:"keyword" gorm:"column:keyword"`
 	Name        string  `json:"name" gorm:"column:name"`
-	Type        string  `json:"type" gorm:"column:type"`
 	Description *string `json:"description" gorm:"column:description"`
 	types.BaseModel
 }
 
 type DictionaryValue struct {
 	DictionaryId uint32             `json:"dictionaryId" gorm:"column:dictionary_id"`
-	ParentId     uint32             `json:"parentId" gorm:"column:parent_id"`
 	Label        string             `json:"label" gorm:"column:label"`
 	Value        string             `json:"value" gorm:"column:value"`
 	Status       *bool              `json:"status" gorm:"column:status"`
@@ -28,11 +26,6 @@ type DictionaryValue struct {
 // ID 获取ID
 func (m *DictionaryValue) ID() uint32 {
 	return m.Id
-}
-
-// Parent 获取父ID
-func (m *DictionaryValue) Parent() uint32 {
-	return m.ParentId
 }
 
 // AppendChildren 添加子节点

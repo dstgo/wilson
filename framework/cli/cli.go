@@ -8,6 +8,8 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
+
+	"github.com/dstgo/wilson/framework/kratosx/library/env"
 )
 
 type Options struct {
@@ -40,9 +42,21 @@ func NewCLI(opts *Options) Service {
 		opts = &Options{}
 	}
 
+	appName := env.GetAppName()
+	if appName != "" {
+		opts.AppName = appName
+	}
+	appVersion := env.GetAppVersion()
+	if appVersion != "" {
+		opts.AppVersion = appVersion
+	}
+
 	if opts.AppName == "" {
 		panic("app name is required")
 	}
+
+	env.SetAppName(opts.AppName)
+	env.SetAppVersion(opts.AppVersion)
 
 	opts.AppVersion = lo.Ternary(opts.AppVersion == "", "v0.0.0", opts.AppVersion)
 

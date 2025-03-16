@@ -6,7 +6,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 
-	"github.com/dstgo/wilson/api/rpc/manager"
+	"github.com/dstgo/wilson/client/rpc/manager"
 	"github.com/dstgo/wilson/framework/kratosx"
 	"github.com/dstgo/wilson/framework/pkg/valx"
 

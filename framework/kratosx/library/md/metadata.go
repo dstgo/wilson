@@ -15,7 +15,7 @@ type Auth struct {
 	DepartmentKeyword string `json:"departmentKeyword"`
 }
 
-func New(info *Auth) map[string]any {
+func NewAuthMap(info *Auth) map[string]any {
 	var res map[string]any
 	_ = valx.Transform(info, &res)
 	return res
@@ -30,14 +30,14 @@ func GetAuthInfo(ctx kratosx.Context) *Auth {
 		err = ctx.JWT().Parse(ctx, &data)
 	} else {
 		// 三方服务调用的时候通过auth信息获取
-		err = ctx.Authentication().ParseAuth(ctx, &data)
+		err = ctx.Authentication().ParseAuthFromMD(ctx, &data)
 	}
 	if err != nil {
-		panic(errors.ForbiddenError())
+		panic(errors.ForbiddenErrorWrap(err))
 	}
 
 	if data.UserId == 0 {
-		panic(errors.ForbiddenError())
+		panic(errors.ForbiddenErrorWrap(err))
 	}
 	return &data
 }

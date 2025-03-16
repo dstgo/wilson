@@ -54,9 +54,10 @@ func Init(lc *config.Logger, watcher config.Watcher, fields LogField) {
 
 	watcher("log", func(value config.Value) {
 		if err := value.Scan(lc); err != nil {
-			log.Errorf("配置变更失败：%v", err.Error())
+			log.Errorf("watch log config failed: %s", err.Error())
 			return
 		}
+		log.Infof("watch log config successfully")
 		// 变更初始化
 		ins.initFactory(lc, fs)
 	})

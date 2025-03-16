@@ -26,15 +26,15 @@ const OperationExportGetExport = "/wilson.api.resource.export.v1.Export/GetExpor
 const OperationExportListExport = "/wilson.api.resource.export.v1.Export/ListExport"
 
 type ExportHTTPServer interface {
-	// DeleteExport DeleteExport 删除导出信息
+	// DeleteExport DeleteExport
 	DeleteExport(context.Context, *DeleteExportRequest) (*DeleteExportReply, error)
-	// ExportExcel ExportExcel 创建导出表格信息
+	// ExportExcel ExportExcel
 	ExportExcel(context.Context, *ExportExcelRequest) (*ExportExcelReply, error)
-	// ExportFile ExportFile 创建导出信息
+	// ExportFile ExportFile
 	ExportFile(context.Context, *ExportFileRequest) (*ExportFileReply, error)
-	// GetExport GetExport 获取指定的导出信息
+	// GetExport GetExport
 	GetExport(context.Context, *GetExportRequest) (*GetExportReply, error)
-	// ListExport ListExport 获取导出信息列表
+	// ListExport ListExport
 	ListExport(context.Context, *ListExportRequest) (*ListExportReply, error)
 }
 

@@ -22,9 +22,9 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http/status"
 	"github.com/prometheus/client_golang/prometheus"
 
+	"github.com/dstgo/wilson/framework/constants"
 	"github.com/dstgo/wilson/service/gateway/client"
 	"github.com/dstgo/wilson/service/gateway/config"
-	"github.com/dstgo/wilson/service/gateway/consts"
 	gtmiddleware "github.com/dstgo/wilson/service/gateway/middleware"
 	"github.com/dstgo/wilson/service/gateway/router"
 	"github.com/dstgo/wilson/service/gateway/router/mux"
@@ -102,7 +102,7 @@ func writeError(w http.ResponseWriter, r *http.Request, err error, labels gtmidd
 		statusCode = 502
 	}
 	requestsTotalIncr(labels, statusCode)
-	if labels.Protocol() == consts.GRPC {
+	if labels.Protocol() == constants.GRPC {
 		// see https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto
 		code := strconv.Itoa(int(status.ToGRPCCode(statusCode)))
 		w.Header().Set("Content-Type", "application/grpc")
@@ -128,7 +128,7 @@ func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 		"code", code,
 		"error", message,
 	)
-	_metricRequestsTotal.WithLabelValues("HTTP", r.Method, "/404", strconv.Itoa(code), "", "").Inc()
+	_metricRequestsTotal.WithLabelValues(constants.HTTP, r.Method, "/404", strconv.Itoa(code), "", "").Inc()
 }
 
 func methodNotAllowedHandler(w http.ResponseWriter, r *http.Request) {
@@ -145,7 +145,7 @@ func methodNotAllowedHandler(w http.ResponseWriter, r *http.Request) {
 		"code", code,
 		"error", message,
 	)
-	_metricRequestsTotal.WithLabelValues("HTTP", r.Method, "/405", strconv.Itoa(code), "", "").Inc()
+	_metricRequestsTotal.WithLabelValues(constants.HTTP, r.Method, "/405", strconv.Itoa(code), "", "").Inc()
 }
 
 type interceptors struct {

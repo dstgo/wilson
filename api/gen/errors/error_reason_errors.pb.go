@@ -1567,6 +1567,30 @@ func NotPermissionErrorWrapf(err error, msg string, args ...any) *errors.Error {
 	return errors.New(500, ErrorReason_NotPermissionError.String(), fmt.Sprintf("no resource permission: %s: %s", fmt.Sprintf(msg, args...), err))
 }
 
+func IsInvalidParentIdError(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_InvalidParentIdError.String() && e.Code == 500
+}
+
+func InvalidParentIdError() *errors.Error {
+	return errors.New(500, ErrorReason_InvalidParentIdError.String(), "invalid parent id")
+}
+
+func InvalidParentIdErrorf(msg string, args ...any) *errors.Error {
+	return errors.New(500, ErrorReason_InvalidParentIdError.String(), fmt.Sprintf("invalid parent id: %s", fmt.Sprintf(msg, args...)))
+}
+
+func InvalidParentIdErrorWrap(err error) *errors.Error {
+	return errors.New(500, ErrorReason_InvalidParentIdError.String(), fmt.Sprintf("invalid parent id: %s", err))
+}
+
+func InvalidParentIdErrorWrapf(err error, msg string, args ...any) *errors.Error {
+	return errors.New(500, ErrorReason_InvalidParentIdError.String(), fmt.Sprintf("invalid parent id: %s: %s", fmt.Sprintf(msg, args...), err))
+}
+
 // Usercenter errors (4000-4999)
 func IsUserServiceError(err error) bool {
 	if err == nil {

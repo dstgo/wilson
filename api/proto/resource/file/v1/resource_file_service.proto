@@ -9,39 +9,32 @@ import "google/api/annotations.proto";
 
 service File{
 
-  // GetFile 获取指定的文件信息
+  // GetFile
   rpc GetFile (GetFileRequest) returns (GetFileReply) {
     option (google.api.http) = {
       get: "/resource/api/v1/file",
-      additional_bindings:{
-        get: "/resource/client/v1/file",
-      }
     };
   }
 
-  // ListFile 获取文件信息列表
+  // ListFile
   rpc ListFile (ListFileRequest) returns (ListFileReply) {
     option (google.api.http) = {
       get: "/resource/api/v1/files",
     };
   }
 
-  // PrepareUploadFile 预上传文件信息
+  // PrepareUploadFile
   rpc PrepareUploadFile (PrepareUploadFileRequest) returns (PrepareUploadFileReply) {
     option (google.api.http) = {
       post: "/resource/api/v1/file/prepare_upload",
       body: "*",
-      additional_bindings:{
-        post: "/resource/client/v1/file/prepare_upload",
-        body: "*",
-      }
     };
   }
 
-  // UploadFile 上传文件
+  // UploadFile
   rpc UploadFile(UploadFileRequest) returns (UploadFileReply){}
 
-  // UpdateFile 更新文件信息
+  // UpdateFile
   rpc UpdateFile (UpdateFileRequest) returns (UpdateFileReply) {
     option (google.api.http) = {
       put: "/resource/api/v1/file",
@@ -49,7 +42,7 @@ service File{
     };
   }
 
-  // DeleteFile 删除文件信息
+  // DeleteFile
   rpc DeleteFile (DeleteFileRequest) returns (DeleteFileReply) {
     option (google.api.http) = {
       delete: "/resource/api/v1/file",

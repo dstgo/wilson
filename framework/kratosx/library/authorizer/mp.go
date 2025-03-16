@@ -16,7 +16,7 @@ func init() {
 }
 
 func (w wx) Name() string {
-	return "微信"
+	return "weixin"
 }
 
 func (w wx) GetAccessToken(ctx kratosx.Context, req GetAccessTokenRequest) (*GetAccessTokenReply, error) {
@@ -25,7 +25,7 @@ func (w wx) GetAccessToken(ctx kratosx.Context, req GetAccessTokenRequest) (*Get
 		ExpiresIn   int    `json:"expires_in"`
 	}{}
 
-	response, err := ctx.Http().Option(func(request *resty.Request) {
+	response, err := ctx.HTTPRequest().Option(func(request *resty.Request) {
 		request.SetQueryParam("appid", req.Ak).
 			SetQueryParam("secret", req.Sk).
 			SetQueryParam("grant_type", "client_credential")
@@ -49,7 +49,7 @@ func (w wx) GetAuthInfo(ctx kratosx.Context, req GetAuthInfoRequest) (*GetAuthIn
 		Openid  string `json:"openid"`
 		Unionid string `json:"unionid"`
 	}{}
-	response, err := ctx.Http().Option(func(request *resty.Request) {
+	response, err := ctx.HTTPRequest().Option(func(request *resty.Request) {
 		request.SetQueryParam("appid", req.Ak).
 			SetQueryParam("secret", req.Sk).
 			SetQueryParam("js_code", req.Code).

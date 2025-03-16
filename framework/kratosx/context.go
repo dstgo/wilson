@@ -9,7 +9,9 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/metadata"
 	md "github.com/go-kratos/kratos/v2/metadata"
+	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-redis/redis/v8"
+	"github.com/go-resty/resty/v2"
 	"google.golang.org/grpc"
 	"gorm.io/gorm"
 
@@ -47,7 +49,8 @@ type Context interface {
 	GetMetadata(string) string
 	SetMetadata(key, value string)
 	WaitRunner() pool.WaitRunner
-	Http() http.Request
+	HTTP() *resty.Client
+	HTTPRequest() http.Request
 	GrpcConn(srvName string) (*grpc.ClientConn, error)
 
 	ID() string
@@ -154,14 +157,15 @@ func (c *ctx) JWT() jwt.Jwt {
 	return jwt.Instance()
 }
 
-// Http 带链路日志的请求工具
-func (c *ctx) Http() http.Request {
-	if !c.Config().IsInit() || c.Config().App().Http == nil {
-		return http.NewDefault(c.Logger())
-	}
+func (c *ctx) HTTP() *resty.Client {
+	return http.Instance()
+}
+
+// HTTPRequest 带链路日志的请求工具
+func (c *ctx) HTTPRequest() http.Request {
 	cfg := c.Config().App().Http
 	cfg.Server = c.Name()
-	return http.New(cfg, c.Logger())
+	return http.NewRequest(cfg, c.Logger())
 }
 
 // Token 获取令牌验证器
@@ -184,7 +188,7 @@ func (c *ctx) GetMetadata(key string) string {
 
 // SetMetadata 设置元数据信息
 func (c *ctx) SetMetadata(key, value string) {
-	c.Context = md.AppendToClientContext(context.Background(), key, value)
+	c.Context = md.AppendToClientContext(c.Context, key, value)
 }
 
 // Config 获取配置对象
@@ -203,6 +207,18 @@ func (c *ctx) GrpcConn(srvName string) (*grpc.ClientConn, error) {
 
 func (c *ctx) Clone() Context {
 	return MustContext(context.WithoutCancel(c.Context))
+}
+
+// TraceID 获取trace id
+func (c *ctx) TraceID() string {
+	t, _ := tracing.TraceID()(c.Context).(string)
+	return t
+}
+
+// SpanID 获取span id
+func (c *ctx) SpanID() string {
+	t, _ := tracing.SpanID()(c.Context).(string)
+	return t
 }
 
 // Env 获取配置环境

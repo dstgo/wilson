@@ -16,18 +16,11 @@ type User struct {
 	Setting      *string     `json:"setting" gorm:"column:setting"`
 	Token        *string     `json:"token" gorm:"column:token"`
 	LoggedAt     int64       `json:"loggedAt" gorm:"column:logged_at"`
-	UserJobs     []*UserJob  `json:"userJobs"`
 	UserRoles    []*UserRole `json:"userRoles"`
 	Roles        []*Role     `json:"roles" gorm:"many2many:user_role"` // fixed code
-	Jobs         []*Job      `json:"jobs" gorm:"many2many:user_job"`
 	Department   *Department `json:"department"`
 	Role         *Role       `json:"role"`
 	types.BaseModel
-}
-
-type UserJob struct {
-	UserId uint32 `json:"userId" gorm:"column:user_id"`
-	JobId  uint32 `json:"jobId" gorm:"column:job_id"`
 }
 
 type UserRole struct {

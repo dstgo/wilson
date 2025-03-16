@@ -30,29 +30,44 @@ type Request interface {
 	Do() (*response, error)
 }
 
-func NewDefault(logger *log.Helper) Request {
-	return New(&config.Http{
-		EnableLog:        true,
-		RetryCount:       3,
-		RetryWaitTime:    100 * time.Millisecond,
-		MaxRetryWaitTime: 3 * time.Second,
-		Timeout:          10 * time.Second,
-	}, logger)
+var httpClient *resty.Client
+
+func Instance() *resty.Client {
+	return httpClient
 }
 
-func New(conf *config.Http, logger *log.Helper) Request {
+func Init(hc *config.Http, watcher config.Watcher) {
+
+	if hc == nil {
+		hc = &config.Http{
+			EnableLog:        true,
+			RetryCount:       3,
+			RetryWaitTime:    100 * time.Millisecond,
+			MaxRetryWaitTime: 3 * time.Second,
+			Timeout:          10 * time.Second,
+		}
+	}
+
 	client := resty.New()
-	if conf.MaxRetryWaitTime == 0 {
-		conf.RetryWaitTime = 5 * time.Second
-	}
-	if conf.Timeout == 0 {
-		conf.Timeout = 60 * time.Second
-	}
-	client.SetRetryWaitTime(conf.RetryWaitTime)
-	client.SetRetryMaxWaitTime(conf.MaxRetryWaitTime)
-	client.SetRetryCount(conf.RetryCount)
-	client.SetTimeout(conf.Timeout)
-	req := client.R()
+	client.SetRetryWaitTime(hc.RetryWaitTime)
+	client.SetRetryMaxWaitTime(hc.MaxRetryWaitTime)
+	client.SetRetryCount(hc.RetryCount)
+	client.SetTimeout(hc.Timeout)
+
+	watcher("http", func(value config.Value) {
+		err := value.Scan(hc)
+		if err != nil {
+			log.Errorf("watch http client config failed: %s", err.Error())
+			return
+		}
+		log.Infof("watch http client config successfully")
+	})
+
+	httpClient = client
+}
+
+func NewRequest(conf *config.Http, logger *log.Helper) Request {
+	req := httpClient.R()
 	if conf.Server == "" {
 		conf.Server = "kratosx http client"
 	}
