@@ -63,12 +63,13 @@ type Tls struct {
 }
 
 type GrpcService struct {
-	Network     string
-	Addr        string
-	Host        string
-	Port        int
-	MaxRecvSize int
-	Timeout     time.Duration
+	Network        string
+	Addr           string
+	Host           string
+	Port           int
+	MaxRecvSize    int
+	Timeout        time.Duration
+	TimeoutSpecial map[string]time.Duration
 }
 
 type HttpService struct {
@@ -77,6 +78,7 @@ type HttpService struct {
 	Host           string
 	Port           int
 	Timeout        time.Duration
+	TimeoutSpecial map[string]time.Duration
 	FormatResponse bool
 	Cors           *Cors
 	Marshal        *Marshal

@@ -47,7 +47,7 @@ func Init(conf []*config.Prometheus, watcher config.Watcher) {
 
 	watcher("prometheus", func(value config.Value) {
 		if err := value.Scan(&conf); err != nil {
-			log.Errorf("prometheus配置变更失败：%s", err.Error())
+			log.Errorf("prometheus watch scan failed：%s", err.Error())
 			return
 		}
 		ins.initFactory(conf)

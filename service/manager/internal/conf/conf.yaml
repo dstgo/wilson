@@ -4,7 +4,7 @@ server:
     # 服务器监听地址
     addr: "127.0.0.1:7001"
     # 请求超时时间
-    timeout: 10s
+    timeout: "10s"
     marshal:
       # 是否输出未填充的字段
       emitUnpopulated: true
@@ -14,19 +14,19 @@ server:
     # gRPC 服务器监听地址
     addr: "127.0.0.1:7002"
     # gRPC 请求超时时间
-    timeout: 60s
+    timeout: "60s"
 
 # 日志配置
 log:
   # 日志级别
-  level: debug
-  encode: json
+  level: "debug"
+  encode: "json"
   # 是否显示调用者信息
   caller: true
   # 日志输出目标
   output:
-    - stdout
-    - file
+    - "stdout"
+    - "file"
   file:
     # 日志文件路径
     name: "/etc/wilson/manager/log/output.log"
@@ -192,7 +192,7 @@ authentication:
   skipRole:
     - "superAdmin"
   # 白名单
-  whitelist: {}
+  whitelist: { }
 
 # 服务配置
 manager:
