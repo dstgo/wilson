@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/dstgo/wilson/service/gateway/consts"
+	"github.com/dstgo/wilson/framework/constants"
 )
 
 type Response struct {
@@ -26,10 +26,10 @@ func ResponseFormat(response *http.Response) []byte {
 	}
 
 	newRes := Response{
-		Code:    consts.HTTP_SUCCESS_CODE,
-		Message: consts.HTTP_SUCCESS_MESSAGE,
-		Reason:  consts.HTTP_SUCCESS_REASON,
-		TraceID: response.Header.Get(consts.TRACE_ID),
+		Code:    constants.HTTPSuccessCode,
+		Message: constants.HTTPSuccessMessage,
+		Reason:  constants.HTTPSuccessReason,
+		TraceID: response.Header.Get(constants.TraceID),
 	}
 	// 上游返回error
 	m, ok := res.(map[string]any)

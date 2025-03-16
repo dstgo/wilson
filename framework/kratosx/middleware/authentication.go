@@ -8,6 +8,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/go-kratos/kratos/v2/transport/http"
 
+	"github.com/dstgo/wilson/framework/constants"
 	ec "github.com/dstgo/wilson/framework/kratosx/config"
 	"github.com/dstgo/wilson/framework/kratosx/library/authentication"
 )
@@ -36,7 +37,7 @@ func Authentication(conf *ec.Authentication) middleware.Middleware {
 				path = h.URL.Path
 				method = h.Method
 			} else {
-				method = "GRPC"
+				method = constants.GRPC
 			}
 
 			if author.IsWhitelist(path, method) {

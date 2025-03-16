@@ -606,7 +606,7 @@ func (u *Use) UserLogin(ctx kratosx.Context, in *types.UserLoginRequest) (token 
 		return
 	}
 
-	token, err = ctx.JWT().NewToken(md.New(&md.Auth{
+	token, err = ctx.JWT().NewToken(md.NewAuthMap(&md.Auth{
 		UserId:            user.Id,
 		RoleId:            user.RoleId,
 		RoleKeyword:       user.Role.Keyword,

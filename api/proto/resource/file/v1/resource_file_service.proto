@@ -13,9 +13,6 @@ service File{
   rpc GetFile (GetFileRequest) returns (GetFileReply) {
     option (google.api.http) = {
       get: "/resource/api/v1/file",
-      additional_bindings:{
-        get: "/resource/client/v1/file",
-      }
     };
   }
 
@@ -31,10 +28,6 @@ service File{
     option (google.api.http) = {
       post: "/resource/api/v1/file/prepare_upload",
       body: "*",
-      additional_bindings:{
-        post: "/resource/client/v1/file/prepare_upload",
-        body: "*",
-      }
     };
   }
 

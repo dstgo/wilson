@@ -13,8 +13,8 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 
+	"github.com/dstgo/wilson/framework/constants"
 	"github.com/dstgo/wilson/service/gateway/config"
-	"github.com/dstgo/wilson/service/gateway/consts"
 	gtmiddleware "github.com/dstgo/wilson/service/gateway/middleware"
 )
 
@@ -46,7 +46,7 @@ func Middleware(c *config.Middleware) (gtmiddleware.Middleware, error) {
 			ctx := req.Context()
 			contentType := req.Header.Get("Content-Type")
 			endpoint, _ := gtmiddleware.EndpointFromContext(ctx)
-			if endpoint.Protocol != consts.GRPC || strings.HasPrefix(contentType, "application/grpc") {
+			if endpoint.Protocol != constants.GRPC || strings.HasPrefix(contentType, "application/grpc") {
 				return next.RoundTrip(req)
 			}
 			b, err := io.ReadAll(req.Body)

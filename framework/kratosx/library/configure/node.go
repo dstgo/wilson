@@ -2,13 +2,11 @@ package configure
 
 import (
 	"github.com/go-kratos/kratos/v2/selector"
+
+	"github.com/dstgo/wilson/framework/constants"
 )
 
 var _ selector.Node = &node{}
-
-const (
-	GRPC = "GRPC"
-)
 
 type node struct {
 	name     string
@@ -19,7 +17,7 @@ type node struct {
 }
 
 func (n *node) Scheme() string {
-	return GRPC
+	return constants.GRPC
 }
 
 func (n *node) Address() string {

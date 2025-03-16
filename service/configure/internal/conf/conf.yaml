@@ -26,7 +26,7 @@ client:
   - server: "Manager"
     type: "direct"
     backends:
-      - target: "127.0.0.1:8010"
+      - target: "127.0.0.1:7002"
 
 # 日志配置
 log:
@@ -119,4 +119,4 @@ configure:
     addr: ":6080"
   author:
     adminUser: "admin@dstgo.cn"
-    adminPassword: "dstgowilson"
+    adminPassword: "12345678"

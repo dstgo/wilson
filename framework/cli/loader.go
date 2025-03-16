@@ -4,7 +4,7 @@ import (
 	kratosConfig "github.com/go-kratos/kratos/v2/config"
 	filesource "github.com/go-kratos/kratos/v2/config/file"
 
-	configuresource "github.com/dstgo/wilson/api/rpc/configure"
+	configuresource "github.com/dstgo/wilson/client/rpc/configure"
 )
 
 type Loader func() kratosConfig.Source

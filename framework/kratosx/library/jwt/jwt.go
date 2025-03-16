@@ -13,6 +13,7 @@ import (
 	jwtv5 "github.com/golang-jwt/jwt/v5"
 	json "github.com/json-iterator/go"
 
+	"github.com/dstgo/wilson/framework/constants"
 	"github.com/dstgo/wilson/framework/kratosx/config"
 	"github.com/dstgo/wilson/framework/kratosx/library/redis"
 )
@@ -197,7 +198,7 @@ func (j *jwt) IsWhitelist(path, method string) bool {
 	j.rw.RLock()
 	defer j.rw.RUnlock()
 
-	if !j.conf.EnableGrpc && method == "GRPC" {
+	if !j.conf.EnableGrpc && method == constants.GRPC {
 		return true
 	}
 

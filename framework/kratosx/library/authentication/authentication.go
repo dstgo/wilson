@@ -20,6 +20,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	jwtv5 "github.com/golang-jwt/jwt/v5"
 
+	"github.com/dstgo/wilson/framework/constants"
 	"github.com/dstgo/wilson/framework/kratosx/config"
 	"github.com/dstgo/wilson/framework/kratosx/library/db"
 	rd "github.com/dstgo/wilson/framework/kratosx/library/redis"
@@ -52,7 +53,7 @@ var instance *authentication
 
 const (
 	redisKey  = "rbac_authentication"
-	authMdKey = "x-md-global-auth"
+	authMdKey = constants.GlobalAuthMD
 )
 
 func Instance() Authentication {
@@ -222,7 +223,7 @@ func (a *authentication) RemoveWhitelist(path, method string) {
 }
 
 func (a *authentication) IsWhitelist(path, method string) bool {
-	if !a.conf.EnableGrpc && method == "GRPC" {
+	if !a.conf.EnableGrpc && method == constants.GRPC {
 		return true
 	}
 	is, _ := a.redis.HGet(context.Background(), redisKey, a.path(path, method)).Bool()

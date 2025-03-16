@@ -15,7 +15,7 @@ type Auth struct {
 	DepartmentKeyword string `json:"departmentKeyword"`
 }
 
-func New(info *Auth) map[string]any {
+func NewAuthMap(info *Auth) map[string]any {
 	var res map[string]any
 	_ = valx.Transform(info, &res)
 	return res

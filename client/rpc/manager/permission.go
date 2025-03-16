@@ -55,12 +55,7 @@ func (p *Permission) GetPermission(ctx kratosx.Context, keyword string) (bool, [
 		return false, nil, err
 	}
 
-	mdCtx, err := ctx.Authentication().SetAuthMD(ctx, info)
-	if err != nil {
-		return false, nil, err
-	}
-
-	reply, err := client.GetResourceScopes(mdCtx, &mresourcev1.GetResourceScopesRequest{
+	reply, err := client.GetResourceScopes(ctx, &mresourcev1.GetResourceScopesRequest{
 		Keyword: keyword,
 	})
 
