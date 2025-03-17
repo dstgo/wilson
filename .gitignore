@@ -32,3 +32,4 @@ go.work.sum
 # idea file
 .idea
 .vscode
+.run
