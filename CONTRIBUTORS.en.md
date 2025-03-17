@@ -6,7 +6,8 @@ individuals who have contributed to the project, in no particular order.
 
 ## List
 
-- [246859](https://github.com/246859) - [wilson@dstgo.cn](mailto:wilson@dstgo.cn)
+- [246859](https://github.com/246859) - [yihaow@dstgo.cn](mailto:yihaow@dstgo.cn)
+- [Zenith](https://github.com/Deep-Octopus) - [xduer@dstgo.cn](mailto:xduer@dstgo.cn)
 
 ## How to Add Your Name
 

@@ -4,7 +4,8 @@
 
 ## 名单
 
-- [246859](https://github.com/246859) - [wilson@dstgo.cn](mailto:wilson@dstgo.cn)
+- [246859](https://github.com/246859) - [yihaow@dstgo.cn](mailto:yihaow@dstgo.cn)
+- [Zenith](https://github.com/Deep-Octopus) - [xduer@dstgo.cn](mailto:xduer@dstgo.cn)
 
 ## 如何添加您的名字
 
