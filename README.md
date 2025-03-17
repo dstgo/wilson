@@ -3,9 +3,9 @@
 </div>
 <div align=center>
 <img src="https://img.shields.io/badge/MIT%20LICENSE-red" alt="MIT LICENSE"/>
-<img src="https://img.shields.io/badge/golang-1.23-blue" alt=""/>
+<img src="https://img.shields.io/badge/golang-1.24-blue" alt=""/>
 <img src="https://img.shields.io/badge/vue-3-bright" alt=""/>
-<img src="https://img.shields.io/badge/kratos-2.7.2-orange" alt=""/>
+<img src="https://img.shields.io/badge/kratos-2.8.4-orange" alt=""/>
 </div>
 
 [English](README.en.md)|**简体中文**

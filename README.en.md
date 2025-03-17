@@ -3,9 +3,9 @@
 </div>
 <div align=center>
 <img src="https://img.shields.io/badge/MIT%20LICENSE-red" alt="MIT LICENSE"/>
-<img src="https://img.shields.io/badge/Go-1.23-blue" alt="g"/>
-<img src="https://img.shields.io/badge/Vue-3.4.27-bright" alt="Vue-3.4.27"/>
-<img src="https://img.shields.io/badge/Kratos-2.7.2-orange" alt="Kratos-2.7.2"/>
+<img src="https://img.shields.io/badge/Go-1.24-blue" alt="g"/>
+<img src="https://img.shields.io/badge/Vue-3-bright" alt="Vue-3.4.27"/>
+<img src="https://img.shields.io/badge/Kratos-2.8.4-orange" alt="Kratos-2.7.2"/>
 </div>
 
 **English**|[简体中文](README.md)
