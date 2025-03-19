@@ -11,7 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 	_ "go.uber.org/automaxprocs"
 
-	"github.com/dstgo/wilson/framework/cli"
+	"github.com/dstgo/wilson/framework/kratosx/cli"
 	"github.com/dstgo/wilson/service/gateway/client"
 	"github.com/dstgo/wilson/service/gateway/config"
 	"github.com/dstgo/wilson/service/gateway/discovery"

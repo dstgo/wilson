@@ -10,8 +10,8 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	_ "go.uber.org/automaxprocs"
 
-	"github.com/dstgo/wilson/framework/cli"
 	"github.com/dstgo/wilson/framework/kratosx"
+	"github.com/dstgo/wilson/framework/kratosx/cli"
 	"github.com/dstgo/wilson/framework/kratosx/config"
 	"github.com/dstgo/wilson/framework/kratosx/library/logger"
 	"github.com/dstgo/wilson/framework/pkg/filex"
