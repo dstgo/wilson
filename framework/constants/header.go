@@ -1,5 +1,5 @@
 package constants
 
 const (
-	TraceID = "x-trace-id"
+	HeaderTraceID = "x-trace-id"
 )

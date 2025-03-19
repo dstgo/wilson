@@ -72,7 +72,7 @@ func (c *client) RoundTrip(req *http.Request) (*http.Response, error) {
 	if !ok {
 		panic(fmt.Sprintf("invalid traceId type, expected string, got %T", val))
 	}
-	resp.Header.Set(constants.TraceID, traceId)
+	resp.Header.Set(constants.HeaderTraceID, traceId)
 
 	reqOpt.UpstreamStatusCode = append(reqOpt.UpstreamStatusCode, resp.StatusCode)
 	reqOpt.DoneFunc = done

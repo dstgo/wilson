@@ -29,7 +29,7 @@ func ResponseFormat(response *http.Response) []byte {
 		Code:    constants.HTTPSuccessCode,
 		Message: constants.HTTPSuccessMessage,
 		Reason:  constants.HTTPSuccessReason,
-		TraceID: response.Header.Get(constants.TraceID),
+		TraceID: response.Header.Get(constants.HeaderTraceID),
 	}
 	// 上游返回error
 	m, ok := res.(map[string]any)

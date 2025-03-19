@@ -1,5 +1,5 @@
 package constants
 
 const (
-	GlobalAuthMD = "x-md-global-auth"
+	MdGlobalAuth = "x-md-global-auth"
 )
