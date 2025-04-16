@@ -114,7 +114,7 @@ type StaticFileRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m StaticFileRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -220,7 +220,7 @@ type StaticFileReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m StaticFileReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -355,7 +355,7 @@ type DownloadFileRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DownloadFileRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -461,7 +461,7 @@ type DownloadFileReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DownloadFileReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -608,7 +608,7 @@ type GetFileRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetFileRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -733,7 +733,7 @@ type GetFileReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetFileReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -908,7 +908,7 @@ type ListFileRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListFileRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1060,7 +1060,7 @@ type ListFileReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListFileReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1223,7 +1223,7 @@ type PrepareUploadFileRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m PrepareUploadFileRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1351,7 +1351,7 @@ type PrepareUploadFileReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m PrepareUploadFileReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1486,7 +1486,7 @@ type UploadFileRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UploadFileRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1594,7 +1594,7 @@ type UploadFileReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UploadFileReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1727,7 +1727,7 @@ type UpdateFileRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateFileRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1829,7 +1829,7 @@ type UpdateFileReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateFileReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1961,7 +1961,7 @@ type DeleteFileRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteFileRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -2065,7 +2065,7 @@ type DeleteFileReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteFileReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -2191,7 +2191,7 @@ type ListFileReply_FileMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListFileReply_FileMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

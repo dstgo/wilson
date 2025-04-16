@@ -71,7 +71,7 @@ type GetSystemSettingRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetSystemSettingRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -185,7 +185,7 @@ type DictionaryValueMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DictionaryValueMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -345,7 +345,7 @@ type GetSystemSettingReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetSystemSettingReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -484,7 +484,7 @@ type GetSystemSettingReply_DictionaryValueListMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetSystemSettingReply_DictionaryValueListMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

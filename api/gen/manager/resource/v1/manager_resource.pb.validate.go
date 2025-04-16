@@ -82,7 +82,7 @@ type GetResourceScopesRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetResourceScopesRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -186,7 +186,7 @@ type GetResourceScopesReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetResourceScopesReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -310,7 +310,7 @@ type GetResourceRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetResourceRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -412,7 +412,7 @@ type GetResourceReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetResourceReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -566,7 +566,7 @@ type UpdateResourceRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateResourceRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -668,7 +668,7 @@ type UpdateResourceReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateResourceReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

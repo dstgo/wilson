@@ -90,7 +90,7 @@ type GetExportRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetExportRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -220,7 +220,7 @@ type GetExportReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetExportReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -374,7 +374,7 @@ type ListExportRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListExportRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -523,7 +523,7 @@ type ListExportReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListExportReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -712,7 +712,7 @@ type ExportExcelRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ExportExcelRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -816,7 +816,7 @@ type ExportExcelReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ExportExcelReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -994,7 +994,7 @@ type ExportFileRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ExportFileRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1098,7 +1098,7 @@ type ExportFileReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ExportFileReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1230,7 +1230,7 @@ type DeleteExportRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteExportRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1334,7 +1334,7 @@ type DeleteExportReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteExportReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1466,7 +1466,7 @@ type ListExportReply_ExportMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListExportReply_ExportMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1581,7 +1581,7 @@ type ExportExcelRequest_ColMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ExportExcelRequest_ColMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1717,7 +1717,7 @@ type ExportExcelRequest_RowMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ExportExcelRequest_RowMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1823,7 +1823,7 @@ type ExportFileRequest_ExportFileMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ExportFileRequest_ExportFileMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

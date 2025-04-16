@@ -82,7 +82,7 @@ type ListBusinessValueRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListBusinessValueRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -220,7 +220,7 @@ type ListBusinessValueReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListBusinessValueReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -378,7 +378,7 @@ type UpdateBusinessValueRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateBusinessValueRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -480,7 +480,7 @@ type UpdateBusinessValueReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateBusinessValueReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -596,7 +596,7 @@ type ListBusinessValueReply_BusinessValueMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListBusinessValueReply_BusinessValueMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -723,7 +723,7 @@ type UpdateBusinessValueRequest_ValueMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateBusinessValueRequest_ValueMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

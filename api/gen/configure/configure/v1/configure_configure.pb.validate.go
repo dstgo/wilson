@@ -93,7 +93,7 @@ type GetConfigureRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetConfigureRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -211,7 +211,7 @@ type GetConfigureReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetConfigureReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -335,7 +335,7 @@ type CompareConfigureRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CompareConfigureRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -443,7 +443,7 @@ type CompareMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CompareMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -577,7 +577,7 @@ type CompareConfigureReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CompareConfigureReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -712,7 +712,7 @@ type UpdateConfigureRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateConfigureRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -814,7 +814,7 @@ type UpdateConfigureReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateConfigureReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -938,7 +938,7 @@ type WatchConfigureRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m WatchConfigureRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1044,7 +1044,7 @@ type WatchConfigureReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m WatchConfigureReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

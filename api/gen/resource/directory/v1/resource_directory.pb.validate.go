@@ -82,7 +82,7 @@ type GetDirectoryRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetDirectoryRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -198,7 +198,7 @@ type GetDirectoryReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetDirectoryReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -330,7 +330,7 @@ type ListDirectoryRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListDirectoryRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -479,7 +479,7 @@ type ListDirectoryReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListDirectoryReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -625,7 +625,7 @@ type CreateDirectoryRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CreateDirectoryRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -729,7 +729,7 @@ type CreateDirectoryReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CreateDirectoryReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -886,7 +886,7 @@ type UpdateDirectoryRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateDirectoryRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -988,7 +988,7 @@ type UpdateDirectoryReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateDirectoryReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1122,7 +1122,7 @@ type DeleteDirectoryRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteDirectoryRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1226,7 +1226,7 @@ type DeleteDirectoryReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteDirectoryReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1376,7 +1376,7 @@ type ListDirectoryReply_DirectoryMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListDirectoryReply_DirectoryMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

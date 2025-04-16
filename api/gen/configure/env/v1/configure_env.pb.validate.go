@@ -101,7 +101,7 @@ type GetEnvRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetEnvRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -218,7 +218,7 @@ type GetEnvReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetEnvReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -330,7 +330,7 @@ type ListEnvRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListEnvRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -465,7 +465,7 @@ type ListEnvReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListEnvReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -595,7 +595,7 @@ type CreateEnvRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CreateEnvRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -697,7 +697,7 @@ type CreateEnvReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CreateEnvReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -820,7 +820,7 @@ type UpdateEnvRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateEnvRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -920,7 +920,7 @@ type UpdateEnvReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateEnvReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1031,7 +1031,7 @@ type DeleteEnvRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteEnvRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1131,7 +1131,7 @@ type DeleteEnvReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteEnvReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1242,7 +1242,7 @@ type GetEnvTokenRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetEnvTokenRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1346,7 +1346,7 @@ type GetEnvTokenReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetEnvTokenReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1457,7 +1457,7 @@ type ResetEnvTokenRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ResetEnvTokenRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1561,7 +1561,7 @@ type ResetEnvTokenReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ResetEnvTokenReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1681,7 +1681,7 @@ type ListEnvReply_EnvMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListEnvReply_EnvMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

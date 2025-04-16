@@ -122,7 +122,7 @@ type GetRoleRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetRoleRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -247,7 +247,7 @@ type GetRoleReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetRoleReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -358,7 +358,7 @@ type GetRoleMenuIdsRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetRoleMenuIdsRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -460,7 +460,7 @@ type GetRoleMenuIdsReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m GetRoleMenuIdsReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -570,7 +570,7 @@ type ListRoleRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListRoleRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -704,7 +704,7 @@ type ListRoleReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListRoleReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -871,7 +871,7 @@ type CreateRoleRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CreateRoleRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -983,7 +983,7 @@ type CreateRoleReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CreateRoleReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1146,7 +1146,7 @@ type UpdateRoleRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateRoleRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1256,7 +1256,7 @@ type UpdateRoleReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateRoleReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1369,7 +1369,7 @@ type UpdateRoleStatusRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateRoleStatusRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1514,7 +1514,7 @@ type UpdateRoleMenuRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateRoleMenuRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1616,7 +1616,7 @@ type UpdateRoleMenuReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateRoleMenuReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1718,7 +1718,7 @@ type UpdateRoleStatusReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateRoleStatusReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1831,7 +1831,7 @@ type DeleteRoleRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteRoleRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1933,7 +1933,7 @@ type DeleteRoleReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteRoleReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -2093,7 +2093,7 @@ type ListRoleReply_RoleMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListRoleReply_RoleMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

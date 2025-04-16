@@ -135,7 +135,7 @@ type ListServerRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListServerRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -282,7 +282,7 @@ type ListServerReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListServerReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -412,7 +412,7 @@ type CreateServerRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CreateServerRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -516,7 +516,7 @@ type CreateServerReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m CreateServerReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -641,7 +641,7 @@ type UpdateServerRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateServerRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -743,7 +743,7 @@ type UpdateServerReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m UpdateServerReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -856,7 +856,7 @@ type DeleteServerRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteServerRequestMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -958,7 +958,7 @@ type DeleteServerReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m DeleteServerReplyMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1078,7 +1078,7 @@ type ListServerReply_ServerMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ListServerReply_ServerMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
